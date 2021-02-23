@@ -240,6 +240,47 @@ map(addToList, bmaElem)
 map(addToList, dataElem)
 map(addToList, NotRuf)
 
+# Kabeltrasse und formteile
+kabTr = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_CableTray)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
+
+kabForm = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_CableTrayFitting)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
+
+all_kab = list()
+addToList = lambda x: all_kab.append(x)
+map(addToList, kabTr)
+map(addToList, kabForm)
+
+# filtering Kabeltrassen Starkstrom
+all_kab_elektro = list()
+filter_list = ["_MS", "_SV", "_NS"]
+
+addToList = lambda x: all_kab_elektro.append(x)\
+	if any([
+		True if i in GetParVal(x, "ELEM_TYPE_PARAM")
+		else False for i in filter_list])\
+	else None
+
+map(addToList, all_kab)
+
+# filtering Kabeltrassen Starkstrom
+all_kab_dat = list()
+filter_list = ["_SS"]
+
+addToList = lambda x: all_kab_dat.append(x)\
+	if any([
+		True if i in GetParVal(x, "ELEM_TYPE_PARAM")
+		else False for i in filter_list])\
+	else None
+
+map(addToList, all_kab)
+
+
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 lvls = setWorkset(levelElem, "00_Ebenen und Raster")
@@ -247,9 +288,11 @@ grids = setWorkset(gridElem, "00_Ebenen und Raster")
 links_ELT = setWorkset(link_ELT, "01_LINK_Elektro")
 links_HLKS = setWorkset(link_HLKS, "01_LINK_Heizung_Kälte")
 links_Arch = setWorkset(link_Arch, "01_LINK_Architektur")
-allELT = setWorkset(all_elektro, "440_Elektro_Anlagen_Starkstrom")
-allDAT = setWorkset(all_data, "450_Eletro_Anlagen_Schwachstrom")
+all_elt = setWorkset(all_elektro, "440_Elektro_Anlagen_Starkstrom")
+all_dat = setWorkset(all_data, "450_Eletro_Anlagen_Schwachstrom")
+kab_elt = setWorkset(all_kab_elektro, "440_Elektro_Kabeltrassen Starkstrom")
+kab_dat = setWorkset(all_kab_dat, "450_Elektro_Kabeltrassen_Schwachstrom")
 
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = link_Arch
+OUT = all_kab_dat
