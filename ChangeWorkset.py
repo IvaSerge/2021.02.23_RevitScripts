@@ -158,7 +158,7 @@ workset_list.append("01_LINK_Lüftung")
 workset_list.append("01_LINK_Sanitär")
 workset_list.append("440_Elektro_Anlagen_Starkstrom")
 workset_list.append("440_Elektro_Kabeltrassen Starkstrom")
-workset_list.append("450_Elektro_Labeltrassen_Schwachstrom")
+workset_list.append("450_Elektro_Kabeltrassen_Schwachstrom")
 workset_list.append("450_Eletro_Anlagen_Schwachstrom")
 
 workset_rvt = [
@@ -180,24 +180,75 @@ gridElem = FilteredElementCollector(doc)\
 	.WhereElementIsNotElementType()\
 	.ToElements()
 
-rvtElem = FilteredElementCollector(doc)\
+linkElem = FilteredElementCollector(doc)\
 	.OfCategory(BuiltInCategory.OST_RvtLinks)\
 	.WhereElementIsNotElementType()\
 	.ToElements()
 
-# sort rvtElem
-link_ELT = [i for i in rvtElem if "_ELT" in i.Name]
-link_HLKS = [i for i in rvtElem if "_HLKS" in i.Name]
-link_Arch = [i for i in rvtElem if all([
+# sort linkElem
+link_ELT = [i for i in linkElem if "_ELT" in i.Name]
+link_HLKS = [i for i in linkElem if "_HLKS" in i.Name]
+link_Arch = [i for i in linkElem if all([
 	i not in link_ELT,
 	i not in link_HLKS])]
 
+electroElem = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_ElectricalFixtures)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
+
+leuchten = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_LightingFixtures)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
+
+lichtschalter = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_LightingDevices)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
+
+electroBoards = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_ElectricalEquipment)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
+
+all_elektro = list()
+addToList = lambda x: all_elektro.append(x)
+map(addToList, electroElem)
+map(addToList, leuchten)
+map(addToList, lichtschalter)
+map(addToList, electroBoards)
+
+bmaElem = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_FireAlarmDevices)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
+
+dataElem = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_DataDevices)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
+
+NotRuf = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_NurseCallDevices)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
+
+all_data = list()
+addToList = lambda x: all_data.append(x)
+map(addToList, bmaElem)
+map(addToList, dataElem)
+map(addToList, NotRuf)
+
 TransactionManager.Instance.EnsureInTransaction(doc)
+
 lvls = setWorkset(levelElem, "00_Ebenen und Raster")
 grids = setWorkset(gridElem, "00_Ebenen und Raster")
 links_ELT = setWorkset(link_ELT, "01_LINK_Elektro")
 links_HLKS = setWorkset(link_HLKS, "01_LINK_Heizung_Kälte")
 links_Arch = setWorkset(link_Arch, "01_LINK_Architektur")
+allELT = setWorkset(all_elektro, "440_Elektro_Anlagen_Starkstrom")
+allDAT = setWorkset(all_data, "450_Eletro_Anlagen_Schwachstrom")
 
 TransactionManager.Instance.TransactionTaskDone()
 
