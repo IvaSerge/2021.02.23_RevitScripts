@@ -130,6 +130,10 @@ def setWorkset(elem_list, workset_name):
 	:return:
 			workset name
 	"""
+	# check if list is empty
+	if not(elem_list):
+		return None
+
 	# get workset instance by name
 	wokrset_inst = [
 		i for i in workset_rvt
@@ -148,9 +152,8 @@ def setWorkset(elem_list, workset_name):
 workset_list = list()
 workset_list.append("00_Ebenen und Raster")
 workset_list.append("01_LINK_Architektur")
-workset_list.append("01_LINK_CAD")
 workset_list.append("01_LINK_Elektro")
-workset_list.append("01_LINK_Heizunk_Kälte")
+workset_list.append("01_LINK_Heizung_Kälte")
 workset_list.append("01_LINK_Lüftung")
 workset_list.append("01_LINK_Sanitär")
 workset_list.append("440_Elektro_Anlagen_Starkstrom")
@@ -172,9 +175,30 @@ levelElem = FilteredElementCollector(doc)\
 	.WhereElementIsNotElementType()\
 	.ToElements()
 
+gridElem = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_Grids)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
+
+rvtElem = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_RvtLinks)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
+
+# sort rvtElem
+link_ELT = [i for i in rvtElem if "_ELT" in i.Name]
+link_HLKS = [i for i in rvtElem if "_HLKS" in i.Name]
+link_Arch = [i for i in rvtElem if all([
+	i not in link_ELT,
+	i not in link_HLKS])]
+
 TransactionManager.Instance.EnsureInTransaction(doc)
 lvls = setWorkset(levelElem, "00_Ebenen und Raster")
+grids = setWorkset(gridElem, "00_Ebenen und Raster")
+links_ELT = setWorkset(link_ELT, "01_LINK_Elektro")
+links_HLKS = setWorkset(link_HLKS, "01_LINK_Heizung_Kälte")
+links_Arch = setWorkset(link_Arch, "01_LINK_Architektur")
 
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = lvls
+OUT = link_Arch
