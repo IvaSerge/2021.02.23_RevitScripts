@@ -3,6 +3,8 @@ clr.AddReference('RevitAPI')
 import Autodesk
 from Autodesk.Revit.DB import *
 
+import System
+
 clr.AddReference("RevitServices")
 import RevitServices
 from RevitServices.Persistence import DocumentManager
@@ -49,6 +51,7 @@ def GetBuiltInParam(paramName):
 		if i.ToString() == paramName:
 			param.append(i)
 			return i
+	return None
 
 
 def SetupParVal(elem, name, pValue):
@@ -57,16 +60,10 @@ def SetupParVal(elem, name, pValue):
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
 	if not(param):
-		try:
-			param = elem.get_Parameter(GetBuiltInParam(name)).Set(pValue)
-		except:
-			pass
+		param = elem.get_Parameter(GetBuiltInParam(name)).Set(pValue)
+	else:
+		param.Set(pValue)
 
-	if param:
-		try:
-			param.Set(pValue)
-		except:
-			pass
 	return elem
 
 
@@ -118,6 +115,36 @@ def getTypeByCatFamType(_bic, _fam, _type):
 	return elem
 
 
+def setWorkset(elem_list, workset_name):
+	"""
+	Change workset of elements
+
+	:global:
+		workset_rvt - [Autodesk.Revit.DB.Workset]
+			list of filtered worksets
+	:args:
+		elem_list - list()
+			List of Revit elements
+		workset_name - str()
+			name of workset to be set
+	:return:
+			workset name
+	"""
+	# get workset instance by name
+	wokrset_inst = [
+		i for i in workset_rvt
+		if i.Name == workset_name]
+	wokrset_id = int(wokrset_inst[0].Id.ToString())
+
+	set_param = lambda x: SetupParVal(
+		x,
+		"ELEM_PARTITION_PARAM",
+		wokrset_id)
+	map(set_param, elem_list)
+
+	return wokrset_inst[0].Name
+
+
 workset_list = list()
 workset_list.append("00_Ebenen und Raster")
 workset_list.append("01_LINK_Architektur")
@@ -140,9 +167,14 @@ if len(workset_rvt) != len(workset_list):
 	raise ValueError('Check worksets!')
 
 # RVT model objects
+levelElem = FilteredElementCollector(doc)\
+	.OfCategory(BuiltInCategory.OST_Levels)\
+	.WhereElementIsNotElementType()\
+	.ToElements()
 
-# TransactionManager.Instance.EnsureInTransaction(doc)
+TransactionManager.Instance.EnsureInTransaction(doc)
+lvls = setWorkset(levelElem, "00_Ebenen und Raster")
 
-# TransactionManager.Instance.TransactionTaskDone()
+TransactionManager.Instance.TransactionTaskDone()
 
-OUT = workset_rvt
+OUT = lvls
