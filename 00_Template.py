@@ -75,6 +75,15 @@ OUT = walltypes
 
 
 def GetParVal(elem, name):
+	"""Get parametr value
+
+	args:
+		elem - family instance or type
+		name - parameter name
+	return:
+		value - parameter value
+	"""
+
 	value = None
 	# custom parameter
 	param = elem.LookupParameter(name)
