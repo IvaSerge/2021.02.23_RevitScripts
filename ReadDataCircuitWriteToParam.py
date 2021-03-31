@@ -274,7 +274,7 @@ ParamsSwitch = ["MC Object Variable 2"]
 
 elemList = list()
 # elemList = [UnwrapElement(IN[1])]
-# map(elemList.append, dataElem)
+map(elemList.append, dataElem)
 map(elemList.append, electroElem)
 map(elemList.append, leuchten)
 map(elemList.append, lichtschalter)
