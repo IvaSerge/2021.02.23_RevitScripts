@@ -192,6 +192,32 @@ def ft_to_mm(ft):
 	return ft * 304.8
 
 
+def getSystems(_brd):
+	"""Get all systems of electrical board.
+
+		args:
+		_brd - electrical board FamilyInstance
+
+		return list(1, 2) where:
+		1 - main electrical circuit
+		2 - list of connectet low circuits
+	"""
+	allsys = _brd.MEPModel.ElectricalSystems
+	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	if lowsys:
+		lowsysId = [i.Id for i in lowsys]
+		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
+		if len(mainboardsysLst) == 0:
+			mainboardsys = None
+		else:
+			mainboardsys = mainboardsysLst[0]
+		lowsys = [i for i in allsys if i.Id in lowsysId]
+		lowsys.sort(key=lambda x: float(GetParVal(x, "RBS_ELEC_CIRCUIT_NUMBER")))
+		return mainboardsys, lowsys
+	else:
+		return [i for i in allsys][0], None
+
+
 # array = ModelCurveArray() # создание массива Array
 # array.Append(UnwrapElement(i)) # положить элементы в массив
 
