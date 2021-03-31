@@ -206,8 +206,10 @@ def ft_to_mm(ft):
 # OUT = UnwrapElement(IN[0]).get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM).AsValueString()
 # в зависимости от параметра окончание может быть также AsString() AsDouble()
 
+# =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
+# =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
 # new.ToDSType(False)
