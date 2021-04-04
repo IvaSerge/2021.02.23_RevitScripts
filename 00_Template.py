@@ -1,34 +1,33 @@
 import clr
-clr.AddReference('RevitAPI')
-import Autodesk
-from Autodesk.Revit.DB import *
 
 import sys
 # sys.path.append(r"C:\Program Files\Dynamo 0.8")
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
 
-import os.path
-
-import math
-
-from operator import itemgetter, attrgetter
-import string
-import re
-
-clr.AddReference('ProtoGeometry')
-from Autodesk.DesignScript.Geometry import *
+clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
+from Microsoft.Office.Interop import Excel
 
 import System
 from System import Array
 from System.Collections.Generic import *
-import Autodesk.DesignScript as ds
-
-clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
-from Microsoft.Office.Interop import Excel
 
 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo("en-US")
 from System.Runtime.InteropServices import Marshal
+
+# ================ Revit imports
+clr.AddReference('RevitAPI')
+import Autodesk
+from Autodesk.Revit.DB import *
+
+clr.AddReference("RevitServices")
+import RevitServices
+from RevitServices.Persistence import DocumentManager
+from RevitServices.Transactions import TransactionManager
+
+clr.AddReference('ProtoGeometry')
+import Autodesk.DesignScript as ds
+from ds.Geometry import *
 
 clr.AddReference("RevitNodes")
 import Revit
@@ -37,11 +36,16 @@ from Revit.Elements import *
 clr.ImportExtensions(Revit.GeometryConversion)
 clr.ImportExtensions(Revit.GeometryReferences)
 
-clr.AddReference("RevitServices")
-import RevitServices
-from RevitServices.Persistence import DocumentManager
-from RevitServices.Transactions import TransactionManager
+# ================ Python imports
+import os.path
+import math
+import string
+import re
+import operator
+from operator import itemgetter, attrgetter
+import itertools
 
+global doc
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
@@ -136,8 +140,40 @@ def get_bip(paramName):
 			return i
 
 
+def param_by_cat(_bic, _name):
+	"""Get parametr in
+
+	args:
+		_bic (BuiltiInCategory.OST_xxx): category
+		_name (str): parameter name
+	return:
+		param (Autodesk.Revit.DB.Parameter) - parameter
+	"""
+	# check Type parameter
+	elem = FilteredElementCollector(doc).\
+		OfCategory(_bic).\
+		WhereElementIsElementType().\
+		FirstElement()
+	param = elem.LookupParameter(_name)
+	if param:
+		return param
+
+	# check instance parameter
+	# ATTENTION! instance is first in!
+	# Be sure that all instances has the parameter.
+	elem = FilteredElementCollector(doc).\
+		OfCategory(_bic).\
+		WhereElementIsNotElementType().\
+		FirstElement()
+	param = elem.LookupParameter(_name)
+	if param:
+		return param
+
+	# Not found
+	return None
+
+
 def setup_param_value(elem, name, pValue):
-	global doc
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
@@ -156,7 +192,16 @@ def setup_param_value(elem, name, pValue):
 
 
 def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
-	global doc
+	"""Get all family instances by category and parameter value
+
+		args:
+		_bic - BuiltInCategory.OST_xxx
+		_bip - str, family name
+		_tnam - str, type name
+
+		return:
+		Autodesk.Revit.DB.FamilySymbol
+	"""
 	if _isType:
 		fnrvStr = FilterStringEquals()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
@@ -180,17 +225,27 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 	return elem
 
 
-def type_by_bic_fam_type(_bic, _fam, _type):
-	global doc
+def type_by_bic_fam_type(_bic, _fnam, _tnam):
+	"""Get Type by family category, family name and type
+
+		args:
+		_bic: BuiltInCategory.OST_xxx
+		_fnam (str): family name
+		_tnam (str): type name
+
+		return:
+		Autodesk.Revit.DB.FamilySymbol
+	"""
+
 	fnrvStr = FilterStringEquals()
 
 	pvpType = ParameterValueProvider(ElementId(int(BuiltInParameter.SYMBOL_NAME_PARAM)))
 	pvpFam = ParameterValueProvider(ElementId(int(BuiltInParameter.ALL_MODEL_FAMILY_NAME)))
 
-	fruleF = FilterStringRule(pvpFam, fnrvStr, _fam, False)
+	fruleF = FilterStringRule(pvpFam, fnrvStr, _fnam, False)
 	filterF = ElementParameterFilter(fruleF)
 
-	fruleT = FilterStringRule(pvpType, fnrvStr, _type, False)
+	fruleT = FilterStringRule(pvpType, fnrvStr, _tnam, False)
 	filterT = ElementParameterFilter(fruleT)
 
 	filter = LogicalAndFilter(filterT, filterF)
