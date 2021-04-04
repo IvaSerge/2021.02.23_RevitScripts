@@ -49,15 +49,15 @@ app = uiapp.Application
 view = doc.ActiveView
 
 
-def ProcessList(_func, _list):
+def process_list(_func, _list):
 	return map(
-		lambda x: ProcessList(_func, x)
+		lambda x: process_list(_func, x)
 		if type(x) == list else _func(x), _list)
 
 
-def Unwrap(_item):
+def unwrap(_item):
 	if isinstance(_item, list):
-		return ProcessList(Unwrap, _item)
+		return process_list(unwrap, _item)
 	else:
 		return UnwrapElement(_item)
 
@@ -74,7 +74,26 @@ else:
 OUT = walltypes
 
 
-def GetParVal(elem, name):
+def flatten_list(data):
+	# iterating over the data
+	list_in_progress = data
+	list_found = True
+
+	while list_found:
+		flat_list = list()
+		list_found = False
+		for i in list_in_progress:
+			if isinstance(i, list):
+				list_found = True
+				map(lambda x: flat_list.append(x), i)
+			else:
+				flat_list.append(i)
+		list_in_progress = [x for x in flat_list]
+
+	return list_in_progress
+
+
+def get_parval(elem, name):
 	"""Get parametr value
 
 	args:
@@ -89,7 +108,7 @@ def GetParVal(elem, name):
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
 	if not(param):
-		param = elem.get_Parameter(GetBuiltInParam(name))
+		param = elem.get_Parameter(get_bip(name))
 
 	# get paremeter Value if found
 	try:
@@ -108,7 +127,7 @@ def GetParVal(elem, name):
 	return value
 
 
-def GetBuiltInParam(paramName):
+def get_bip(paramName):
 	builtInParams = System.Enum.GetValues(BuiltInParameter)
 	param = []
 	for i in builtInParams:
@@ -117,14 +136,14 @@ def GetBuiltInParam(paramName):
 			return i
 
 
-def SetupParVal(elem, name, pValue):
+def setup_param_value(elem, name, pValue):
 	global doc
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
 	if not(param):
 		try:
-			param = elem.get_Parameter(GetBuiltInParam(name)).Set(pValue)
+			param = elem.get_Parameter(get_bip(name)).Set(pValue)
 		except:
 			pass
 
@@ -136,7 +155,7 @@ def SetupParVal(elem, name, pValue):
 	return elem
 
 
-def getByCatAndStrParam(_bic, _bip, _val, _isType):
+def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 	global doc
 	if _isType:
 		fnrvStr = FilterStringEquals()
@@ -161,7 +180,7 @@ def getByCatAndStrParam(_bic, _bip, _val, _isType):
 	return elem
 
 
-def getTypeByCatFamType(_bic, _fam, _type):
+def type_by_bic_fam_type(_bic, _fam, _type):
 	global doc
 	fnrvStr = FilterStringEquals()
 
@@ -192,7 +211,7 @@ def ft_to_mm(ft):
 	return ft * 304.8
 
 
-def getSystems(_brd):
+def elsys_by_brd(_brd):
 	"""Get all systems of electrical board.
 
 		args:
@@ -212,7 +231,7 @@ def getSystems(_brd):
 		else:
 			mainboardsys = mainboardsysLst[0]
 		lowsys = [i for i in allsys if i.Id in lowsysId]
-		lowsys.sort(key=lambda x: float(GetParVal(x, "RBS_ELEC_CIRCUIT_NUMBER")))
+		lowsys.sort(key=lambda x: float(get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER")))
 		return mainboardsys, lowsys
 	else:
 		return [i for i in allsys][0], None
