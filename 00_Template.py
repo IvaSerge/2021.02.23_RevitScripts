@@ -140,6 +140,13 @@ def get_bip(paramName):
 			return i
 
 
+def category_by_bic_name(_bicString):
+	global doc
+	bicList = System.Enum.GetValues(BuiltInCategory)
+	bic = [i for i in bicList if _bicString == i.ToString()][0]
+	return GetCategory(doc, bic)
+
+
 def param_by_cat(_bic, _name):
 	"""Get parametr in
 
