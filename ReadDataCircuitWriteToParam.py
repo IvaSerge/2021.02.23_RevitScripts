@@ -217,6 +217,30 @@ def getSwitchNumber(_elem):
 		return _elem, [" "]
 
 
+def update_subboard_name(board_info):
+	"""
+	Board with "\\" symbol is subboard.
+	Board name need to be changed according to current circuit name
+	"""
+	brd_inst = board_info[0]
+	brd_name = GetParVal(brd_inst, "RBS_ELEC_PANEL_NAME")
+
+	if not brd_name or not board_info[1]:
+		return None
+
+	if "/" in brd_name and brd_name:
+		circuit_name = board_info[1][0]
+		splited_names = brd_name.split("/")
+		if splited_names[0] != circuit_name:
+			new_name = circuit_name + "/" + splited_names[1]
+			SetupParVal(
+				brd_inst,
+				"RBS_ELEC_PANEL_NAME",
+				new_name)
+			return new_name
+	return None
+
+
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
@@ -228,10 +252,10 @@ switchSystems = FilteredElementCollector(doc)\
 
 switchedInstances = getSwitchedInst(switchSystems)
 
-dataElem = FilteredElementCollector(doc)\
-	.OfCategory(BuiltInCategory.OST_DataDevices)\
-	.WhereElementIsNotElementType()\
-	.ToElements()
+# dataElem = FilteredElementCollector(doc)\
+# 	.OfCategory(BuiltInCategory.OST_DataDevices)\
+# 	.WhereElementIsNotElementType()\
+# 	.ToElements()
 
 electroElem = FilteredElementCollector(doc)\
 	.OfCategory(BuiltInCategory.OST_ElectricalFixtures)\
@@ -253,10 +277,10 @@ electroBoards = FilteredElementCollector(doc)\
 	.WhereElementIsNotElementType()\
 	.ToElements()
 
-NotRuf = FilteredElementCollector(doc)\
-	.OfCategory(BuiltInCategory.OST_NurseCallDevices)\
-	.WhereElementIsNotElementType()\
-	.ToElements()
+# NotRuf = FilteredElementCollector(doc)\
+# 	.OfCategory(BuiltInCategory.OST_NurseCallDevices)\
+# 	.WhereElementIsNotElementType()\
+# 	.ToElements()
 
 reload = IN[0]
 
@@ -274,7 +298,7 @@ ParamsSwitch = ["MC Object Variable 2"]
 
 elemList = list()
 # elemList = [UnwrapElement(IN[1])]
-map(elemList.append, dataElem)
+# map(elemList.append, dataElem)
 map(elemList.append, electroElem)
 map(elemList.append, leuchten)
 map(elemList.append, lichtschalter)
@@ -283,6 +307,7 @@ map(elemList.append, electroBoards)
 
 eltInfo = map(
 	readInfo, zip(elemList, [Electrical.ElectricalSystemType.PowerCircuit] * len(elemList)))
+brdInfo = [x for x in eltInfo if x[0] in electroBoards]
 
 # datInfo = map(
 # 	readInfo, zip(elemList, [
@@ -294,6 +319,7 @@ eltInfo = map(
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 eltParamInfo = map(writeInfo, zip(eltInfo, [ParamsELT] * len(eltInfo)))
+brd_updated = map(update_subboard_name, brdInfo)
 # datParamInfo = map(writeInfo, zip(datInfo, [ParamsDAT] * len(datInfo)))
 # switchParamInfo = map(writeInfo, zip(switchInfo, [ParamsSwitch]*len(switchInfo)))
 
@@ -301,4 +327,4 @@ TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
 # OUT = zip(elemList, [Electrical.ElectricalSystemType.PowerCircuit] * len(elemList))
-OUT = eltParamInfo
+OUT = brd_updated
