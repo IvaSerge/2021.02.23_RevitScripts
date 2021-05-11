@@ -204,8 +204,7 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 
 		args:
 		_bic - BuiltInCategory.OST_xxx
-		_bip - str, family name
-		_tnam - str, type name
+		_bip - BuiltInParameter
 
 		return:
 		Autodesk.Revit.DB.FamilySymbol
