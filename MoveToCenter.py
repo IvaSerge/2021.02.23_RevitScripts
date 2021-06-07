@@ -21,12 +21,53 @@ from RevitServices.Transactions import TransactionManager
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 
+# ================ Revit imports
 clr.AddReference('RevitAPIUI')
 from Autodesk.Revit.UI import *
+
+clr.AddReference('RevitAPI')
+import Autodesk
+from Autodesk.Revit.DB import *
+
+clr.AddReference('ProtoGeometry')
+from Autodesk.DesignScript.Geometry import *
+
+# Import Element wrapper extension methods
+clr.AddReference("RevitNodes")
+import Revit
+clr.ImportExtensions(Revit.Elements)
+clr.ImportExtensions(Revit.GeometryConversion)
 
 
 def ft_to_mm(ft):
 	return ft * 304.8
+
+def toPoint(xyz):
+	x = ft_to_mm(xyz.X)
+	y = ft_to_mm(xyz.Y)
+	z = ft_to_mm(xyz.Z)
+	return Point.ByCoordinates(x, y, z)
+
+class Vec():
+	def __init__(self, start, end):
+		"""
+		Vector by start-end points all
+		"""
+		vector_x = end.X - start.X
+		vector_y = end.Y - start.Y
+		vector_z = end.Z - start.Z
+
+		self.start = start
+		self.end = end
+		self.coord = XYZ(vector_x, vector_y, vector_z)
+		basis = Autodesk.Revit.DB.XYZ.BasisX
+		self.direction = basis.AngleTo(self.coord)
+	
+	def num_multiply(self, num):
+		vector_x = self.coord.X * num
+		vector_y = self.coord.Y * num
+		vector_z = self.coord.Z * num
+		return XYZ(vector_x, vector_y, vector_z)
 
 
 uiapp = DocumentManager.Instance.CurrentUIApplication
@@ -60,19 +101,24 @@ obList = list()
 map(lambda x: obList.append(doc.GetElement(x.ElementId)), refList)
 
 # new point coordinates calculation
-pnt_x1 = obList[0].Location.Point.X
-pnt_x2 = obList[1].Location.Point.X
-midPointX = (pnt_x1 + pnt_x2) * distance_k
+start = obList[0].Location.Point
+start_xyz = XYZ(start.X, start.Y, 0)
+end = obList[1].Location.Point
+end_xyz = XYZ(end.X, end.Y, 0)
+obj_point = obList[2].Location.Point
+obj_point = XYZ(obj_point.X, obj_point.Y, 0)
 
-pnt_y1 = obList[0].Location.Point.Y
-pnt_y2 = obList[1].Location.Point.Y
-midPointY = (pnt_y1 + pnt_y2) * distance_k
+vector_start_end = Vec(start, end)
+new_vector = vector_start_end.num_multiply(distance_k)
+new_xyz = XYZ(start.X + new_vector.X,
+	start.Y + new_vector.Y,
+	0)
 
-vectorX = midPointX - obList[2].Location.Point.X
-vectorY = midPointY - obList[2].Location.Point.Y
-midPointXYZ = XYZ(vectorX, vectorY, 0)
+move_vector = Vec(obj_point, new_xyz).coord
 
 # move element
 TransactionManager.Instance.EnsureInTransaction(doc)
-ElementTransformUtils.MoveElement(doc, obList[2].Id, midPointXYZ)
+ElementTransformUtils.MoveElement(doc, obList[2].Id, move_vector)
 TransactionManager.Instance.TransactionTaskDone()
+
+OUT = move_vector
