@@ -34,6 +34,7 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 app = uiapp.Application
 
 reLoad = IN[0]
+distance_k = IN[1]
 
 ob1 = uidoc.Selection.PickObject(
 	Autodesk.Revit.UI.Selection.ObjectType.Element,
@@ -61,11 +62,11 @@ map(lambda x: obList.append(doc.GetElement(x.ElementId)), refList)
 # new point coordinates calculation
 pnt_x1 = obList[0].Location.Point.X
 pnt_x2 = obList[1].Location.Point.X
-midPointX = (pnt_x1 + pnt_x2) / 2
+midPointX = (pnt_x1 + pnt_x2) * distance_k
 
 pnt_y1 = obList[0].Location.Point.Y
 pnt_y2 = obList[1].Location.Point.Y
-midPointY = (pnt_y1 + pnt_y2) / 2
+midPointY = (pnt_y1 + pnt_y2) * distance_k
 
 vectorX = midPointX - obList[2].Location.Point.X
 vectorY = midPointY - obList[2].Location.Point.Y
