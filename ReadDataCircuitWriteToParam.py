@@ -148,8 +148,10 @@ def readInfo(_elem):
 			circPanelName = circPanel.get_Parameter(
 				BuiltInParameter.RBS_ELEC_CIRCUIT_PREFIX).AsString()
 			circNumber = str(mainciruit.CircuitNumber)
-			fnumber = '{:02}'.format(int(float(circNumber)))
-			circInfo = circPanelName + fnumber
+			# add leading zeros
+			# fnumber = '{:02}'.format(int(float(circNumber)))
+			# circInfo = circPanelName + fnumber
+			circInfo = circPanelName + "F" + circNumber
 			return elem, [circInfo]
 		except:
 			# Not connected
@@ -175,8 +177,10 @@ def readInfo(_elem):
 			circPanelName = circPanel.get_Parameter(
 				BuiltInParameter.RBS_ELEC_CIRCUIT_PREFIX).AsString()
 			circNumber = str(circuit.CircuitNumber)
-			fnumber = '{:02}'.format(int(float(circNumber)))
-			circInfo = circPanelName + fnumber
+			# add leading zeros
+			# fnumber = '{:02}'.format(int(float(circNumber)))
+			# circInfo = circPanelName + fnumber
+			circInfo = circPanelName + "F" + circNumber
 			outlist.append(circInfo)
 		except:
 			outlist.append("NotConnected")
@@ -327,4 +331,4 @@ TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
 # OUT = zip(elemList, [Electrical.ElectricalSystemType.PowerCircuit] * len(elemList))
-OUT = brd_updated
+OUT = eltInfo
