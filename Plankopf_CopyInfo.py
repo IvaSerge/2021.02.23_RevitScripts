@@ -136,7 +136,11 @@ ignorParamsList = [
 		"SYMBOL_NAME_PARAM",
 		"ELEM_TYPE_PARAM",
 		"VIEW_TYPE_SCHEDULES",
-		"SHEET_FILE_PATH"
+		"SHEET_FILE_PATH",
+		"MC Page Number",
+		"MC Number of Pages",
+		"MC Panel Code",
+		"PB_Sub Gewerk",
 		]
 
 SheetBic = "OST_Sheets"
@@ -231,17 +235,17 @@ if legendViews:
 		except: None
 
 # Copy all elements on view
-if elems_on_view:
-	tr_form = ElementTransformUtils.GetTransformFromViewToView(
-		ElemFrom_Sheet,
-		ElemTo_Sheet)
-	copy_opt = CopyPasteOptions()
-	ElementTransformUtils.CopyElements(
-		ElemFrom_Sheet,
-		elems_on_view,
-		ElemTo_Sheet,
-		tr_form,
-		copy_opt)
+# if elems_on_view:
+# 	tr_form = ElementTransformUtils.GetTransformFromViewToView(
+# 		ElemFrom_Sheet,
+# 		ElemTo_Sheet)
+# 	copy_opt = CopyPasteOptions()
+# 	ElementTransformUtils.CopyElements(
+# 		ElemFrom_Sheet,
+# 		elems_on_view,
+# 		ElemTo_Sheet,
+# 		tr_form,
+# 		copy_opt)
 
 
 # =========End transaction
