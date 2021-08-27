@@ -3,6 +3,8 @@ clr.AddReference('RevitAPI')
 import Autodesk
 from Autodesk.Revit.DB import *
 
+clr.AddReference
+
 import sys
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
@@ -17,5 +19,10 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 doc = DocumentManager.Instance.CurrentDBDocument
 
+from Autodesk.Revit.DB import FiteredElementCollector
+FiteredElementCollector(doc).Of
 
+clr.A
+
+# get
 OUT = None

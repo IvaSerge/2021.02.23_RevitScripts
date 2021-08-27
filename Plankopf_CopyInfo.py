@@ -18,14 +18,17 @@ from RevitServices.Transactions import TransactionManager
 
 doc = DocumentManager.Instance.CurrentDBDocument
 
+
 def ProcessList(_func, _list):
-	return map( lambda x: ProcessList(_func, x) if type(x)==list else _func(x), _list )
+	return map(lambda x: ProcessList(_func, x) if type(x) == list else _func(x), _list)
+
 
 def Unwrap(_item):
 	if isinstance(_item, list):
 		return ProcessList(Unwrap, _item)
 	else:
 		return UnwrapElement(_item)
+
 
 def GetParVal(elem, name):
 	# Параметр пользовательский
@@ -35,7 +38,7 @@ def GetParVal(elem, name):
 		if storeType == StorageType.String:
 			value = elem.LookupParameter(name).AsString()
 		elif storeType == StorageType.Integer:
-			value  = elem.LookupParameter(name).AsDouble()
+			value = elem.LookupParameter(name).AsDouble()
 		elif storeType == StorageType.Double:
 			value = elem.LookupParameter(name).AsDouble()
 	# Параметр встроенный
@@ -45,15 +48,16 @@ def GetParVal(elem, name):
 		if storeType == StorageType.String:
 			value = elem.get_Parameter(bip).AsString()
 		elif storeType == StorageType.Integer:
-			value  = elem.get_Parameter(bip).AsDouble()
+			value = elem.get_Parameter(bip).AsDouble()
 		elif storeType == StorageType.Double:
 			value = elem.get_Parameter(bip).AsDouble()
 	return value
 
+
 def GetBuiltInParam(paramName):
 	builtInParams = System.Enum.GetValues(BuiltInParameter)
 	param = []
-	
+
 	for i in builtInParams:
 		if i.ToString() == paramName:
 			param.append(i)
@@ -62,12 +66,14 @@ def GetBuiltInParam(paramName):
 			continue
 	return param[0]
 
+
 def SetpParVal(elem, name, pValue):
 	global doc
 	elem.LookupParameter(name).Set(pValue)
 	return elem
 
-def getByCatAndStrParam (_bic, _bip, _val, _isType):
+
+def getByCatAndStrParam(_bic, _bip, _val, _isType):
 	global doc
 	if _isType:
 		fnrvStr = FilterStringEquals()
@@ -91,28 +97,30 @@ def getByCatAndStrParam (_bic, _bip, _val, _isType):
 			ToElements()
 	return elem
 
-def getTypeByCatFamType (_bic, _fam, _type):
+
+def getTypeByCatFamType(_bic, _fam, _type):
 	global doc
 	fnrvStr = FilterStringEquals()
-	
+
 	pvpType = ParameterValueProvider(ElementId(int(BuiltInParameter.SYMBOL_NAME_PARAM)))
 	pvpFam = ParameterValueProvider(ElementId(int(BuiltInParameter.ALL_MODEL_FAMILY_NAME)))
-	
+
 	fruleF = FilterStringRule(pvpFam, fnrvStr, _fam, False)
 	filterF = ElementParameterFilter(fruleF)
-	
+
 	fruleT = FilterStringRule(pvpType, fnrvStr, _type, False)
 	filterT = ElementParameterFilter(fruleT)
-	
+
 	filter = LogicalAndFilter(filterT, filterF)
-	
+
 	elem = FilteredElementCollector(doc).\
-	OfCategory(_bic).\
-	WhereElementIsElementType().\
-	WherePasses(filter).\
-	FirstElement()
-	
+		OfCategory(_bic).\
+		WhereElementIsElementType().\
+		WherePasses(filter).\
+		FirstElement()
+
 	return elem
+
 
 ElemFrom = Unwrap(IN[0])
 ElemFrom_Sheet = doc.GetElement(ElemFrom.OwnerViewId)
@@ -140,8 +148,7 @@ ignorParamsList = [
 		"MC Page Number",
 		"MC Number of Pages",
 		"MC Panel Code",
-		"PB_Sub Gewerk",
-		]
+		"PB_Sub Gewerk", ]
 
 SheetBic = "OST_Sheets"
 SheetNum = "SHEET_NUMBER"
@@ -168,8 +175,8 @@ for param in paramList_Title:
 	storeType = param.StorageType
 
 	# check if param is boolean
-	isBool = (storeType == StorageType.Integer and\
-			param.Definition.ParameterType == ParameterType.YesNo)
+	isBool = all(storeType == StorageType.Integer,
+		param.Definition.ParameterType == ParameterType.YesNo)
 
 	if StorageType.String or isBool:
 		# check if parameter Built-in
@@ -232,7 +239,8 @@ if legendViews:
 				ElemTo_Sheet.Id,
 				viewId,
 				insertPoint)
-		except: None
+		except:
+			None
 
 # Copy all elements on view
 # if elems_on_view:

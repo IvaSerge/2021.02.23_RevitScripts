@@ -1,7 +1,4 @@
 import clr
-clr.AddReference('RevitAPI')
-import Autodesk
-from Autodesk.Revit.DB import *
 
 import sys
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
@@ -42,11 +39,13 @@ clr.ImportExtensions(Revit.GeometryConversion)
 def ft_to_mm(ft):
 	return ft * 304.8
 
+
 def toPoint(xyz):
 	x = ft_to_mm(xyz.X)
 	y = ft_to_mm(xyz.Y)
 	z = ft_to_mm(xyz.Z)
 	return Point.ByCoordinates(x, y, z)
+
 
 class Vec():
 	def __init__(self, start, end):
@@ -62,7 +61,7 @@ class Vec():
 		self.coord = XYZ(vector_x, vector_y, vector_z)
 		basis = Autodesk.Revit.DB.XYZ.BasisX
 		self.direction = basis.AngleTo(self.coord)
-	
+
 	def num_multiply(self, num):
 		vector_x = self.coord.X * num
 		vector_y = self.coord.Y * num

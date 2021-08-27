@@ -27,8 +27,8 @@ from RevitServices.Transactions import TransactionManager
 
 # ================ Dynamo imports
 clr.AddReference('ProtoGeometry')
-import Autodesk.DesignScript as ds
-from ds.Geometry import *
+import Autodesk.DesignScript
+from Autodesk.DesignScript.Geometry import *
 
 clr.AddReference("RevitNodes")
 import Revit
@@ -203,8 +203,8 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 	"""Get all family instances by category and parameter value
 
 		args:
-		_bic - BuiltInCategory.OST_xxx
-		_bip - BuiltInParameter
+		_bic: BuiltInCategory.OST_xxx
+		_bip: BuiltInParameter
 
 		return:
 		Autodesk.Revit.DB.FamilySymbol
