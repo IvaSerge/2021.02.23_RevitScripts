@@ -16,6 +16,9 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+import System
+from System import Enum
+
 doc = DocumentManager.Instance.CurrentDBDocument
 
 
@@ -175,10 +178,13 @@ for param in paramList_Title:
 	storeType = param.StorageType
 
 	# check if param is boolean
-	isBool = all(storeType == StorageType.Integer,
-		param.Definition.ParameterType == ParameterType.YesNo)
+	isBool = all([storeType == StorageType.Integer,
+		param.Definition.ParameterType == ParameterType.YesNo])
 
-	if StorageType.String or isBool:
+	if any([
+		storeType == StorageType.String,
+		isBool,
+		storeType == StorageType.ElementId]):
 		# check if parameter Built-in
 		parBIP = param.Definition.BuiltInParameter.ToString()
 		if parBIP == "INVALID":
@@ -190,8 +196,12 @@ for param in paramList_Title:
 			pName = param.Definition.Name
 			if isBool:
 				pValue = param.AsInteger()
-			else:
+			elif storeType == StorageType.String:
 				pValue = param.AsString()
+			elif storeType == StorageType.ElementId:
+				pValue = param.AsElementId()
+			else:
+				pass
 			pList_Title.append([pName, pValue])
 
 # find Legends on view
