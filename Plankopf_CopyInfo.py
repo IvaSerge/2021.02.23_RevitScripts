@@ -30,7 +30,7 @@ def Unwrap(_item):
 	if isinstance(_item, list):
 		return ProcessList(Unwrap, _item)
 	else:
-		return UnwrapElement(_item)
+		return UnwrapElement(_item)  # type: ignore
 
 
 def GetParVal(elem, name):
@@ -125,33 +125,33 @@ def getTypeByCatFamType(_bic, _fam, _type):
 	return elem
 
 
-ElemFrom = Unwrap(IN[0])
+ElemFrom = Unwrap(IN[0])  # type: ignore
 ElemFrom_Sheet = doc.GetElement(ElemFrom.OwnerViewId)
 
-ElemTo = Unwrap(IN[1])
+ElemTo = Unwrap(IN[1])  # type: ignore
 ElemTo_Sheet = doc.GetElement(ElemTo.OwnerViewId)
-reload = IN[2]
+reload = IN[2]  # type: ignore
 pList_Sheet = list()
 pList_Title = list()
 ignorParamsList = [
-		"SHEET_NAME",
-		"VIEWER_SHEET_NUMBER",
-		"SHEET_NUMBER",
-		"VIEW_TYPE",
-		"ELEM_FAMILY_AND_TYPE_PARAM",
-		"VIEW_FAMILY_AND_TYPE_SCHEDULES",
-		"ALL_MODEL_FAMILY_NAME",
-		"VIEW_FAMILY_SCHEDULES",
-		"VIEW_FAMILY",
-		"VIEW_FAMILY_SCHEDULES",
-		"SYMBOL_NAME_PARAM",
-		"ELEM_TYPE_PARAM",
-		"VIEW_TYPE_SCHEDULES",
-		"SHEET_FILE_PATH",
-		"MC Page Number",
-		"MC Number of Pages",
-		"MC Panel Code",
-		"PB_Sub Gewerk", ]
+	"SHEET_NAME",
+	"VIEWER_SHEET_NUMBER",
+	"SHEET_NUMBER",
+	"VIEW_TYPE",
+	"ELEM_FAMILY_AND_TYPE_PARAM",
+	"VIEW_FAMILY_AND_TYPE_SCHEDULES",
+	"ALL_MODEL_FAMILY_NAME",
+	"VIEW_FAMILY_SCHEDULES",
+	"VIEW_FAMILY",
+	"VIEW_FAMILY_SCHEDULES",
+	"SYMBOL_NAME_PARAM",
+	"ELEM_TYPE_PARAM",
+	"VIEW_TYPE_SCHEDULES",
+	"SHEET_FILE_PATH",
+	"MC Page Number",
+	"MC Number of Pages",
+	"MC Panel Code",
+	"PB_Sub Gewerk", ]
 
 SheetBic = "OST_Sheets"
 SheetNum = "SHEET_NUMBER"
