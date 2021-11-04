@@ -78,6 +78,15 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
+        },
+        {
+          "Id": "ecd46298230448d19d1a43f1c61bd2f1",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -176,7 +185,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "CP1-SN3L1F03",
+      "InputValue": "CP1-FN3L1C13",
       "Id": "cd46275a7e4a49b78fbfc71eb9021344",
       "Inputs": [],
       "Outputs": [
@@ -192,6 +201,27 @@
       ],
       "Replication": "Disabled",
       "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "5b21fd32-3f27-4740-bf44-a6c16479a36f-00d669cd"
+      ],
+      "Id": "fefb87d385404251863283d7f160c7cf",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "334821bf4acb4500a0c4a6d507b493a5",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
     }
   ],
   "Connectors": [
@@ -224,6 +254,11 @@
       "Start": "ce38333756764d489143721e710eed88",
       "End": "2d03435a82aa4dbab0989bdd2277ec20",
       "Id": "e8a34e78950641d59d36c62573f02473"
+    },
+    {
+      "Start": "334821bf4acb4500a0c4a6d507b493a5",
+      "End": "ecd46298230448d19d1a43f1c61bd2f1",
+      "Id": "dd51adb05a2a4ace83af92c66b22d691"
     }
   ],
   "Dependencies": [],
@@ -310,11 +345,21 @@
         "Excluded": false,
         "X": 542.33405867311137,
         "Y": 845.103213849443
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Select Model Element",
+        "Id": "fefb87d385404251863283d7f160c7cf",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 500.99971667145212,
+        "Y": 934.29838447320594
       }
     ],
     "Annotations": [],
-    "X": -530.81460814019954,
-    "Y": -494.14677873157723,
-    "Zoom": 1.063688655320882
+    "X": -813.81742257038377,
+    "Y": -1258.418314255046,
+    "Zoom": 1.6995847667883788
   }
 }

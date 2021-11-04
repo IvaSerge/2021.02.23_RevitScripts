@@ -6,7 +6,7 @@ pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
 
 clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
-from Microsoft.Office.Interop import Excel
+from Microsoft.Office.Interop import Excel  # type: ignore
 
 import System
 from System import Array
@@ -65,19 +65,7 @@ def unwrap(_item):
 	if isinstance(_item, list):
 		return process_list(unwrap, _item)
 	else:
-		return UnwrapElement(_item)
-
-
-# пример для получения типа стены
-walltypes = []
-# если на входе лист
-if isinstance(IN[0], list):
-	for i in IN[0]:
-		walltypes.append(U(i).WallType)
-# в противном случае (это означает, что на входе 1 элемент)
-else:
-	walltypes = U(IN[0]).WallType
-OUT = walltypes
+		return UnwrapElement(_item)  # type: ignore
 
 
 def flatten_list(data):

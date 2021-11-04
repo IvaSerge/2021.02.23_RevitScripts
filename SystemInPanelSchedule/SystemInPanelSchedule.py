@@ -25,14 +25,125 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
+import math
+from math import sqrt
 
 
-def elsys_by_brd(_brd):
+def GetParVal(elem, name):
+	value = None
+	# custom parameter
+	param = elem.LookupParameter(name)
+	# check is it a BuiltIn parameter if not found
+	if not(param):
+		param = elem.get_Parameter(GetBuiltInParam(name))
+
+	# get paremeter Value if found
+	try:
+		storeType = param.StorageType
+		# value = storeType
+		if storeType == StorageType.String:
+			value = param.AsString()
+		elif storeType == StorageType.Integer:
+			value = param.AsDouble()
+		elif storeType == StorageType.Double:
+			value = param.AsDouble()
+		elif storeType == StorageType.ElementId:
+			value = param.AsValueString()
+	except:
+		pass
+	return value
+
+
+def GetBuiltInParam(paramName):
+	builtInParams = System.Enum.GetValues(BuiltInParameter)
+	param = []
+	for i in builtInParams:
+		if i.ToString() == paramName:
+			param.append(i)
+			return i
+
+
+def SetupParVal(elem, name, pValue):
+	global doc
+	# custom parameter
+	param = elem.LookupParameter(name)
+	# check is it a BuiltIn parameter if not found
+	if not(param):
+		try:
+			param = elem.get_Parameter(GetBuiltInParam(name)).Set(pValue)
+		except:
+			pass
+	if param:
+		try:
+			param.Set(pValue)
+		except:
+			pass
+	return elem
+
+
+def getByCatAndStrParam(_bic, _bip, _val, _isType):
+	global doc
+	if _isType:
+		fnrvStr = FilterStringEquals()
+		pvp = ParameterValueProvider(ElementId(int(_bip)))
+		frule = FilterStringRule(pvp, fnrvStr, _val, False)
+		filter = ElementParameterFilter(frule)
+		elem = FilteredElementCollector(doc).\
+			OfCategory(_bic).\
+			WhereElementIsElementType().\
+			WherePasses(filter).\
+			ToElements()
+	else:
+		fnrvStr = FilterStringEquals()
+		pvp = ParameterValueProvider(ElementId(int(_bip)))
+		frule = FilterStringRule(pvp, fnrvStr, _val, False)
+		filter = ElementParameterFilter(frule)
+		elem = FilteredElementCollector(doc).\
+			OfCategory(_bic).\
+			WhereElementIsNotElementType().\
+			WherePasses(filter).\
+			ToElements()
+	return elem
+
+
+def clearParam(_elem):
+	name = "CBT:CIR_Elektrischen Schlag"
+	parVal = GetParVal(_elem, name)
+	if parVal and "Schutz Datenbank" in parVal:
+		SetupParVal(_elem, name, "")
+	return parVal
+
+
+def getSystems(_brd):
 	"""Get all systems of electrical board.
 
 		args:
 		_brd - electrical board FamilyInstance
 
+		return list(1, 2) where:
+		1 - main electrical circuit
+		2 - list of connectet low circuits
+	"""
+	allsys = _brd.MEPModel.ElectricalSystems
+	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	if lowsys:
+		lowsysId = [i.Id for i in lowsys]
+		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
+		if len(mainboardsysLst) == 0:
+			mainboardsys = None
+		else:
+			mainboardsys = mainboardsysLst[0]
+		lowsys = [i for i in allsys if i.Id in lowsysId]
+		lowsys.sort(key=lambda x: float(GetParVal(x, "RBS_ELEC_CIRCUIT_NUMBER")))
+		return mainboardsys, lowsys
+	else:
+		return [i for i in allsys][0], None
+
+
+def elsys_by_brd(_brd):
+	"""Get all systems of electrical board.
+		args:
+		_brd - electrical board FamilyInstance
 		return list(1, 2) where:
 		1 - main electrical circuit
 		2 - list of connectet low circuits
@@ -55,11 +166,9 @@ def elsys_by_brd(_brd):
 
 def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 	"""Get all family instances by category and parameter value
-
 		args:
 		_bic: BuiltInCategory.OST_xxx
 		_bip: BuiltInParameter
-
 		return:
 		list()[Autodesk.Revit.DB.FamilySymbol]
 	"""
@@ -87,6 +196,7 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 
 
 def get_bip(paramName):
+	# type: (str) -> BuiltInParameter
 	builtInParams = System.Enum.GetValues(BuiltInParameter)
 	param = []
 	for i in builtInParams:
@@ -95,16 +205,8 @@ def get_bip(paramName):
 			return i
 
 
-def category_by_bic_name(_bicString):
-	global doc
-	bicList = System.Enum.GetValues(BuiltInCategory)
-	bic = [i for i in bicList if _bicString == i.ToString()][0]
-	return Category.GetCategory(doc, bic)
-
-
 def get_parval(elem, name):
 	"""Get parametr value
-
 	args:
 		elem - family instance or type
 		name - parameter name
@@ -136,38 +238,97 @@ def get_parval(elem, name):
 	return value
 
 
+def SetEstimatedValues(_elSys, _testboard):
+	# type: (Electrical.ElectricalSystem, FamilyInstance) -> list[Electrical.ElectricalSystem]
+	"""Copy Estimated values from elecrtical board to the circuit
+
+	args:
+		_elSys: system to be calculated
+		_testboard: temporary board for manipulations
+
+	return:
+		param (Autodesk.Revit.DB.Parameter) - parameter
+
+	"""
+	# check if it is a real circuit
+	# it it is spare or space - no actions requiered
+	circ_type = _elSys.CircuitType
+	if circ_type != Electrical.CircuitType.Circuit:
+		return None
+
+	global doc
+	calcSystem = _elSys
+	poles_number = calcSystem.PolesNumber
+
+	# Main board of electrical system
+	mainBoard = calcSystem.BaseEquipment
+
+	# reconnect system from Main to Test board
+	calcSystem.SelectPanel(_testboard)
+	doc.Regenerate()
+
+	# Get parameters from test board
+	rvt_DemandFactor = _testboard.get_Parameter(
+		BuiltInParameter.
+		RBS_ELEC_PANEL_TOTAL_DEMAND_FACTOR_PARAM).AsDouble()
+
+	rvt_TotalEstLoad = _testboard.get_Parameter(
+		BuiltInParameter.
+		RBS_ELEC_PANEL_TOTALESTLOAD_PARAM).AsDouble()
+
+	convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
+		rvt_TotalEstLoad, DisplayUnitType.DUT_VOLT_AMPERES)
+
+	# calculate parameters
+	if poles_number == 1:
+		current_estimated = round(
+			(convert_TotalEstLoad / 230) * 10) / 10
+	else:
+		current_estimated = round(
+			(convert_TotalEstLoad / (400 * sqrt(3))) * 10) / 10
+
+	rvt_TotalInstalledLoad = _elSys.ApparentLoad
+
+	# Write parameters in Circuit
+	calcSystem.LookupParameter("E_DemandFactor").Set(rvt_DemandFactor)
+	calcSystem.LookupParameter("E_TotalInstalledLoad").Set(rvt_TotalInstalledLoad)
+	calcSystem.LookupParameter("E_TotalEstLoad").Set(rvt_TotalEstLoad)
+	calcSystem.LookupParameter("E_EstCurrent").Set(current_estimated)
+
+	# reconnect circuit back
+	calcSystem.SelectPanel(mainBoard)
+	doc.Regenerate()
+	return rvt_DemandFactor, rvt_TotalEstLoad, current_estimated
+
+
 # ================ GLOBAL VARIABLES
+global doc  # type: ignore
+doc = DocumentManager.Instance.CurrentDBDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 app = uiapp.Application
 DISTR_SYS_NAME = "230/400V"
 
-global doc  # type: ignore
-doc = DocumentManager.Instance.CurrentDBDocument
-
-
-reload = IN[1]  # type: ignore[reportUndefinedVariable]
-panel_name = IN[2]  # type: ignore
-
+reload = IN[1]  # type: ignore
+calculate_all = False  # type: ignore
+panel_instance = UnwrapElement(IN[2])  # type: ignore
 outlist = list()
-error_list = list()
 
-all_views = FilteredElementCollector(doc).\
-	OfClass(Autodesk.Revit.DB.Electrical.PanelScheduleView).\
-	WhereElementIsNotElementType()
+# Take the type the same as selected board
+testBoardType = panel_instance.Symbol
 
+# find and set distribution system
+testParam = BuiltInParameter.SYMBOL_NAME_PARAM
+pvp = ParameterValueProvider(ElementId(int(testParam)))
+fnrvStr = FilterStringEquals()
+filter = ElementParameterFilter(
+	FilterStringRule(pvp, fnrvStr, DISTR_SYS_NAME, False))
 
-shedule = [x for x in all_views
-	if doc.GetElement(x.GetPanel()).Name == panel_name][0]  # type: Electrical.PanelScheduleView
-
-panel_name_bip = get_bip("RBS_ELEC_PANEL_NAME")
-panel_instance = inst_by_cat_strparamvalue(BuiltInCategory.OST_ElectricalEquipment, panel_name_bip, panel_name, False)
-
-# check if Panel name is unique
-if len(panel_instance) > 1:
-	raise ValueError("More than 1 board with the same name in model")
-else:
-	panel_instance = panel_instance[0]  # type: FamilyInstance
+distrSys = FilteredElementCollector(doc).\
+	OfCategory(BuiltInCategory.OST_ElecDistributionSys).\
+	WhereElementIsElementType().\
+	WherePasses(filter).\
+	ToElements()[0].Id
 
 
 # get all assigned circuits in the panel
@@ -179,33 +340,18 @@ if len(panel_assigned_circuits[1]) == 0:
 else:
 	panel_assigned_circuits = panel_assigned_circuits[1]
 
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
-# get info about all cells in the shadule
-# shedule_circuits_found = list()
-# while len(shedule_circuits_found) != len(panel_assigned_circuits):
-# for i in range(5):
-# circuit_in_shedule = shedule.GetCircuitByCell(3, 2)
-# shedule_circuits_found.append(circuit_in_shedule)
+TESTBOARD = doc.Create.NewFamilyInstance(
+	XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
+TESTBOARD.get_Parameter(
+	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
+param_info = [SetEstimatedValues(x, TESTBOARD) for x in panel_assigned_circuits]
+doc.Delete(TESTBOARD.Id)
 
-# circuit = view_in_work.GetCircuitByCell(2, 4)
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
-# for each circuit in the panel
-	# find circuit current position
-	# disconnect circuit
-	# connect to the virtual panel
-	# get electrical parameters
-	# write circuit parameters
-	# connect circuit back
-	# move to the correct position
-
-# after work with circuits
-# change cell infos "as it was"
-
-
-# slots_list = shedule.IsSpare(1, 2)
-# slot_texts = shedule.GetCircuitByCell(2, 2)
-# OUT = circuit_in_shedule, get_parval(circuit_in_shedule, "RBS_ELEC_CIRCUIT_NUMBER")
-circuit_in_shedule = shedule.GetCircuitByCell(5, 1)
-
-OUT = circuit_in_shedule, panel_assigned_circuits
+OUT = param_info
