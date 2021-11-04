@@ -208,7 +208,7 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 		_bip: BuiltInParameter
 
 		return:
-		Autodesk.Revit.DB.FamilySymbol
+		list()[Autodesk.Revit.DB.FamilySymbol]
 	"""
 	if _isType:
 		fnrvStr = FilterStringEquals()
