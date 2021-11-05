@@ -247,7 +247,7 @@ def SetEstimatedValues(_elSys, _testboard):
 		_testboard: temporary board for manipulations
 
 	return:
-		param (Autodesk.Revit.DB.Parameter) - parameter
+		param List[str] - list of installed values
 
 	"""
 	# check if it is a real circuit
@@ -349,6 +349,7 @@ TESTBOARD.get_Parameter(
 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
 param_info = [SetEstimatedValues(x, TESTBOARD) for x in panel_assigned_circuits]
+
 doc.Delete(TESTBOARD.Id)
 
 # =========End transaction

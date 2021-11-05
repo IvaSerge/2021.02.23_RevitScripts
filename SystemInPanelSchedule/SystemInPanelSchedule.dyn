@@ -78,15 +78,6 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
-        },
-        {
-          "Id": "ecd46298230448d19d1a43f1c61bd2f1",
-          "Name": "IN[3]",
-          "Description": "Input #3",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -183,26 +174,6 @@
       "Description": "Erstellt eine Zeichenfolge."
     },
     {
-      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
-      "NodeType": "StringInputNode",
-      "InputValue": "CP1-FN3L1C13",
-      "Id": "cd46275a7e4a49b78fbfc71eb9021344",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "ce38333756764d489143721e710eed88",
-          "Name": "",
-          "Description": "String",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Creates a string."
-    },
-    {
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
@@ -251,14 +222,9 @@
       "Id": "6c6625a2c4904cb2abd6e4db423d8c32"
     },
     {
-      "Start": "ce38333756764d489143721e710eed88",
-      "End": "2d03435a82aa4dbab0989bdd2277ec20",
-      "Id": "e8a34e78950641d59d36c62573f02473"
-    },
-    {
       "Start": "334821bf4acb4500a0c4a6d507b493a5",
-      "End": "ecd46298230448d19d1a43f1c61bd2f1",
-      "Id": "dd51adb05a2a4ace83af92c66b22d691"
+      "End": "2d03435a82aa4dbab0989bdd2277ec20",
+      "Id": "61d600effdf24814a4a7a49dcfca2d9a"
     }
   ],
   "Dependencies": [],
@@ -338,28 +304,18 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "String",
-        "Id": "cd46275a7e4a49b78fbfc71eb9021344",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 542.33405867311137,
-        "Y": 845.103213849443
-      },
-      {
-        "ShowGeometry": true,
         "Name": "Select Model Element",
         "Id": "fefb87d385404251863283d7f160c7cf",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 500.99971667145212,
-        "Y": 934.29838447320594
+        "X": 490.2910113509223,
+        "Y": 843.76114858145434
       }
     ],
     "Annotations": [],
-    "X": -813.81742257038377,
-    "Y": -1258.418314255046,
-    "Zoom": 1.6995847667883788
+    "X": -207.5922036487608,
+    "Y": -377.46771905227615,
+    "Zoom": 1.0272016710471805
   }
 }
