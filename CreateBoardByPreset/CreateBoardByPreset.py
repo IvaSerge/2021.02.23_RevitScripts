@@ -26,6 +26,8 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+import presets
+
 
 def GetParVal(elem, name):
 	value = None
@@ -112,18 +114,30 @@ if board_schedule:
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
+# CHECK IF THE SCHEDULE IS EMTY!
+options_list = presets.preset_2R_main
 
+# for option in options_list
 # in view create Spare
 board_schedule.AddSpare(1, 1)
 doc.Regenerate()
+
+# change Spare parameters according to type
 last_system = getSystems(board_to_convert)[1][-1]  # Autodesk.Revit.DB.Electrical.ElectricalSystem
 n_of_poles = last_system.get_Parameter(
 	BuiltInParameter.RBS_ELEC_NUMBER_OF_POLES).Set(int(3))
+rating = last_system.get_Parameter(
+	BuiltInParameter.RBS_ELEC_CIRCUIT_RATING_PARAM)
 
-# change Spare parameters according to type
+last_system.LoadName = "Empty"
+last_system.Rating = UnitUtils.ConvertToInternalUnits(20, DisplayUnitType.DUT_AMPERES)
+
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
+# board_schedule.GetCellText(SectionType.Body, 2, 2)
+# board_schedule.SetParamValue(SectionType.Body, 2, 3, "1")
 
-OUT = last_system
+
+OUT = sys.path
