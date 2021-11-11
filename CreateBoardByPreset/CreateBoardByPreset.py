@@ -13,9 +13,6 @@ import System
 from System import Array
 from System.Collections.Generic import *
 
-System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo("en-US")
-from System.Runtime.InteropServices import Marshal
-
 # ================ Revit imports
 clr.AddReference('RevitAPI')
 import Autodesk
@@ -26,7 +23,9 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+
 import presets
+from presets import *
 
 
 def GetParVal(elem, name):
@@ -100,7 +99,13 @@ reload = IN[1]  # type: ignore
 # get FamilyInstance of the board, that need to be converted
 board_to_convert = UnwrapElement(IN[2])  # type: ignore
 
-# get or hard set sub-panel FamilyType (if need)
+# get preset
+if not(IN[3]):  # type: ignore
+	raise ValueError("No preset found")
+elif "2R_main" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2R_main
+elif "2R_sub" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2R_sub
 
 # get PanelScheduleView if no view found - create Default
 board_schedule = [x for x in FilteredElementCollector(doc).
@@ -114,30 +119,21 @@ if board_schedule:
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-# CHECK IF THE SCHEDULE IS EMTY!
-options_list = presets.preset_2R_main
+# TODO: CHECK IF THE SCHEDULE IS EMPTY!
 
-# for option in options_list
-# in view create Spare
-board_schedule.AddSpare(1, 1)
-doc.Regenerate()
+options_list = user_preset[1]
+options_column = user_preset[0]
 
-# change Spare parameters according to type
-last_system = getSystems(board_to_convert)[1][-1]  # Autodesk.Revit.DB.Electrical.ElectricalSystem
-n_of_poles = last_system.get_Parameter(
-	BuiltInParameter.RBS_ELEC_NUMBER_OF_POLES).Set(int(3))
-rating = last_system.get_Parameter(
-	BuiltInParameter.RBS_ELEC_CIRCUIT_RATING_PARAM)
-
-last_system.LoadName = "Empty"
-last_system.Rating = UnitUtils.ConvertToInternalUnits(20, DisplayUnitType.DUT_AMPERES)
+for i, option in enumerate(options_list, start=2):
+	# in view create Spare
+	board_schedule.AddSpare(i, 1)
+	# Set options to columns
+	for column, opt_to_set in zip(options_column, option):
+		board_schedule.SetParamValue(SectionType.Body, i, column, opt_to_set)
+	doc.Regenerate()
 
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-# board_schedule.GetCellText(SectionType.Body, 2, 2)
-# board_schedule.SetParamValue(SectionType.Body, 2, 3, "1")
-
-
-OUT = sys.path
+OUT = options_list, options_column
