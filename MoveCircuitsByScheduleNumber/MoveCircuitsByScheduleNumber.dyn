@@ -2,7 +2,7 @@
   "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
   "IsCustomNode": false,
   "Description": "",
-  "Name": "CreateBoardByPreset",
+  "Name": "MoveCircuitsByScheduleNumber",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -11,7 +11,7 @@
       "Id": "0eb69237dd0c4dc187884facd965d90a",
       "Name": "String",
       "Type": "string",
-      "Value": "CreateBoardByPreset.py",
+      "Value": "MoveCircuitsByScheduleNumber.py",
       "Description": "Erstellt eine Zeichenfolge."
     }
   ],
@@ -83,6 +83,24 @@
           "Id": "4644526c7f40463da9663338d9962434",
           "Name": "IN[3]",
           "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "834d9e922e134b1aa7288e1770bbc377",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d9562b31fcb640918fe48a61aecc4d66",
+          "Name": "IN[5]",
+          "Description": "Input #5",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -165,7 +183,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "CreateBoardByPreset.py",
+      "InputValue": "MoveCircuitsByScheduleNumber.py",
       "Id": "0eb69237dd0c4dc187884facd965d90a",
       "Inputs": [],
       "Outputs": [
@@ -206,12 +224,12 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
       "NodeType": "CodeBlockNode",
-      "Code": "\"2R_main\";\n\"2R_sub\";",
+      "Code": "1;\n1;",
       "Id": "671ef6b141124af29f4512d3ccc3aef1",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "4ab9b169dc8d44d4a7d82c0bb6c11900",
+          "Id": "85521d16976b40a195ce22848e8c06e3",
           "Name": "",
           "Description": "Value of expression at line 1",
           "UsingDefaultValue": false,
@@ -220,7 +238,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "2a2add35b59140fbacb275cc4a4ae9e0",
+          "Id": "7a9872a1ddad40ffa6c99b25aae0ec23",
           "Name": "",
           "Description": "Value of expression at line 2",
           "UsingDefaultValue": false,
@@ -231,6 +249,27 @@
       ],
       "Replication": "Disabled",
       "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "d0238dcf-2c5e-4282-b430-52377a6875d4-00dd402f"
+      ],
+      "Id": "b515efe8246a4969925b247a00268f48",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "71937f1e1790482ebde3133f60f4e59e",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
     }
   ],
   "Connectors": [
@@ -265,9 +304,19 @@
       "Id": "61d600effdf24814a4a7a49dcfca2d9a"
     },
     {
-      "Start": "2a2add35b59140fbacb275cc4a4ae9e0",
+      "Start": "85521d16976b40a195ce22848e8c06e3",
+      "End": "834d9e922e134b1aa7288e1770bbc377",
+      "Id": "478a573118504efeb5055961aab91760"
+    },
+    {
+      "Start": "7a9872a1ddad40ffa6c99b25aae0ec23",
+      "End": "d9562b31fcb640918fe48a61aecc4d66",
+      "Id": "bdc65bf90f4a42838ab51414e1fe74ad"
+    },
+    {
+      "Start": "71937f1e1790482ebde3133f60f4e59e",
       "End": "4644526c7f40463da9663338d9962434",
-      "Id": "24fe5501636841a5a44af3718d8b8916"
+      "Id": "c4e6307affab48d9b952a876bb2a7fda"
     }
   ],
   "Dependencies": [],
@@ -342,12 +391,12 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 8.7190327665745144,
+        "X": -45.633455700537752,
         "Y": 624.51198116686533
       },
       {
         "ShowGeometry": true,
-        "Name": "Select board",
+        "Name": "CopyFrom",
         "Id": "fefb87d385404251863283d7f160c7cf",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -357,18 +406,28 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "Presets",
+        "Name": "Start/End rows",
         "Id": "671ef6b141124af29f4512d3ccc3aef1",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 508.40230995733407,
-        "Y": 955.34199547302842
+        "X": 490.61929748096475,
+        "Y": 1065.2733453269489
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "CopyTo",
+        "Id": "b515efe8246a4969925b247a00268f48",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 431.49168684015484,
+        "Y": 926.89759655178739
       }
     ],
     "Annotations": [],
-    "X": -353.29067947163611,
-    "Y": -485.37659250722584,
-    "Zoom": 0.94104915223538854
+    "X": 130.31519752961844,
+    "Y": -151.93734723592422,
+    "Zoom": 0.62630837880505008
   }
 }
