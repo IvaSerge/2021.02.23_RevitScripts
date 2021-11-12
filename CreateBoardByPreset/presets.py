@@ -19,16 +19,16 @@ class presets():
 	# list of preset options
 	preset_2R_main = [
 		# Description | n_of_poles | TripRating | Remarks
-		[2, 3, 5, 7],
+		[5, 4, 2],
 		[
 			["Empty", "3", "0 A", ""],
-			["63 A / Section Q2", "3", "63 A", "0Q2"],
-			["63 A / Section Q3", "3", "63 A", "0Q3"],
-			["63 A / Section Q4", "3", "63 A", "0Q4"],
-			["63 A / Section Q5", "3", "63 A", "0Q5"],
-			["63 A / Section Q6", "3", "63 A", "0Q6"],
-			["63 A / Section Q7", "3", "63 A", "0Q7"],
-			["160 A / Section Q8", "3", "160 A", "0Q8"]
+			["63 A / Section Q2", "3", "63 A"],
+			["63 A / Section Q3", "3", "63 A"],
+			["63 A / Section Q4", "3", "63 A"],
+			["63 A / Section Q5", "3", "63 A"],
+			["63 A / Section Q6", "3", "63 A"],
+			["63 A / Section Q7", "3", "63 A"],
+			["160 A / Section Q8", "3", "160 A"]
 		]
 	]
 

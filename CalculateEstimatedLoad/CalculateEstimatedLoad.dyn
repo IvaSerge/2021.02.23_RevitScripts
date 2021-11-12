@@ -2,7 +2,7 @@
   "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
   "IsCustomNode": false,
   "Description": "",
-  "Name": "SystemInPanelSchedule",
+  "Name": "CalculateEstimatedLoad",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -11,7 +11,7 @@
       "Id": "0eb69237dd0c4dc187884facd965d90a",
       "Name": "String",
       "Type": "string",
-      "Value": "SystemInPanelSchedule.py",
+      "Value": "CalculateEstimatedLoad.py",
       "Description": "Erstellt eine Zeichenfolge."
     }
   ],
@@ -74,6 +74,15 @@
           "Id": "2d03435a82aa4dbab0989bdd2277ec20",
           "Name": "IN[2]",
           "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "394baed6abe94e14b9ea263449041237",
+          "Name": "IN[3]",
+          "Description": "Input #3",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -156,7 +165,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "SystemInPanelSchedule.py",
+      "InputValue": "CalculateEstimatedLoad.py",
       "Id": "0eb69237dd0c4dc187884facd965d90a",
       "Inputs": [],
       "Outputs": [
@@ -177,13 +186,34 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "5b21fd32-3f27-4740-bf44-a6c16479a36f-00d669cd"
+        "ccf7a1ef-854c-4915-bb32-a89e8d511de0-00db1b36"
       ],
       "Id": "fefb87d385404251863283d7f160c7cf",
       "Inputs": [],
       "Outputs": [
         {
           "Id": "334821bf4acb4500a0c4a6d507b493a5",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "ccf7a1ef-854c-4915-bb32-a89e8d511de0-00db1c87"
+      ],
+      "Id": "f979315b07914f3695b407f9d63192dc",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4a370685e9064c0d9647496bd19a2cd8",
           "Name": "Element",
           "Description": "The selected elements.",
           "UsingDefaultValue": false,
@@ -225,6 +255,11 @@
       "Start": "334821bf4acb4500a0c4a6d507b493a5",
       "End": "2d03435a82aa4dbab0989bdd2277ec20",
       "Id": "61d600effdf24814a4a7a49dcfca2d9a"
+    },
+    {
+      "Start": "4a370685e9064c0d9647496bd19a2cd8",
+      "End": "394baed6abe94e14b9ea263449041237",
+      "Id": "fe63a97681484648a284d0606603f34a"
     }
   ],
   "Dependencies": [],
@@ -304,18 +339,28 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "Select Model Element",
+        "Name": "Board_to_modify",
         "Id": "fefb87d385404251863283d7f160c7cf",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 490.2910113509223,
-        "Y": 843.76114858145434
+        "X": 485.94411071029515,
+        "Y": 836.51631418040915
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "TEST_board_type",
+        "Id": "f979315b07914f3695b407f9d63192dc",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 486.44593097065285,
+        "Y": 976.89529447599239
       }
     ],
     "Annotations": [],
-    "X": -207.5922036487608,
-    "Y": -377.46771905227615,
-    "Zoom": 1.0272016710471805
+    "X": -207.7430036870731,
+    "Y": -474.01386175601465,
+    "Zoom": 0.92507905181934214
   }
 }

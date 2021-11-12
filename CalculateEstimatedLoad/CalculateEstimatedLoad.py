@@ -300,6 +300,8 @@ def SetEstimatedValues(_elSys, _testboard):
 	doc.Regenerate()
 	return rvt_DemandFactor, rvt_TotalEstLoad, current_estimated
 
+	return calcSystem
+
 
 # ================ GLOBAL VARIABLES
 global doc  # type: ignore
@@ -315,7 +317,7 @@ panel_instance = UnwrapElement(IN[2])  # type: ignore
 outlist = list()
 
 # Take the type the same as selected board
-testBoardType = panel_instance.Symbol
+testBoardType = UnwrapElement(IN[3]).Symbol  # type: ignore
 
 # find and set distribution system
 testParam = BuiltInParameter.SYMBOL_NAME_PARAM
@@ -348,11 +350,15 @@ TESTBOARD = doc.Create.NewFamilyInstance(
 TESTBOARD.get_Parameter(
 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
+# try:
 param_info = [SetEstimatedValues(x, TESTBOARD) for x in panel_assigned_circuits]
+# 	doc.Delete(TESTBOARD.Id)
+# 	OUT = param_info, TESTBOARD
+# except:
+# 	OUT = TESTBOARD
 
-doc.Delete(TESTBOARD.Id)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = param_info
+OUT = TESTBOARD
