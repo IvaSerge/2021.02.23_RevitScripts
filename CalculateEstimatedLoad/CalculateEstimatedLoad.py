@@ -106,40 +106,6 @@ def getByCatAndStrParam(_bic, _bip, _val, _isType):
 	return elem
 
 
-def clearParam(_elem):
-	name = "CBT:CIR_Elektrischen Schlag"
-	parVal = GetParVal(_elem, name)
-	if parVal and "Schutz Datenbank" in parVal:
-		SetupParVal(_elem, name, "")
-	return parVal
-
-
-def getSystems(_brd):
-	"""Get all systems of electrical board.
-
-		args:
-		_brd - electrical board FamilyInstance
-
-		return list(1, 2) where:
-		1 - main electrical circuit
-		2 - list of connectet low circuits
-	"""
-	allsys = _brd.MEPModel.ElectricalSystems
-	lowsys = _brd.MEPModel.AssignedElectricalSystems
-	if lowsys:
-		lowsysId = [i.Id for i in lowsys]
-		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
-		if len(mainboardsysLst) == 0:
-			mainboardsys = None
-		else:
-			mainboardsys = mainboardsysLst[0]
-		lowsys = [i for i in allsys if i.Id in lowsysId]
-		lowsys.sort(key=lambda x: float(GetParVal(x, "RBS_ELEC_CIRCUIT_NUMBER")))
-		return mainboardsys, lowsys
-	else:
-		return [i for i in allsys][0], None
-
-
 def elsys_by_brd(_brd):
 	"""Get all systems of electrical board.
 		args:
@@ -162,37 +128,6 @@ def elsys_by_brd(_brd):
 		return mainboardsys, lowsys
 	else:
 		return [i for i in allsys][0], None
-
-
-def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
-	"""Get all family instances by category and parameter value
-		args:
-		_bic: BuiltInCategory.OST_xxx
-		_bip: BuiltInParameter
-		return:
-		list()[Autodesk.Revit.DB.FamilySymbol]
-	"""
-	if _isType:
-		fnrvStr = FilterStringEquals()
-		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
-		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
-			OfCategory(_bic).\
-			WhereElementIsElementType().\
-			WherePasses(filter).\
-			ToElements()
-	else:
-		fnrvStr = FilterStringEquals()
-		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
-		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
-			OfCategory(_bic).\
-			WhereElementIsNotElementType().\
-			WherePasses(filter).\
-			ToElements()
-	return elem
 
 
 def get_bip(paramName):
@@ -300,8 +235,6 @@ def SetEstimatedValues(_elSys, _testboard):
 	doc.Regenerate()
 	return rvt_DemandFactor, rvt_TotalEstLoad, current_estimated
 
-	return calcSystem
-
 
 # ================ GLOBAL VARIABLES
 global doc  # type: ignore
@@ -350,15 +283,10 @@ TESTBOARD = doc.Create.NewFamilyInstance(
 TESTBOARD.get_Parameter(
 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
-# try:
 param_info = [SetEstimatedValues(x, TESTBOARD) for x in panel_assigned_circuits]
-# 	doc.Delete(TESTBOARD.Id)
-# 	OUT = param_info, TESTBOARD
-# except:
-# 	OUT = TESTBOARD
-
+doc.Delete(TESTBOARD.Id)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = TESTBOARD
+OUT = param_info
