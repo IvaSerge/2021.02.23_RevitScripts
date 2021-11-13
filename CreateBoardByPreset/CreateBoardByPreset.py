@@ -126,7 +126,10 @@ options_column = user_preset[0]
 
 for i, option in enumerate(options_list, start=2):
 	# in view create Spare
-	board_schedule.AddSpare(i, 1)
+	try:
+		board_schedule.AddSpare(i, 1)
+	except:
+		continue
 	# Set options to columns
 	for column, opt_to_set in zip(options_column, option):
 		board_schedule.SetParamValue(SectionType.Body, i, column, opt_to_set)
