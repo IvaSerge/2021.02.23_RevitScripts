@@ -28,6 +28,10 @@ from RevitServices.Transactions import TransactionManager
 import math
 from math import sqrt
 
+# ================ Local imports
+import CalculateEstimatedLoad
+from CalculateEstimatedLoad import get_est_current
+
 
 # ================ GLOBAL VARIABLES
 global doc  # type: ignore
@@ -37,15 +41,45 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 app = uiapp.Application
 DISTR_SYS_NAME = "230/400V"
 
+# find and set distribution system
+testParam = BuiltInParameter.SYMBOL_NAME_PARAM
+pvp = ParameterValueProvider(ElementId(int(testParam)))
+fnrvStr = FilterStringEquals()
+filter = ElementParameterFilter(
+	FilterStringRule(pvp, fnrvStr, DISTR_SYS_NAME, False))
+
+distrSys = FilteredElementCollector(doc).\
+	OfCategory(BuiltInCategory.OST_ElecDistributionSys).\
+	WhereElementIsElementType().\
+	WherePasses(filter).\
+	ToElements()[0].Id
+
 reload = IN[1]  # type: ignore
 panel_instance = UnwrapElement(IN[2])  # type: ignore
 outlist = list()
 
+# get circuits
+sys_type = Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit
+el_circuits = panel_instance.MEPModel.ElectricalSystems
+el_circuits = [i for i in el_circuits if i.SystemType == sys_type]
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
+# create test board
+# Take the type the same as selected board
+testBoardType = UnwrapElement(IN[3]).Symbol  # type: ignore
+
+TESTBOARD = doc.Create.NewFamilyInstance(
+	XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
+TESTBOARD.get_Parameter(
+	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
+
 # get Estimated Current of circuit
+el_circuit = el_circuits[3]
+est_current = get_est_current(el_circuit, TESTBOARD, doc)
+
+
 # get circuit path
 # get ammount of consumers
 # get number of poles
@@ -67,7 +101,10 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 # calculate Local voltage drop for every element of net
 # Sum results
 
+# delete testboard
+doc.Delete(TESTBOARD.Id)
+
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = None
+OUT = est_current

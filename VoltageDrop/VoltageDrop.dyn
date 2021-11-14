@@ -78,6 +78,15 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
+        },
+        {
+          "Id": "75c93182229f4490bfd016525f8e3ee2",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -177,13 +186,34 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "ccf7a1ef-854c-4915-bb32-a89e8d511de0-00db1b36"
+        "31774e96-9fc5-46c2-a518-f0f00bdbbc76-00c03e4f"
       ],
       "Id": "fefb87d385404251863283d7f160c7cf",
       "Inputs": [],
       "Outputs": [
         {
           "Id": "334821bf4acb4500a0c4a6d507b493a5",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "ccf7a1ef-854c-4915-bb32-a89e8d511de0-00db1c87"
+      ],
+      "Id": "ac28b5caff1c42f081575705859aa34c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "575436ccff464fd2af0027b810be1b1d",
           "Name": "Element",
           "Description": "The selected elements.",
           "UsingDefaultValue": false,
@@ -225,6 +255,11 @@
       "Start": "334821bf4acb4500a0c4a6d507b493a5",
       "End": "2d03435a82aa4dbab0989bdd2277ec20",
       "Id": "61d600effdf24814a4a7a49dcfca2d9a"
+    },
+    {
+      "Start": "575436ccff464fd2af0027b810be1b1d",
+      "End": "75c93182229f4490bfd016525f8e3ee2",
+      "Id": "79b3997da52648178e5d5a92006c3ae9"
     }
   ],
   "Dependencies": [],
@@ -309,13 +344,23 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 485.94411071029515,
-        "Y": 836.51631418040915
+        "X": 451.14322142097262,
+        "Y": 831.16233121282119
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "TEST_board",
+        "Id": "ac28b5caff1c42f081575705859aa34c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 449.69186865262554,
+        "Y": 975.642435209244
       }
     ],
     "Annotations": [],
-    "X": 165.05455346715542,
-    "Y": -427.14894503435096,
-    "Zoom": 1.0224926222867792
+    "X": -295.13506687794825,
+    "Y": -321.98065182286717,
+    "Zoom": 0.72937809080890836
   }
 }
