@@ -55,13 +55,14 @@ distrSys = FilteredElementCollector(doc).\
 	ToElements()[0].Id
 
 reload = IN[1]  # type: ignore
-panel_instance = UnwrapElement(IN[2])  # type: ignore
+el_instance = UnwrapElement(IN[2])  # type: ignore
 outlist = list()
 
 # get circuits
 sys_type = Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit
-el_circuits = panel_instance.MEPModel.ElectricalSystems
-el_circuits = [i for i in el_circuits if i.SystemType == sys_type]
+# el_circuits = panel_instance.MEPModel.ElectricalSystems
+el_circuits = el_instance.MEPModel.ElectricalSystems
+el_circuit = [i for i in el_circuits if i.SystemType == sys_type][0]
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
@@ -76,18 +77,14 @@ TESTBOARD.get_Parameter(
 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
 # get Estimated Current of circuit
-el_circuit = el_circuits[3]
-est_current = get_est_current(el_circuit, TESTBOARD, doc)
-
-
-# get circuit path
-# get ammount of consumers
-# get number of poles
+sys_current = get_est_current(el_circuit, TESTBOARD, doc)
 
 # ============== Voltage Drop Local ==============
 # EXAMPLE of caclulations
 # SEE: http://www.electricalaxis.com/2015/03/how-to-calculate-voltage-drop-of.html
 # find voltage drop to the next device.
+
+
 # create list that describes net.
 # points_info = [(Estimated Current / n_of_consumers) * (n_of_consumers - coint)], [Length to point]
 # type: points_info[Current, Lenght]
@@ -107,4 +104,4 @@ doc.Delete(TESTBOARD.Id)
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = est_current
+OUT = sys_current
