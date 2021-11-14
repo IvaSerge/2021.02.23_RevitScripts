@@ -31,6 +31,8 @@ from math import sqrt
 # ================ Local imports
 import CalculateEstimatedLoad
 from CalculateEstimatedLoad import get_est_current
+import Circuit_voltage_drop
+from Circuit_voltage_drop import calc_circuit_vd
 
 
 # ================ GLOBAL VARIABLES
@@ -78,20 +80,7 @@ TESTBOARD.get_Parameter(
 
 # get Estimated Current of circuit
 sys_current = get_est_current(el_circuit, TESTBOARD, doc)
-
-# ============== Voltage Drop Local ==============
-# EXAMPLE of caclulations
-# SEE: http://www.electricalaxis.com/2015/03/how-to-calculate-voltage-drop-of.html
-# find voltage drop to the next device.
-
-
-# create list that describes net.
-# points_info = [(Estimated Current / n_of_consumers) * (n_of_consumers - coint)], [Length to point]
-# type: points_info[Current, Lenght]
-# get Z from the data base
-# calculate Vd using formulas
-# 1p: Vd = 2 * points_info[0] Z * points_info[1]
-# 3p: Vd = sqrt(3) * points_info[0] Z * points_info[1]
+sys_vd = calc_circuit_vd(el_circuit, sys_current)
 
 # ============== Voltage Drop Owerall ==============
 # find all the net from source to the current net.
@@ -104,4 +93,4 @@ doc.Delete(TESTBOARD.Id)
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = sys_current
+OUT = sys_vd
