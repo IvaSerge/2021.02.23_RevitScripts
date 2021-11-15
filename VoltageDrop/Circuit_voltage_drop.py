@@ -65,10 +65,18 @@ def get_points_lenght(_el_sys):
 		for i in connector_list]
 
 	# calculate distance while point != point in connectors
-	test_list = [i for i in sys_path
-		if check_point(i, connector_points)]
-
-	return test_list
+	length_list = list()
+	length_current = 0
+	for i, pnt in enumerate(sys_path):
+		# do not check last point
+		if i == len(sys_path) - 1:
+			break
+		pnt_next = sys_path[i + 1]
+		length_current += pnt.DistanceTo(pnt_next)
+		if check_point(pnt_next, connector_points):
+			length_list.append(length_current)
+			length_current = 0
+	return length_list
 
 
 def calc_circuit_vd(_el_sys, _est_current):
@@ -96,11 +104,11 @@ def calc_circuit_vd(_el_sys, _est_current):
 		for i in enumerate(sys_elems)]
 
 	points_lenght = get_points_lenght(_el_sys)
-	# points_info = [(Estimated Current / n_of_consumers) * (n_of_consumers - count)], [Length to point]
-	# type: points_info[Current, Lenght]
+	points_info = zip(points_current, points_lenght)
+
 	# get Z from the data base
 	# calculate Vd using formulas
 	# 1p: Vd = 2 * points_info[0] Z * points_info[1]
 	# 3p: Vd = sqrt(3) * points_info[0] Z * points_info[1]
 
-	return points_lenght
+	return points_info
