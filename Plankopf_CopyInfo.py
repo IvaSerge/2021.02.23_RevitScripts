@@ -253,17 +253,17 @@ if legendViews:
 			None
 
 # Copy all elements on view
-# if elems_on_view:
-# 	tr_form = ElementTransformUtils.GetTransformFromViewToView(
-# 		ElemFrom_Sheet,
-# 		ElemTo_Sheet)
-# 	copy_opt = CopyPasteOptions()
-# 	ElementTransformUtils.CopyElements(
-# 		ElemFrom_Sheet,
-# 		elems_on_view,
-# 		ElemTo_Sheet,
-# 		tr_form,
-# 		copy_opt)
+if elems_on_view:
+	tr_form = ElementTransformUtils.GetTransformFromViewToView(
+		ElemFrom_Sheet,
+		ElemTo_Sheet)
+	copy_opt = CopyPasteOptions()
+	ElementTransformUtils.CopyElements(
+		ElemFrom_Sheet,
+		elems_on_view,
+		ElemTo_Sheet,
+		tr_form,
+		copy_opt)
 
 
 # =========End transaction
