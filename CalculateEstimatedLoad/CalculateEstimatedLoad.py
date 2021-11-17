@@ -180,6 +180,7 @@ def SetEstimatedValues(_elSys, _testboard):
 
 	# Write parameters in Circuit
 	calcSystem.LookupParameter("E_DemandFactor").Set(rvt_DemandFactor)
+	calcSystem.LookupParameter("Demand Facto").Set(rvt_DemandFactor)
 	calcSystem.LookupParameter("E_TotalInstalledLoad").Set(rvt_TotalInstalledLoad)
 	calcSystem.LookupParameter("E_TotalEstLoad").Set(total_est_load)
 	calcSystem.LookupParameter("E_EstCurrent").Set(current_estimated)
