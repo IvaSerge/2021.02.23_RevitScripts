@@ -28,30 +28,8 @@ from RevitServices.Transactions import TransactionManager
 import math
 from math import sqrt
 
-
-def GetParVal(elem, name):
-	value = None
-	# custom parameter
-	param = elem.LookupParameter(name)
-	# check is it a BuiltIn parameter if not found
-	if not(param):
-		param = elem.get_Parameter(GetBuiltInParam(name))
-
-	# get paremeter Value if found
-	try:
-		storeType = param.StorageType
-		# value = storeType
-		if storeType == StorageType.String:
-			value = param.AsString()
-		elif storeType == StorageType.Integer:
-			value = param.AsDouble()
-		elif storeType == StorageType.Double:
-			value = param.AsDouble()
-		elif storeType == StorageType.ElementId:
-			value = param.AsValueString()
-	except:
-		pass
-	return value
+import el_exceptions
+from el_exceptions import test_exceptions
 
 
 def GetBuiltInParam(paramName):
@@ -61,49 +39,6 @@ def GetBuiltInParam(paramName):
 		if i.ToString() == paramName:
 			param.append(i)
 			return i
-
-
-def SetupParVal(elem, name, pValue):
-	global doc
-	# custom parameter
-	param = elem.LookupParameter(name)
-	# check is it a BuiltIn parameter if not found
-	if not(param):
-		try:
-			param = elem.get_Parameter(GetBuiltInParam(name)).Set(pValue)
-		except:
-			pass
-	if param:
-		try:
-			param.Set(pValue)
-		except:
-			pass
-	return elem
-
-
-def getByCatAndStrParam(_bic, _bip, _val, _isType):
-	global doc
-	if _isType:
-		fnrvStr = FilterStringEquals()
-		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
-		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
-			OfCategory(_bic).\
-			WhereElementIsElementType().\
-			WherePasses(filter).\
-			ToElements()
-	else:
-		fnrvStr = FilterStringEquals()
-		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
-		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
-			OfCategory(_bic).\
-			WhereElementIsNotElementType().\
-			WherePasses(filter).\
-			ToElements()
-	return elem
 
 
 def elsys_by_brd(_brd):
@@ -173,27 +108,10 @@ def get_parval(elem, name):
 	return value
 
 
-def SetEstimatedValues(_elSys, _testboard):
-	# type: (Electrical.ElectricalSystem, FamilyInstance) -> list[Electrical.ElectricalSystem]
-	"""Copy Estimated values from elecrtical board to the circuit
-
-	args:
-		_elSys: system to be calculated
-		_testboard: temporary board for manipulations
-
-	return:
-		param List[str] - list of installed values
-
-	"""
-	# check if it is a real circuit
-	# it it is spare or space - no actions requiered
-	circ_type = _elSys.CircuitType
-	if circ_type != Electrical.CircuitType.Circuit:
-		return None
-
+def get_estimated_load(_elSys, _testboard):
+	"""Get estimated load of circuit by connecting it to temporar board"""
 	global doc
 	calcSystem = _elSys
-	poles_number = calcSystem.PolesNumber
 
 	# Main board of electrical system
 	mainBoard = calcSystem.BaseEquipment
@@ -214,26 +132,59 @@ def SetEstimatedValues(_elSys, _testboard):
 	convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
 		rvt_TotalEstLoad, DisplayUnitType.DUT_VOLT_AMPERES)
 
-	# calculate parameters
-	if poles_number == 1:
-		current_estimated = round(
-			(convert_TotalEstLoad / 230) * 10) / 10
-	else:
-		current_estimated = round(
-			(convert_TotalEstLoad / (400 * sqrt(3))) * 10) / 10
+	# reconnect circuit back
+	calcSystem.SelectPanel(mainBoard)
+	doc.Regenerate()
 
+	return convert_TotalEstLoad, rvt_DemandFactor
+
+
+def SetEstimatedValues(_elSys, _testboard):
+	# type: (Electrical.ElectricalSystem, FamilyInstance) -> list[Electrical.ElectricalSystem]
+	"""Copy Estimated values from elecrtical board to the circuit
+
+	args:
+		_elSys: system to be calculated
+		_testboard: temporary board for manipulations
+
+	return:
+		param List[str] - list of installed values
+
+	"""
+	# check if it is a real circuit
+	# it it is spare or space - no actions requiered
+	circ_type = _elSys.CircuitType
+	calcSystem = _elSys
 	rvt_TotalInstalledLoad = _elSys.ApparentLoad
+	if circ_type != Electrical.CircuitType.Circuit:
+		return None
+
+	if test_exceptions(_elSys):
+		calc_parameters = get_estimated_load(_elSys, _testboard)
+		total_est_load = calc_parameters[0]
+		rvt_DemandFactor = calc_parameters[1]
+			# calculate parameters
+		poles_number = calcSystem.PolesNumber
+		if poles_number == 1:
+			current_estimated = round(
+				(total_est_load / 230) * 10) / 10
+		else:
+			current_estimated = round((total_est_load / (400 * sqrt(3))) * 10) / 10
+	else:
+		# if not an exception - demand factor == 1
+		rvt_DemandFactor = 1
+		total_est_load = rvt_TotalInstalledLoad
+		rvt_current = _elSys.ApparentCurrent
+		current_estimated = round(UnitUtils.ConvertFromInternalUnits(
+			rvt_current, DisplayUnitType.DUT_AMPERES) * 10) / 10
 
 	# Write parameters in Circuit
 	calcSystem.LookupParameter("E_DemandFactor").Set(rvt_DemandFactor)
 	calcSystem.LookupParameter("E_TotalInstalledLoad").Set(rvt_TotalInstalledLoad)
-	calcSystem.LookupParameter("E_TotalEstLoad").Set(rvt_TotalEstLoad)
+	calcSystem.LookupParameter("E_TotalEstLoad").Set(total_est_load)
 	calcSystem.LookupParameter("E_EstCurrent").Set(current_estimated)
 
-	# reconnect circuit back
-	calcSystem.SelectPanel(mainBoard)
-	doc.Regenerate()
-	return rvt_DemandFactor, rvt_TotalEstLoad, current_estimated
+	return rvt_DemandFactor, total_est_load, current_estimated
 
 
 # ================ GLOBAL VARIABLES
