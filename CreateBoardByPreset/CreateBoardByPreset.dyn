@@ -8,11 +8,15 @@
   },
   "Inputs": [
     {
-      "Id": "0eb69237dd0c4dc187884facd965d90a",
-      "Name": "String",
-      "Type": "string",
-      "Value": "CreateBoardByPreset.py",
-      "Description": "Erstellt eine Zeichenfolge."
+      "Id": "df0078fed02041b2829168ffa0038de4",
+      "Name": "Integer Slider",
+      "Type": "number",
+      "Value": "0",
+      "MaximumValue": 100.0,
+      "MinimumValue": 0.0,
+      "StepValue": 1.0,
+      "NumberType": "Integer",
+      "Description": "A slider that produces integer values."
     }
   ],
   "Outputs": [],
@@ -231,6 +235,108 @@
       ],
       "Replication": "Disabled",
       "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.GetItemAtIndex@var[]..[],int",
+      "Id": "ab48922352cd4c55ab1ce8efe1769b2d",
+      "Inputs": [
+        {
+          "Id": "e10089fb35fb43aaa11961f4afe7e116",
+          "Name": "list",
+          "Description": "List to fetch an item from.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ea68af4063ed40cf8318f06be7579977",
+          "Name": "index",
+          "Description": "Index of the item to be fetched.\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a2ae96803ba341428e8db21792fad3a4",
+          "Name": "item",
+          "Description": "Item in the list at the given index.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Returns an item from the given list that's located at the specified index.\n\nList.GetItemAtIndex (list: var[]..[], index: int): var[]..[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.CreateList, CoreNodeModels",
+      "VariableInputPorts": true,
+      "NodeType": "ExtensionNode",
+      "Id": "1062c808f2fa42c6ad1621d9e6d758ee",
+      "Inputs": [
+        {
+          "Id": "54baa4c8c9464c0f86f428ddb5549c94",
+          "Name": "item0",
+          "Description": "Item Index #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f5b8980daeb34cb08983295be4fa15b5",
+          "Name": "item1",
+          "Description": "Item Index #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "12cfc5314e87463db843dff35d60a9e6",
+          "Name": "list",
+          "Description": "A list",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Makes a new list out of the given inputs"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Integer",
+      "InputValue": 0,
+      "MaximumValue": 100,
+      "MinimumValue": 0,
+      "StepValue": 1,
+      "Id": "df0078fed02041b2829168ffa0038de4",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "43e8729d13a14fa79741ed8ca8511cc7",
+          "Name": "",
+          "Description": "Int32",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A slider that produces integer values."
     }
   ],
   "Connectors": [
@@ -266,8 +372,28 @@
     },
     {
       "Start": "4ab9b169dc8d44d4a7d82c0bb6c11900",
+      "End": "54baa4c8c9464c0f86f428ddb5549c94",
+      "Id": "07d4f86527f34e3eb71ff71bb4d59f48"
+    },
+    {
+      "Start": "2a2add35b59140fbacb275cc4a4ae9e0",
+      "End": "f5b8980daeb34cb08983295be4fa15b5",
+      "Id": "baaa9a30f6d94851bcfc016464e7e748"
+    },
+    {
+      "Start": "a2ae96803ba341428e8db21792fad3a4",
       "End": "4644526c7f40463da9663338d9962434",
-      "Id": "69408664c6ed40b3895dc513fbde9417"
+      "Id": "9aa0b710110b4e16bc07e1aaa6a55a56"
+    },
+    {
+      "Start": "12cfc5314e87463db843dff35d60a9e6",
+      "End": "e10089fb35fb43aaa11961f4afe7e116",
+      "Id": "15f2a8e89fae4cf7b2b90b8e00a7a881"
+    },
+    {
+      "Start": "43e8729d13a14fa79741ed8ca8511cc7",
+      "End": "ea68af4063ed40cf8318f06be7579977",
+      "Id": "919cb419662240ecbfcab65eb05f00f4"
     }
   ],
   "Dependencies": [],
@@ -339,7 +465,7 @@
         "ShowGeometry": true,
         "Name": "String",
         "Id": "0eb69237dd0c4dc187884facd965d90a",
-        "IsSetAsInput": true,
+        "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 8.7190327665745144,
@@ -362,13 +488,43 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 508.40230995733407,
-        "Y": 955.34199547302842
+        "X": 100.33371414352169,
+        "Y": 985.47678535672571
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.GetItemAtIndex",
+        "Id": "ab48922352cd4c55ab1ce8efe1769b2d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 506.44030297335757,
+        "Y": 968.76004516723128
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List Create",
+        "Id": "1062c808f2fa42c6ad1621d9e6d758ee",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 311.97726159531851,
+        "Y": 977.8559020732398
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Integer Slider",
+        "Id": "df0078fed02041b2829168ffa0038de4",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 134.62042411646533,
+        "Y": 1158.2358674636646
       }
     ],
     "Annotations": [],
-    "X": -432.8108499395309,
-    "Y": -617.87820455154269,
-    "Zoom": 1.0646677682305847
+    "X": 3.291431913503402,
+    "Y": -455.49376010635706,
+    "Zoom": 0.77826390827767644
   }
 }
