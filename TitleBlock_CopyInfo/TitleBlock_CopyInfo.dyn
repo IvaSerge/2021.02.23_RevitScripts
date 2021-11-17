@@ -381,7 +381,7 @@
         "ShowGeometry": true,
         "Name": "Copy From",
         "Id": "204212c705144861883f927ec5b3c011",
-        "IsSetAsInput": false,
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 471.11429335547132,
@@ -391,7 +391,7 @@
         "ShowGeometry": true,
         "Name": "Copy To",
         "Id": "13159c60afde43a8a3998c280c15b2c6",
-        "IsSetAsInput": false,
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 470.08972294304988,
@@ -399,8 +399,8 @@
       }
     ],
     "Annotations": [],
-    "X": 47.460866047556777,
-    "Y": -479.05587412306903,
-    "Zoom": 1.0290975699333964
+    "X": -137.57022277192794,
+    "Y": -430.1546878808677,
+    "Zoom": 0.86730567836822048
   }
 }
