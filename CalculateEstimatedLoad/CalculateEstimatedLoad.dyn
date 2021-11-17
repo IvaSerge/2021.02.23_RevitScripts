@@ -79,6 +79,15 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
+        },
+        {
+          "Id": "cabf55a19d0b4d95ba8bf922a21a0529",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -215,6 +224,26 @@
         }
       ],
       "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "38a1c8ae383c40e4b57526ea42438a56",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "946dcae159fd4f17b14851075a96f217",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
     }
   ],
   "Connectors": [
@@ -250,8 +279,13 @@
     },
     {
       "Start": "4a370685e9064c0d9647496bd19a2cd8",
+      "End": "cabf55a19d0b4d95ba8bf922a21a0529",
+      "Id": "29d67772de2c414faa278dab8a718f95"
+    },
+    {
+      "Start": "946dcae159fd4f17b14851075a96f217",
       "End": "394baed6abe94e14b9ea263449041237",
-      "Id": "fe63a97681484648a284d0606603f34a"
+      "Id": "2c9adabbc3fd4b29ab92d060f47a8f66"
     }
   ],
   "Dependencies": [],
@@ -346,13 +380,23 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 486.44593097065285,
-        "Y": 976.89529447599239
+        "X": 483.90842510579705,
+        "Y": 1102.5018347863518
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Calculate_all",
+        "Id": "38a1c8ae383c40e4b57526ea42438a56",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 492.08362539135942,
+        "Y": 995.05598969673838
       }
     ],
     "Annotations": [],
-    "X": 126.13872829247954,
-    "Y": -500.33887741200533,
-    "Zoom": 1.1034157929404838
+    "X": -183.75704235735918,
+    "Y": -443.68754624033028,
+    "Zoom": 0.78817551821252541
   }
 }

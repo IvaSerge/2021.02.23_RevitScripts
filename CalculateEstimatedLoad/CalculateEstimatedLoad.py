@@ -196,12 +196,12 @@ app = uiapp.Application
 DISTR_SYS_NAME = "230/400V"
 
 reload = IN[1]  # type: ignore
-calculate_all = False  # type: ignore
+calculate_all = IN[3]  # type: ignore
 panel_instance = UnwrapElement(IN[2])  # type: ignore
 outlist = list()
 
 # Take the type the same as selected board
-testBoardType = UnwrapElement(IN[3]).Symbol  # type: ignore
+testBoardType = UnwrapElement(IN[4]).Symbol  # type: ignore
 
 # find and set distribution system
 testParam = BuiltInParameter.SYMBOL_NAME_PARAM
@@ -216,15 +216,21 @@ distrSys = FilteredElementCollector(doc).\
 	WherePasses(filter).\
 	ToElements()[0].Id
 
+if calculate_all:
+	# get all assigned circuits in the panel
+	panel_assigned_circuits = elsys_by_brd(panel_instance)
 
-# get all assigned circuits in the panel
-panel_assigned_circuits = elsys_by_brd(panel_instance)
-
-# check if there is any circuit in the Panel
-if len(panel_assigned_circuits[1]) == 0:
-	raise ValueError("No circuits found")
+	# check if there is any circuit in the Panel
+	if len(panel_assigned_circuits[1]) == 0:
+		raise ValueError("No circuits found")
+	else:
+		circuits_to_calculate = panel_assigned_circuits[1]
 else:
-	panel_assigned_circuits = panel_assigned_circuits[1]
+	# get all circuits in the model
+	circuits_to_calculate = FilteredElementCollector(doc).\
+		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
+		WhereElementIsNotElementType().WherePasses(filter).\
+		ToElements()
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
@@ -234,7 +240,7 @@ TESTBOARD = doc.Create.NewFamilyInstance(
 TESTBOARD.get_Parameter(
 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
-param_info = [SetEstimatedValues(x, TESTBOARD) for x in panel_assigned_circuits]
+param_info = [SetEstimatedValues(x, TESTBOARD) for x in circuits_to_calculate]
 doc.Delete(TESTBOARD.Id)
 
 # =========End transaction
