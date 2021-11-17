@@ -28,18 +28,6 @@ from RevitServices.Transactions import TransactionManager
 import math
 from math import sqrt
 
-import el_exceptions
-from el_exceptions import test_exceptions
-
-
-def GetBuiltInParam(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
-
 
 def elsys_by_brd(_brd):
 	"""Get all systems of electrical board.
@@ -78,7 +66,7 @@ def get_bip(paramName):
 def get_parval(elem, name):
 	"""Get parametr value
 	args:
-		elem - family instance or type
+		elem - family instance or type\n
 		name - parameter name
 	return:
 		value - parameter value
@@ -139,54 +127,6 @@ def get_estimated_load(_elSys, _testboard):
 	return convert_TotalEstLoad, rvt_DemandFactor
 
 
-def SetEstimatedValues(_elSys, _testboard):
-	# type: (Electrical.ElectricalSystem, FamilyInstance) -> list[Electrical.ElectricalSystem]
-	"""Copy Estimated values from elecrtical board to the circuit
-
-	args:
-		_elSys: system to be calculated
-		_testboard: temporary board for manipulations
-
-	return:
-		param List[str] - list of installed values
-
-	"""
-	# check if it is a real circuit
-	# it it is spare or space - no actions requiered
-	circ_type = _elSys.CircuitType
-	calcSystem = _elSys
-	rvt_TotalInstalledLoad = _elSys.ApparentLoad
-	if circ_type != Electrical.CircuitType.Circuit:
-		return None
-
-	if test_exceptions(_elSys):
-		calc_parameters = get_estimated_load(_elSys, _testboard)
-		total_est_load = calc_parameters[0]
-		rvt_DemandFactor = calc_parameters[1]
-			# calculate parameters
-		poles_number = calcSystem.PolesNumber
-		if poles_number == 1:
-			current_estimated = round(
-				(total_est_load / 230) * 10) / 10
-		else:
-			current_estimated = round((total_est_load / (400 * sqrt(3))) * 10) / 10
-	else:
-		# if not an exception - demand factor == 1
-		rvt_DemandFactor = 1
-		total_est_load = rvt_TotalInstalledLoad
-		rvt_current = _elSys.ApparentCurrent
-		current_estimated = round(UnitUtils.ConvertFromInternalUnits(
-			rvt_current, DisplayUnitType.DUT_AMPERES) * 10) / 10
-
-	# Write parameters in Circuit
-	calcSystem.LookupParameter("E_DemandFactor").Set(rvt_DemandFactor)
-	calcSystem.LookupParameter("Demand Factor").Set(rvt_DemandFactor)
-	calcSystem.LookupParameter("E_TotalInstalledLoad").Set(rvt_TotalInstalledLoad)
-	calcSystem.LookupParameter("E_TotalEstLoad").Set(total_est_load)
-	calcSystem.LookupParameter("E_EstCurrent").Set(current_estimated)
-	return rvt_DemandFactor, total_est_load, current_estimated
-
-
 # ================ GLOBAL VARIABLES
 global doc  # type: ignore
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -196,12 +136,10 @@ app = uiapp.Application
 DISTR_SYS_NAME = "230/400V"
 
 reload = IN[1]  # type: ignore
-calculate_all = IN[3]  # type: ignore
 panel_instance = UnwrapElement(IN[2])  # type: ignore
-outlist = list()
 
 # Take the type the same as selected board
-testBoardType = UnwrapElement(IN[4]).Symbol  # type: ignore
+testBoardType = UnwrapElement(IN[3]).Symbol  # type: ignore
 
 # find and set distribution system
 testParam = BuiltInParameter.SYMBOL_NAME_PARAM
@@ -216,42 +154,26 @@ distrSys = FilteredElementCollector(doc).\
 	WherePasses(filter).\
 	ToElements()[0].Id
 
-if not(calculate_all):
-	# get all assigned circuits in the panel
-	panel_assigned_circuits = elsys_by_brd(panel_instance)
 
-	# check if there is any circuit in the Panel
-	if len(panel_assigned_circuits[1]) == 0:
-		raise ValueError("No circuits found")
-	else:
-		circuits_to_calculate = panel_assigned_circuits[1]
+# get all assigned circuits in the panel
+panel_assigned_circuits = elsys_by_brd(panel_instance)
+
+# check if there is any circuit in the Panel
+if len(panel_assigned_circuits[1]) == 0:
+	raise ValueError("No circuits found")
 else:
-	# get all circuits in the model
-	# Get all electrical circuits
-	# Circuit type need to be electrilca only
-	# electrical circuit type ID == 6
-	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
-	pvp = ParameterValueProvider(ElementId(int(testParam)))
-	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
-	filter = ElementParameterFilter(sysRule)
+	circuits_to_calculate = panel_assigned_circuits[1]
 
-	circuits_to_calculate = FilteredElementCollector(doc).\
-		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
-		WhereElementIsNotElementType().WherePasses(filter).\
-		ToElements()
 
-	voltage_230 = UnitUtils.ConvertToInternalUnits(
-		230, DisplayUnitType.DUT_VOLTS)
-	voltage_400 = UnitUtils.ConvertToInternalUnits(
-		400, DisplayUnitType.DUT_VOLTS)
+circ_trip = [get_parval(x, "Trip") for x in circuits_to_calculate]
+circ_poles = [x.PolesNumber for x in circuits_to_calculate]
 
-	circuits_to_calculate = [
-		i for i in circuits_to_calculate
-		if i.Voltage == voltage_230 or i.Voltage == voltage_400
-	]
+circ_list = [
+	x for x in zip(circuits_to_calculate, circ_trip, circ_poles)]
 
-	# Filtering out not connected circuits
-	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
+circ_list.sort(key=lambda x: (x[1], x[2]))
+circ_list = [i[0] for i in circ_list]
+
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
@@ -261,10 +183,17 @@ TESTBOARD = doc.Create.NewFamilyInstance(
 TESTBOARD.get_Parameter(
 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
-param_info = [SetEstimatedValues(x, TESTBOARD) for x in circuits_to_calculate]
+for circ in circ_list:
+	circ.SelectPanel(TESTBOARD)
+	doc.Regenerate()
+
+for circ in circ_list:
+	circ.SelectPanel(panel_instance)
+	doc.Regenerate()
+
 doc.Delete(TESTBOARD.Id)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = param_info
+OUT = circ_list
