@@ -1,23 +1,27 @@
 import clr
-clr.AddReference('RevitAPI')
-import Autodesk
-from Autodesk.Revit.DB import *
 
 import sys
 # sys.path.append(r"C:\Program Files\Dynamo 0.8")
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
+sys.path.append(IN[0].DirectoryName)  # type: ignore
 
-clr.AddReference('ProtoGeometry')
-from Autodesk.DesignScript.Geometry import *
+clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
+from Microsoft.Office.Interop import Excel  # type: ignore
+
+import System
+from System import Array
+from System.Collections.Generic import *
+
+# ================ Revit imports
+clr.AddReference('RevitAPI')
+import Autodesk
+from Autodesk.Revit.DB import *
 
 clr.AddReference("RevitServices")
 import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
-
-import System
-from System import Enum
 
 doc = DocumentManager.Instance.CurrentDBDocument
 
@@ -125,12 +129,15 @@ def getTypeByCatFamType(_bic, _fam, _type):
 	return elem
 
 
-ElemFrom = Unwrap(IN[0])  # type: ignore
+copy_elements = IN[2]  # type: ignore
+
+
+ElemFrom = Unwrap(IN[3])  # type: ignore
 ElemFrom_Sheet = doc.GetElement(ElemFrom.OwnerViewId)
 
-ElemTo = Unwrap(IN[1])  # type: ignore
+ElemTo = Unwrap(IN[4])  # type: ignore
 ElemTo_Sheet = doc.GetElement(ElemTo.OwnerViewId)
-reload = IN[2]  # type: ignore
+reload = IN[1]  # type: ignore
 pList_Sheet = list()
 pList_Title = list()
 ignorParamsList = [
@@ -252,8 +259,9 @@ if legendViews:
 		except:
 			None
 
+
 # Copy all elements on view
-if elems_on_view:
+if elems_on_view and copy_elements:
 	tr_form = ElementTransformUtils.GetTransformFromViewToView(
 		ElemFrom_Sheet,
 		ElemTo_Sheet)

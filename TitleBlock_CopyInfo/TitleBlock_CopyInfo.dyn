@@ -13,6 +13,13 @@
       "Type": "string",
       "Value": "TitleBlock_CopyInfo.py",
       "Description": "Erstellt eine Zeichenfolge."
+    },
+    {
+      "Id": "c204ab4278b9487395fc53f2f040dfe5",
+      "Name": "Copy Detail Elements",
+      "Type": "boolean",
+      "Value": "true",
+      "Description": "Selection between a true and false."
     }
   ],
   "Outputs": [],
@@ -74,6 +81,24 @@
           "Id": "2d03435a82aa4dbab0989bdd2277ec20",
           "Name": "IN[2]",
           "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1734996c790240b59300b57399318326",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a6d745e7117643e8ba1c8b927e4d5a0c",
+          "Name": "IN[4]",
+          "Description": "Input #4",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -192,6 +217,44 @@
       ],
       "Replication": "Disabled",
       "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [],
+      "Id": "93dd1310e102455db39ebebfdc0332e4",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "108ea172c98449ce9acd81c3f354553f",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [],
+      "Id": "f9e02b08aeb94f0a95f992317be2da0b",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "1b3d2f6f0d9248bbb3c9d4ad22be95d8",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
     }
   ],
   "Connectors": [
@@ -223,7 +286,17 @@
     {
       "Start": "41dedcb17d9f45b9a73709c5aaea9f28",
       "End": "2d03435a82aa4dbab0989bdd2277ec20",
-      "Id": "5b8ba10fd291494ca58d54e7a2e4f6ff"
+      "Id": "ab2e74de019e4844946483a9b4608f31"
+    },
+    {
+      "Start": "108ea172c98449ce9acd81c3f354553f",
+      "End": "1734996c790240b59300b57399318326",
+      "Id": "3d17108601524668badcb3b510046190"
+    },
+    {
+      "Start": "1b3d2f6f0d9248bbb3c9d4ad22be95d8",
+      "End": "a6d745e7117643e8ba1c8b927e4d5a0c",
+      "Id": "6eaa1008c4c64cf2a1675447239211af"
     }
   ],
   "Dependencies": [],
@@ -258,8 +331,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 494.88848012897324,
-        "Y": 741.50636382788332
+        "X": 506.2852387616424,
+        "Y": 687.94159825433792
       },
       {
         "ShowGeometry": true,
@@ -305,16 +378,36 @@
         "ShowGeometry": true,
         "Name": "Copy Detail Elements",
         "Id": "c204ab4278b9487395fc53f2f040dfe5",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 500.57790709575238,
+        "Y": 767.44489053138841
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Copy From",
+        "Id": "93dd1310e102455db39ebebfdc0332e4",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 499.43823123248558,
-        "Y": 855.19993200294152
+        "X": 479.973213375946,
+        "Y": 862.99489572491279
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Copy To",
+        "Id": "f9e02b08aeb94f0a95f992317be2da0b",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 474.97123385116674,
+        "Y": 1009.2418337781392
       }
     ],
     "Annotations": [],
-    "X": -176.30891460906679,
-    "Y": -358.108956470783,
-    "Zoom": 1.0908556567830705
+    "X": -279.52100330242854,
+    "Y": -347.10049282589773,
+    "Zoom": 0.87744246608282361
   }
 }
