@@ -8,13 +8,6 @@
   },
   "Inputs": [
     {
-      "Id": "0eb69237dd0c4dc187884facd965d90a",
-      "Name": "String",
-      "Type": "string",
-      "Value": "TitleBlock_CopyInfo.py",
-      "Description": "Erstellt eine Zeichenfolge."
-    },
-    {
       "Id": "c204ab4278b9487395fc53f2f040dfe5",
       "Name": "Copy Detail Elements",
       "Type": "boolean",
@@ -221,14 +214,12 @@
     {
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
-      "InstanceId": [
-        "a9b5e661-2969-4a22-88d6-747280e86f09-00dd4341"
-      ],
-      "Id": "93dd1310e102455db39ebebfdc0332e4",
+      "InstanceId": [],
+      "Id": "204212c705144861883f927ec5b3c011",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "108ea172c98449ce9acd81c3f354553f",
+          "Id": "8aeccfb63db34786837337ff6d428294",
           "Name": "Element",
           "Description": "The selected elements.",
           "UsingDefaultValue": false,
@@ -242,14 +233,12 @@
     {
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
-      "InstanceId": [
-        "d3ffa6f2-0486-4563-86ad-f31651652eb6-00dddf5c"
-      ],
-      "Id": "f9e02b08aeb94f0a95f992317be2da0b",
+      "InstanceId": [],
+      "Id": "13159c60afde43a8a3998c280c15b2c6",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "1b3d2f6f0d9248bbb3c9d4ad22be95d8",
+          "Id": "7d97c82fa6a74be5afbe4810b1e775d3",
           "Name": "Element",
           "Description": "The selected elements.",
           "UsingDefaultValue": false,
@@ -293,14 +282,14 @@
       "Id": "ab2e74de019e4844946483a9b4608f31"
     },
     {
-      "Start": "108ea172c98449ce9acd81c3f354553f",
+      "Start": "8aeccfb63db34786837337ff6d428294",
       "End": "1734996c790240b59300b57399318326",
-      "Id": "3d17108601524668badcb3b510046190"
+      "Id": "a04ad359b461422eb0a875700d30ee9d"
     },
     {
-      "Start": "1b3d2f6f0d9248bbb3c9d4ad22be95d8",
+      "Start": "7d97c82fa6a74be5afbe4810b1e775d3",
       "End": "a6d745e7117643e8ba1c8b927e4d5a0c",
-      "Id": "6eaa1008c4c64cf2a1675447239211af"
+      "Id": "b82026c039e7460da0e2287f86ccba6d"
     }
   ],
   "Dependencies": [],
@@ -372,7 +361,7 @@
         "ShowGeometry": true,
         "Name": "String",
         "Id": "0eb69237dd0c4dc187884facd965d90a",
-        "IsSetAsInput": true,
+        "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 8.7190327665745144,
@@ -391,27 +380,27 @@
       {
         "ShowGeometry": true,
         "Name": "Copy From",
-        "Id": "93dd1310e102455db39ebebfdc0332e4",
+        "Id": "204212c705144861883f927ec5b3c011",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 479.973213375946,
-        "Y": 862.99489572491279
+        "X": 471.11429335547132,
+        "Y": 872.16988683447426
       },
       {
         "ShowGeometry": true,
         "Name": "Copy To",
-        "Id": "f9e02b08aeb94f0a95f992317be2da0b",
+        "Id": "13159c60afde43a8a3998c280c15b2c6",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 474.97123385116674,
-        "Y": 1009.2418337781392
+        "X": 470.08972294304988,
+        "Y": 1008.4377516865267
       }
     ],
     "Annotations": [],
-    "X": -280.29912262614442,
-    "Y": -428.63436814514171,
-    "Zoom": 0.94759976086211
+    "X": 47.460866047556777,
+    "Y": -479.05587412306903,
+    "Zoom": 1.0290975699333964
   }
 }

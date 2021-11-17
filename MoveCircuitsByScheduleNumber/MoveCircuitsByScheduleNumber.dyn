@@ -8,13 +8,6 @@
   },
   "Inputs": [
     {
-      "Id": "0eb69237dd0c4dc187884facd965d90a",
-      "Name": "String",
-      "Type": "string",
-      "Value": "MoveCircuitsByScheduleNumber.py",
-      "Description": "Erstellt eine Zeichenfolge."
-    },
-    {
       "Id": "c0fd6ed4f3f24d90a8ec009a7f839102",
       "Name": "Start",
       "Type": "number",
@@ -223,48 +216,6 @@
       "Description": "Erstellt eine Zeichenfolge."
     },
     {
-      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
-      "NodeType": "ExtensionNode",
-      "InstanceId": [
-        "d0238dcf-2c5e-4282-b430-52377a6875d4-00dd402f"
-      ],
-      "Id": "fefb87d385404251863283d7f160c7cf",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "334821bf4acb4500a0c4a6d507b493a5",
-          "Name": "Element",
-          "Description": "The selected elements.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled"
-    },
-    {
-      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
-      "NodeType": "ExtensionNode",
-      "InstanceId": [
-        "d0238dcf-2c5e-4282-b430-52377a6875d4-00dd402f"
-      ],
-      "Id": "b515efe8246a4969925b247a00268f48",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "71937f1e1790482ebde3133f60f4e59e",
-          "Name": "Element",
-          "Description": "The selected elements.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled"
-    },
-    {
       "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Integer",
@@ -311,6 +262,44 @@
       ],
       "Replication": "Disabled",
       "Description": "A slider that produces integer values."
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [],
+      "Id": "3dc5870fa0954166ae7096d151c75237",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2df9324cf86242cdaf0515c8e011eb8b",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [],
+      "Id": "ada7066e2aa34119a260030679a6c901",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3b80097fa5c24ec18c1c50b1cd8d733e",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
     }
   ],
   "Connectors": [
@@ -340,16 +329,6 @@
       "Id": "6c6625a2c4904cb2abd6e4db423d8c32"
     },
     {
-      "Start": "334821bf4acb4500a0c4a6d507b493a5",
-      "End": "2d03435a82aa4dbab0989bdd2277ec20",
-      "Id": "61d600effdf24814a4a7a49dcfca2d9a"
-    },
-    {
-      "Start": "71937f1e1790482ebde3133f60f4e59e",
-      "End": "4644526c7f40463da9663338d9962434",
-      "Id": "c4e6307affab48d9b952a876bb2a7fda"
-    },
-    {
       "Start": "3c809d2053fb4eae9a5881e2df506f91",
       "End": "834d9e922e134b1aa7288e1770bbc377",
       "Id": "20039c7e020d4fd193b19c8544682e38"
@@ -358,6 +337,16 @@
       "Start": "0b62a3a41bfb4e0287d0c97371ec4051",
       "End": "d9562b31fcb640918fe48a61aecc4d66",
       "Id": "c4e8618a35044ad2a159fda9b5e4a412"
+    },
+    {
+      "Start": "2df9324cf86242cdaf0515c8e011eb8b",
+      "End": "2d03435a82aa4dbab0989bdd2277ec20",
+      "Id": "98170bfe64c347be8438dc605f209aa6"
+    },
+    {
+      "Start": "3b80097fa5c24ec18c1c50b1cd8d733e",
+      "End": "4644526c7f40463da9663338d9962434",
+      "Id": "8fc6dd292d4f428eb35e92469e59b5f1"
     }
   ],
   "Dependencies": [],
@@ -429,31 +418,11 @@
         "ShowGeometry": true,
         "Name": "String",
         "Id": "0eb69237dd0c4dc187884facd965d90a",
-        "IsSetAsInput": true,
+        "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": -45.633455700537752,
         "Y": 624.51198116686533
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "CopyFrom",
-        "Id": "fefb87d385404251863283d7f160c7cf",
-        "IsSetAsInput": true,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 432.65418103223169,
-        "Y": 798.187840887606
-      },
-      {
-        "ShowGeometry": true,
-        "Name": "CopyTo",
-        "Id": "b515efe8246a4969925b247a00268f48",
-        "IsSetAsInput": true,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 431.49168684015484,
-        "Y": 926.89759655178739
       },
       {
         "ShowGeometry": true,
@@ -474,11 +443,31 @@
         "Excluded": false,
         "X": 317.75214319908139,
         "Y": 1154.8662275961665
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "CopyFrom",
+        "Id": "3dc5870fa0954166ae7096d151c75237",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 443.18796662994686,
+        "Y": 798.92989062513027
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "CopyTo",
+        "Id": "ada7066e2aa34119a260030679a6c901",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 442.12171748575355,
+        "Y": 918.55801867714308
       }
     ],
     "Annotations": [],
-    "X": -10.865914943314351,
-    "Y": -344.04303650315023,
-    "Zoom": 0.69440879444000547
+    "X": -320.63960973952612,
+    "Y": -605.38935605201118,
+    "Zoom": 1.0903546711768815
   }
 }

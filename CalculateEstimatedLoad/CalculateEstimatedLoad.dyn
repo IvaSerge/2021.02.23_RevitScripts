@@ -6,15 +6,7 @@
   "ElementResolver": {
     "ResolutionMap": {}
   },
-  "Inputs": [
-    {
-      "Id": "0eb69237dd0c4dc187884facd965d90a",
-      "Name": "String",
-      "Type": "string",
-      "Value": "CalculateEstimatedLoad.py",
-      "Description": "Erstellt eine Zeichenfolge."
-    }
-  ],
+  "Inputs": [],
   "Outputs": [],
   "Nodes": [
     {
@@ -331,7 +323,7 @@
         "ShowGeometry": true,
         "Name": "String",
         "Id": "0eb69237dd0c4dc187884facd965d90a",
-        "IsSetAsInput": true,
+        "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 8.7190327665745144,
@@ -359,8 +351,8 @@
       }
     ],
     "Annotations": [],
-    "X": -259.8892578392805,
-    "Y": -383.94180489167741,
-    "Zoom": 0.84145314464011234
+    "X": 126.13872829247954,
+    "Y": -500.33887741200533,
+    "Zoom": 1.1034157929404838
   }
 }
