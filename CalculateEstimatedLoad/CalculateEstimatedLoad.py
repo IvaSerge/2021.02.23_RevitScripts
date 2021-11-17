@@ -180,11 +180,10 @@ def SetEstimatedValues(_elSys, _testboard):
 
 	# Write parameters in Circuit
 	calcSystem.LookupParameter("E_DemandFactor").Set(rvt_DemandFactor)
-	calcSystem.LookupParameter("Demand Facto").Set(rvt_DemandFactor)
+	calcSystem.LookupParameter("Demand Factor").Set(rvt_DemandFactor)
 	calcSystem.LookupParameter("E_TotalInstalledLoad").Set(rvt_TotalInstalledLoad)
 	calcSystem.LookupParameter("E_TotalEstLoad").Set(total_est_load)
 	calcSystem.LookupParameter("E_EstCurrent").Set(current_estimated)
-
 	return rvt_DemandFactor, total_est_load, current_estimated
 
 
@@ -217,7 +216,7 @@ distrSys = FilteredElementCollector(doc).\
 	WherePasses(filter).\
 	ToElements()[0].Id
 
-if calculate_all:
+if not(calculate_all):
 	# get all assigned circuits in the panel
 	panel_assigned_circuits = elsys_by_brd(panel_instance)
 
@@ -228,10 +227,31 @@ if calculate_all:
 		circuits_to_calculate = panel_assigned_circuits[1]
 else:
 	# get all circuits in the model
+	# Get all electrical circuits
+	# Circuit type need to be electrilca only
+	# electrical circuit type ID == 6
+	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
+	pvp = ParameterValueProvider(ElementId(int(testParam)))
+	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
+	filter = ElementParameterFilter(sysRule)
+
 	circuits_to_calculate = FilteredElementCollector(doc).\
 		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
 		WhereElementIsNotElementType().WherePasses(filter).\
 		ToElements()
+
+	voltage_230 = UnitUtils.ConvertToInternalUnits(
+		230, DisplayUnitType.DUT_VOLTS)
+	voltage_400 = UnitUtils.ConvertToInternalUnits(
+		400, DisplayUnitType.DUT_VOLTS)
+
+	circuits_to_calculate = [
+		i for i in circuits_to_calculate
+		if i.Voltage == voltage_230 or i.Voltage == voltage_400
+	]
+
+	# Filtering out not connected circuits
+	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
@@ -242,7 +262,7 @@ TESTBOARD.get_Parameter(
 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
 param_info = [SetEstimatedValues(x, TESTBOARD) for x in circuits_to_calculate]
-doc.Delete(TESTBOARD.Id)
+# doc.Delete(TESTBOARD.Id)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
