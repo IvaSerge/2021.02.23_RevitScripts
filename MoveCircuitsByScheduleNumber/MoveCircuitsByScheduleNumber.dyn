@@ -13,6 +13,28 @@
       "Type": "string",
       "Value": "MoveCircuitsByScheduleNumber.py",
       "Description": "Erstellt eine Zeichenfolge."
+    },
+    {
+      "Id": "c0fd6ed4f3f24d90a8ec009a7f839102",
+      "Name": "Start",
+      "Type": "number",
+      "Value": "2",
+      "MaximumValue": 120.0,
+      "MinimumValue": 2.0,
+      "StepValue": 1.0,
+      "NumberType": "Integer",
+      "Description": "A slider that produces integer values."
+    },
+    {
+      "Id": "5d306000a82c490aa36b18e249e5258a",
+      "Name": "End",
+      "Type": "number",
+      "Value": "2",
+      "MaximumValue": 120.0,
+      "MinimumValue": 2.0,
+      "StepValue": 1.0,
+      "NumberType": "Integer",
+      "Description": "A slider that produces integer values."
     }
   ],
   "Outputs": [],
@@ -222,35 +244,6 @@
       "Replication": "Disabled"
     },
     {
-      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
-      "NodeType": "CodeBlockNode",
-      "Code": "1;\n1;",
-      "Id": "671ef6b141124af29f4512d3ccc3aef1",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "85521d16976b40a195ce22848e8c06e3",
-          "Name": "",
-          "Description": "Value of expression at line 1",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "7a9872a1ddad40ffa6c99b25aae0ec23",
-          "Name": "",
-          "Description": "Value of expression at line 2",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Allows for DesignScript code to be authored directly"
-    },
-    {
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
@@ -270,6 +263,54 @@
         }
       ],
       "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Integer",
+      "InputValue": 2,
+      "MaximumValue": 120,
+      "MinimumValue": 2,
+      "StepValue": 1,
+      "Id": "c0fd6ed4f3f24d90a8ec009a7f839102",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3c809d2053fb4eae9a5881e2df506f91",
+          "Name": "",
+          "Description": "Int32",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A slider that produces integer values."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Integer",
+      "InputValue": 2,
+      "MaximumValue": 120,
+      "MinimumValue": 2,
+      "StepValue": 1,
+      "Id": "5d306000a82c490aa36b18e249e5258a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0b62a3a41bfb4e0287d0c97371ec4051",
+          "Name": "",
+          "Description": "Int32",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A slider that produces integer values."
     }
   ],
   "Connectors": [
@@ -304,19 +345,19 @@
       "Id": "61d600effdf24814a4a7a49dcfca2d9a"
     },
     {
-      "Start": "85521d16976b40a195ce22848e8c06e3",
-      "End": "834d9e922e134b1aa7288e1770bbc377",
-      "Id": "478a573118504efeb5055961aab91760"
-    },
-    {
-      "Start": "7a9872a1ddad40ffa6c99b25aae0ec23",
-      "End": "d9562b31fcb640918fe48a61aecc4d66",
-      "Id": "bdc65bf90f4a42838ab51414e1fe74ad"
-    },
-    {
       "Start": "71937f1e1790482ebde3133f60f4e59e",
       "End": "4644526c7f40463da9663338d9962434",
       "Id": "c4e6307affab48d9b952a876bb2a7fda"
+    },
+    {
+      "Start": "3c809d2053fb4eae9a5881e2df506f91",
+      "End": "834d9e922e134b1aa7288e1770bbc377",
+      "Id": "20039c7e020d4fd193b19c8544682e38"
+    },
+    {
+      "Start": "0b62a3a41bfb4e0287d0c97371ec4051",
+      "End": "d9562b31fcb640918fe48a61aecc4d66",
+      "Id": "c4e8618a35044ad2a159fda9b5e4a412"
     }
   ],
   "Dependencies": [],
@@ -398,7 +439,7 @@
         "ShowGeometry": true,
         "Name": "CopyFrom",
         "Id": "fefb87d385404251863283d7f160c7cf",
-        "IsSetAsInput": false,
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 432.65418103223169,
@@ -406,28 +447,38 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "Start/End rows",
-        "Id": "671ef6b141124af29f4512d3ccc3aef1",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 490.61929748096475,
-        "Y": 1065.2733453269489
-      },
-      {
-        "ShowGeometry": true,
         "Name": "CopyTo",
         "Id": "b515efe8246a4969925b247a00268f48",
-        "IsSetAsInput": false,
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 431.49168684015484,
         "Y": 926.89759655178739
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Start",
+        "Id": "c0fd6ed4f3f24d90a8ec009a7f839102",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 315.47319267888906,
+        "Y": 1068.6857097944157
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "End",
+        "Id": "5d306000a82c490aa36b18e249e5258a",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 317.75214319908139,
+        "Y": 1154.8662275961665
       }
     ],
     "Annotations": [],
-    "X": 130.31519752961844,
-    "Y": -151.93734723592422,
-    "Zoom": 0.62630837880505008
+    "X": -10.865914943314351,
+    "Y": -344.04303650315023,
+    "Zoom": 0.69440879444000547
   }
 }

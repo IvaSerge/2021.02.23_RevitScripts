@@ -341,7 +341,7 @@
         "ShowGeometry": true,
         "Name": "Board_to_modify",
         "Id": "fefb87d385404251863283d7f160c7cf",
-        "IsSetAsInput": false,
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 485.94411071029515,
@@ -359,8 +359,8 @@
       }
     ],
     "Annotations": [],
-    "X": -332.69326731641536,
-    "Y": -543.08263171603141,
-    "Zoom": 0.99877201717315223
+    "X": -259.8892578392805,
+    "Y": -383.94180489167741,
+    "Zoom": 0.84145314464011234
   }
 }
