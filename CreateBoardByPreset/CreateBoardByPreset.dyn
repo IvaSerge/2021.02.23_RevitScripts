@@ -475,7 +475,7 @@
         "ShowGeometry": true,
         "Name": "Select board",
         "Id": "fefb87d385404251863283d7f160c7cf",
-        "IsSetAsInput": false,
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 432.65418103223169,
@@ -523,8 +523,8 @@
       }
     ],
     "Annotations": [],
-    "X": 3.291431913503402,
-    "Y": -455.49376010635706,
+    "X": 23.291431913503402,
+    "Y": -431.49376010635706,
     "Zoom": 0.77826390827767644
   }
 }
