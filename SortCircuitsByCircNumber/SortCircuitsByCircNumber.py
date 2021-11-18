@@ -171,7 +171,7 @@ circ_poles = [x.PolesNumber for x in circuits_to_calculate]
 circ_list = [
 	x for x in zip(circuits_to_calculate, circ_trip, circ_poles)]
 
-circ_list.sort(key=lambda x: (x[1], x[2]))
+circ_list.sort(key=lambda x: (x[1], x[2]), reverse=True)
 circ_list = [i[0] for i in circ_list]
 
 

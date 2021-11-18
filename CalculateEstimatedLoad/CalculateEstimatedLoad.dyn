@@ -6,7 +6,15 @@
   "ElementResolver": {
     "ResolutionMap": {}
   },
-  "Inputs": [],
+  "Inputs": [
+    {
+      "Id": "38a1c8ae383c40e4b57526ea42438a56",
+      "Name": "Calculate_all",
+      "Type": "boolean",
+      "Value": "true",
+      "Description": "Selection between a true and false."
+    }
+  ],
   "Outputs": [],
   "Nodes": [
     {
@@ -228,7 +236,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "38a1c8ae383c40e4b57526ea42438a56",
       "Inputs": [],
       "Outputs": [
@@ -387,7 +395,7 @@
         "ShowGeometry": true,
         "Name": "Calculate_all",
         "Id": "38a1c8ae383c40e4b57526ea42438a56",
-        "IsSetAsInput": false,
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 492.08362539135942,
@@ -395,8 +403,8 @@
       }
     ],
     "Annotations": [],
-    "X": 8.8058186639509586,
-    "Y": -79.665628214688468,
-    "Zoom": 0.52443993238744613
+    "X": -88.201613397718234,
+    "Y": -277.35671847971969,
+    "Zoom": 0.71203455872074706
   }
 }
