@@ -69,26 +69,15 @@ el_circuit = [i for i in el_circuits if i.SystemType == sys_type][0]
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-# create test board
-# Take the type the same as selected board
-testBoardType = UnwrapElement(IN[3]).Symbol  # type: ignore
-
-TESTBOARD = doc.Create.NewFamilyInstance(
-	XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
-TESTBOARD.get_Parameter(
-	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
-
 # get Estimated Current of circuit
-sys_current = get_est_current(el_circuit, TESTBOARD, doc)
-sys_vd = calc_circuit_vd(el_circuit, sys_current)
+# sys_power = 
+# sys_current = 
+# sys_vd = calc_circuit_vd(el_circuit, sys_current)
 
 # ============== Voltage Drop Owerall ==============
 # find all the net from source to the current net.
 # calculate Local voltage drop for every element of net
 # Sum results
-
-# delete testboard
-doc.Delete(TESTBOARD.Id)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
