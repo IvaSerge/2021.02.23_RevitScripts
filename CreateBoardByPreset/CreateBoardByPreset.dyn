@@ -189,12 +189,12 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
       "NodeType": "CodeBlockNode",
-      "Code": "\"2R_main\";\n\"2R_sub\";",
+      "Code": "\"2E_main\";\n\"2E_sub\";\n\"2R_main\";\n\"2R_sub\";",
       "Id": "671ef6b141124af29f4512d3ccc3aef1",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "4ab9b169dc8d44d4a7d82c0bb6c11900",
+          "Id": "52b8b07b52294d9ea71ea71fcf822dd9",
           "Name": "",
           "Description": "Value of expression at line 1",
           "UsingDefaultValue": false,
@@ -203,9 +203,27 @@
           "KeepListStructure": false
         },
         {
-          "Id": "2a2add35b59140fbacb275cc4a4ae9e0",
+          "Id": "d640b1839d294565ad60e10f2c03345f",
           "Name": "",
           "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1cc2843646044042bce5b07a0cecba86",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "15cdd162eef54d8d963576d9f34c258e",
+          "Name": "",
+          "Description": "Value of expression at line 4",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -273,6 +291,24 @@
           "Id": "f5b8980daeb34cb08983295be4fa15b5",
           "Name": "item1",
           "Description": "Item Index #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9f455e0c35064f45b5b725ca7c3d3e25",
+          "Name": "item2",
+          "Description": "Item Index #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3e023dfc5925488dbd3c67920f0acc9a",
+          "Name": "item3",
+          "Description": "Item Index #3",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -364,14 +400,24 @@
       "Id": "6c6625a2c4904cb2abd6e4db423d8c32"
     },
     {
-      "Start": "4ab9b169dc8d44d4a7d82c0bb6c11900",
+      "Start": "52b8b07b52294d9ea71ea71fcf822dd9",
       "End": "54baa4c8c9464c0f86f428ddb5549c94",
-      "Id": "07d4f86527f34e3eb71ff71bb4d59f48"
+      "Id": "16b43cae8634401a9a32c274d4f1f277"
     },
     {
-      "Start": "2a2add35b59140fbacb275cc4a4ae9e0",
+      "Start": "d640b1839d294565ad60e10f2c03345f",
       "End": "f5b8980daeb34cb08983295be4fa15b5",
-      "Id": "baaa9a30f6d94851bcfc016464e7e748"
+      "Id": "84f3782b0bbb478499de3848e3d55ba6"
+    },
+    {
+      "Start": "1cc2843646044042bce5b07a0cecba86",
+      "End": "9f455e0c35064f45b5b725ca7c3d3e25",
+      "Id": "f3dc93f048a54e43b97dbb4304c4bd0c"
+    },
+    {
+      "Start": "15cdd162eef54d8d963576d9f34c258e",
+      "End": "3e023dfc5925488dbd3c67920f0acc9a",
+      "Id": "2fb23c8b91ef4395ac27629f664bffa6"
     },
     {
       "Start": "a2ae96803ba341428e8db21792fad3a4",
@@ -476,8 +522,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 100.33371414352169,
-        "Y": 985.47678535672571
+        "X": -255.5332935674688,
+        "Y": 966.60505009932467
       },
       {
         "ShowGeometry": true,
@@ -496,8 +542,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 311.97726159531851,
-        "Y": 977.8559020732398
+        "X": -43.889746115671983,
+        "Y": 958.98416681583876
       },
       {
         "ShowGeometry": true,
@@ -506,8 +552,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 134.62042411646533,
-        "Y": 1158.2358674636646
+        "X": 111.70474558962113,
+        "Y": 1127.2323023979343
       },
       {
         "ShowGeometry": true,
@@ -521,8 +567,8 @@
       }
     ],
     "Annotations": [],
-    "X": -44.7085680864966,
-    "Y": -313.49376010635706,
-    "Zoom": 0.77826390827767644
+    "X": 160.77497885543085,
+    "Y": -601.23343549184847,
+    "Zoom": 0.84617047221891728
   }
 }
