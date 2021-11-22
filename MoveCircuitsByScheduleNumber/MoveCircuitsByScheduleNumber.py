@@ -51,6 +51,7 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 
 for el_sys in systems_from_schedule:
 	el_sys.SelectPanel(board_to)
+	doc.Regenerate()
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
