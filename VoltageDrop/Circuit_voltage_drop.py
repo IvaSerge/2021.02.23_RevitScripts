@@ -61,6 +61,7 @@ def check_point(_point, _point_list):
 def get_points_lenght(_el_sys):
 	# check if path mode set not to Farthest device.
 	# else - change path to All Devices
+
 	sys_path = _el_sys.GetCircuitPath()
 	mode_farthest = Autodesk.Revit.DB.Electrical.ElectricalCircuitPathMode.FarthestDevice
 	mode_all_devices = Autodesk.Revit.DB.Electrical.ElectricalCircuitPathMode.AllDevices
@@ -82,15 +83,19 @@ def get_points_lenght(_el_sys):
 	length_current = 0
 	for i, pnt in enumerate(sys_path):
 		# do not check last point
-		if i == len(sys_path) - 1:
+		if i == len(sys_path) - 1 and len(connector_points) > 1:
+			break
+		if i == len(sys_path) - 1 and len(connector_points) == 1:
+			length_list.append(length_current)
 			break
 		pnt_next = sys_path[i + 1]
 		length_current += pnt.DistanceTo(pnt_next)
+		# need to check connector points
 		if check_point(pnt_next, connector_points):
 			length_list.append(length_current)
 			length_current = 0
 
-	# convert lenght to km
+	# # convert lenght to km
 	length_list = [ft_to_km(x) for x in length_list]
 	return length_list
 
