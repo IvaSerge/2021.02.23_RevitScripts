@@ -22,6 +22,19 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+# ================ Python imports
+import math
+
+# ================ Local imports
+import cable_catalogue
+from cable_catalogue import get_cable
+
+
+def ft_to_km(ft):
+	meters = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(
+		ft, Autodesk.Revit.DB.DisplayUnitType.DUT_METERS)
+	return meters / 1000
+
 
 def get_current_at_point(_current, _count, _n_elems):
 	current_sub = _current / _n_elems * _count
@@ -76,6 +89,9 @@ def get_points_lenght(_el_sys):
 		if check_point(pnt_next, connector_points):
 			length_list.append(length_current)
 			length_current = 0
+
+	# convert lenght to km
+	length_list = [ft_to_km(x) for x in length_list]
 	return length_list
 
 
@@ -91,6 +107,7 @@ def calc_circuit_vd(_el_sys):
 	# ============== Voltage Drop Local ==============
 	# EXAMPLE of caclulations
 	# SEE: http://www.electricalaxis.com/2015/03/how-to-calculate-voltage-drop-of.html
+	# SEE: https://www.electrical4u.com/voltage-drop-calculation/
 	# find voltage drop to the next device.
 
 	# system parameters
@@ -107,9 +124,27 @@ def calc_circuit_vd(_el_sys):
 	points_lenght = get_points_lenght(_el_sys)
 	points_info = zip(points_current, points_lenght)
 
-	# get Z from the data base
-	# calculate Vd using formulas
-	# 1p: Vd = 2 * points_info[0] Z * points_info[1]
-	# 3p: Vd = sqrt(3) * points_info[0] Z * points_info[1]
+	# get R, X from the data base
+	el_sys_cable_size = _el_sys.WireSizeString
+	cable_info = get_cable(el_sys_cable_size)
 
-	return est_current, points_info
+	# Z calculation
+	el_sys_R = cable_info[1]
+	el_sys_X = cable_info[2]
+	el_sys_cos_phi = _el_sys.PowerFactor
+	el_sys_sin_phi = math.sin(math.acos(el_sys_cos_phi))
+	el_sys_Z = (el_sys_R * el_sys_cos_phi + el_sys_X * el_sys_sin_phi)
+
+	# calculate Vd using formulas
+	# 1p: Vd = 2 * points_info[1] Z * points_info[2]
+	# 3p: Vd = sqrt(3) * points_info[1] Z * points_info[2]
+
+	el_sys_poles = _el_sys.PolesNumber
+	if el_sys_poles == 1:
+		calc_vd = lambda x: 2 * x[0] * el_sys_Z * x[1]
+	else:
+		calc_vd = lambda x: math.sqrt(3) * x[0] * el_sys_Z * x[1]
+
+	points_vd = sum(map(calc_vd, points_info))
+
+	return points_vd
