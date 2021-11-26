@@ -79,7 +79,7 @@ def get_points_lenght(_el_sys):
 	return length_list
 
 
-def calc_circuit_vd(_el_sys, _est_current):
+def calc_circuit_vd(_el_sys):
 	"""Calculate voltage dorp from board to consumer (local).\n
 		args:\n
 			_el_sys - electrical system\n
@@ -98,9 +98,10 @@ def calc_circuit_vd(_el_sys, _est_current):
 	sys_elems = [i for i in _el_sys.Elements]
 	n_elems = len(sys_elems)
 
+	est_current = _el_sys.LookupParameter("E_EstCurrent").AsDouble()
 	# create list that describes net.
 	points_current = [
-		get_current_at_point(_est_current, i[0], n_elems)
+		get_current_at_point(est_current, i[0], n_elems)
 		for i in enumerate(sys_elems)]
 
 	points_lenght = get_points_lenght(_el_sys)
@@ -111,4 +112,4 @@ def calc_circuit_vd(_el_sys, _est_current):
 	# 1p: Vd = 2 * points_info[0] Z * points_info[1]
 	# 3p: Vd = sqrt(3) * points_info[0] Z * points_info[1]
 
-	return points_info
+	return est_current, points_info

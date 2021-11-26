@@ -29,11 +29,8 @@ import math
 from math import sqrt
 
 # ================ Local imports
-import CalculateEstimatedLoad
-from CalculateEstimatedLoad import get_est_current
 import Circuit_voltage_drop
 from Circuit_voltage_drop import calc_circuit_vd
-
 
 # ================ GLOBAL VARIABLES
 global doc  # type: ignore
@@ -69,10 +66,7 @@ el_circuit = [i for i in el_circuits if i.SystemType == sys_type][0]
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-# get Estimated Current of circuit
-# sys_power = 
-# sys_current = 
-# sys_vd = calc_circuit_vd(el_circuit, sys_current)
+sys_vd = calc_circuit_vd(el_circuit)
 
 # ============== Voltage Drop Owerall ==============
 # find all the net from source to the current net.
