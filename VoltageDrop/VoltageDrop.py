@@ -32,6 +32,86 @@ from math import sqrt
 import Circuit_voltage_drop
 from Circuit_voltage_drop import calc_circuit_vd
 
+
+def elsys_by_brd(_brd):
+	"""Get all systems of electrical board.
+		args:
+		_brd - electrical board FamilyInstance
+		return list(1, 2) where:
+		1 - main electrical circuit
+		2 - list of connectet low circuits
+	"""
+	allsys = _brd.MEPModel.ElectricalSystems
+	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	if lowsys:
+		lowsysId = [i.Id for i in lowsys]
+		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
+		if len(mainboardsysLst) == 0:
+			mainboardsys = None
+		else:
+			mainboardsys = mainboardsysLst[0]
+		lowsys = [i for i in allsys if i.Id in lowsysId]
+		lowsys.sort(key=lambda x: get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER"))
+		return mainboardsys, lowsys
+	else:
+		return [i for i in allsys][0], None
+
+
+def get_parval(elem, name):
+	"""Get parametr value
+
+	args:
+		elem - family instance or type
+		name - parameter name
+	return:
+		value - parameter value
+	"""
+
+	value = None
+	# custom parameter
+	param = elem.LookupParameter(name)
+	# check is it a BuiltIn parameter if not found
+	if not(param):
+		param = elem.get_Parameter(get_bip(name))
+
+	# get paremeter Value if found
+	try:
+		storeType = param.StorageType
+		# value = storeType
+		if storeType == StorageType.String:
+			value = param.AsString()
+		elif storeType == StorageType.Integer:
+			value = param.AsDouble()
+		elif storeType == StorageType.Double:
+			value = param.AsDouble()
+		elif storeType == StorageType.ElementId:
+			value = param.AsValueString()
+	except:
+		pass
+	return value
+
+
+def get_bip(paramName):
+	builtInParams = System.Enum.GetValues(BuiltInParameter)
+	param = []
+	for i in builtInParams:
+		if i.ToString() == paramName:
+			param.append(i)
+			return i
+
+
+def get_el_sys(_elem):
+	elem_cat = _elem.Category.Id.IntegerValue
+	# check if it is electrical board
+	if elem_cat == -2001040:
+		el_sys = elsys_by_brd(_elem)[0]
+	else:
+		sys_type = Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit
+		el_sys = _elem.MEPModel.ElectricalSystems
+		el_sys = [i for i in el_sys if i.SystemType == sys_type][0]
+	return el_sys
+
+
 # ================ GLOBAL VARIABLES
 global doc  # type: ignore
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -57,11 +137,9 @@ reload = IN[1]  # type: ignore
 el_instance = UnwrapElement(IN[2])  # type: ignore
 outlist = list()
 
-# get circuits
-sys_type = Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit
 # el_circuits = panel_instance.MEPModel.ElectricalSystems
-el_circuits = el_instance.MEPModel.ElectricalSystems
-el_circuit = [i for i in el_circuits if i.SystemType == sys_type][0]
+el_circuit = get_el_sys(el_instance)
+
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
