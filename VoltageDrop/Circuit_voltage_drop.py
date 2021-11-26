@@ -151,5 +151,7 @@ def calc_circuit_vd(_el_sys):
 		calc_vd = lambda x: math.sqrt(3) * x[0] * el_sys_Z * x[1]
 
 	points_vd = sum(map(calc_vd, points_info))
+	sys_voltage = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(
+		_el_sys.Voltage, Autodesk.Revit.DB.DisplayUnitType.DUT_VOLTS)
 
-	return points_vd
+	return points_vd * 100 / sys_voltage
