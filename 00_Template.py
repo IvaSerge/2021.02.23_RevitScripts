@@ -259,7 +259,9 @@ def mm_to_ft(mm):
 
 
 def ft_to_mm(ft):
-	return ft * 304.8
+	mm = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(
+		ft, Autodesk.Revit.DB.DisplayUnitType.DUT_MILLIMETERS)
+	return mm
 
 
 def elsys_by_brd(_brd):
