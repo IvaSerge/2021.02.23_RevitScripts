@@ -29,8 +29,10 @@ import math
 from math import sqrt
 
 # ================ Local imports
-import Circuit_voltage_drop
-from Circuit_voltage_drop import calc_circuit_vd
+import circuit_voltage_drop
+from circuit_voltage_drop import calc_circuit_vd
+import calc_overall_vd
+from calc_overall_vd import get_low_net
 
 
 def elsys_by_brd(_brd):
@@ -145,6 +147,11 @@ el_circuit = get_el_sys(el_instance)
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 sys_vd = calc_circuit_vd(el_circuit)
+# set_vd to the circuit.
+
+# get all net elements to the source
+low_net = get_low_net(el_circuit)
+
 
 # ============== Voltage Drop Owerall ==============
 # find all the net from source to the current net.
@@ -154,4 +161,4 @@ sys_vd = calc_circuit_vd(el_circuit)
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = sys_vd
+OUT = low_net
