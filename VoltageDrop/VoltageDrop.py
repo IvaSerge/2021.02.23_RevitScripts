@@ -45,9 +45,11 @@ def elsys_by_brd(_brd):
 	"""
 	allsys = _brd.MEPModel.ElectricalSystems
 	lowsys = _brd.MEPModel.AssignedElectricalSystems
-	if lowsys:
+	# board have upper and lower circuits
+	if lowsys and allsys:
 		lowsysId = [i.Id for i in lowsys]
 		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
+		# board have no main circuit
 		if len(mainboardsysLst) == 0:
 			mainboardsys = None
 		else:
@@ -55,7 +57,13 @@ def elsys_by_brd(_brd):
 		lowsys = [i for i in allsys if i.Id in lowsysId]
 		lowsys.sort(key=lambda x: get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER"))
 		return mainboardsys, lowsys
-	else:
+
+	# board have no circuits
+	if not allsys and not lowsys:
+		return None, None
+
+	# board have only main circuit
+	if not lowsys:
 		return [i for i in allsys][0], None
 
 
@@ -122,6 +130,8 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 app = uiapp.Application
 DISTR_SYS_NAME = "230/400V"
 
+calc_overall_vd.doc = doc
+
 # find and set distribution system
 testParam = BuiltInParameter.SYMBOL_NAME_PARAM
 pvp = ParameterValueProvider(ElementId(int(testParam)))
@@ -146,7 +156,7 @@ el_circuit = get_el_sys(el_instance)
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-sys_vd = calc_circuit_vd(el_circuit)
+# sys_vd = calc_circuit_vd(el_circuit)
 # set_vd to the circuit.
 
 # get all net elements to the source
