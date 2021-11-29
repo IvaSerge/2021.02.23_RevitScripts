@@ -73,8 +73,8 @@ uiapp = DocumentManager.Instance.CurrentUIApplication
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 app = uiapp.Application
 
-reLoad = IN[0]
-distance_k = IN[1]
+reLoad = IN[0]  # type: ignore
+distance_k = IN[1]  # type: ignore
 
 ob1 = uidoc.Selection.PickObject(
 	Autodesk.Revit.UI.Selection.ObjectType.Element,

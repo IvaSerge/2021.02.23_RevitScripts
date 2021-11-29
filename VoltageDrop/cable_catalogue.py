@@ -68,5 +68,11 @@ def get_cable(section):
 		return None
 
 	global cab_lst
-	cable = [x for x in cab_lst if section in x[0]][0]
-	return cable
+	try:
+		cable = [x for x in cab_lst if section in x[0]][0]
+		return cable
+	except:
+		# cable not found
+		return 0
+		# raise ValueError(
+		# 	"Cable not in catalogue \n %s" % section)

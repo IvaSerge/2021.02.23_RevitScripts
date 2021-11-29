@@ -158,5 +158,6 @@ def get_low_net(_el_sys):
 
 	# el_sys_cable_size = _el_sys.WireSizeString
 	# cable_info = get_cable(el_sys_cable_size)
+	vd_overall = sum(vd_list)
 
-	return zip(low_nets, vd_list)
+	return low_elem_list[0], vd_list[0], vd_overall
