@@ -134,11 +134,16 @@ def calc_circuit_vd(_el_sys):
 	cable_info = get_cable(el_sys_cable_size)
 
 	# Z calculation
-	el_sys_R = cable_info[1]
-	el_sys_X = cable_info[2]
-	el_sys_cos_phi = _el_sys.PowerFactor
-	el_sys_sin_phi = math.sin(math.acos(el_sys_cos_phi))
-	el_sys_Z = (el_sys_R * el_sys_cos_phi + el_sys_X * el_sys_sin_phi)
+	if cable_info:
+		# if there is info - calculate Z
+		el_sys_R = cable_info[1]
+		el_sys_X = cable_info[2]
+		el_sys_cos_phi = _el_sys.PowerFactor
+		el_sys_sin_phi = math.sin(math.acos(el_sys_cos_phi))
+		el_sys_Z = (el_sys_R * el_sys_cos_phi + el_sys_X * el_sys_sin_phi)
+	else:
+		# else - ignor this cable
+		el_sys_Z = 0
 
 	# calculate Vd using formulas
 	# 1p: Vd = 2 * points_info[1] Z * points_info[2]

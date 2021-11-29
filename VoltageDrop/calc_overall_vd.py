@@ -22,6 +22,12 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+import circuit_voltage_drop
+from circuit_voltage_drop import calc_circuit_vd
+
+import cable_catalogue
+from cable_catalogue import get_cable
+
 
 def elsys_by_brd(_brd):
 	"""Get all systems of electrical board.
@@ -144,5 +150,13 @@ def get_low_net(_el_sys):
 			low_elem_list.append(low_elem)
 		else:
 			break
+	cat_el_sys = category_by_bic_name("OST_ElectricalCircuit").Id
+	low_nets = [i for i in low_elem_list if i.Category.Id == cat_el_sys]
 
-	return low_elem_list
+	vd_list = [calc_circuit_vd(i) for i in low_nets]
+	# vd_list = [get_cable(i.WireSizeString) for i in low_nets]
+
+	# el_sys_cable_size = _el_sys.WireSizeString
+	# cable_info = get_cable(el_sys_cable_size)
+
+	return zip(low_nets, vd_list)

@@ -63,9 +63,10 @@ def get_cable(section):
 	args:
 		section (str): cross-section of cable`
 	"""
+	# parameter is empty
+	if not(section):
+		return None
+
 	global cab_lst
 	cable = [x for x in cab_lst if section in x[0]][0]
-	try:
-		return cable
-	except:
-		return None
+	return cable
