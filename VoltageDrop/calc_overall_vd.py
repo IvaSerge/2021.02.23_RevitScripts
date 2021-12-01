@@ -129,9 +129,9 @@ def get_low_elem(_up_elem):
 	return None
 
 
-def get_low_net(_el_sys):
+def get_vd(_el_sys):
 	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list
-	"""Get all low systems that represents electrical net from source.
+	"""Calculate total voltage drop of circuit.
 
 		args:
 			_el_sys: electrical system
@@ -160,4 +160,4 @@ def get_low_net(_el_sys):
 	# cable_info = get_cable(el_sys_cable_size)
 	vd_overall = sum(vd_list)
 
-	return low_elem_list[0], vd_list[0], vd_overall
+	return low_elem_list, vd_list, vd_overall
