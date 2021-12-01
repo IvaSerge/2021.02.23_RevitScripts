@@ -32,7 +32,7 @@ from math import sqrt
 import circuit_voltage_drop
 from circuit_voltage_drop import calc_circuit_vd
 import calc_overall_vd
-from calc_overall_vd import get_low_net
+from calc_overall_vd import get_vd
 
 
 def elsys_by_brd(_brd):
@@ -160,7 +160,7 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 # set_vd to the circuit.
 
 # get all net elements to the source
-low_net = get_low_net(el_circuit)
+low_net = get_vd(el_circuit)
 
 
 # ============== Voltage Drop Owerall ==============
