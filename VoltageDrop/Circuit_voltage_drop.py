@@ -68,30 +68,33 @@ def get_points_lenght(_el_sys):
 	path_mode = _el_sys.CircuitPathMode
 	if path_mode == mode_farthest:
 		_el_sys.CircuitPathMode = mode_all_devices
-	el_sys_connectors = _el_sys.ConnectorManager.Connectors
 
-	# filter out connector of electrical board
-	board_id = _el_sys.BaseEquipment.Id
-	connector_list = [i for i in el_sys_connectors
-		if [x for x in i.AllRefs][0].Owner.Id != board_id]
-	connector_points = [
-		[x for x in i.AllRefs][0].Origin
-		for i in connector_list]
+	# # Points by connector
+	# # _el_sys_connectors = _el_sys.ConnectorManager.Connectors
+	# # filter out connector of electrical board
+	# board_id = _el_sys.BaseEquipment.Id
+	# connector_list = [i for i in el_sys_connectors
+	# 	if [x for x in i.AllRefs][0].Owner.Id != board_id]
+	# inst_points = [
+	# 	[x for x in i.AllRefs][0].Origin for i in connector_list]
+
+	# Points by Location Point
+	inst_points = [i.Location.Point for i in _el_sys.Elements]
 
 	# calculate distance while point != point in connectors
 	length_list = list()
 	length_current = 0
 	for i, pnt in enumerate(sys_path):
 		# do not check last point
-		if i == len(sys_path) - 1 and len(connector_points) > 1:
+		if i == len(sys_path) - 1 and len(inst_points) > 1:
 			break
-		if i == len(sys_path) - 1 and len(connector_points) == 1:
+		if i == len(sys_path) - 1 and len(inst_points) == 1:
 			length_list.append(length_current)
 			break
 		pnt_next = sys_path[i + 1]
 		length_current += pnt.DistanceTo(pnt_next)
 		# need to check connector points
-		if check_point(pnt_next, connector_points):
+		if check_point(pnt_next, inst_points):
 			length_list.append(length_current)
 			length_current = 0
 
