@@ -21,7 +21,7 @@ import math
 
 def test_exceptions(_elSys):
 	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> bool
-	"""Analise of electrical system if it is an "excepgion" """
+	"""Analise of electrical system if it is an "exception" """
 	el_sys_elements = [i for i in _elSys.Elements]  # type: list[Autodesk.Revit.DB.FamilyInstance]
 	first_elem = el_sys_elements[0]  # type: Autodesk.Revit.DB.FamilyInstance
 

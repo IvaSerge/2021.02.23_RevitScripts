@@ -108,6 +108,33 @@ def get_parval(elem, name):
 	return value
 
 
+def get_circuit_cell(_el_sys):
+	global doc
+	calcSystem = _el_sys
+
+	# Main board of electrical system
+	mainBoard = calcSystem.BaseEquipment
+
+	# find the shedule of electrical board
+	board_schedule = [x for x in FilteredElementCollector(doc).
+		OfClass(Autodesk.Revit.DB.Electrical.PanelScheduleView).
+		ToElements()
+		if x.TargetId == mainBoard.Id]  # type: Autodesk.Revit.DB.Electrical.PanelScheduleView
+
+	if board_schedule:
+		# find the row of the circuit in schedule
+		board_schedule = board_schedule[0]  # type: Autodesk.Revit.DB.Electrical.PanelScheduleView
+		max_cells = board_schedule.GetTableData().NumberOfSlots
+		board_circuits = [
+			board_schedule.GetCircuitIdByCell(i, 1).IntegerValue
+			for i in range(1, max_cells + 1)]
+		board_row = board_circuits.index(calcSystem.Id.IntegerValue)
+	else:
+		board_row = None
+
+	return board_row
+
+
 def get_estimated_load(_elSys, _testboard):
 	"""Get estimated load of circuit by connecting it to temporar board"""
 	global doc
@@ -259,18 +286,20 @@ else:
 	# Filtering out not connected circuits
 	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
 
-# =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
+# # =========Start transaction
+# TransactionManager.Instance.EnsureInTransaction(doc)
 
-TESTBOARD = doc.Create.NewFamilyInstance(
-	XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
-TESTBOARD.get_Parameter(
-	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
+# TESTBOARD = doc.Create.NewFamilyInstance(
+# 	XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
+# TESTBOARD.get_Parameter(
+# 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
-param_info = [SetEstimatedValues(x, TESTBOARD) for x in circuits_to_calculate]
-doc.Delete(TESTBOARD.Id)
+# param_info = [SetEstimatedValues(x, TESTBOARD) for x in circuits_to_calculate]
+# doc.Delete(TESTBOARD.Id)
 
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
+# # =========End transaction
+# TransactionManager.Instance.TransactionTaskDone()
 
-OUT = param_info
+# OUT = param_info
+param_info = [get_circuit_cell(x) for x in circuits_to_calculate]
+OUT = param_info  # circuits_to_calculate
