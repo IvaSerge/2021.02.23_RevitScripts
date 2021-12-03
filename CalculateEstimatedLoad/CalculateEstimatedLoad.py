@@ -108,7 +108,7 @@ def get_parval(elem, name):
 	return value
 
 
-def get_circuit_cell(_el_sys):
+def get_circuit_row(_el_sys):
 	global doc
 	calcSystem = _el_sys
 
@@ -142,6 +142,7 @@ def get_estimated_load(_elSys, _testboard):
 
 	# Main board of electrical system
 	mainBoard = calcSystem.BaseEquipment
+	calcSystem_row = get_circuit_row(_elSys)
 
 	# reconnect system from Main to Test board
 	calcSystem.SelectPanel(_testboard)
@@ -163,6 +164,22 @@ def get_estimated_load(_elSys, _testboard):
 	calcSystem.SelectPanel(mainBoard)
 	doc.Regenerate()
 
+	calcSystem_row_new = get_circuit_row(_elSys)
+
+	# there was no schedule. Reconection not reqiuered
+	if not calcSystem_row:
+		return convert_TotalEstLoad, rvt_DemandFactor
+
+	if calcSystem_row == calcSystem_row_new:
+		return convert_TotalEstLoad, rvt_DemandFactor
+
+	# find the shedule of electrical board
+	board_schedule = [x for x in FilteredElementCollector(doc).
+		OfClass(Autodesk.Revit.DB.Electrical.PanelScheduleView).
+		ToElements()
+		if x.TargetId == mainBoard.Id]  # type: Autodesk.Revit.DB.Electrical.PanelScheduleView
+
+	board_schedule.MoveSlotTo(calcSystem_row_new, 1, calcSystem_row, 1)
 	return convert_TotalEstLoad, rvt_DemandFactor
 
 
@@ -286,20 +303,18 @@ else:
 	# Filtering out not connected circuits
 	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
 
-# # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
-# TESTBOARD = doc.Create.NewFamilyInstance(
-# 	XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
-# TESTBOARD.get_Parameter(
-# 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
+TESTBOARD = doc.Create.NewFamilyInstance(
+	XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
+TESTBOARD.get_Parameter(
+	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
-# param_info = [SetEstimatedValues(x, TESTBOARD) for x in circuits_to_calculate]
-# doc.Delete(TESTBOARD.Id)
+param_info = [SetEstimatedValues(x, TESTBOARD) for x in circuits_to_calculate]
+doc.Delete(TESTBOARD.Id)
 
-# # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
-# OUT = param_info
-param_info = [get_circuit_cell(x) for x in circuits_to_calculate]
-OUT = param_info  # circuits_to_calculate
+OUT = param_info
