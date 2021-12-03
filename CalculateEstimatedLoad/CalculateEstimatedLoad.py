@@ -250,6 +250,12 @@ else:
 		if i.Voltage == voltage_230 or i.Voltage == voltage_400
 	]
 
+	# filter out not owned circuits
+	circuits_to_calculate = [
+		i for i in circuits_to_calculate
+		if WorksharingUtils.GetCheckoutStatus(doc, i) != CheckoutStatus.OwnedByOtherUser
+	]
+
 	# Filtering out not connected circuits
 	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
 
