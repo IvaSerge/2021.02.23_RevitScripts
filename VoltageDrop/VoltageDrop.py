@@ -146,29 +146,58 @@ distrSys = FilteredElementCollector(doc).\
 	ToElements()[0].Id
 
 reload = IN[1]  # type: ignore
-el_instance = UnwrapElement(IN[2])  # type: ignore
+calc_all = IN[2]  # type: ignore
+el_instance = UnwrapElement(IN[3])  # type: ignore
 outlist = list()
 
-# el_circuits = panel_instance.MEPModel.ElectricalSystems
-el_circuit = get_el_sys(el_instance)
+# only 1 element to calculate
+if not calc_all:
+	circuits_to_calculate = [get_el_sys(el_instance)]
+
+# get all electrical systems that are modifiable
+if calc_all:
+		# get all circuits in the model
+	# Get all electrical circuits
+	# Circuit type need to be electrilca only
+	# electrical circuit type ID == 6
+	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
+	pvp = ParameterValueProvider(ElementId(int(testParam)))
+	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
+	filter = ElementParameterFilter(sysRule)
+
+	circuits_to_calculate = FilteredElementCollector(doc).\
+		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
+		WhereElementIsNotElementType().WherePasses(filter).\
+		ToElements()
+
+	voltage_230 = UnitUtils.ConvertToInternalUnits(
+		230, DisplayUnitType.DUT_VOLTS)
+	voltage_400 = UnitUtils.ConvertToInternalUnits(
+		400, DisplayUnitType.DUT_VOLTS)
+
+	circuits_to_calculate = [
+		i for i in circuits_to_calculate
+		if i.Voltage == voltage_230 or i.Voltage == voltage_400
+	]
+
+	# filter out not owned circuits
+	circuits_to_calculate = [
+		i for i in circuits_to_calculate
+		if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != CheckoutStatus.OwnedByOtherUser
+	]
+
+	# Filtering out not connected circuits
+	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
+
+
+# vd_list = [get_vd(circuit) for circuit in circuits_to_calculate]
 
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-# sys_vd = calc_circuit_vd(el_circuit)
-# set_vd to the circuit.
-
-# get all net elements to the source
-low_net = get_vd(el_circuit)
-
-
-# ============== Voltage Drop Owerall ==============
-# find all the net from source to the current net.
-# calculate Local voltage drop for every element of net
-# Sum results
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = low_net
+OUT = circuits_to_calculate

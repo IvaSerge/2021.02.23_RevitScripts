@@ -13,6 +13,13 @@
       "Type": "string",
       "Value": "VoltageDrop.py",
       "Description": "Erstellt eine Zeichenfolge."
+    },
+    {
+      "Id": "14b859b8ea7141b1a6fc65b7a3becf55",
+      "Name": "calc_all",
+      "Type": "boolean",
+      "Value": "false",
+      "Description": "Selection between a true and false."
     }
   ],
   "Outputs": [],
@@ -74,6 +81,15 @@
           "Id": "2d03435a82aa4dbab0989bdd2277ec20",
           "Name": "IN[2]",
           "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a2b0fde4b8b44f46a756fbb3db1a95e3",
+          "Name": "IN[3]",
+          "Description": "Input #3",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -176,14 +192,12 @@
     {
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
-      "InstanceId": [
-        "d2c1ead9-af48-4852-a8cd-349b04dc7412-003465ae"
-      ],
-      "Id": "fefb87d385404251863283d7f160c7cf",
+      "InstanceId": [],
+      "Id": "26126cbe85c949c587909e4eb8b35166",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "334821bf4acb4500a0c4a6d507b493a5",
+          "Id": "e41ca185258f455697165b1a47aa4473",
           "Name": "Element",
           "Description": "The selected elements.",
           "UsingDefaultValue": false,
@@ -193,6 +207,26 @@
         }
       ],
       "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "14b859b8ea7141b1a6fc65b7a3becf55",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4f19dd7097cc4eceb0b8019a66d74265",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
     }
   ],
   "Connectors": [
@@ -222,9 +256,14 @@
       "Id": "6c6625a2c4904cb2abd6e4db423d8c32"
     },
     {
-      "Start": "334821bf4acb4500a0c4a6d507b493a5",
+      "Start": "e41ca185258f455697165b1a47aa4473",
+      "End": "a2b0fde4b8b44f46a756fbb3db1a95e3",
+      "Id": "137adac1f9b44cb9b4280d022b7d44a3"
+    },
+    {
+      "Start": "4f19dd7097cc4eceb0b8019a66d74265",
       "End": "2d03435a82aa4dbab0989bdd2277ec20",
-      "Id": "61d600effdf24814a4a7a49dcfca2d9a"
+      "Id": "dbaf7477fc27497aa449d153a9f00205"
     }
   ],
   "Dependencies": [],
@@ -304,18 +343,28 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "Board_to_modify",
-        "Id": "fefb87d385404251863283d7f160c7cf",
-        "IsSetAsInput": false,
+        "Name": "Select element",
+        "Id": "26126cbe85c949c587909e4eb8b35166",
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 451.14322142097262,
-        "Y": 831.16233121282119
+        "X": 464.41240557641595,
+        "Y": 954.03183329527644
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "calc_all",
+        "Id": "14b859b8ea7141b1a6fc65b7a3becf55",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 499.10607723312182,
+        "Y": 857.66052313776061
       }
     ],
     "Annotations": [],
-    "X": -431.91985607328,
-    "Y": -493.925024135476,
-    "Zoom": 1.0357425302042949
+    "X": -416.281687449953,
+    "Y": -536.83686166994949,
+    "Zoom": 1.0376532168811774
   }
 }
