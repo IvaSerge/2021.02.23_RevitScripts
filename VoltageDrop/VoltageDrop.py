@@ -223,7 +223,7 @@ for i in vd_list:
 	el_vd = str(i[1][0])
 	el_vd_overall = str(sum(i[1]))
 	el_sys.LookupParameter("CP_Voltage Drop").Set(el_vd)
-	el_sys.LookupParameter("CP_Voltage Drop Overall").Set(el_vd)
+	el_sys.LookupParameter("CP_Voltage Drop Overall").Set(el_vd_overall)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
