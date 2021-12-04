@@ -189,15 +189,20 @@ if calc_all:
 	# Filtering out not connected circuits
 	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
 
-
-# vd_list = [get_vd(circuit) for circuit in circuits_to_calculate]
-
-
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
+# accrodting to script, all pathes would be changed to "all devices"
+vd_list = [get_vd(circuit) for circuit in circuits_to_calculate]
+
+for i in vd_list:
+	el_sys = i[0]
+	el_vd = str(i[1][0])
+	el_vd_overall = str(sum(i[1]))
+	el_sys.LookupParameter("CP_Voltage Drop").Set(el_vd)
+	el_sys.LookupParameter("CP_Voltage Drop Overall").Set(el_vd)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = circuits_to_calculate
+OUT = vd_list
