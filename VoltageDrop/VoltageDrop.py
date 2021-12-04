@@ -35,6 +35,30 @@ import calc_overall_vd
 from calc_overall_vd import get_vd
 
 
+def get_sys_by_selection():
+	"""
+	Get system by selected object
+	"""
+	el_sys_list = list()
+	# get system by selected object
+	sel = uidoc.Selection.PickObject(  # type: ignore
+		Autodesk.Revit.UI.Selection.ObjectType.Element, "")
+	sel_obj = doc.GetElement(sel.ElementId)  # type: ignore
+	# check if selection is electrical board
+	# OST_ElectricalEquipment.Id == -2001040
+	if sel_obj.Category.Id == ElementId(-2001040):
+		sys_el = sel_obj.MEPModel.ElectricalSystems
+		sys_all = [x.Id for x in sel_obj.MEPModel.AssignedElectricalSystems]
+		el_sys_list = [x for x in sys_el if x.Id not in sys_all]
+		# filter out electrical circuit only
+		el_sys_list = [
+			x for x in el_sys_list
+			if x.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+	else:
+		el_sys_list = [x for x in sel_obj.MEPModel.ElectricalSystems]
+	return el_sys_list
+
+
 def elsys_by_brd(_brd):
 	"""Get all systems of electrical board.
 		args:
@@ -147,12 +171,11 @@ distrSys = FilteredElementCollector(doc).\
 
 reload = IN[1]  # type: ignore
 calc_all = IN[2]  # type: ignore
-el_instance = UnwrapElement(IN[3])  # type: ignore
 outlist = list()
 
 # only 1 element to calculate
 if not calc_all:
-	circuits_to_calculate = [get_el_sys(el_instance)]
+	circuits_to_calculate = get_sys_by_selection()
 
 # get all electrical systems that are modifiable
 if calc_all:

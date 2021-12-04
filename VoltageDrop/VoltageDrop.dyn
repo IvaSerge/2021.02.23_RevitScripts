@@ -85,15 +85,6 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
-        },
-        {
-          "Id": "a2b0fde4b8b44f46a756fbb3db1a95e3",
-          "Name": "IN[3]",
-          "Description": "Input #3",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -190,25 +181,6 @@
       "Description": "Erstellt eine Zeichenfolge."
     },
     {
-      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
-      "NodeType": "ExtensionNode",
-      "InstanceId": [],
-      "Id": "26126cbe85c949c587909e4eb8b35166",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "e41ca185258f455697165b1a47aa4473",
-          "Name": "Element",
-          "Description": "The selected elements.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled"
-    },
-    {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
       "InputValue": false,
@@ -254,11 +226,6 @@
       "Start": "24e320b0a8844744b7c6b6bf89539764",
       "End": "c1793981a2564442b958a5e8fbf8a6a3",
       "Id": "6c6625a2c4904cb2abd6e4db423d8c32"
-    },
-    {
-      "Start": "e41ca185258f455697165b1a47aa4473",
-      "End": "a2b0fde4b8b44f46a756fbb3db1a95e3",
-      "Id": "137adac1f9b44cb9b4280d022b7d44a3"
     },
     {
       "Start": "4f19dd7097cc4eceb0b8019a66d74265",
@@ -343,16 +310,6 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "Select element",
-        "Id": "26126cbe85c949c587909e4eb8b35166",
-        "IsSetAsInput": true,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 464.41240557641595,
-        "Y": 954.03183329527644
-      },
-      {
-        "ShowGeometry": true,
         "Name": "calc_all",
         "Id": "14b859b8ea7141b1a6fc65b7a3becf55",
         "IsSetAsInput": true,
@@ -363,8 +320,8 @@
       }
     ],
     "Annotations": [],
-    "X": -416.281687449953,
-    "Y": -536.83686166994949,
-    "Zoom": 1.0376532168811774
+    "X": -345.542729042916,
+    "Y": -331.16149868155583,
+    "Zoom": 0.74011341432095412
   }
 }
