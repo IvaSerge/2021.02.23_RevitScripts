@@ -110,10 +110,9 @@ def get_parval(elem, name):
 
 def get_circuit_row(_el_sys):
 	global doc
-	calcSystem = _el_sys
 
 	# Main board of electrical system
-	mainBoard = calcSystem.BaseEquipment
+	mainBoard = _el_sys.BaseEquipment
 
 	# find the shedule of electrical board
 	board_schedule = [x for x in FilteredElementCollector(doc).
@@ -128,11 +127,14 @@ def get_circuit_row(_el_sys):
 		board_circuits = [
 			board_schedule.GetCircuitIdByCell(i, 1).IntegerValue
 			for i in range(1, max_cells + 1)]
-		board_row = board_circuits.index(calcSystem.Id.IntegerValue)
+		try:
+			board_row = board_circuits.index(_el_sys.Id.IntegerValue)
+		except:
+			board_row = [None, None]
 	else:
-		board_row = None
+		board_row = [None, None]
 
-	return board_row
+	return board_row, board_schedule
 
 
 def get_estimated_load(_elSys, _testboard):
@@ -142,7 +144,9 @@ def get_estimated_load(_elSys, _testboard):
 
 	# Main board of electrical system
 	mainBoard = calcSystem.BaseEquipment
-	calcSystem_row = get_circuit_row(_elSys)
+	row_and_schedule = get_circuit_row(_elSys)
+	calcSystem_row = row_and_schedule[0]
+	mainBoard_schedule = row_and_schedule[0]
 
 	# reconnect system from Main to Test board
 	calcSystem.SelectPanel(_testboard)
@@ -164,22 +168,18 @@ def get_estimated_load(_elSys, _testboard):
 	calcSystem.SelectPanel(mainBoard)
 	doc.Regenerate()
 
-	calcSystem_row_new = get_circuit_row(_elSys)
+	calcSystem_row_new = get_circuit_row(_elSys)[0]
 
 	# there was no schedule. Reconection not reqiuered
-	if not calcSystem_row:
+	if not calcSystem_row or not mainBoard_schedule:
 		return convert_TotalEstLoad, rvt_DemandFactor
 
+	# the system is on correct place - no reconection
 	if calcSystem_row == calcSystem_row_new:
 		return convert_TotalEstLoad, rvt_DemandFactor
 
-	# find the shedule of electrical board
-	board_schedule = [x for x in FilteredElementCollector(doc).
-		OfClass(Autodesk.Revit.DB.Electrical.PanelScheduleView).
-		ToElements()
-		if x.TargetId == mainBoard.Id]  # type: Autodesk.Revit.DB.Electrical.PanelScheduleView
+		mainBoard_schedule.MoveSlotTo(calcSystem_row_new, 1, calcSystem_row, 1)
 
-	board_schedule.MoveSlotTo(calcSystem_row_new, 1, calcSystem_row, 1)
 	return convert_TotalEstLoad, rvt_DemandFactor
 
 
@@ -297,7 +297,7 @@ else:
 	# filter out not owned circuits
 	circuits_to_calculate = [
 		i for i in circuits_to_calculate
-		if WorksharingUtils.GetCheckoutStatus(doc, i) != CheckoutStatus.OwnedByOtherUser
+		if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != CheckoutStatus.OwnedByOtherUser
 	]
 
 	# Filtering out not connected circuits
@@ -312,9 +312,11 @@ TESTBOARD.get_Parameter(
 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
 param_info = [SetEstimatedValues(x, TESTBOARD) for x in circuits_to_calculate]
+
 doc.Delete(TESTBOARD.Id)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = param_info
+# OUT = param_info
+OUT = circuits_to_calculate
