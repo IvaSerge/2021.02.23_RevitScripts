@@ -1,4 +1,20 @@
+# ================ system imports
 import clr
+
+import sys
+# sys.path.append(r"C:\Program Files\Dynamo 0.8")
+pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
+sys.path.append(pyt_path)
+sys.path.append(IN[0].DirectoryName)  # type: ignore
+
+import System
+from System import Array
+from System.Collections.Generic import *
+
+# ================ Revit imports
+clr.AddReference('RevitAPIUI')
+from Autodesk.Revit.UI import *
+
 clr.AddReference('RevitAPI')
 import Autodesk
 from Autodesk.Revit.DB import *
@@ -8,26 +24,57 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
-import System
+
+def elsys_by_brd(_brd):
+	"""Get all systems of electrical board.
+		args:
+		_brd - electrical board FamilyInstance
+		return list(1, 2) where:
+		1 - main electrical circuit
+		2 - list of connectet low circuits
+	"""
+	allsys = _brd.MEPModel.ElectricalSystems
+	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	# board have upper and lower circuits
+	if lowsys and allsys:
+		lowsysId = [i.Id for i in lowsys]
+		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
+		# board have no main circuit
+		if len(mainboardsysLst) == 0:
+			mainboardsys = None
+		else:
+			mainboardsys = mainboardsysLst[0]
+		lowsys = [i for i in allsys if i.Id in lowsysId]
+		lowsys.sort(key=lambda x: get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER"))
+		return mainboardsys, lowsys
+
+	# board have no circuits
+	if not allsys and not lowsys:
+		return None, None
+
+	# board have only main circuit
+	if not lowsys:
+		return [i for i in allsys][0], None
 
 
-def GetBuiltInParam(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
+def get_parval(elem, name):
+	"""Get parametr value
 
+	args:
+		elem - family instance or type
+		name - parameter name
+	return:
+		value - parameter value
+	"""
 
-def GetParVal(elem, name):
-	value = " "
-	# Параметр пользовательский
+	value = None
+	# custom parameter
 	param = elem.LookupParameter(name)
-	# параметр не найден. Надо проверить, есть ли такой же встроенный параметр
+	# check is it a BuiltIn parameter if not found
 	if not(param):
-		param = elem.get_Parameter(GetBuiltInParam(name))
-	# Если параметр найден, считываем значение
+		param = elem.get_Parameter(get_bip(name))
+
+	# get paremeter Value if found
 	try:
 		storeType = param.StorageType
 		# value = storeType
@@ -44,205 +91,30 @@ def GetParVal(elem, name):
 	return value
 
 
-def SetupParVal(elem, name, pValue):
-	global doc
-	# Параметр пользовательский
-	param = elem.LookupParameter(name)
-	# параметр не найден. Надо проверить, есть ли такой же встроенный параметр
-	if not(param):
-		param = elem.get_Parameter(GetBuiltInParam(name))
-	if param:
-		param.Set(pValue)
-	return elem
+def get_bip(paramName):
+	builtInParams = System.Enum.GetValues(BuiltInParameter)
+	param = []
+	for i in builtInParams:
+		if i.ToString() == paramName:
+			param.append(i)
+			return i
 
 
-def getSwitchedInst(_switchSys):
-	outlist = list(), list()
-	for sys in _switchSys:
-		switch = sys.BaseEquipment
-		if switch:
-			outlist[0].append(switch.Id)
-			outlist[1].append(sys)
-		elems = sys.Elements
-		for elem in elems:
-			outlist[0].append(elem.Id)
-			outlist[1].append(sys)
-	return outlist
-
-
-def getSystems(_brd):
-	"""Get all systems of electrical board.
-
-		args:
-		_brd - electrical board FamilyInstance
-
-		return:
-		list(1, 2) where:
-		1 - feeder
-		2 - list of branch systems
+def update_subboard_name(board_inst):
 	"""
-	try:
-		board_all_systems = [i for i in _brd.MEPModel.ElectricalSystems]
-	except TypeError:
-		# raise TypeError("Board \"%s\" have no systems" % brd_name)
-		return None, None
-	try:
-		board_branch_systems = [i for i in _brd.MEPModel.AssignedElectricalSystems]
-		board_branch_systems.sort(
-			key=lambda x:
-			float(GetParVal(x, "RBS_ELEC_CIRCUIT_NUMBER")))
-	except TypeError:
-		# raise ValueError("Board \"%s\" have no branch systems" % brd_name)
-		return board_all_systems[0], None
-	if len(board_branch_systems) == len(board_all_systems):
-		# raise ValueError("Board \"%s\" have no feeder" % brd_name)
-		return None, board_branch_systems
-
-	branch_systems_id = [i.Id for i in board_branch_systems]
-	board_feeder = [
-		i for i in board_all_systems
-		if i.Id not in branch_systems_id][0]
-	return board_feeder, board_branch_systems
-
-
-def readInfo(_elem):
-	"""
-	Read electrical parameters of element
-
-	args:
-		_elem[0] - FamilyInstance
-		_elem[1] - Type of electrical system
-
-	return:
-		_elem - FamilyInstance
-		list() - list of circuit indexes
-
-	index structure is XYY where:
-	X: - board prefix, YY: - circuit number with leading zeros
-	"""
-	global doc
-	elem = _elem[0]
-	elem_cat_Id = elem.Category.Id
-	brd_cat_Id = Category.GetCategory(
-		doc, BuiltInCategory.OST_ElectricalEquipment).Id
-	sysType = _elem[1]
-
-	# Element is Electrical board:
-	if elem_cat_Id == brd_cat_Id:
-		brd_systems = getSystems(elem)
-		mainciruit = brd_systems[0]
-		# no feeder found
-		if not(mainciruit):
-			return elem, None
-
-		# check if it is correct type of the system
-		check_circ_type = mainciruit.SystemType == sysType
-		if not(check_circ_type):
-			return elem, None
-
-		# After all make index
-		circPanel = mainciruit.BaseEquipment
-		# check if electrical system is connected to any board
-		try:
-			# is connected
-			circPanelName = circPanel.get_Parameter(
-				BuiltInParameter.RBS_ELEC_CIRCUIT_PREFIX).AsString()
-			circNumber = str(mainciruit.CircuitNumber)
-			# add leading zeros
-			# fnumber = '{:02}'.format(int(float(circNumber)))
-			# circInfo = circPanelName + fnumber
-			circInfo = circPanelName + "F" + circNumber
-			return elem, [circInfo]
-		except:
-			# Not connected
-			return elem, ["NotConnected"]
-
-	# For all other elements
-	allCircuits = elem.MEPModel.ElectricalSystems
-
-	# element is not connectes
-	if not(allCircuits):
-		return elem, None
-
-	outlist = list()
-	for circuit in allCircuits:
-		# check if it is correct type of the system
-		check_circ_type = circuit.SystemType == sysType
-		if not(check_circ_type):
-			continue
-
-		try:
-			# check if electrical system is connected to any board
-			circPanel = circuit.BaseEquipment
-			circPanelName = circPanel.get_Parameter(
-				BuiltInParameter.RBS_ELEC_CIRCUIT_PREFIX).AsString()
-			circNumber = str(circuit.CircuitNumber)
-			# add leading zeros
-			# fnumber = '{:02}'.format(int(float(circNumber)))
-			# circInfo = circPanelName + fnumber
-			circInfo = circPanelName + "F" + circNumber
-			outlist.append(circInfo)
-		except:
-			outlist.append("NotConnected")
-
-	outlist.sort(key=lambda x: (x[1], x[0]))
-	return elem, outlist
-
-
-def writeInfo(_info):
-	elem = _info[0][0]
-	circuitsInfo = _info[0][1]
-	ParamsList = _info[1]
-	# Check if there any parameter to set
-	# If there is no parameter - set white space
-	if not(circuitsInfo):
-		circuitsInfo = [" "] * len(ParamsList)
-
-	# Check if there are all parameters in the list
-	paramCount = len(ParamsList) - len(circuitsInfo)
-	if paramCount > 0:
-		for i in range(paramCount):
-			circuitsInfo.append(" ")
-
-	# Set values
-	map(lambda x: SetupParVal(elem, x[0], x[1]), zip(
-		ParamsList, circuitsInfo))
-	return elem, circuitsInfo, ParamsList
-
-
-def getSwitchNumber(_elem):
-	global switchedInstances
-	if _elem.Id in switchedInstances[0]:
-		elemIndex = switchedInstances[0].index(_elem.Id)
-		switchSys = switchedInstances[1][elemIndex]
-		sysNumber = GetParVal(switchSys, "MC Object Variable 2")
-		return _elem, [sysNumber]
-	else:
-		return _elem, [" "]
-
-
-def update_subboard_name(board_info):
-	"""
-	Board with "\\" symbol is subboard.
+	Board type "QUASI_Connector" symbol is subboard.
 	Board name need to be changed according to current circuit name
 	"""
-	brd_inst = board_info[0]
-	brd_name = GetParVal(brd_inst, "RBS_ELEC_PANEL_NAME")
-
-	if not brd_name or not board_info[1]:
+	brd_main_circuit = elsys_by_brd(board_inst)[0]
+	if not brd_main_circuit:
 		return None
 
-	if "/" in brd_name and brd_name:
-		circuit_name = board_info[1][0]
-		splited_names = brd_name.split("/")
-		if splited_names[0] != circuit_name:
-			new_name = circuit_name + "/" + splited_names[1]
-			SetupParVal(
-				brd_inst,
-				"RBS_ELEC_PANEL_NAME",
-				new_name)
-			return new_name
-	return None
+	main_board = brd_main_circuit.BaseEquipment.Name
+	main_circ_num = brd_main_circuit.CircuitNumber
+	name = main_board + ": " + main_circ_num
+	board_inst.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_NAME).Set(name)
+
+	return name
 
 
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -250,28 +122,32 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 
-electroBoards = FilteredElementCollector(doc)\
-	.OfCategory(BuiltInCategory.OST_ElectricalEquipment)\
-	.WhereElementIsNotElementType()\
-	.ToElements()
+fnrvStr = FilterStringEquals()
+pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
+frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector", False)
+filter = ElementParameterFilter(frule)
 
-reload = IN[0]
+electroBoards = FilteredElementCollector(doc).\
+	OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
+	WhereElementIsNotElementType().\
+	WherePasses(filter).\
+	ToElements()
 
-elemList = list()
-# elemList = [UnwrapElement(IN[1])]
-map(elemList.append, electroBoards)
+reload = IN[1]  # type: ignore
+calc_all = IN[2]  # type: ignore
 
+if calc_all:
+	elemList = electroBoards
 
-eltInfo = map(
-	readInfo, zip(elemList, [Electrical.ElectricalSystemType.PowerCircuit] * len(elemList)))
-brdInfo = [x for x in eltInfo if x[0] in electroBoards]
+if not calc_all:
+	elemList = [UnwrapElement(IN[3])]  # type: ignore
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-brd_updated = map(update_subboard_name, brdInfo)
+brd_updated = map(update_subboard_name, elemList)
 
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
-OUT = eltInfo
+OUT = electroBoards

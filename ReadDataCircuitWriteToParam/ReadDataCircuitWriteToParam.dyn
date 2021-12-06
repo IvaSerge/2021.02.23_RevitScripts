@@ -8,24 +8,97 @@
   },
   "Inputs": [
     {
-      "Id": "f8acbe39e1ff4edd841b8e2342f9d2ae",
+      "Id": "247389cd36b8437db0c2971fb3851598",
       "Name": "String",
       "Type": "string",
       "Value": "ReadDataCircuitWriteToParam.py",
-      "Description": "Erstellt eine Zeichenfolge."
+      "Description": "Creates a string."
+    },
+    {
+      "Id": "2a7c59b378f94df2865f5684cdf35587",
+      "Name": "calc_all",
+      "Type": "boolean",
+      "Value": "true",
+      "Description": "Selection between a true and false."
     }
   ],
   "Outputs": [],
   "Nodes": [
     {
+      "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
+      "VariableInputPorts": true,
+      "NodeType": "ExtensionNode",
+      "Id": "1b79df6695194458b3633e0bed15cd64",
+      "Inputs": [
+        {
+          "Id": "f77fa4bc7b15462e94816c963a486648",
+          "Name": "script",
+          "Description": "Python script to run.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "47f4a056f13f43868341f1b01a274f7e",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0ce557ba57ea4f53840d30d83a6db2f5",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "dea01028c0d14c778e215769761eb86e",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e59c98df47e5435c835fedaae42ab651",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0ffe33e7c7f34f6a8d151e5ab16336dc",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs a IronPython script from a string."
+    },
+    {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
-      "Id": "28f8db797e924b65a21687e0bf972afe",
+      "InputValue": true,
+      "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "8cc0e3ac40584b88b1aa605e94a6e3c9",
+          "Id": "0c50f0a5e8394f019a078e6850124104",
           "Name": "",
           "Description": "Boolean",
           "UsingDefaultValue": false,
@@ -38,33 +111,15 @@
       "Description": "Selection between a true and false."
     },
     {
-      "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
-      "VariableInputPorts": true,
-      "NodeType": "ExtensionNode",
-      "Id": "51b47d8ff94f42aebc20460895cc8863",
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.IO.FileSystem.ReadText@var",
+      "Id": "508e1ae226144bda9f28c842aeae9af8",
       "Inputs": [
         {
-          "Id": "67c2d5080b7c4d64af72b10ed12983cb",
-          "Name": "script",
-          "Description": "Das auszuführende Python-Skript",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "9c79eb24dca340988187ed88c52e73cf",
-          "Name": "IN[0]",
-          "Description": "Input #0",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "1f78acaacc444a5dbceaf4c972d27350",
-          "Name": "IN[1]",
-          "Description": "Input #1",
+          "Id": "e3c70fc4d4f14aff8aa26e1f060f57f2",
+          "Name": "file",
+          "Description": "var",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -73,9 +128,38 @@
       ],
       "Outputs": [
         {
-          "Id": "3da63dc0b8c44977b12a837c531f34ec",
-          "Name": "OUT",
-          "Description": "Ergebnis des Python-Skripts",
+          "Id": "e7849bae2b704038b9a1ce4cee46d4fc",
+          "Name": "str",
+          "Description": "Contents of the text file.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Reads a text file and returns the contents as a string.\n\nFileSystem.ReadText (file: var): string"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.FileObject, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "f5f2e95993264fd5b7943ab8bac7453c",
+      "Inputs": [
+        {
+          "Id": "b505712d4efc41cd97c3c4dc0c84d9e6",
+          "Name": "path",
+          "Description": "Path to the file.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2ce9610afe59481aa813a31da14f8501",
+          "Name": "file",
+          "Description": "File object",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -83,17 +167,17 @@
         }
       ],
       "Replication": "Disabled",
-      "Description": "Führt ein IronPython-Skript aus einer Zeichenfolge aus."
+      "Description": "Creates a file object from a path."
     },
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
       "InputValue": "ReadDataCircuitWriteToParam.py",
-      "Id": "f8acbe39e1ff4edd841b8e2342f9d2ae",
+      "Id": "247389cd36b8437db0c2971fb3851598",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "921b16f1fb1743429ff98e0665afb86b",
+          "Id": "26ebc66651a646cda0966943be75c7d2",
           "Name": "",
           "Description": "String",
           "UsingDefaultValue": false,
@@ -103,14 +187,85 @@
         }
       ],
       "Replication": "Disabled",
-      "Description": "Erstellt eine Zeichenfolge."
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "d220154b-962e-438c-8dec-92a24e81959b-00dee8a2"
+      ],
+      "Id": "fe74da84427042468a648326f7fb22c5",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "bda170b9ee2947609aa34753773ba2e1",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "2a7c59b378f94df2865f5684cdf35587",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4b16e34c05934f5d8c99c6025e471a7b",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
     }
   ],
   "Connectors": [
     {
-      "Start": "8cc0e3ac40584b88b1aa605e94a6e3c9",
-      "End": "9c79eb24dca340988187ed88c52e73cf",
-      "Id": "c67d4efa58b04fbc981c9a461d61f12e"
+      "Start": "0c50f0a5e8394f019a078e6850124104",
+      "End": "0ce557ba57ea4f53840d30d83a6db2f5",
+      "Id": "fb503b92c8fd42ab9bf81ecab94118b7"
+    },
+    {
+      "Start": "e7849bae2b704038b9a1ce4cee46d4fc",
+      "End": "f77fa4bc7b15462e94816c963a486648",
+      "Id": "1ef977db6c684532b2d699b962f43f23"
+    },
+    {
+      "Start": "2ce9610afe59481aa813a31da14f8501",
+      "End": "47f4a056f13f43868341f1b01a274f7e",
+      "Id": "16769b54c70a4521a738946c5dea4d33"
+    },
+    {
+      "Start": "2ce9610afe59481aa813a31da14f8501",
+      "End": "e3c70fc4d4f14aff8aa26e1f060f57f2",
+      "Id": "5ddf6818722f4612a56012ce87453e49"
+    },
+    {
+      "Start": "26ebc66651a646cda0966943be75c7d2",
+      "End": "b505712d4efc41cd97c3c4dc0c84d9e6",
+      "Id": "dc0a98baa73b4ab2b23bb5d741aeb4e5"
+    },
+    {
+      "Start": "bda170b9ee2947609aa34753773ba2e1",
+      "End": "e59c98df47e5435c835fedaae42ab651",
+      "Id": "f823e1b4e53345ce8246c71e4c28c6e8"
+    },
+    {
+      "Start": "4b16e34c05934f5d8c99c6025e471a7b",
+      "End": "dea01028c0d14c778e215769761eb86e",
+      "Id": "288dcd979d7c480ca9a2a698d3563049"
     }
   ],
   "Dependencies": [],
@@ -139,39 +294,79 @@
     },
     "NodeViews": [
       {
-        "Id": "28f8db797e924b65a21687e0bf972afe",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Name": "Reload",
-        "ShowGeometry": true,
-        "Excluded": false,
-        "X": 261.41071238696469,
-        "Y": 238.98430478844662
-      },
-      {
-        "Id": "51b47d8ff94f42aebc20460895cc8863",
+        "Id": "1b79df6695194458b3633e0bed15cd64",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Name": "Python Script From String",
         "ShowGeometry": true,
         "Excluded": false,
-        "X": 652.556589288027,
-        "Y": 98.118626093968061
+        "X": 1456.5543213236706,
+        "Y": 62.350322446648931
       },
       {
-        "Id": "f8acbe39e1ff4edd841b8e2342f9d2ae",
+        "Id": "ad531ae1b87d458d89230df621752f91",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Reload",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 1167.4196696472279,
+        "Y": 165.33485263100829
+      },
+      {
+        "Id": "508e1ae226144bda9f28c842aeae9af8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "FileSystem.ReadText",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 1150.5322161699632,
+        "Y": 17.180403139486202
+      },
+      {
+        "Id": "f5f2e95993264fd5b7943ab8bac7453c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "File From Path",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 915.68573411746524,
+        "Y": 86.25012621823214
+      },
+      {
+        "Id": "247389cd36b8437db0c2971fb3851598",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Name": "String",
         "ShowGeometry": true,
         "Excluded": false,
-        "X": -15.343515222852375,
-        "Y": 70.29067615038872
+        "X": 650.48573411746577,
+        "Y": 86.25012621823214
+      },
+      {
+        "Id": "fe74da84427042468a648326f7fb22c5",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "test_element",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 1118.0623046731855,
+        "Y": 334.455508702419
+      },
+      {
+        "Id": "2a7c59b378f94df2865f5684cdf35587",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Name": "calc_all",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 1165.6332502949397,
+        "Y": 243.76457412875538
       }
     ],
     "Annotations": [],
-    "X": -138.56007237094178,
-    "Y": 122.63849243235373,
-    "Zoom": 0.73189005558727815
+    "X": -900.21426273139707,
+    "Y": 43.631539899992305,
+    "Zoom": 0.89152937572694235
   }
 }
