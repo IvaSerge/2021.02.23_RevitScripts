@@ -25,8 +25,7 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
-import math
-from math import sqrt
+
 
 # ================ Local imports
 import circuit_voltage_drop
@@ -220,8 +219,8 @@ vd_list = [get_vd(circuit) for circuit in circuits_to_calculate]
 
 for i in vd_list:
 	el_sys = i[0]
-	el_vd = str(i[1][0])
-	el_vd_overall = str(sum(i[1]))
+	el_vd = str(round(i[1][0] * 100) / 100)
+	el_vd_overall = str(round(sum(i[1]) * 100) / 100)
 	el_sys.LookupParameter("CP_Voltage Drop").Set(el_vd)
 	el_sys.LookupParameter("CP_Voltage Drop Overall").Set(el_vd_overall)
 
