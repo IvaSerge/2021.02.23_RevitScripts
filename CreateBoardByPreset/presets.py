@@ -16,6 +16,49 @@ from operator import itemgetter, attrgetter
 
 class presets():
 
+	preset_2A_sub = [
+		# Description | n_of_poles
+		[5, 4],
+		[
+			["6 A / F123 Section 0F1", "3"],
+			["6 A / F456 Section 0F1", "3"],
+			["6 A / F789 Section 0F1", "3"],
+			["6 A / F101112 Section 0F1", "3"],
+			["6 A / F131415 Section 0F1", "3"],
+
+			["6 A / F161718 Section 0F2", "3"],
+			["6 A / F192021 Section 0F2", "3"],
+			["6 A / F222324 Section 0F2", "3"],
+			["6 A / F252627 Section 0F2", "3"],
+			["6 A / F282930 Section 0F2", "3"],
+
+			["6 A / F313233 Section 0F3", "3"],
+			["6 A / F343536 Section 0F3", "3"],
+			["6 A / F373839 Section 0F3", "3"],
+			["6 A / F404142 Section 0F3", "3"],
+			["6 A / F434445 Section 0F3", "3"],
+
+			["6 A / F464748 Section 0F4", "3"],
+			["6 A / F495051 Section 0F4", "3"],
+			["6 A / F525354 Section 0F4", "3"],
+			["6 A / F555657 Section 0F4", "3"],
+			["6 A / F585969 Section 0F4", "3"],
+
+			["6 A / F61 Section 0F5", "1"],
+			["6 A / F62 Section 0F5", "1"],
+			["6 A / F63 Section 0F5", "1"],
+			["6 A / F64 Section 0F5", "1"],
+			["6 A / F65 Section 0F5", "1"],
+			["6 A / F66 Section 0F5", "1"],
+			["6 A / F67 Section 0F5", "1"],
+			["6 A / F68 Section 0F5", "1"],
+			["6 A / F69 Section 0F5", "1"],
+			["6 A / F70 Section 0F5", "1"],
+			["6 A / F71 Section 0F5", "1"],
+			["6 A / F72 Section 0F5", "1"],
+		]
+	]
+
 	# list of preset options
 	preset_2R_main = [
 		# Description | n_of_poles
