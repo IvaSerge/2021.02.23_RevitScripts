@@ -154,5 +154,5 @@ def get_vd(_el_sys):
 	low_nets = [i for i in low_elem_list if i.Category.Id == cat_el_sys]
 
 	vd_list = [calc_circuit_vd(i) for i in low_nets]
-	
+
 	return _el_sys, vd_list
