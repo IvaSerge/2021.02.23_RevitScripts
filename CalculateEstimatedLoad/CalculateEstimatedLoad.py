@@ -142,43 +142,27 @@ def get_estimated_load(_elSys, _testboard):
 	global doc
 	calcSystem = _elSys
 
-	# Main board of electrical system
-	mainBoard = calcSystem.BaseEquipment
-	row_and_schedule = get_circuit_row(_elSys)
-	calcSystem_row = row_and_schedule[0]
-	mainBoard_schedule = row_and_schedule[0]
+	# perform changes in subtransaction
+	with SubTransaction(doc) as sub_tr:
+		sub_tr.Start()
 
-	# reconnect system from Main to Test board
-	calcSystem.SelectPanel(_testboard)
-	doc.Regenerate()
+		# reconnect system from Main to Test board
+		calcSystem.SelectPanel(_testboard)
+		doc.Regenerate()
 
-	# Get parameters from test board
-	rvt_DemandFactor = _testboard.get_Parameter(
-		BuiltInParameter.
-		RBS_ELEC_PANEL_TOTAL_DEMAND_FACTOR_PARAM).AsDouble()
+		# Get parameters from test board
+		rvt_DemandFactor = _testboard.get_Parameter(
+			BuiltInParameter.
+			RBS_ELEC_PANEL_TOTAL_DEMAND_FACTOR_PARAM).AsDouble()
 
-	rvt_TotalEstLoad = _testboard.get_Parameter(
-		BuiltInParameter.
-		RBS_ELEC_PANEL_TOTALESTLOAD_PARAM).AsDouble()
+		rvt_TotalEstLoad = _testboard.get_Parameter(
+			BuiltInParameter.
+			RBS_ELEC_PANEL_TOTALESTLOAD_PARAM).AsDouble()
 
-	convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
-		rvt_TotalEstLoad, DisplayUnitType.DUT_VOLT_AMPERES)
+		convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
+			rvt_TotalEstLoad, DisplayUnitType.DUT_VOLT_AMPERES)
 
-	# reconnect circuit back
-	calcSystem.SelectPanel(mainBoard)
-	doc.Regenerate()
-
-	calcSystem_row_new = get_circuit_row(_elSys)[0]
-
-	# there was no schedule. Reconection not reqiuered
-	if not calcSystem_row or not mainBoard_schedule:
-		return convert_TotalEstLoad, rvt_DemandFactor
-
-	# the system is on correct place - no reconection
-	if calcSystem_row == calcSystem_row_new:
-		return convert_TotalEstLoad, rvt_DemandFactor
-
-		mainBoard_schedule.MoveSlotTo(calcSystem_row_new, 1, calcSystem_row, 1)
+		sub_tr.RollBack()
 
 	return convert_TotalEstLoad, rvt_DemandFactor
 
