@@ -250,85 +250,28 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 
-switchSystems = FilteredElementCollector(doc)\
-	.OfCategory(BuiltInCategory.OST_SwitchSystem)\
-	.OfClass(MEPSystem)
-
-switchedInstances = getSwitchedInst(switchSystems)
-
-# dataElem = FilteredElementCollector(doc)\
-# 	.OfCategory(BuiltInCategory.OST_DataDevices)\
-# 	.WhereElementIsNotElementType()\
-# 	.ToElements()
-
-electroElem = FilteredElementCollector(doc)\
-	.OfCategory(BuiltInCategory.OST_ElectricalFixtures)\
-	.WhereElementIsNotElementType()\
-	.ToElements()
-
-leuchten = FilteredElementCollector(doc)\
-	.OfCategory(BuiltInCategory.OST_LightingFixtures)\
-	.WhereElementIsNotElementType()\
-	.ToElements()
-
-lichtschalter = FilteredElementCollector(doc)\
-	.OfCategory(BuiltInCategory.OST_LightingDevices)\
-	.WhereElementIsNotElementType()\
-	.ToElements()
-
 electroBoards = FilteredElementCollector(doc)\
 	.OfCategory(BuiltInCategory.OST_ElectricalEquipment)\
 	.WhereElementIsNotElementType()\
 	.ToElements()
 
-# NotRuf = FilteredElementCollector(doc)\
-# 	.OfCategory(BuiltInCategory.OST_NurseCallDevices)\
-# 	.WhereElementIsNotElementType()\
-# 	.ToElements()
-
 reload = IN[0]
-
-ParamsELT = [
-	"Beschriftung 1",
-	"Beschriftung 2"]
-
-ParamsDAT = [
-	"Beschriftung 3",
-	"Beschriftung 4",
-	"Beschriftung 5",
-	"Beschriftung 6"]
-
-ParamsSwitch = ["MC Object Variable 2"]
 
 elemList = list()
 # elemList = [UnwrapElement(IN[1])]
-# map(elemList.append, dataElem)
-map(elemList.append, electroElem)
-map(elemList.append, leuchten)
-map(elemList.append, lichtschalter)
 map(elemList.append, electroBoards)
-# map(elemList.append, NotRuf)
+
 
 eltInfo = map(
 	readInfo, zip(elemList, [Electrical.ElectricalSystemType.PowerCircuit] * len(elemList)))
 brdInfo = [x for x in eltInfo if x[0] in electroBoards]
 
-# datInfo = map(
-# 	readInfo, zip(elemList, [
-# 		Electrical.ElectricalSystemType.Data] * len(elemList)))
-
-# switchInfo = map(getSwitchNumber, elemList)
-
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-eltParamInfo = map(writeInfo, zip(eltInfo, [ParamsELT] * len(eltInfo)))
 brd_updated = map(update_subboard_name, brdInfo)
-# datParamInfo = map(writeInfo, zip(datInfo, [ParamsDAT] * len(datInfo)))
-# switchParamInfo = map(writeInfo, zip(switchInfo, [ParamsSwitch]*len(switchInfo)))
 
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
-# OUT = zip(elemList, [Electrical.ElectricalSystemType.PowerCircuit] * len(elemList))
 OUT = eltInfo
