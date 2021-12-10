@@ -16,7 +16,7 @@ from operator import itemgetter, attrgetter
 
 class presets():
 
-	preset_2A_sub = [
+	preset_3A_sub = [
 		# Description | n_of_poles
 		[5, 4],
 		[
@@ -56,6 +56,84 @@ class presets():
 			["6 A / F70 Section 0F5", "1"],
 			["6 A / F71 Section 0F5", "1"],
 			["6 A / F72 Section 0F5", "1"],
+		]
+	]
+
+	preset_3B_sub = [
+		# Description | n_of_poles
+		[5, 4],
+		[
+			["6 A / F1 Section 0F1", "1"],
+			["6 A / F2 Section 0F1", "1"],
+			["6 A / F3 Section 0F1", "1"],
+			["6 A / F4 Section 0F1", "1"],
+			["6 A / F5 Section 0F1", "1"],
+			["6 A / F6 Section 0F1", "1"],
+			["6 A / F7 Section 0F1", "1"],
+			["6 A / F8 Section 0F1", "1"],
+
+			["6 A / F9 Section 0F2", "1"],
+			["6 A / F10 Section 0F2", "1"],
+			["6 A / F11 Section 0F2", "1"],
+			["6 A / F12 Section 0F2", "1"],
+			["6 A / F13 Section 0F2", "1"],
+			["6 A / F14 Section 0F2", "1"],
+			["6 A / F15 Section 0F2", "1"],
+			["6 A / F16 Section 0F2", "1"],
+
+			["6 A / F17 Section 0F3", "1"],
+			["6 A / F18 Section 0F3", "1"],
+			["6 A / F19 Section 0F3", "1"],
+			["6 A / F20 Section 0F3", "1"],
+			["6 A / F21 Section 0F3", "1"],
+			["6 A / F22 Section 0F3", "1"],
+			["6 A / F23 Section 0F3", "1"],
+			["6 A / F24	Section 0F3", "1"],
+
+			["6 A / F25 Section 0F4", "1"],
+			["6 A / F26 Section 0F4", "1"],
+			["6 A / F27 Section 0F4", "1"],
+			["6 A / F28 Section 0F4", "1"],
+			["6 A / F29 Section 0F4", "1"],
+			["6 A / F30 Section 0F4", "1"],
+			["6 A / F31 Section 0F4", "1"],
+			["6 A / F32	Section 0F4", "1"],
+
+			["6 A / F33 Section 0F5", "1"],
+			["6 A / F34 Section 0F5", "1"],
+			["6 A / F35 Section 0F5", "1"],
+			["6 A / F36 Section 0F5", "1"],
+			["6 A / F37 Section 0F5", "1"],
+			["6 A / F38 Section 0F5", "1"],
+			["6 A / F39 Section 0F5", "1"],
+			["6 A / F40	Section 0F5", "1"],
+
+			["6 A / F33 Section 0F6", "1"],
+			["6 A / F34 Section 0F6", "1"],
+			["6 A / F35 Section 0F6", "1"],
+			["6 A / F36 Section 0F6", "1"],
+			["6 A / F37 Section 0F6", "1"],
+			["6 A / F38 Section 0F6", "1"],
+			["6 A / F39 Section 0F6", "1"],
+			["6 A / F40	Section 0F6", "1"],
+
+			["6 A / F49 Section 0F7", "1"],
+			["6 A / F50 Section 0F7", "1"],
+			["6 A / F51 Section 0F7", "1"],
+			["6 A / F52 Section 0F7", "1"],
+			["6 A / F53 Section 0F7", "1"],
+			["6 A / F54 Section 0F7", "1"],
+			["6 A / F55 Section 0F7", "1"],
+			["6 A / F56	Section 0F7", "1"],
+
+			["6 A / F57 Section 0F8", "1"],
+			["6 A / F58 Section 0F8", "1"],
+			["6 A / F59 Section 0F8", "1"],
+			["6 A / F60 Section 0F8", "1"],
+			["6 A / F61 Section 0F8", "1"],
+			["6 A / F62 Section 0F8", "1"],
+			["6 A / F63 Section 0F8", "1"],
+			["6 A / F64	Section 0F8", "1"],
 		]
 	]
 

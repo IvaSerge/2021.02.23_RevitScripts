@@ -102,8 +102,10 @@ board_to_convert = UnwrapElement(IN[2])  # type: ignore
 # get preset
 if not(IN[3]):  # type: ignore
 	raise ValueError("No preset found")
-elif "2A_sub" == IN[3]:  # type: ignore
-	user_preset = presets.preset_2A_sub
+elif "3A_sub" == IN[3]:  # type: ignore
+	user_preset = presets.preset_3A_sub
+elif "3B_sub" == IN[3]:  # type: ignore
+	user_preset = presets.preset_3B_sub
 elif "2E_main" == IN[3]:  # type: ignore
 	user_preset = presets.preset_2E_main
 elif "2E_sub" == IN[3]:  # type: ignore
