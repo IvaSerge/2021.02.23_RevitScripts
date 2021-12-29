@@ -34,12 +34,10 @@ def get_sys_by_selection():
 	Get system by selected object
 	"""
 	el_sys_list = list()
-	# # get system by selected object
-	# sel = uidoc.Selection.PickObject(  # type: ignore
-	# 	Autodesk.Revit.UI.Selection.ObjectType.Element, "")
-	# sel_obj = doc.GetElement(sel.ElementId)  # type: ignore
-	global IN
-	sel_obj = UnwrapElement(IN[3])  # type: ignore
+	# get system by selected object
+	sel = uidoc.Selection.PickObject(  # type: ignore
+		Autodesk.Revit.UI.Selection.ObjectType.Element, "")
+	sel_obj = doc.GetElement(sel.ElementId)  # type: ignore
 
 	# check if selection is electrical board
 	# OST_ElectricalEquipment.Id == -2001040
@@ -241,7 +239,11 @@ for circuit in circuits_to_calculate:
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
-
+par_name = "E_Light_number"
+for i in info_list:
+	elem = i[0]
+	value = str(i[1])
+	setup_param_value(elem, par_name, value)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
