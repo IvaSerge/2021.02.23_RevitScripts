@@ -184,6 +184,9 @@ def get_sys_elements(_el_sys, all_elements=list()):
 	return _el_sys, elem_count
 
 
+def write_DALI_info():
+	pass
+
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
@@ -201,8 +204,6 @@ if not calc_all:
 # get all electrical systems
 if calc_all:
 	# get all circuits in the model
-	# Get all electrical circuits
-	# Circuit type need to be electrilca only
 	# electrical circuit type ID == 6
 	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
 	pvp = ParameterValueProvider(ElementId(int(testParam)))
@@ -233,19 +234,59 @@ if calc_all:
 	# Filtering out not connected circuits
 	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
 
+	# get electrical boards
+	# filter only 3A and 3B boards
+
+	# get all circuits in the model
+	# electrical circuit type ID == 6
+	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
+	pvp = ParameterValueProvider(ElementId(int(testParam)))
+	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
+	filter = ElementParameterFilter(sysRule)
+
+	boards_to_calculate = FilteredElementCollector(doc).\
+		OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
+		WhereElementIsNotElementType().\
+		ToElements()
+
+	boards_to_calculate = [i.Symbol.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM).AsString()
+		for i in boards_to_calculate
+		if any(
+			["typ-3A" in i.Symbol.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM).AsString(),
+			"typ 3B" in i.Symbol.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM).AsString()])]
+
+
 for circuit in circuits_to_calculate:
 	info = get_sys_elements(circuit, [])
 	info_list.append(info)
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
-par_name = "E_Light_number"
-for i in info_list:
-	elem = i[0]
-	value = str(i[1])
-	setup_param_value(elem, par_name, value)
 
+# write parameter to circuit
+# with SubTransaction(doc) as sub_tr:
+# 	sub_tr.Start()
+# 	par_name = "E_Light_number"
+# 	for i in info_list:
+# 		elem = i[0]
+# 		value = str(i[1])
+# 		setup_param_value(elem, par_name, value)
+# 	sub_tr.Commit()
+
+
+# calculate DALI swithcgear in panel
+with SubTransaction(doc) as sub_tr:
+	# only for all panels
+	if calc_all:
+		sub_tr.Start()
+		for board in boards_to_calculate:
+			write_DALI_info(board)
+
+		sub_tr.Commit()
+
+	else:
+		pass
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = info_list
+OUT = boards_to_calculate
