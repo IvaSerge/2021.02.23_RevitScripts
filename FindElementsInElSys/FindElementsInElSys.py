@@ -25,6 +25,7 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
+import re
 
 # ================ Local imports
 
@@ -184,8 +185,54 @@ def get_sys_elements(_el_sys, all_elements=list()):
 	return _el_sys, elem_count
 
 
-def write_DALI_info():
-	pass
+def get_first_circuit_number(_circuit):
+	# type: (Autodesk.Revit.DB.Autodesk.Revit.DB.Electrical.ElectricalSystem) -> int
+	"""Used for circuit sorting"""
+	circuit_number_str = _circuit.Name
+	regexp = re.compile(r"^F*(\d+)")
+	check = regexp.match(circuit_number_str)
+	return int(check.group(1))
+
+
+def write_DALI_info(_el_board):
+	# type: (Autodesk.Revit.DB.FamilyInstance) -> list
+
+	# get electrical circuits by board
+
+	circuits = [i for i in _el_board.MEPModel.AssignedElectricalSystems]
+	if _el_board.MEPModel.AssignedElectricalSystems:
+		circuits = [i for i in _el_board.MEPModel.AssignedElectricalSystems]
+	else:
+		return None
+
+	circuits.sort(key=get_first_circuit_number)
+	# dali_switchgear = None
+
+	# clear out spares and reserves
+	circuits = [i for i in circuits
+		if i.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit]
+
+	# for every circuit get ammount of fixtures in circuit
+	total_fixtures = 0
+	current_switch = 1
+	for circuit in circuits:
+		fixtures_in_circuit = int(circuit.LookupParameter("E_Light_number").AsString())
+
+		# it is possible to connect 64 lightings to 1 switchgear
+		# 54 lightings can be connected, 10 in reserve
+		if fixtures_in_circuit + total_fixtures > 54:
+			# not possible to connect to the device
+			# switch to other device
+			total_fixtures = fixtures_in_circuit
+			current_switch += 1
+		else:
+			# possible to connect to the device
+			total_fixtures += fixtures_in_circuit
+
+		str_switch = "DALI_" + str(current_switch)
+		circuit.LookupParameter("Switching Unit").Set(str_switch)
+	return circuits
+
 
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -249,7 +296,7 @@ if calc_all:
 		WhereElementIsNotElementType().\
 		ToElements()
 
-	boards_to_calculate = [i.Symbol.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM).AsString()
+	boards_to_calculate = [i
 		for i in boards_to_calculate
 		if any(
 			["typ-3A" in i.Symbol.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM).AsString(),
@@ -279,10 +326,15 @@ with SubTransaction(doc) as sub_tr:
 	# only for all panels
 	if calc_all:
 		sub_tr.Start()
+
 		for board in boards_to_calculate:
-			write_DALI_info(board)
+			try:
+				write_DALI_info(board)
+			except:
+				OUT = board
 
 		sub_tr.Commit()
+		pass
 
 	else:
 		pass
