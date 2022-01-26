@@ -1,0 +1,167 @@
+{
+  "Uuid": "4976b172-6126-4166-94fc-79e68a26f9e2",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "CopyParametersFromLink",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "9c955fc0-39d6-4aa0-a0b3-96c015a4ce2e-00b3f2ad"
+      ],
+      "Id": "1320d4e2451a4e86a18e364712bfd993",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "7e9abe77d22946eb93675c5ffb47790b",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\n\r\nimport sys\r\n# sys.path.append(r\"C:\\Program Files\\Dynamo 0.8\")\r\npyt_path = r'C:\\Program Files (x86)\\IronPython 2.7\\Lib'\r\nsys.path.append(pyt_path)\r\n\r\nclr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')\r\nfrom Microsoft.Office.Interop import Excel  # type: ignore\r\n\r\nimport System\r\nfrom System import Array\r\nfrom System.Collections.Generic import *\r\n\r\nSystem.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo(\"en-US\")\r\nfrom System.Runtime.InteropServices import Marshal\r\n\r\n# ================ Revit imports\r\nclr.AddReference('RevitAPI')\r\nimport Autodesk\r\nfrom Autodesk.Revit.DB import *\r\n\r\nclr.AddReference('RevitAPIUI')\r\nfrom Autodesk.Revit.UI import *\r\n\r\n\r\nclr.AddReference(\"RevitServices\")\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\n# ================ Dynamo imports\r\nclr.AddReference('ProtoGeometry')\r\nimport Autodesk.DesignScript\r\n\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nclr.AddReference(\"RevitNodes\")\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nfrom Revit.Elements import *\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\nclr.ImportExtensions(Revit.GeometryReferences)\r\n\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication\r\napp = uiapp.Application\r\nview = doc.ActiveView\r\n\r\n\r\nobt = Autodesk.Revit.UI.Selection.ObjectType.LinkedElement\r\n\r\nrefElemLinked = uidoc.Selection.PickObject(obt, \"Please pick an element in the linked model\")\r\nelem = doc.GetElement(refElemLinked.ElementId)\r\ndocLinked = elem.GetLinkDocument()\r\n\r\nlinkedelement = docLinked.GetElement(refElemLinked.LinkedElementId)\r\n\r\nOUT = linkedelement",
+      "VariableInputPorts": true,
+      "Id": "95d868394c824730b5cb1d43b4794fff",
+      "Inputs": [
+        {
+          "Id": "bb25d3f1cf0f48e89facee4610f87ea7",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "dae44ea4d1e64fb1baa9e33db807fb17",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "681d9f675998494aba4289f3d4eff2cb",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "50915687d7024da59edee9d2ac3631af",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b3c7205540134e43ae9726e34a28f31f",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "7e9abe77d22946eb93675c5ffb47790b",
+      "End": "dae44ea4d1e64fb1baa9e33db807fb17",
+      "Id": "e037df983c9e44498204415ff7a8e4c8"
+    },
+    {
+      "Start": "b3c7205540134e43ae9726e34a28f31f",
+      "End": "bb25d3f1cf0f48e89facee4610f87ea7",
+      "Id": "fd7641ad768c4f4e9d3882abb5e28804"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.3.0.5885",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Select Model Element",
+        "Id": "1320d4e2451a4e86a18e364712bfd993",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 37.5,
+        "Y": 326.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "95d868394c824730b5cb1d43b4794fff",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 321.5,
+        "Y": 274.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "50915687d7024da59edee9d2ac3631af",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 55.5,
+        "Y": 225.0
+      }
+    ],
+    "Annotations": [],
+    "X": 0.0,
+    "Y": 0.0,
+    "Zoom": 1.0
+  }
+}
