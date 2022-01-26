@@ -4,6 +4,7 @@ import sys
 # sys.path.append(r"C:\Program Files\Dynamo 0.8")
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
+sys.path.append(IN[0].DirectoryName)  # type: ignore
 
 clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
 from Microsoft.Office.Interop import Excel  # type: ignore
@@ -97,12 +98,23 @@ def get_bip(paramName):
 			return i
 
 
+def get_info(_elem_link, _elem, _param_list):
+	search_list = zip([_elem_link] * len(_param_list), _param_list)
+	found_list = [[
+		_elem,
+		i[1],
+		get_parval(i[0], i[1])] for i in search_list]
+	return found_list
+
+
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 view = doc.ActiveView
 
+reload = IN[1]  # type: ignore
+calc_all = IN[2]  # type: ignore
 
 params_dat = [
 	"st_devicetag",
@@ -111,17 +123,28 @@ params_dat = [
 	"TSLA_SCOPE_ID"]
 
 # Select element in current doc
-elem = uidoc.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.Element, "")
+sel_elem = uidoc.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.Element, "")
+elem = doc.GetElement(sel_elem.ElementId)
 
 # Select element in link
 ref_elem_linked = uidoc.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.LinkedElement, "")
-elem = doc.GetElement(ref_elem_linked.ElementId)
-doc_linked = elem.GetLinkDocument()
+elem_ref = doc.GetElement(ref_elem_linked.ElementId)
+doc_linked = elem_ref.GetLinkDocument()
 elem_linked = doc_linked.GetElement(ref_elem_linked.LinkedElementId)
 
 # get parameters from the linked element
+info_list = get_info(elem_linked, elem, params_dat)
 
 # write parameters to main element
+
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
+
+for i in info_list:
+	setup_param_value(i[0], i[1], i[2])
+
+TransactionManager.Instance.TransactionTaskDone()
+# =========End transaction
 
 # TODO: save result to csv
 # element ID, doc_linked ID, elem_linked Id, Link_exists
@@ -129,4 +152,4 @@ elem_linked = doc_linked.GetElement(ref_elem_linked.LinkedElementId)
 # TODO:
 # update links and update parameters info
 
-OUT = elem_linked
+OUT = info_list
