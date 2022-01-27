@@ -219,8 +219,8 @@ def write_DALI_info(_el_board):
 		fixtures_in_circuit = int(circuit.LookupParameter("E_Light_number").AsString())
 
 		# it is possible to connect 64 lightings to 1 switchgear
-		# 54 lightings can be connected, 10 in reserve
-		if fixtures_in_circuit + total_fixtures > 54:
+		# 64 lightings can be connected, 0 in reserve
+		if fixtures_in_circuit + total_fixtures > 64:
 			# not possible to connect to the device
 			# switch to other device
 			total_fixtures = fixtures_in_circuit
@@ -311,14 +311,14 @@ for circuit in circuits_to_calculate:
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 # write parameter to circuit
-# with SubTransaction(doc) as sub_tr:
-# 	sub_tr.Start()
-# 	par_name = "E_Light_number"
-# 	for i in info_list:
-# 		elem = i[0]
-# 		value = str(i[1])
-# 		setup_param_value(elem, par_name, value)
-# 	sub_tr.Commit()
+with SubTransaction(doc) as sub_tr:
+	sub_tr.Start()
+	par_name = "E_Light_number"
+	for i in info_list:
+		elem = i[0]
+		value = str(i[1])
+		setup_param_value(elem, par_name, value)
+	sub_tr.Commit()
 
 
 # calculate DALI swithcgear in panel
@@ -338,7 +338,8 @@ with SubTransaction(doc) as sub_tr:
 
 	else:
 		pass
+
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = boards_to_calculate
+OUT = circuits_to_calculate
