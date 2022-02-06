@@ -25,6 +25,11 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 
+# ================ local imports
+import EmLight_SearchInSys
+from EmLight_SearchInSys import *
+
+
 def elsys_by_brd(_brd):
 	"""Get all systems of electrical board.
 		args:
@@ -139,27 +144,37 @@ pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
 frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector", False)
 filter = ElementParameterFilter(frule)
 
-electroBoards = FilteredElementCollector(doc).\
-	OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
-	WhereElementIsNotElementType().\
-	WherePasses(filter).\
-	ToElements()
-
 reload = IN[1]  # type: ignore
 calc_all = IN[2]  # type: ignore
 
 if calc_all:
+	electroBoards = FilteredElementCollector(doc).\
+		OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
+		WhereElementIsNotElementType().\
+		WherePasses(filter).\
+		ToElements()
 	elemList = electroBoards
+
+	# get circuits for emergency lighting
+
+# only 1 quasi element in circuits
+# if element is Quasi:
+	# get circuits
+	# For every circuit: get elements. Elements - sort by distance to Quasi element.
+	# if not a Quasi element: count += 1,
+# first element - first element in electrical
 
 if not calc_all:
 	elemList = [UnwrapElement(IN[3])]  # type: ignore
+	circuits = elsys_by_brd(elemList[0])[1]
+
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-brd_updated = map(update_subboard_name, elemList)
+# brd_updated = map(update_subboard_name, elemList)
 
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
-OUT = brd_updated
+OUT = getElemInSys(circuits[1])
