@@ -25,6 +25,81 @@ import operator
 from operator import itemgetter, attrgetter
 
 
+def elsys_by_brd(_brd):
+	"""Get all systems of electrical board.
+		args:
+		_brd - electrical board FamilyInstance
+		return list(1, 2) where:
+		1 - main electrical circuit
+		2 - list of connectet low circuits
+	"""
+	allsys = _brd.MEPModel.ElectricalSystems
+	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	# board have upper and lower circuits
+	if lowsys and allsys:
+		lowsysId = [i.Id for i in lowsys]
+		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
+		# board have no main circuit
+		if len(mainboardsysLst) == 0:
+			mainboardsys = None
+		else:
+			mainboardsys = mainboardsysLst[0]
+		lowsys = [i for i in allsys if i.Id in lowsysId]
+		lowsys.sort(key=lambda x: get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER"))
+		return mainboardsys, lowsys
+
+	# board have no circuits
+	if not allsys and not lowsys:
+		return None, None
+
+	# board have only main circuit
+	if not lowsys:
+		return [i for i in allsys][0], None
+
+
+def get_parval(elem, name):
+	"""Get parametr value
+
+	args:
+		elem - family instance or type
+		name - parameter name
+	return:
+		value - parameter value
+	"""
+
+	value = None
+	# custom parameter
+	param = elem.LookupParameter(name)
+	# check is it a BuiltIn parameter if not found
+	if not(param):
+		param = elem.get_Parameter(get_bip(name))
+
+	# get paremeter Value if found
+	try:
+		storeType = param.StorageType
+		# value = storeType
+		if storeType == StorageType.String:
+			value = param.AsString()
+		elif storeType == StorageType.Integer:
+			value = param.AsDouble()
+		elif storeType == StorageType.Double:
+			value = param.AsDouble()
+		elif storeType == StorageType.ElementId:
+			value = param.AsValueString()
+	except:
+		pass
+	return value
+
+
+def get_bip(paramName):
+	builtInParams = System.Enum.GetValues(BuiltInParameter)
+	param = []
+	for i in builtInParams:
+		if i.ToString() == paramName:
+			param.append(i)
+			return i
+
+
 def sort_list_by_point(start_point, point_list, elems):
 	list_len = len(point_list)
 	start_pnt_list = [start_point] * list_len
@@ -49,9 +124,24 @@ def getElemInSys(el_sys):
 	return sorted_elems
 
 
-def searchInDeep(el_sys):
-		# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list()
-	"""Check if Quasi elements are in circuit.
-	Return list of elements in Quasi element
+def searchInDeep(el_sys, elem_list=list()):
+	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem, list()) -> list()
+	"""Check if Quasi elements are in circuit. Return list of elements.
 	"""
-	pass
+
+	# ATTENTION: 2 circuits in Quasi element not allowed
+	# ATTENTION: only 1st circuit will be calculated
+	elems = getElemInSys(el_sys)
+
+	for elem in elems:
+		if elem.Symbol.Family.Name == "QUASI_Connector":
+			# get first circuit
+			low_sys = elsys_by_brd(elem)[1]
+			if low_sys:
+				low_sys = low_sys[0]
+				searchInDeep(low_sys, elem_list)
+
+		else:
+			elem_list.append(elem)
+
+	return elem_list

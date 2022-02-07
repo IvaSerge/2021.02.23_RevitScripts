@@ -105,6 +105,31 @@ def get_bip(paramName):
 			return i
 
 
+def setup_param_value(elem, name, pValue):
+
+	# check element staus
+	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
+
+	if elem_status == CheckoutStatus.OwnedByOtherUser:
+		return None
+
+	# custom parameter
+	param = elem.LookupParameter(name)
+	# check is it a BuiltIn parameter if not found
+	if not(param):
+		try:
+			param = elem.get_Parameter(get_bip(name)).Set(pValue)
+		except:
+			pass
+
+	if param:
+		try:
+			param.Set(pValue)
+		except:
+			pass
+	return elem
+
+
 def update_subboard_name(board_inst):
 	"""
 	Board type "QUASI_Connector" symbol is subboard.
@@ -139,42 +164,45 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 
+reload = IN[1]  # type: ignore
+calc_all = IN[2]  # type: ignore
+
 fnrvStr = FilterStringEquals()
 pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
 frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector", False)
 filter = ElementParameterFilter(frule)
 
-reload = IN[1]  # type: ignore
-calc_all = IN[2]  # type: ignore
+quasi_boards = FilteredElementCollector(doc).\
+	OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
+	WhereElementIsNotElementType().\
+	WherePasses(filter).\
+	ToElements()
 
-if calc_all:
-	electroBoards = FilteredElementCollector(doc).\
-		OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
-		WhereElementIsNotElementType().\
-		WherePasses(filter).\
-		ToElements()
-	elemList = electroBoards
+fnrvStr = FilterStringEquals()
+pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
+frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector", False)
+filter = ElementParameterFilter(frule)
 
-	# get circuits for emergency lighting
-
-# only 1 quasi element in circuits
-# if element is Quasi:
-	# get circuits
-	# For every circuit: get elements. Elements - sort by distance to Quasi element.
-	# if not a Quasi element: count += 1,
-# first element - first element in electrical
-
-if not calc_all:
-	elemList = [UnwrapElement(IN[3])]  # type: ignore
-	circuits = elsys_by_brd(elemList[0])[1]
+em_board = UnwrapElement(IN[3])  # type: ignore
+circuits = elsys_by_brd(em_board)[1]
 
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-# brd_updated = map(update_subboard_name, elemList)
+brd_updated = map(update_subboard_name, quasi_boards)
+
+outlist = list()
+# # set number of elements
+for circuit in circuits:
+	elems_in_circuit = searchInDeep(circuit, [])
+	outlist.append(elems_in_circuit)
+	if elems_in_circuit:
+		for i, elem in enumerate(elems_in_circuit):
+			outlist.append([elem, "E_Light_number", str(i + 1)])
+			setup_param_value(elem, "E_Light_number", str(i + 1))
 
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
-OUT = getElemInSys(circuits[1])
+OUT = outlist
