@@ -135,28 +135,32 @@ def update_subboard_name(board_inst):
 	Board type "QUASI_Connector" symbol is subboard.
 	Board name need to be changed according to current circuit name
 	"""
-	brd_main_circuit = elsys_by_brd(board_inst)[0]
-	if not brd_main_circuit:
-		return None
+	# TODO: do not understand, what do not work here
+	try:
+		brd_main_circuit = elsys_by_brd(board_inst)[0]
+		if not brd_main_circuit:
+			return None
 
-	current_board = board_inst
+		current_board = board_inst
 
-	while True:
-		board_is_quasi = current_board.Symbol.Family.Name == "QUASI_Connector"
+		while True:
+			board_is_quasi = current_board.Symbol.Family.Name == "QUASI_Connector"
 
-		if board_is_quasi:
-			# get upper board
-			next_system = elsys_by_brd(current_board)[0]
-			next_board = next_system.BaseEquipment
-			current_board = next_board
-		else:
-			main_board = current_board.Name
-			main_circ_num = next_system.CircuitNumber
-			break
+			if board_is_quasi:
+				# get upper board
+				next_system = elsys_by_brd(current_board)[0]
+				next_board = next_system.BaseEquipment
+				current_board = next_board
+			else:
+				main_board = current_board.Name
+				main_circ_num = next_system.CircuitNumber
+				break
 
-	name = main_board + ": " + main_circ_num
-	board_inst.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_NAME).Set(name)
-	return name
+		name = main_board + ": " + main_circ_num
+		board_inst.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_NAME).Set(name)
+		return name
+	except:
+		return "None"
 
 
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -205,4 +209,4 @@ for circuit in circuits:
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
-OUT = outlist
+OUT = circuits
