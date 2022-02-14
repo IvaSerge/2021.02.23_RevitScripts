@@ -136,31 +136,33 @@ def update_subboard_name(board_inst):
 	Board name need to be changed according to current circuit name
 	"""
 	# TODO: do not understand, what do not work here
-	try:
-		brd_main_circuit = elsys_by_brd(board_inst)[0]
-		if not brd_main_circuit:
-			return None
 
-		current_board = board_inst
+	brd_main_circuit = elsys_by_brd(board_inst)[0]
+	if not brd_main_circuit:
+		return None
 
-		while True:
+	current_board = board_inst
+
+	while True:
+		if current_board:
 			board_is_quasi = current_board.Symbol.Family.Name == "QUASI_Connector"
+		else:
+			return "None"
 
-			if board_is_quasi:
-				# get upper board
-				next_system = elsys_by_brd(current_board)[0]
-				next_board = next_system.BaseEquipment
-				current_board = next_board
-			else:
-				main_board = current_board.Name
-				main_circ_num = next_system.CircuitNumber
-				break
+		if board_is_quasi:
+			# get upper board
+			next_system = elsys_by_brd(current_board)[0]
+			next_board = next_system.BaseEquipment
+			current_board = next_board
+		else:
+			main_board = current_board.Name
+			main_circ_num = next_system.CircuitNumber
+			break
 
-		name = main_board + ": " + main_circ_num
-		board_inst.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_NAME).Set(name)
-		return name
-	except:
-		return "None"
+	name = main_board + ": " + main_circ_num
+	board_inst.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_NAME).Set(name)
+
+	return name
 
 
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -182,6 +184,10 @@ quasi_boards = FilteredElementCollector(doc).\
 	WherePasses(filter).\
 	ToElements()
 
+elem_status = CheckoutStatus.OwnedByOtherUser
+quasi_boards = [i for i in quasi_boards
+	if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != elem_status]
+
 fnrvStr = FilterStringEquals()
 pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
 frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector", False)
@@ -197,8 +203,8 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 brd_updated = map(update_subboard_name, quasi_boards)
 
 outlist = list()
-# # set number of elements
 for circuit in circuits:
+	# TODO check if circuit is electrical
 	elems_in_circuit = searchInDeep(circuit, [])
 	outlist.append(elems_in_circuit)
 	if elems_in_circuit:
@@ -209,4 +215,4 @@ for circuit in circuits:
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
-OUT = circuits
+OUT = quasi_boards
