@@ -93,7 +93,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
@@ -193,7 +193,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "022defdc-d098-4a05-9aa4-ed9d041f5de1-00f5b427"
+        "7c4112e2-afac-42ed-b895-971a40dea66f-00196a8c"
       ],
       "Id": "fe74da84427042468a648326f7fb22c5",
       "Inputs": [],
@@ -345,7 +345,7 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "test_element",
+        "Name": "Panel",
         "Id": "fe74da84427042468a648326f7fb22c5",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -365,8 +365,8 @@
       }
     ],
     "Annotations": [],
-    "X": -976.65107898502265,
-    "Y": 7.4330857366009013,
-    "Zoom": 0.92812721357551842
+    "X": -809.01929659367352,
+    "Y": 61.443805988709869,
+    "Zoom": 1.0145796437625187
   }
 }
