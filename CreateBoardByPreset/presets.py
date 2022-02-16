@@ -314,7 +314,7 @@ class presets():
 		]
 	]
 
-	# list of preset options
+	# # list of preset options
 	preset_2S_main = [
 		# Description | n_of_poles
 		[5, 4],
@@ -328,8 +328,8 @@ class presets():
 		[5, 4],
 		[
 			["16 A / 0,03 A / F1 Section Q1", "1"],
-			["16 A / 0,03 A / F1 Section Q2", "1"],
-			["16 A / 0,03 A / F1 Section Q3", "1"],
+			["16 A / 0,03 A / F2 Section Q2", "1"],
+			["16 A / 0,03 A / F3 Section Q3", "1"],
 			["95 A / F456", "3"],
 			["95 A / F789", "3"],
 			["95 A / F101112", "3"],
@@ -345,7 +345,7 @@ class presets():
 		# Description | n_of_poles
 		[5, 4],
 		[
-			["800 A / Main circuit breaker Q1", "3", "0 A"],
+			["800 A / Main circuit breaker Q1", "3"],
 			["63 A / Section Q2", "3"],
 			["400 A / Q3", "3"],
 			["100 A / Q4", "3"],
@@ -354,9 +354,9 @@ class presets():
 			["100 A / Q7", "3"],
 			["100 A / Q8", "3"],
 			["100 A / Q9", "3"],
-			["100 A / Q10", "3"]
-			["100 A / Q11", "3"]
-			["100 A / Q12", "3"]
+			["100 A / Q10", "3"],
+			["100 A / Q11", "3"],
+			["100 A / Q12", "3"],
 		]
 	]
 
