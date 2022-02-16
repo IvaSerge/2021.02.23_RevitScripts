@@ -110,11 +110,24 @@ elif "2E_main" == IN[3]:  # type: ignore
 	user_preset = presets.preset_2E_main
 elif "2E_sub" == IN[3]:  # type: ignore
 	user_preset = presets.preset_2E_sub
+elif "2H" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2H
+elif "2I" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2I
 elif "2R_main" == IN[3]:  # type: ignore
 	user_preset = presets.preset_2R_main
 elif "2R_sub" == IN[3]:  # type: ignore
 	user_preset = presets.preset_2R_sub
-
+elif "2S_main" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2S_main
+elif "2S_sub" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2S_sub
+elif "2T_main" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2T_main
+elif "2U_main" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2U_main
+elif "2U_sub" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2U_sub
 
 # get PanelScheduleView if no view found - create Default
 board_schedule = [x for x in FilteredElementCollector(doc).
