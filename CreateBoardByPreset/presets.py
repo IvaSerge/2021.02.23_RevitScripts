@@ -200,9 +200,9 @@ class presets():
 			["16 A / F585960 Section F4", "3"],
 			["16 A / F616263 Section F4", "3"],
 
-			["25 A / 0,03 A / F646566 Section F5", "3"],
-			["25 A / 0,03 A / F676869 Section F5", "3"],
-			["25 A / 0,03 A / F707172 Section F5", "3"],
+			["16 A / 0,03 A / F646566 Section F5", "3"],
+			["16 A / 0,03 A / F676869 Section F5", "3"],
+			["16 A / 0,03 A / F707172 Section F5", "3"],
 
 			["10 A / F73 Section F6", "1"],
 			["10 A / F74 Section F6", "1"],
@@ -328,8 +328,8 @@ class presets():
 		[5, 4],
 		[
 			["16 A / 0,03 A / F1 Section Q1", "1"],
-			["16 A / 0,03 A / F2 Section Q2", "1"],
-			["16 A / 0,03 A / F3 Section Q3", "1"],
+			["16 A / 0,03 A / F2 Section Q1", "1"],
+			["16 A / 0,03 A / F3 Section Q1", "1"],
 			["95 A / F456", "3"],
 			["95 A / F789", "3"],
 			["95 A / F101112", "3"],
