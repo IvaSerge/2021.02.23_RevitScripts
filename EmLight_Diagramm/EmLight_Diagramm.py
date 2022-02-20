@@ -30,6 +30,9 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+# ================ python imports
+from operator import itemgetter
+
 
 def getByCatAndStrParam(_bic, _bip, _val, _isType):
 	global doc
@@ -56,6 +59,110 @@ def getByCatAndStrParam(_bic, _bip, _val, _isType):
 	return elem
 
 
+def mm_to_ft(mm):
+	return 3.2808 * mm / 1000
+
+
+def elsys_by_brd(_brd):
+	"""Get all systems of electrical board.
+		args:
+		_brd - electrical board FamilyInstance
+		return list(1, 2) where:
+		1 - main electrical circuit
+		2 - list of connectet low circuits
+	"""
+	allsys = _brd.MEPModel.ElectricalSystems
+	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	# board have upper and lower circuits
+	if lowsys and allsys:
+		lowsysId = [i.Id for i in lowsys]
+		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
+		# board have no main circuit
+		if len(mainboardsysLst) == 0:
+			mainboardsys = None
+		else:
+			mainboardsys = mainboardsysLst[0]
+		lowsys = [i for i in allsys if i.Id in lowsysId]
+		lowsys.sort(key=lambda x: get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER"))
+		return mainboardsys, lowsys
+
+	# board have no circuits
+	if not allsys and not lowsys:
+		return None, None
+
+	# board have only main circuit
+	if not lowsys:
+		return [i for i in allsys][0], None
+
+
+def get_parval(elem, name):
+	"""Get parametr value
+
+	args:
+		elem - family instance or type
+		name - parameter name
+	return:
+		value - parameter value
+	"""
+
+	value = None
+	# custom parameter
+	param = elem.LookupParameter(name)
+	# check is it a BuiltIn parameter if not found
+	if not(param):
+		param = elem.get_Parameter(get_bip(name))
+
+	# get paremeter Value if found
+	try:
+		storeType = param.StorageType
+		# value = storeType
+		if storeType == StorageType.String:
+			value = param.AsString()
+		elif storeType == StorageType.Integer:
+			value = param.AsDouble()
+		elif storeType == StorageType.Double:
+			value = param.AsDouble()
+		elif storeType == StorageType.ElementId:
+			value = param.AsValueString()
+	except:
+		pass
+	return value
+
+
+def get_bip(paramName):
+	builtInParams = System.Enum.GetValues(BuiltInParameter)
+	param = []
+	for i in builtInParams:
+		if i.ToString() == paramName:
+			param.append(i)
+			return i
+
+
+def setup_param_value(elem, name, pValue):
+
+	# check element staus
+	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
+
+	if elem_status == CheckoutStatus.OwnedByOtherUser:
+		return None
+
+	# custom parameter
+	param = elem.LookupParameter(name)
+	# check is it a BuiltIn parameter if not found
+	if not(param):
+		try:
+			param = elem.get_Parameter(get_bip(name)).Set(pValue)
+		except:
+			pass
+
+	if param:
+		try:
+			param.Set(pValue)
+		except:
+			pass
+	return elem
+
+
 global doc
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -75,6 +182,12 @@ view_diagramm = getByCatAndStrParam(
 	False)[0]
 
 # type to install
+type_first = getByCatAndStrParam(
+	BuiltInCategory.OST_DetailComponents,
+	BuiltInParameter.SYMBOL_NAME_PARAM,
+	"2D_diagramm_NOT_1P",
+	True)[0]
+
 type_emergency = getByCatAndStrParam(
 	BuiltInCategory.OST_DetailComponents,
 	BuiltInParameter.SYMBOL_NAME_PARAM,
@@ -84,34 +197,72 @@ type_emergency = getByCatAndStrParam(
 type_exit = getByCatAndStrParam(
 	BuiltInCategory.OST_DetailComponents,
 	BuiltInParameter.SYMBOL_NAME_PARAM,
-	"2D_diagramm_E01",
+	"2D_diagramm_Exit",
 	True)[0]
 
 
 # for circuit in boards:
+circuit_inst = elsys_by_brd(board_inst)[1][6]
+circuit_num = circuit_inst.CircuitNumber
+circuit_str = board_inst.Name + ": " + circuit_num
+
 # find all elements by "Panel" and "Circuit Number"
+elems_in_circuit = getByCatAndStrParam(
+	BuiltInCategory.OST_LightingFixtures,
+	BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM,
+	circuit_str,
+	False)
 
 # read element parameters
-# convert parameters
 
-# list [type, list[param, value]]
+params_to_set = list()
+for elem in elems_in_circuit:
+	elem_mark = get_parval(elem.Symbol, "WINDOW_TYPE_ID")
+	elem_panel = circuit_num
+	elem_light_num = get_parval(elem, "E_Light_number")
+	params_to_set.append([elem_mark, elem_panel, int(elem_light_num)])
 
-# insert 2D on drawing, add parameters
+params_to_set.sort(key=itemgetter(2))
 
 
 # # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
+TransactionManager.Instance.EnsureInTransaction(doc)
 
-# # Start point
-# start_pnt = XYZ(0, 0, 0)
+instances_on_view = list()
+# insert 2D on drawing, add parameters
+# insert first element
+# Start point
+insert_pnt = XYZ(0, 0, 0)
+instance_on_view = doc.Create.NewFamilyInstance(
+	insert_pnt,
+	type_first,
+	view_diagramm)
 
-# view_inst = doc.Create.NewFamilyInstance(
-# 	start_pnt,
-# 	symbol_type,
-# 	view_diagramm)
+instances_on_view.append(instance_on_view)
+
+
+for y, info in enumerate(params_to_set):
+	insert_pnt = XYZ((y + 1) * mm_to_ft(1000), 0, 0)
+
+	if "03" in info[0] or "04" in info[0]:
+		symbol_type = type_exit
+	else:
+		symbol_type = type_emergency
+
+	instance_on_view = doc.Create.NewFamilyInstance(
+		insert_pnt,
+		symbol_type,
+		view_diagramm)
+
+	# set parameters to new instance
+	setup_param_value(instance_on_view, "Type Mark", info[0])
+	setup_param_value(instance_on_view, "Panel", info[1])
+	setup_param_value(instance_on_view, "E_Light_number", str(info[2]))
+
+	instances_on_view.append(instance_on_view)
+
 
 # # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
+TransactionManager.Instance.TransactionTaskDone()
 
-
-OUT = symbol_type
+OUT = instances_on_view
