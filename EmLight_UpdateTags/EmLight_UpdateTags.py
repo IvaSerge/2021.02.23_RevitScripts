@@ -138,10 +138,13 @@ def update_subboard_name(board_inst):
 	# TODO: do not understand, what do not work here
 
 	brd_main_circuit = elsys_by_brd(board_inst)[0]
+
 	if not brd_main_circuit:
 		return None
 
 	current_board = board_inst
+	main_board = board_inst.Name
+	main_circ_num = brd_main_circuit.CircuitNumber
 
 	while True:
 		if current_board:
@@ -151,9 +154,12 @@ def update_subboard_name(board_inst):
 
 		if board_is_quasi:
 			# get upper board
-			next_system = elsys_by_brd(current_board)[0]
-			next_board = next_system.BaseEquipment
-			current_board = next_board
+			try:
+				next_system = elsys_by_brd(current_board)[0]
+				next_board = next_system.BaseEquipment
+				current_board = next_board
+			except:
+				break
 		else:
 			main_board = current_board.Name
 			main_circ_num = next_system.CircuitNumber
