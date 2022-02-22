@@ -189,12 +189,12 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
       "NodeType": "CodeBlockNode",
-      "Code": "\"3A_sub\";\n\"3B_sub\";\n\"2E_main\";\n\"2E_sub\";\n\"2H\";\n\"2I\";\n\"2R_main\";\n\"2R_sub\";\n\"2S_main\";\n\"2S_sub\";\n\"2U_main\";\n\"2U_sub\";",
+      "Code": "\"3A_sub\";\n\"3B_sub\";\n\"2E_main\";\n\"2E_sub\";\n\"2H\";\n\"2I\";\n\"2R_main\";\n\"2R_sub\";\n\"2S_main\";\n\"2S_sub\";\n\"2T_main\";\n\"2U_main\";\n\"2U_sub\";",
       "Id": "671ef6b141124af29f4512d3ccc3aef1",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "77082f38804140d88b4af64e733f295c",
+          "Id": "5189d0e31af544b6b481e434121b8992",
           "Name": "",
           "Description": "Value of expression at line 1",
           "UsingDefaultValue": false,
@@ -203,7 +203,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "4129729753bf4341bc5ea9339b8ebd20",
+          "Id": "53a05a0f98ec45019c58c75dcc74f072",
           "Name": "",
           "Description": "Value of expression at line 2",
           "UsingDefaultValue": false,
@@ -212,7 +212,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "440c1b2055584d35a46f3ebfca748bd0",
+          "Id": "8d3e83057e2c41138f633fc240651f42",
           "Name": "",
           "Description": "Value of expression at line 3",
           "UsingDefaultValue": false,
@@ -221,7 +221,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "e17a33e256ed4f3daf386f67917e23ba",
+          "Id": "d2574bc25eab4ad089eca2e9cf3cbb81",
           "Name": "",
           "Description": "Value of expression at line 4",
           "UsingDefaultValue": false,
@@ -230,7 +230,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "b575b049a4654b0482dd5d8245755f9c",
+          "Id": "10f95a434a8b4052a18a8548dd8e3c6a",
           "Name": "",
           "Description": "Value of expression at line 5",
           "UsingDefaultValue": false,
@@ -239,7 +239,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "85b15337a6a24df48d9ba302355aea53",
+          "Id": "e1755965a92f485f815480d17add2143",
           "Name": "",
           "Description": "Value of expression at line 6",
           "UsingDefaultValue": false,
@@ -248,7 +248,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "920de88542e04049be95692061fbbfae",
+          "Id": "c4a8a1c2d257419087698b771b8a0c2a",
           "Name": "",
           "Description": "Value of expression at line 7",
           "UsingDefaultValue": false,
@@ -257,7 +257,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "d052951a4d2d4f8d9af56df26895c548",
+          "Id": "bc8efbf3c7e84b588d734b610bb6ba79",
           "Name": "",
           "Description": "Value of expression at line 8",
           "UsingDefaultValue": false,
@@ -266,7 +266,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "151e0bf4640840608598a299eedfab7f",
+          "Id": "9edde5469f9b4d379ecb4ee7df0a57ba",
           "Name": "",
           "Description": "Value of expression at line 9",
           "UsingDefaultValue": false,
@@ -275,7 +275,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "4e37942448e7487aaaa556505cbe6681",
+          "Id": "ee5d9ebd640f4b4d825770c8bd8e4286",
           "Name": "",
           "Description": "Value of expression at line 10",
           "UsingDefaultValue": false,
@@ -284,7 +284,7 @@
           "KeepListStructure": false
         },
         {
-          "Id": "26ca3693b05044ca9728b25517ce055d",
+          "Id": "a6d7844153094d0f98d3f33c0e92c4ce",
           "Name": "",
           "Description": "Value of expression at line 11",
           "UsingDefaultValue": false,
@@ -293,9 +293,18 @@
           "KeepListStructure": false
         },
         {
-          "Id": "811153c3c33d40a8835d8b374c135685",
+          "Id": "d3101ea7fb9c4b29af95750f28ecfd95",
           "Name": "",
           "Description": "Value of expression at line 12",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9af490790e8c4be9968d7accd352b0d0",
+          "Name": "",
+          "Description": "Value of expression at line 13",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -457,6 +466,15 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
+        },
+        {
+          "Id": "f1936992d96a4a8d8069382eb85c8918",
+          "Name": "item12",
+          "Description": "Item Index #12",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -544,64 +562,69 @@
       "Id": "6c6625a2c4904cb2abd6e4db423d8c32"
     },
     {
-      "Start": "77082f38804140d88b4af64e733f295c",
+      "Start": "5189d0e31af544b6b481e434121b8992",
       "End": "54baa4c8c9464c0f86f428ddb5549c94",
-      "Id": "0f9950075b7144158c29da8080654089"
+      "Id": "77b537cc7f2c4180b25287eae4759b94"
     },
     {
-      "Start": "4129729753bf4341bc5ea9339b8ebd20",
+      "Start": "53a05a0f98ec45019c58c75dcc74f072",
       "End": "f5b8980daeb34cb08983295be4fa15b5",
-      "Id": "e9d6719b966f4f7f8d3ef5c4be74acd5"
+      "Id": "0713c05381d949e6bd043fce8903ff2b"
     },
     {
-      "Start": "440c1b2055584d35a46f3ebfca748bd0",
+      "Start": "8d3e83057e2c41138f633fc240651f42",
       "End": "9f455e0c35064f45b5b725ca7c3d3e25",
-      "Id": "b871d0a9838d4d9d87fe33f3979dbf23"
+      "Id": "1d76bc8eb323424ca691ac6e0142722b"
     },
     {
-      "Start": "e17a33e256ed4f3daf386f67917e23ba",
+      "Start": "d2574bc25eab4ad089eca2e9cf3cbb81",
       "End": "3e023dfc5925488dbd3c67920f0acc9a",
-      "Id": "b0dbc6a4a1014445bcc7da3ad21f6509"
+      "Id": "dd87220d15ea4147adedf6337204c806"
     },
     {
-      "Start": "b575b049a4654b0482dd5d8245755f9c",
+      "Start": "10f95a434a8b4052a18a8548dd8e3c6a",
       "End": "7b97c633c38741a4a584ba8a8a7bb1c6",
-      "Id": "9fbf02a87768458ba713b354d9a1c980"
+      "Id": "960f4901d4f4421082b9b7b7514427e4"
     },
     {
-      "Start": "85b15337a6a24df48d9ba302355aea53",
+      "Start": "e1755965a92f485f815480d17add2143",
       "End": "0d7b53ee29b34dc38cf03078ddecb53e",
-      "Id": "a4d0ee3138af4596941cf0840dfe077d"
+      "Id": "65dbe966892a406a959121eceef68b68"
     },
     {
-      "Start": "920de88542e04049be95692061fbbfae",
+      "Start": "c4a8a1c2d257419087698b771b8a0c2a",
       "End": "967efd1e78c243ea8fc1f4b825c8d63c",
-      "Id": "e2998220c6ee490c9838ad90966fb0b7"
+      "Id": "ed1ae1e1b00149a2a0695fc421e164f7"
     },
     {
-      "Start": "d052951a4d2d4f8d9af56df26895c548",
+      "Start": "bc8efbf3c7e84b588d734b610bb6ba79",
       "End": "3213e31c55cb4f429938b0db31ea2f78",
-      "Id": "b6b28f071bb74af2a22e146a7de0b6df"
+      "Id": "857302b427c1482c8c7b7377aa7e02ad"
     },
     {
-      "Start": "151e0bf4640840608598a299eedfab7f",
+      "Start": "9edde5469f9b4d379ecb4ee7df0a57ba",
       "End": "8070cad8bd2843d2b4bdfeac9bbbc092",
-      "Id": "ff7315cf8ac14f9280939ab332b059bb"
+      "Id": "41760c5e135e4a70b123f15818c863cf"
     },
     {
-      "Start": "4e37942448e7487aaaa556505cbe6681",
+      "Start": "ee5d9ebd640f4b4d825770c8bd8e4286",
       "End": "99d4ec6f1f09463aabf06352172e4853",
-      "Id": "68091d1f84ec4cbdbd7c229b24e00204"
+      "Id": "8b5931643e184d85a4a4ddfc20cde58d"
     },
     {
-      "Start": "26ca3693b05044ca9728b25517ce055d",
+      "Start": "a6d7844153094d0f98d3f33c0e92c4ce",
       "End": "d4fe32126ec64514b9adf54e46904abe",
-      "Id": "1cc6e7db09ed453385e3d7c4c0bd4b6c"
+      "Id": "03ebf1c274c348209e596099cf851034"
     },
     {
-      "Start": "811153c3c33d40a8835d8b374c135685",
+      "Start": "d3101ea7fb9c4b29af95750f28ecfd95",
       "End": "566faf02d7534d47a6f99051142d779d",
-      "Id": "ca01aefbfcdb43a9a66b23dc2437fae5"
+      "Id": "7f4e7d015ef3467f8080cbb613c56f3c"
+    },
+    {
+      "Start": "9af490790e8c4be9968d7accd352b0d0",
+      "End": "f1936992d96a4a8d8069382eb85c8918",
+      "Id": "69515efc4db54df88e3f89f5f48ab22a"
     },
     {
       "Start": "a2ae96803ba341428e8db21792fad3a4",
@@ -751,8 +774,8 @@
       }
     ],
     "Annotations": [],
-    "X": 370.86426242599305,
-    "Y": -629.07459522977069,
-    "Zoom": 1.2064082789803217
+    "X": 203.38792152996996,
+    "Y": -396.89163816677939,
+    "Zoom": 0.78024345350354229
   }
 }
