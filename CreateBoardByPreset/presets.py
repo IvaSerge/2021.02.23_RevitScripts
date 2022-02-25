@@ -302,15 +302,15 @@ class presets():
 			["16 A / 0,03 A / F65 Section Q5", "1"],
 			["16 A / 0,03 A / F66 Section Q5", "1"],
 
-			["40 A / 0,03 A / F676869 Section Q6", "3"],
-			["40 A / 0,03 A / F707172 Section Q6", "3"],
-			["40 A / 0,03 A / F7837475 Section Q6", "3"],
-			["40 A / 0,03 A / F767778 Section Q6", "3"],
+			["32 A / 0,03 A / F676869 Section Q6", "3"],
+			["32 A / 0,03 A / F707172 Section Q6", "3"],
+			["32 A / 0,03 A / F7837475 Section Q6", "3"],
+			["32 A / 0,03 A / F767778 Section Q6", "3"],
 
-			["25 A / 0,03 A / F798081 Section Q7", "3"],
-			["25 A / 0,03 A / F828384 Section Q7", "3"],
-			["25 A / 0,03 A / F858687 Section Q7", "3"],
-			["25 A / 0,03 A / F888990 Section Q7", "3"],
+			["16 A / 0,03 A / F798081 Section Q7", "3"],
+			["16 A / 0,03 A / F828384 Section Q7", "3"],
+			["16 A / 0,03 A / F858687 Section Q7", "3"],
+			["16 A / 0,03 A / F888990 Section Q7", "3"],
 		]
 	]
 
