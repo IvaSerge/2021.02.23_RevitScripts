@@ -229,6 +229,27 @@
       ],
       "Replication": "Disabled",
       "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "aad0014a-3686-4b57-93aa-3e79e16863c1-0018c357"
+      ],
+      "Id": "a108da49379641ca865ea36de5eab38e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4ba96f7c2ff94947a5206a94385b5ee2",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
     }
   ],
   "Connectors": [
@@ -345,13 +366,13 @@
       },
       {
         "ShowGeometry": true,
-        "Name": "Panel",
+        "Name": "Left Panel",
         "Id": "fe74da84427042468a648326f7fb22c5",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1099.8782824890959,
-        "Y": 348.02585547543788
+        "X": 947.1810062978916,
+        "Y": 349.49409851573785
       },
       {
         "ShowGeometry": true,
@@ -362,11 +383,21 @@
         "Excluded": false,
         "X": 1095.9771450834305,
         "Y": 248.29697233651285
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Right Panel",
+        "Id": "a108da49379641ca865ea36de5eab38e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1153.926950620292,
+        "Y": 353.34342507243741
       }
     ],
     "Annotations": [],
-    "X": -895.91611196192684,
-    "Y": -1.3983596723253413,
-    "Zoom": 0.92898902053195864
+    "X": -902.53150538773821,
+    "Y": -91.48875282331403,
+    "Zoom": 1.0637486133389846
   }
 }

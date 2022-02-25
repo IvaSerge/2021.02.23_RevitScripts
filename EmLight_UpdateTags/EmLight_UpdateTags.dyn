@@ -93,7 +93,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
@@ -193,7 +193,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "7c4112e2-afac-42ed-b895-971a40dea66f-00196a8c"
+        "aad0014a-3686-4b57-93aa-3e79e16863c1-0018c357"
       ],
       "Id": "fe74da84427042468a648326f7fb22c5",
       "Inputs": [],
@@ -229,6 +229,27 @@
       ],
       "Replication": "Disabled",
       "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "7c4112e2-afac-42ed-b895-971a40dea66f-00196a8c"
+      ],
+      "Id": "32e62e5e2307439fbee16213435d7f24",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "08adc169df5f4280b4976542f3c43df0",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
     }
   ],
   "Connectors": [
@@ -260,7 +281,7 @@
     {
       "Start": "bda170b9ee2947609aa34753773ba2e1",
       "End": "e59c98df47e5435c835fedaae42ab651",
-      "Id": "f823e1b4e53345ce8246c71e4c28c6e8"
+      "Id": "bea50e9f1a4e4ee4b2c7c704e2bff91d"
     },
     {
       "Start": "4b16e34c05934f5d8c99c6025e471a7b",
@@ -294,79 +315,89 @@
     },
     "NodeViews": [
       {
-        "ShowGeometry": true,
-        "Name": "Python Script From String",
         "Id": "1b79df6695194458b3633e0bed15cd64",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
+        "Name": "Python Script From String",
+        "ShowGeometry": true,
         "Excluded": false,
         "X": 1384.462918499979,
         "Y": 79.222778426661876
       },
       {
-        "ShowGeometry": true,
-        "Name": "Reload",
         "Id": "ad531ae1b87d458d89230df621752f91",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
+        "Name": "Reload",
+        "ShowGeometry": true,
         "Excluded": false,
         "X": 1167.4196696472279,
         "Y": 165.33485263100829
       },
       {
-        "ShowGeometry": true,
-        "Name": "FileSystem.ReadText",
         "Id": "508e1ae226144bda9f28c842aeae9af8",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
+        "Name": "FileSystem.ReadText",
+        "ShowGeometry": true,
         "Excluded": false,
         "X": 1150.5322161699632,
         "Y": 17.180403139486202
       },
       {
-        "ShowGeometry": true,
-        "Name": "File From Path",
         "Id": "f5f2e95993264fd5b7943ab8bac7453c",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
+        "Name": "File From Path",
+        "ShowGeometry": true,
         "Excluded": false,
         "X": 915.68573411746524,
         "Y": 86.25012621823214
       },
       {
-        "ShowGeometry": true,
-        "Name": "String",
         "Id": "247389cd36b8437db0c2971fb3851598",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
+        "Name": "String",
+        "ShowGeometry": true,
         "Excluded": false,
         "X": 650.48573411746577,
         "Y": 86.25012621823214
       },
       {
-        "ShowGeometry": true,
-        "Name": "Panel",
         "Id": "fe74da84427042468a648326f7fb22c5",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
+        "Name": "Right panel",
+        "ShowGeometry": true,
         "Excluded": false,
-        "X": 1118.0623046731855,
-        "Y": 334.455508702419
+        "X": 1265.5247478794674,
+        "Y": 440.18329817107394
       },
       {
-        "ShowGeometry": true,
-        "Name": "calc_all",
         "Id": "2a7c59b378f94df2865f5684cdf35587",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
+        "Name": "calc_all",
+        "ShowGeometry": true,
         "Excluded": false,
         "X": 1165.6332502949397,
         "Y": 243.76457412875538
+      },
+      {
+        "Id": "32e62e5e2307439fbee16213435d7f24",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Left panel",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 983.27611427411466,
+        "Y": 427.12527866824536
       }
     ],
     "Annotations": [],
-    "X": -809.01929659367352,
-    "Y": 61.443805988709869,
-    "Zoom": 1.0145796437625187
+    "X": -414.07745393289019,
+    "Y": 114.30786212342599,
+    "Zoom": 0.68497146923071428
   }
 }

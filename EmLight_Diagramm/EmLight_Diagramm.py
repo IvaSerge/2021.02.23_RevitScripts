@@ -1,4 +1,5 @@
 
+from re import X
 from this import d
 import clr
 
@@ -202,67 +203,85 @@ type_exit = getByCatAndStrParam(
 
 
 # for circuit in boards:
-circuit_inst = elsys_by_brd(board_inst)[1][6]
-circuit_num = circuit_inst.CircuitNumber
-circuit_str = board_inst.Name + ": " + circuit_num
-
-# find all elements by "Panel" and "Circuit Number"
-elems_in_circuit = getByCatAndStrParam(
-	BuiltInCategory.OST_LightingFixtures,
-	BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM,
-	circuit_str,
-	False)
-
-# read element parameters
-
-params_to_set = list()
-for elem in elems_in_circuit:
-	elem_mark = get_parval(elem.Symbol, "WINDOW_TYPE_ID")
-	elem_panel = circuit_num
-	elem_light_num = get_parval(elem, "E_Light_number")
-	params_to_set.append([elem_mark, elem_panel, int(elem_light_num)])
-
-params_to_set.sort(key=itemgetter(2))
+circuits = [i for i in elsys_by_brd(board_inst)[1]
+	if i.SystemType == Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit]
 
 
-# # =========Start transaction
+circuits.sort(key=lambda x: x.StartSlot)
+
+circuits_info_list = list()
+for circuit_inst in circuits:
+
+	circuit_num = circuit_inst.CircuitNumber
+	circuit_str = board_inst.Name + ": " + circuit_num
+
+	# find all elements by "Panel" and "Circuit Number"
+	elems_in_circuit = getByCatAndStrParam(
+		BuiltInCategory.OST_LightingFixtures,
+		BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM,
+		circuit_str,
+		False)
+
+	if not(elems_in_circuit):
+		continue
+
+	# read element parameters
+	params_to_set = list()
+	for elem in elems_in_circuit:
+		try:
+			elem_mark = get_parval(elem.Symbol, "WINDOW_TYPE_ID")
+			elem_panel = circuit_num
+			elem_light_num = get_parval(elem, "E_Light_number")
+			params_to_set.append([elem_mark, elem_panel, int(elem_light_num)])
+			# params_to_set.append(elem_mark)
+		except:
+			continue
+	params_to_set.sort(key=itemgetter(2))
+	circuits_info_list.append(params_to_set)
+
+
+# =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 instances_on_view = list()
-# insert 2D on drawing, add parameters
-# insert first element
-# Start point
-insert_pnt = XYZ(0, 0, 0)
-instance_on_view = doc.Create.NewFamilyInstance(
-	insert_pnt,
-	type_first,
-	view_diagramm)
+for pnt_y, params_to_set in enumerate(circuits_info_list):
 
-instances_on_view.append(instance_on_view)
-
-
-for y, info in enumerate(params_to_set):
-	insert_pnt = XYZ((y + 1) * mm_to_ft(1000), 0, 0)
-
-	if "03" in info[0] or "04" in info[0]:
-		symbol_type = type_exit
-	else:
-		symbol_type = type_emergency
-
-	instance_on_view = doc.Create.NewFamilyInstance(
-		insert_pnt,
-		symbol_type,
-		view_diagramm)
-
-	# set parameters to new instance
-	setup_param_value(instance_on_view, "Type Mark", info[0])
-	setup_param_value(instance_on_view, "Panel", info[1])
-	setup_param_value(instance_on_view, "E_Light_number", str(info[2]))
+	# insert 2D on drawing, add parameters
+	# insert first element
+	# Start point
+	if elems_in_circuit:
+		insert_pnt = XYZ(0, -(pnt_y + 1) * mm_to_ft(2000), 0)
+		instance_on_view = doc.Create.NewFamilyInstance(
+			insert_pnt,
+			type_first,
+			view_diagramm)
 
 	instances_on_view.append(instance_on_view)
 
+	for pnt_x, info in enumerate(params_to_set):
+		try:
+			insert_pnt = XYZ((pnt_x + 1) * mm_to_ft(1000), -(pnt_y + 1) * mm_to_ft(2000), 0)
 
-# # =========End transaction
+			if "03" in info[0] or "04" in info[0]:
+				symbol_type = type_exit
+			else:
+				symbol_type = type_emergency
+
+			instance_on_view = doc.Create.NewFamilyInstance(
+				insert_pnt,
+				symbol_type,
+				view_diagramm)
+
+			# set parameters to new instance
+			setup_param_value(instance_on_view, "Type Mark", info[0])
+			setup_param_value(instance_on_view, "Panel", info[1])
+			setup_param_value(instance_on_view, "E_Light_number", str(info[2]))
+
+			instances_on_view.append(instance_on_view)
+		except:
+			continue
+
+# =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
 OUT = instances_on_view
