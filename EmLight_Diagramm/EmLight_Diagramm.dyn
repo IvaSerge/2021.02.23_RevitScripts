@@ -18,7 +18,7 @@
       "Id": "704e6265838e4dd2bdc3d1d2cb9ac920",
       "Name": "Diagramm_name",
       "Type": "string",
-      "Value": "CP1-KE3W2C05_Emergency lighting",
+      "Value": "CP1-KE3L2B05_Emergency lighting",
       "Description": "Creates a string."
     }
   ],
@@ -213,7 +213,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "CP1-KE3W2C05_Emergency lighting",
+      "InputValue": "CP1-KE3L2B05_Emergency lighting",
       "Id": "704e6265838e4dd2bdc3d1d2cb9ac920",
       "Inputs": [],
       "Outputs": [
@@ -279,14 +279,14 @@
       "Id": "dc0a98baa73b4ab2b23bb5d741aeb4e5"
     },
     {
-      "Start": "bda170b9ee2947609aa34753773ba2e1",
-      "End": "e59c98df47e5435c835fedaae42ab651",
-      "Id": "d9bb7639d1e14539bab8ca539ef2cb93"
-    },
-    {
       "Start": "fd5d2c3d4ad4497b877e5166210a6ce0",
       "End": "dea01028c0d14c778e215769761eb86e",
       "Id": "44f1011a68d9463c86a905095a64330e"
+    },
+    {
+      "Start": "4ba96f7c2ff94947a5206a94385b5ee2",
+      "End": "e59c98df47e5435c835fedaae42ab651",
+      "Id": "bd3ac09cc89c425793b86f495d394821"
     }
   ],
   "Dependencies": [],
@@ -381,8 +381,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1095.9771450834305,
-        "Y": 248.29697233651285
+        "X": 1085.9419739591938,
+        "Y": 249.41199135031695
       },
       {
         "ShowGeometry": true,
@@ -396,8 +396,8 @@
       }
     ],
     "Annotations": [],
-    "X": -902.53150538773821,
-    "Y": -91.48875282331403,
-    "Zoom": 1.0637486133389846
+    "X": -746.09703585024477,
+    "Y": -10.869213227976616,
+    "Zoom": 0.89684569287148441
   }
 }

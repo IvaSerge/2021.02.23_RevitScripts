@@ -214,6 +214,7 @@ for circuit_inst in circuits:
 
 	circuit_num = circuit_inst.CircuitNumber
 	circuit_str = board_inst.Name + ": " + circuit_num
+	circuit_name = circuit_inst.LoadName
 
 	# find all elements by "Panel" and "Circuit Number"
 	elems_in_circuit = getByCatAndStrParam(
@@ -232,7 +233,7 @@ for circuit_inst in circuits:
 			elem_mark = get_parval(elem.Symbol, "WINDOW_TYPE_ID")
 			elem_panel = circuit_num
 			elem_light_num = get_parval(elem, "E_Light_number")
-			params_to_set.append([elem_mark, elem_panel, int(elem_light_num)])
+			params_to_set.append([elem_mark, elem_panel, int(elem_light_num), circuit_name])
 			# params_to_set.append(elem_mark)
 		except:
 			continue
@@ -249,39 +250,38 @@ for pnt_y, params_to_set in enumerate(circuits_info_list):
 	# insert 2D on drawing, add parameters
 	# insert first element
 	# Start point
-	if elems_in_circuit:
+	instance_on_view = None
+
+	if params_to_set:
 		insert_pnt = XYZ(0, -(pnt_y + 1) * mm_to_ft(2000), 0)
 		instance_on_view = doc.Create.NewFamilyInstance(
 			insert_pnt,
 			type_first,
 			view_diagramm)
-
-	instances_on_view.append(instance_on_view)
+		instance_on_view.LookupParameter("Beschriftung 1").Set(params_to_set[0][3])
+		instances_on_view.append(instance_on_view)
 
 	for pnt_x, info in enumerate(params_to_set):
-		try:
-			insert_pnt = XYZ((pnt_x + 1) * mm_to_ft(1000), -(pnt_y + 1) * mm_to_ft(2000), 0)
+		insert_pnt = XYZ((pnt_x + 2) * mm_to_ft(1000), -(pnt_y + 1) * mm_to_ft(2000), 0)
 
-			if "03" in info[0] or "04" in info[0]:
-				symbol_type = type_exit
-			else:
-				symbol_type = type_emergency
+		if "03" in info[0] or "04" in info[0]:
+			symbol_type = type_exit
+		else:
+			symbol_type = type_emergency
 
-			instance_on_view = doc.Create.NewFamilyInstance(
-				insert_pnt,
-				symbol_type,
-				view_diagramm)
+		instance_on_view = doc.Create.NewFamilyInstance(
+			insert_pnt,
+			symbol_type,
+			view_diagramm)
 
-			# set parameters to new instance
-			setup_param_value(instance_on_view, "Type Mark", info[0])
-			setup_param_value(instance_on_view, "Panel", info[1])
-			setup_param_value(instance_on_view, "E_Light_number", str(info[2]))
+		# set parameters to new instance
+		setup_param_value(instance_on_view, "Type Mark", info[0])
+		setup_param_value(instance_on_view, "Panel", info[1])
+		setup_param_value(instance_on_view, "E_Light_number", str(info[2]))
 
-			instances_on_view.append(instance_on_view)
-		except:
-			continue
+		instances_on_view.append(instance_on_view)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = instances_on_view
+OUT = circuits_info_list
