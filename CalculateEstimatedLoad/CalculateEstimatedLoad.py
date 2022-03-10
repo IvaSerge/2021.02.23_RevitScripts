@@ -159,12 +159,12 @@ def get_estimated_load(_elSys, _testboard):
 			BuiltInParameter.
 			RBS_ELEC_PANEL_TOTALESTLOAD_PARAM).AsDouble()
 
-		convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
-			rvt_TotalEstLoad, DisplayUnitType.DUT_VOLT_AMPERES)
+		# convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
+		# 	rvt_TotalEstLoad, DisplayUnitType.DUT_VOLT_AMPERES)
 
 		sub_tr.RollBack()
 
-	return convert_TotalEstLoad, rvt_DemandFactor
+	return rvt_TotalEstLoad, rvt_DemandFactor  # convert_TotalEstLoad, rvt_DemandFactor
 
 
 def SetEstimatedValues(_elSys, _testboard):
@@ -303,4 +303,4 @@ doc.Delete(TESTBOARD.Id)
 TransactionManager.Instance.TransactionTaskDone()
 
 # OUT = param_info
-OUT = circuits_to_calculate
+OUT = param_info
