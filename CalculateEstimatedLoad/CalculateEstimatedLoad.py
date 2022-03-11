@@ -159,9 +159,6 @@ def get_estimated_load(_elSys, _testboard):
 			BuiltInParameter.
 			RBS_ELEC_PANEL_TOTALESTLOAD_PARAM).AsDouble()
 
-		# convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
-		# 	rvt_TotalEstLoad, DisplayUnitType.DUT_VOLT_AMPERES)
-
 		sub_tr.RollBack()
 
 	return rvt_TotalEstLoad, rvt_DemandFactor  # convert_TotalEstLoad, rvt_DemandFactor
@@ -190,14 +187,16 @@ def SetEstimatedValues(_elSys, _testboard):
 	if test_exceptions(_elSys):
 		calc_parameters = get_estimated_load(_elSys, _testboard)
 		total_est_load = calc_parameters[0]
+		convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
+			total_est_load, DisplayUnitType.DUT_VOLT_AMPERES)
 		rvt_DemandFactor = calc_parameters[1]
-			# calculate parameters
+		# calculate parameters
 		poles_number = calcSystem.PolesNumber
 		if poles_number == 1:
 			current_estimated = round(
-				(total_est_load / 230) * 10) / 10
+				(convert_TotalEstLoad / 230) * 10) / 10
 		else:
-			current_estimated = round((total_est_load / (400 * sqrt(3))) * 10) / 10
+			current_estimated = round((convert_TotalEstLoad / (400 * sqrt(3))) * 10) / 10
 	else:
 		# if not an exception - demand factor == 1
 		rvt_DemandFactor = 1
