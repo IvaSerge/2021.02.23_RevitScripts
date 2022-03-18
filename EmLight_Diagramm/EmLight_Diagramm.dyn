@@ -20,6 +20,13 @@
       "Type": "string",
       "Value": "CP1-KE3L2B05_Emergency lighting",
       "Description": "Creates a string."
+    },
+    {
+      "Id": "ed65fa1657b94c558bcab618fd8787d7",
+      "Name": "Diagramm_name",
+      "Type": "string",
+      "Value": "CP1-KE3W2C05_Emergency lighting",
+      "Description": "Creates a string."
     }
   ],
   "Outputs": [],
@@ -250,6 +257,26 @@
         }
       ],
       "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "CP1-KE3W2C05_Emergency lighting",
+      "Id": "ed65fa1657b94c558bcab618fd8787d7",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "fb9c2cf74ed74cbbb82494671c43fb8c",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
     }
   ],
   "Connectors": [
@@ -371,8 +398,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 947.1810062978916,
-        "Y": 349.49409851573785
+        "X": 853.51940913834869,
+        "Y": 376.25455484703576
       },
       {
         "ShowGeometry": true,
@@ -381,8 +408,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1085.9419739591938,
-        "Y": 249.41199135031695
+        "X": 1103.7822781800592,
+        "Y": 282.86256176443936
       },
       {
         "ShowGeometry": true,
@@ -391,8 +418,18 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1153.926950620292,
-        "Y": 353.34342507243741
+        "X": 1105.9811330267166,
+        "Y": 367.83867225189044
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Diagramm_name",
+        "Id": "ed65fa1657b94c558bcab618fd8787d7",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 859.004710686035,
+        "Y": 285.02225754357409
       }
     ],
     "Annotations": [],
