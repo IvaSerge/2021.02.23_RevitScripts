@@ -178,7 +178,7 @@ if not calc_all:
 
 # get all electrical systems that are modifiable
 if calc_all:
-		# get all circuits in the model
+	# get all circuits in the model
 	# Get all electrical circuits
 	# Circuit type need to be electrilca only
 	# electrical circuit type ID == 6
