@@ -98,7 +98,17 @@ for lighting in lightings:
 	panel_name = el_sys[0].PanelName
 	if not panel_name:
 		outlist.append(lighting.Id.ToString())
+		continue
 
+	# check panel name CP1-KE3W2C05 or CP1-KE3L2B05
+	emerg_panel = any(
+		[
+			"CP1-KE3W2C05" in panel_name,
+			"CP1-KE3L2B05" in panel_name
+		])
+
+	if not(emerg_panel):
+		outlist.append(lighting.Id.ToString())
 
 # # =========Start transaction
 # TransactionManager.Instance.EnsureInTransaction(doc)
