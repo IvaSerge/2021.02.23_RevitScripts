@@ -2,7 +2,7 @@
   "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
   "IsCustomNode": false,
   "Description": "",
-  "Name": "FindNotConnected",
+  "Name": "FindFlippedLights",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -11,14 +11,14 @@
       "Id": "0eb69237dd0c4dc187884facd965d90a",
       "Name": "String",
       "Type": "string",
-      "Value": "FindNotConnected.py",
+      "Value": "FindFlippedLights.py",
       "Description": "Erstellt eine Zeichenfolge."
     },
     {
       "Id": "f0c35a1a54cd46a59816ac6342b08c68",
       "Name": "String",
       "Type": "string",
-      "Value": "test,test",
+      "Value": "",
       "Description": "Creates a string."
     }
   ],
@@ -154,7 +154,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "FindNotConnected.py",
+      "InputValue": "FindFlippedLights.py",
       "Id": "0eb69237dd0c4dc187884facd965d90a",
       "Inputs": [],
       "Outputs": [
@@ -213,7 +213,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "test,test",
+      "InputValue": "",
       "Id": "f0c35a1a54cd46a59816ac6342b08c68",
       "Inputs": [],
       "Outputs": [
@@ -232,8 +232,8 @@
     },
     {
       "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
-      "HintPath": "C:\\04 Git\\2021.02.23_RevitScripts\\FindNotConnected\\FindNotConnected.csv",
-      "InputValue": ".\\FindNotConnected.csv",
+      "HintPath": "C:\\04 Git\\2021.02.23_RevitScripts\\FindFlippedLights\\FindFlippedLights.csv",
+      "InputValue": ".\\FindFlippedLights.csv",
       "NodeType": "ExtensionNode",
       "Id": "bbd3c4241faa4eaeb2cf87562100dab3",
       "Inputs": [],
@@ -259,6 +259,11 @@
       "Id": "4734e1badb1143e599f226e5a3253696"
     },
     {
+      "Start": "e338fe7403ae470eb5206baf5fed837a",
+      "End": "011bed530c4e4cffbfe1b52c47f203d8",
+      "Id": "45c1dc0dd77e42d49fb17b8d574ed286"
+    },
+    {
       "Start": "0c0f3de7a008471d9c3e3aa4859858d0",
       "End": "bb170739472447139597e4f0e7c71d5e",
       "Id": "4a1e87526b814e91b4af2724d9e0776a"
@@ -277,11 +282,6 @@
       "Start": "24e320b0a8844744b7c6b6bf89539764",
       "End": "c1793981a2564442b958a5e8fbf8a6a3",
       "Id": "6c6625a2c4904cb2abd6e4db423d8c32"
-    },
-    {
-      "Start": "8884659e5b2a434e8abc8eceee89e40c",
-      "End": "011bed530c4e4cffbfe1b52c47f203d8",
-      "Id": "2536714cee674f9581fb96421b3e0d02"
     },
     {
       "Start": "e3abdf0011b043419393af664a0e1070",
@@ -396,8 +396,8 @@
       }
     ],
     "Annotations": [],
-    "X": -176.30443290872768,
-    "Y": -367.83031531314003,
-    "Zoom": 0.82993686083059459
+    "X": -536.40559519950648,
+    "Y": -269.09865066844827,
+    "Zoom": 0.82030952543106561
   }
 }
