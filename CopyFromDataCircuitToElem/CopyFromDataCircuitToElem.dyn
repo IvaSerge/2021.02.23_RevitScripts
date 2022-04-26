@@ -18,7 +18,7 @@
       "Id": "2a7c59b378f94df2865f5684cdf35587",
       "Name": "calc_all",
       "Type": "boolean",
-      "Value": "true",
+      "Value": "false",
       "Description": "Selection between a true and false."
     }
   ],
@@ -193,7 +193,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "477cd5ce-d62c-49a8-a447-422d73a4119a-00ea8027"
+        "156b64a7-961f-41c0-8ffc-486f602aa53b-00f6902b"
       ],
       "Id": "fe74da84427042468a648326f7fb22c5",
       "Inputs": [],
@@ -213,7 +213,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "2a7c59b378f94df2865f5684cdf35587",
       "Inputs": [],
       "Outputs": [
@@ -365,8 +365,8 @@
       }
     ],
     "Annotations": [],
-    "X": -183.60366615167578,
-    "Y": 216.57975770634508,
-    "Zoom": 0.31400241702694376
+    "X": -937.60626457986336,
+    "Y": -5.5704364071837063,
+    "Zoom": 0.889392702022916
   }
 }
