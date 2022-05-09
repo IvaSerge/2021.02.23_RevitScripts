@@ -264,7 +264,7 @@ for pnt_y, params_to_set in enumerate(circuits_info_list):
 	for pnt_x, info in enumerate(params_to_set):
 		insert_pnt = XYZ((pnt_x + 2) * mm_to_ft(1000), -(pnt_y + 1) * mm_to_ft(2000), 0)
 
-		if "03" in info[0] or "04" in info[0]:
+		if any(["03" in info[0], "04" in info[0], "06" in info[0]]):
 			symbol_type = type_exit
 		else:
 			symbol_type = type_emergency
