@@ -249,6 +249,47 @@ class presets():
 	]
 
 	# list of preset options
+	preset_2J_main = [
+		# Description | n_of_poles
+		[5, 4],
+		[
+			["Feeder switch 250 A", "3"],
+			["160 A / 0Q2", "3"],
+			["160 A / 0Q3", "3"],
+			["160 A / 0Q4", "3"],
+			["160 A / 0Q5", "3"],
+			["160 A / 0Q6", "3"],
+			["63 A / Section Q7", "3"],
+			["63 A / Section Q8", "3"],
+		]
+	]
+
+	# list of preset options
+	preset_2J_sub = [
+		# Description | n_of_poles
+		[5, 4],
+		[
+			["16 A / 0,03 A / Q123 Section Q7", "3"],
+			["16 A / 0,03 A / Q456 Section Q7", "3"],
+			["16 A / 0,03 A / Q789 Section Q7", "3"],
+			["16 A / 0,03 A / Q101112 Section Q7", "3"],
+			["16 A / 0,03 A / Q131415 Section Q7", "3"],
+			["16 A / 0,03 A / Q161718 Section Q7", "3"],
+			["16 A / 0,03 A / Q192021 Section Q7", "3"],
+			["16 A / 0,03 A / Q222324 Section Q7", "3"],
+
+			["16 A / 0,03 A / Q252627 Section Q8", "3"],
+			["16 A / 0,03 A / Q282930 Section Q8", "3"],
+			["16 A / 0,03 A / Q313233 Section Q8", "3"],
+			["16 A / 0,03 A / Q343536 Section Q8", "3"],
+			["16 A / 0,03 A / Q373839 Section Q8", "3"],
+			["16 A / 0,03 A / Q404142 Section Q8", "3"],
+			["16 A / 0,03 A / Q434445 Section Q8", "3"],
+			["16 A / 0,03 A / Q464748 Section Q8", "3"],
+		]
+	]
+
+	# list of preset options
 	preset_2R_main = [
 		# Description | n_of_poles
 		[5, 4],
