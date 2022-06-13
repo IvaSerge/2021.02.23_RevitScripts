@@ -456,7 +456,7 @@ class presets():
 			["32 A / F404142 Section 0F6", "3"],
 			["63 A / F434445 Section 0F6", "3"],
 
-			["40 A / 0,03 A / F464748 Section 0F7", "3"],
-			["40 A / 0,03 A / F495051 Section 0F7", "3"],
+			["32 A / 0,03 A / F464748 Section 0F7", "3"],
+			["32 A / 0,03 A / F495051 Section 0F7", "3"],
 		]
 	]
