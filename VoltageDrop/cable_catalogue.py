@@ -35,7 +35,7 @@ cab_lst.append(["2 runs of 3-#70, 1-#70", 0.16, 0.04])
 cab_lst.append(["3-#95, 1-#50", 0.231, 0.08])
 cab_lst.append(["3-#95, 1-#95 mm, 1-#50", 0.231, 0.08])
 
-cab_lst.append(["3-#120, 1-#70", 0.183, 0.04])
+cab_lst.append(["3-#120, 1-#70", 0.183, 0.08])
 cab_lst.append(["2 runs of 3-#120, 1-#70", 0.0915, 0.04])
 cab_lst.append(["3 runs of 3-#120, 1-#70", 0.061, 0.027])
 cab_lst.append(["4 runs of 3-#120, 1-#70", 0.0458, 0.02])
