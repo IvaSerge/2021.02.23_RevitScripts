@@ -21,6 +21,24 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+
+def get_first_elem_of_system(_el_sys):
+	"""Get first family instances of electrical system
+
+		args:
+		_el_sy: Electrical system
+
+		return:
+		Family instance
+	"""
+	first_elem = None
+	elements = [i for i in _el_sys.Elements]
+	if elements:
+		first_elem = elements[0]
+
+	return first_elem
+
+
 global doc
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -50,18 +68,12 @@ el_systems = FilteredElementCollector(doc).\
 	WherePasses(str_filter).\
 	ToElements()
 
-# Find first element
-if el_systems:
-	el_sys = el_systems[0]
-	elements = [i for i in el_sys.Elements]
-	if elements:
-		first_elem = elements[0]
-		first_elem_lst = [elements[0].Id]
-		elem_collection = List[ElementId](first_elem_lst)
-		uidoc.Selection.SetElementIds(elem_collection)
-	else:
-		first_elem = None
-else:
-	first_elem = None
+elem_list = [get_first_elem_of_system(el_sys) for el_sys in el_systems]
 
-OUT = first_elem, el_systems
+if elem_list:
+	first_elem = elem_list[0]
+	first_elem_lst = [first_elem.Id]
+	elem_collection = List[ElementId](first_elem_lst)
+	uidoc.Selection.SetElementIds(elem_collection)
+
+OUT = elem_list
