@@ -55,8 +55,9 @@ if el_systems:
 	el_sys = el_systems[0]
 	elements = [i for i in el_sys.Elements]
 	if elements:
-		first_elem = [elements[0].Id]
-		elem_collection = List[ElementId](first_elem)
+		first_elem = elements[0]
+		first_elem_lst = [elements[0].Id]
+		elem_collection = List[ElementId](first_elem_lst)
 		uidoc.Selection.SetElementIds(elem_collection)
 	else:
 		first_elem = None
