@@ -31,25 +31,33 @@ view = doc.ActiveView
 reload = IN[1]  # type: ignore
 search_str = IN[2]  # type: ignore
 
+# For filtering find id of "Cable tray ID" parameter of electrical circuit
+first_circuit = el_sys = FilteredElementCollector(doc).\
+	OfCategory(Autodesk.Revit.DB.BuiltInCategory.OST_ElectricalCircuit).\
+	WhereElementIsNotElementType().\
+	FirstElement()
+param_id = first_circuit.LookupParameter("Cable Tray ID").Id
+
+# Creating of parameter string filter for electrical system
+fnrvStr = FilterStringContains()
+pvp = ParameterValueProvider(param_id)
+frule = FilterStringRule(pvp, fnrvStr, search_str, True)
+str_filter = ElementParameterFilter(frule)
+
+el_sys = FilteredElementCollector(doc).\
+	OfCategory(Autodesk.Revit.DB.BuiltInCategory.OST_ElectricalCircuit).\
+	WhereElementIsNotElementType().\
+	WherePasses(str_filter).\
+	ToElements()
+
 # Creation of multicategory filter
 # # cat_list = [BuiltInCategory.OST_Rooms, BuiltInCategory.OST_Walls,
 # cat_list = [BuiltInCategory.OST_Rooms, BuiltInCategory.OST_Walls, BuiltInCategory.OST_Windows, BuiltInCategory.OST_Doors]
 # typed_list = List[BuiltInCategory](cat_list)
 # multi_filter = ElementMulticategoryFilter(typed_list)
 
-# Creating of parameter string filter
-# fnrvStr = FilterStringEquals()
-# pvp = ParameterValueProvider(ElementId(int(_bip)))
-# frule = FilterStringRule(pvp, fnrvStr, _val, False)
-# filter = ElementParameterFilter(frule)
-# elem = FilteredElementCollector(doc).\
-# 	OfCategory(_bic).\
-# 	WhereElementIsNotElementType().\
-# 	WherePasses(filter).\
-# 	ToElements()
-
 # output = FilteredElementCollector(doc).WherePasses(multi_filter).ToElements()
 
 # uidoc.Selection.SetElementIds()
 
-OUT = search_str
+OUT = el_sys
