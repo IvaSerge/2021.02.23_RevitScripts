@@ -64,4 +64,4 @@ if el_systems:
 else:
 	first_elem = None
 
-OUT = first_elem
+OUT = first_elem, el_systems
