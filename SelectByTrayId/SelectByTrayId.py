@@ -44,20 +44,23 @@ pvp = ParameterValueProvider(param_id)
 frule = FilterStringRule(pvp, fnrvStr, search_str, True)
 str_filter = ElementParameterFilter(frule)
 
-el_sys = FilteredElementCollector(doc).\
+el_systems = FilteredElementCollector(doc).\
 	OfCategory(Autodesk.Revit.DB.BuiltInCategory.OST_ElectricalCircuit).\
 	WhereElementIsNotElementType().\
 	WherePasses(str_filter).\
 	ToElements()
 
-# Creation of multicategory filter
-# # cat_list = [BuiltInCategory.OST_Rooms, BuiltInCategory.OST_Walls,
-# cat_list = [BuiltInCategory.OST_Rooms, BuiltInCategory.OST_Walls, BuiltInCategory.OST_Windows, BuiltInCategory.OST_Doors]
-# typed_list = List[BuiltInCategory](cat_list)
-# multi_filter = ElementMulticategoryFilter(typed_list)
+# Find first element
+if el_systems:
+	el_sys = el_systems[0]
+	elements = [i for i in el_sys.Elements]
+	if elements:
+		first_elem = [elements[0].Id]
+		elem_collection = List[ElementId](first_elem)
+		uidoc.Selection.SetElementIds(elem_collection)
+	else:
+		first_elem = None
+else:
+	first_elem = None
 
-# output = FilteredElementCollector(doc).WherePasses(multi_filter).ToElements()
-
-# uidoc.Selection.SetElementIds()
-
-OUT = el_sys
+OUT = first_elem
