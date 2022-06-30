@@ -22,6 +22,74 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 
+def get_parval(elem, name):
+	"""Get parametr value
+
+	args:
+		elem - family instance or type\n
+		name - parameter name
+	return:
+		value - parameter value
+	"""
+
+	value = None
+	# custom parameter
+	param = elem.LookupParameter(name)
+	# check is it a BuiltIn parameter if not found
+	if not(param):
+		param = elem.get_Parameter(get_bip(name))
+
+	# get paremeter Value if found
+	try:
+		storeType = param.StorageType
+		# value = storeType
+		if storeType == StorageType.String:
+			value = param.AsString()
+		elif storeType == StorageType.Integer:
+			value = param.AsDouble()
+		elif storeType == StorageType.Double:
+			value = param.AsDouble()
+		elif storeType == StorageType.ElementId:
+			value = param.AsValueString()
+	except:
+		pass
+	return value
+
+
+def get_bip(paramName):
+	builtInParams = System.Enum.GetValues(BuiltInParameter)
+	param = []
+	for i in builtInParams:
+		if i.ToString() == paramName:
+			param.append(i)
+			return i
+
+
+def setup_param_value(elem, name, pValue):
+
+	# check element staus
+	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
+
+	if elem_status == CheckoutStatus.OwnedByOtherUser:
+		return None
+
+	# custom parameter
+	param = elem.LookupParameter(name)
+	# check is it a BuiltIn parameter if not found
+	if not(param):
+		try:
+			param = elem.get_Parameter(get_bip(name)).Set(pValue)
+		except:
+			pass
+
+	if param:
+		try:
+			param.Set(pValue)
+		except:
+			pass
+	return elem
+
+
 def get_first_elem_of_system(_el_sys):
 	"""Get first family instances of electrical system
 
@@ -95,11 +163,21 @@ reload = IN[1]  # type: ignore
 outlist = list()
 
 cab_fitting_cat = BuiltInCategory.OST_CableTrayFitting
+param_name = "Raceway Service"
 param_id = 79571
 
+
 cab_fittings = inst_by_cat_strparamvalue(cab_fitting_cat, param_id, "", False)
-
 neighbors = [get_first_ref(i) for i in cab_fittings]
+result_list = zip(cab_fittings, neighbors)
+ouitlist = [i[0] for i in result_list if not(i[1])]
 
+# get parameter values
+result_params = [[i[0], get_parval(i[1], param_name)]
+	for i in result_list if i[1]]
 
-OUT = zip(cab_fittings, neighbors)
+outlist.extend(
+	[i[0] for i in result_params if not(i[1])]
+)
+
+OUT = result_params
