@@ -176,8 +176,18 @@ ouitlist = [i[0] for i in result_list if not(i[1])]
 result_params = [[i[0], get_parval(i[1], param_name)]
 	for i in result_list if i[1]]
 
-outlist.extend(
-	[i[0] for i in result_params if not(i[1])]
-)
+# outlist.extend(
+# 	[i[0] for i in result_params if not(i[1])]
+# )
 
-OUT = result_params
+# # set parameters
+# # =========Start transaction
+# TransactionManager.Instance.EnsureInTransaction(doc)
+
+# map(lambda x:
+# 	setup_param_value(x[0], param_name, x[1]), result_params)
+
+# # =========End transaction
+# TransactionManager.Instance.TransactionTaskDone()
+
+OUT = result_list
