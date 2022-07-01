@@ -119,7 +119,12 @@ calc_all = IN[2]  # type: ignore
 params_dat = [
 	"st_devicetag",
 	"st_devicetag (NEW)",
+	"st_Voltage",
+	"st_Number of Poles"
+	"st_Apparent Load",
 	"st_connection_details",
+	"st_FLA",
+	"Comments",
 	"TSLA_SCOPE_ID"]
 
 # Select element in current doc
