@@ -190,4 +190,4 @@ map(lambda x:
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = result_list
+OUT = outlist
