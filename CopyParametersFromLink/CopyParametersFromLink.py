@@ -140,21 +140,24 @@ elem_linked = doc_linked.GetElement(ref_elem_linked.LinkedElementId)
 # get parameters from the linked element
 info_list = get_info(elem_linked, elem, params_dat)
 
-# write parameters to main element
+# get electrical circuit of element
+# TODO Update for electircal panels
+
+el_sys = list(elem.MEPModel.ElectricalSystems)[0]
+
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
+# write parameters to main element
 for i in info_list:
 	setup_param_value(i[0], i[1], i[2])
 
+# write parameters to circuit
+el_sys.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NAME).Set(info_list[1][2])
+el_sys.get_Parameter(BuiltInParameter.ALL_MODEL_INSTANCE_COMMENTS).Set(info_list[6][2])
+
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
-
-# TODO: save result to csv
-# element ID, doc_linked ID, elem_linked Id, Link_exists
-
-# TODO:
-# update links and update parameters info
 
 OUT = info_list
