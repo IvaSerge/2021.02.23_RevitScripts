@@ -54,7 +54,7 @@ def get_parval(elem, name):
 		if storeType == StorageType.String:
 			value = param.AsString()
 		elif storeType == StorageType.Integer:
-			value = param.AsDouble()
+			value = param.AsInteger()
 		elif storeType == StorageType.Double:
 			value = param.AsDouble()
 		elif storeType == StorageType.ElementId:
@@ -120,12 +120,14 @@ params_dat = [
 	"st_devicetag",
 	"st_devicetag (NEW)",
 	"st_Voltage",
-	"st_Number of Poles"
+	"st_Number of Poles",
 	"st_Apparent Load",
 	"st_connection_details",
 	"st_FLA",
 	"Comments",
-	"TSLA_SCOPE_ID"]
+	"TSLA_SCOPE_ID",
+	"st_neutral",
+]
 
 # Select element in current doc
 sel_elem = uidoc.Selection.PickObject(Autodesk.Revit.UI.Selection.ObjectType.Element, "")
@@ -143,8 +145,12 @@ info_list = get_info(elem_linked, elem, params_dat)
 # get electrical circuit of element
 # TODO Update for electircal panels
 
-el_sys = list(elem.MEPModel.ElectricalSystems)[0]
 
+if elem.MEPModel.ElectricalSystems:
+	el_sys = list(elem.MEPModel.ElectricalSystems)
+	el_sys = el_sys[0]
+else:
+	el_sys = None
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
@@ -154,8 +160,9 @@ for i in info_list:
 	setup_param_value(i[0], i[1], i[2])
 
 # write parameters to circuit
-el_sys.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NAME).Set(info_list[1][2])
-el_sys.get_Parameter(BuiltInParameter.ALL_MODEL_INSTANCE_COMMENTS).Set(info_list[6][2])
+if el_sys:
+	el_sys.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NAME).Set(info_list[1][2])
+	el_sys.get_Parameter(BuiltInParameter.ALL_MODEL_INSTANCE_COMMENTS).Set(info_list[6][2])
 
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
