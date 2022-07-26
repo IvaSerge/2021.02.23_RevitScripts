@@ -18,7 +18,7 @@
       "Id": "2a7c59b378f94df2865f5684cdf35587",
       "Name": "calc_by_panel",
       "Type": "boolean",
-      "Value": "false",
+      "Value": "true",
       "Description": "Selection between a true and false."
     }
   ],
@@ -213,7 +213,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "2a7c59b378f94df2865f5684cdf35587",
       "Inputs": [],
       "Outputs": [
@@ -300,14 +300,14 @@
       "Id": "dc0a98baa73b4ab2b23bb5d741aeb4e5"
     },
     {
+      "Start": "bda170b9ee2947609aa34753773ba2e1",
+      "End": "e59c98df47e5435c835fedaae42ab651",
+      "Id": "11b9509192d947febe0ab6e8718c24de"
+    },
+    {
       "Start": "4b16e34c05934f5d8c99c6025e471a7b",
       "End": "dea01028c0d14c778e215769761eb86e",
       "Id": "288dcd979d7c480ca9a2a698d3563049"
-    },
-    {
-      "Start": "50da26853e984b51aea1afcf18f1d714",
-      "End": "e59c98df47e5435c835fedaae42ab651",
-      "Id": "2fe17c58263748318c60857d35d981af"
     }
   ],
   "Dependencies": [],
@@ -436,7 +436,7 @@
         ],
         "Left": 835.59516397928064,
         "Top": 402.47135667012304,
-        "Width": 432.70479674525905,
+        "Width": 426.70479674525905,
         "Height": 174.25951359735126,
         "FontSize": 36.0,
         "InitialTop": 455.47135667012304,
