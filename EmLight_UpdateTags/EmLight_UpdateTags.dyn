@@ -16,9 +16,9 @@
     },
     {
       "Id": "2a7c59b378f94df2865f5684cdf35587",
-      "Name": "calc_all",
+      "Name": "calc_by_panel",
       "Type": "boolean",
-      "Value": "true",
+      "Value": "false",
       "Description": "Selection between a true and false."
     }
   ],
@@ -213,7 +213,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "2a7c59b378f94df2865f5684cdf35587",
       "Inputs": [],
       "Outputs": [
@@ -241,6 +241,27 @@
       "Outputs": [
         {
           "Id": "08adc169df5f4280b4976542f3c43df0",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "1aef9cff-6a01-470b-a910-e802a4ce446e-015b2da7"
+      ],
+      "Id": "1f5a4013c12942ad8760cdde32334f60",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "50da26853e984b51aea1afcf18f1d714",
           "Name": "Element",
           "Description": "The selected elements.",
           "UsingDefaultValue": false,
@@ -279,14 +300,14 @@
       "Id": "dc0a98baa73b4ab2b23bb5d741aeb4e5"
     },
     {
-      "Start": "bda170b9ee2947609aa34753773ba2e1",
-      "End": "e59c98df47e5435c835fedaae42ab651",
-      "Id": "ff353baa9bff4b44a2c170c0df968673"
-    },
-    {
       "Start": "4b16e34c05934f5d8c99c6025e471a7b",
       "End": "dea01028c0d14c778e215769761eb86e",
       "Id": "288dcd979d7c480ca9a2a698d3563049"
+    },
+    {
+      "Start": "50da26853e984b51aea1afcf18f1d714",
+      "End": "e59c98df47e5435c835fedaae42ab651",
+      "Id": "2fe17c58263748318c60857d35d981af"
     }
   ],
   "Dependencies": [],
@@ -297,7 +318,7 @@
       "ScaleFactor": 1.0,
       "HasRunWithoutCrash": true,
       "IsVisibleInDynamoLibrary": true,
-      "Version": "2.3.0.5885",
+      "Version": "2.3.2.15696",
       "RunType": "Manual",
       "RunPeriod": "1000"
     },
@@ -371,18 +392,18 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1265.5247478794674,
-        "Y": 440.18329817107394
+        "X": 1083.2999607245397,
+        "Y": 457.7308702674743
       },
       {
         "ShowGeometry": true,
-        "Name": "calc_all",
+        "Name": "calc_by_panel",
         "Id": "2a7c59b378f94df2865f5684cdf35587",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1165.6332502949397,
-        "Y": 243.76457412875538
+        "X": 1127.8384796257694,
+        "Y": 245.11438736693992
       },
       {
         "ShowGeometry": true,
@@ -391,13 +412,41 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 983.27611427411466,
-        "Y": 427.12527866824536
+        "X": 845.59516397928064,
+        "Y": 455.47135667012304
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Or select first element of circuit",
+        "Id": "1f5a4013c12942ad8760cdde32334f60",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1042.0826440422261,
+        "Y": 612.712194085939
       }
     ],
-    "Annotations": [],
-    "X": -1092.737865379705,
-    "Y": 51.48892438002315,
-    "Zoom": 1.0448733403231716
+    "Annotations": [
+      {
+        "Id": "4325851dee3c48d1a9763dffbaf43623",
+        "Title": "Select panel",
+        "Nodes": [
+          "fe74da84427042468a648326f7fb22c5",
+          "32e62e5e2307439fbee16213435d7f24"
+        ],
+        "Left": 835.59516397928064,
+        "Top": 402.47135667012304,
+        "Width": 432.70479674525905,
+        "Height": 174.25951359735126,
+        "FontSize": 36.0,
+        "InitialTop": 455.47135667012304,
+        "InitialHeight": 149.44011287901805,
+        "TextblockHeight": 43.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": -538.40988779377642,
+    "Y": 27.48022747853139,
+    "Zoom": 0.740843230538242
   }
 }

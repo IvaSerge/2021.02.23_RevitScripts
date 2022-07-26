@@ -177,13 +177,15 @@ uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 
 reload = IN[1]  # type: ignore
-calc_all = IN[2]  # type: ignore
+calc_by_panel = IN[2]  # type: ignore
 
 fnrvStr = FilterStringEquals()
 pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
 frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector", False)
 filter = ElementParameterFilter(frule)
 
+# =================== part 1 of the script
+# get quai_boards and change their parameters
 quasi_boards = FilteredElementCollector(doc).\
 	OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
 	WhereElementIsNotElementType().\
@@ -194,20 +196,31 @@ elem_status = CheckoutStatus.OwnedByOtherUser
 quasi_boards = [i for i in quasi_boards
 	if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != elem_status]
 
-fnrvStr = FilterStringEquals()
-pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
-frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector", False)
-filter = ElementParameterFilter(frule)
-
-em_board = UnwrapElement(IN[3])  # type: ignore
-circuits = elsys_by_brd(em_board)[1]
-
+# =================== part 2 of the script
+# renumerate lighting fixtures in panel
+if calc_by_panel:
+	# get all circuits of the panel
+	em_board = UnwrapElement(IN[3])  # type: ignore
+	circuits = elsys_by_brd(em_board)[1]
+else:
+	# get only current circuit of the element
+	# means, that only 1 circuit (connector) in faliy possible
+	el_fixture = UnwrapElement(IN[3])  # type: ignore
+	circuits = el_fixture.MEPModel.ElectricalSystems
+	if circuits:
+		circuits = [i for i in el_fixture.MEPModel.ElectricalSystems]
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
+# =================== part 1 of the script
+# Set parameters for all quasi_boards
+# it does not matter, if calc_by_panel.
+# All quasi panels, that are avaliable, will be updated.
 brd_updated = map(update_subboard_name, quasi_boards)
 
+# =================== part 2 of the script
+# Set parameters to lighting fixtures
 outlist = list()
 for circuit in circuits:
 	# TODO check if circuit is electrical
@@ -221,4 +234,4 @@ for circuit in circuits:
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
-OUT = quasi_boards
+OUT = circuits
