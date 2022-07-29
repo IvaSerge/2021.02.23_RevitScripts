@@ -127,6 +127,7 @@ params_dat = [
 	"Comments",
 	"TSLA_SCOPE_ID",
 	"st_neutral",
+	"INSTANCE_FREE_HOST_OFFSET_PARAM"
 ]
 
 # Select element in current doc
