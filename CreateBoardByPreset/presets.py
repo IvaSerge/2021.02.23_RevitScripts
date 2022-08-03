@@ -355,6 +355,155 @@ class presets():
 		]
 	]
 
+	# list of preset options
+	preset_2R2_main = [
+		# Description | n_of_poles
+		[5, 4],
+		[
+			["Feeder switch 400 A", "3"],
+			["100 A / Section 0Q2", "3"],
+			["100 A / Section 0Q3", "3"],
+			["100 A / Section 0Q4", "3"],
+			["100 A / Section 0Q5", "3"],
+			["100 A / Section 0Q6", "3"],
+			["100 A / Section 0Q7", "3"],
+			["100 A / Section 0Q8", "3"],
+			["100 A / Section 0Q9", "3"],
+			["160 A / Section 0Q10", "3"],
+		]
+	]
+
+	preset_2R2_sub = [
+		# Description | n_of_poles
+		[5, 4],
+		[
+			["40 A / F123", "3"],
+			["40 A / F456", "3"],
+			["40 A / F789", "3"],
+			["40 A / F101112", "3"],
+			["40 A / F131415", "3"],
+			["40 A / F161718", "3"],
+
+			["63 A / F192021", "3"],
+			["63 A / F222324", "3"],
+			["63 A / F252627", "3"],
+			["63 A / F282930", "3"],
+			["63 A / F313233", "3"],
+			["63 A / F343536", "3"],
+
+			["32 A / 0,03 A / F373839 Section Q2", "3"],
+			["32 A / 0,03 A / F404142 Section Q2", "3"],
+			["32 A / 0,03 A / F434445 Section Q2", "3"],
+			["32 A / 0,03 A / F464748 Section Q2", "3"],
+			["32 A / 0,03 A / F495051 Section Q2", "3"],
+			["32 A / 0,03 A / F525354 Section Q2", "3"],
+
+			["32 A / 0,03 A / F555657 Section Q3", "3"],
+			["32 A / 0,03 A / F585960 Section Q3", "3"],
+			["32 A / 0,03 A / F616263 Section Q3", "3"],
+			["32 A / 0,03 A / F646566 Section Q3", "3"],
+			["32 A / 0,03 A / F676869 Section Q3", "3"],
+			["32 A / 0,03 A / F707172 Section Q3", "3"],
+
+			["16 A / F73 Section Q4", "1"],
+			["16 A / F74 Section Q4", "1"],
+			["16 A / F75 Section Q4", "1"],
+			["16 A / F76 Section Q4", "1"],
+			["16 A / F77 Section Q4", "1"],
+			["16 A / F78 Section Q4", "1"],
+			["16 A / F79 Section Q4", "1"],
+			["16 A / F80 Section Q4", "1"],
+			["16 A / F81 Section Q4", "1"],
+			["16 A / F82 Section Q4", "1"],
+			["16 A / F83 Section Q4", "1"],
+			["16 A / F84 Section Q4", "1"],
+			["16 A / F85 Section Q4", "1"],
+			["16 A / F86 Section Q4", "1"],
+			["16 A / F87 Section Q4", "1"],
+			["16 A / F88 Section Q4", "1"],
+			["16 A / F89 Section Q4", "1"],
+			["16 A / F90 Section Q4", "1"],
+
+
+			["32 A / F91 Section Q5", "1"],
+			["32 A / F92 Section Q5", "1"],
+			["32 A / F93 Section Q5", "1"],
+			["32 A / F94 Section Q5", "1"],
+			["32 A / F95 Section Q5", "1"],
+			["32 A / F96 Section Q5", "1"],
+			["32 A / F97 Section Q5", "1"],
+			["32 A / F98 Section Q5", "1"],
+			["32 A / F99 Section Q5", "1"],
+
+			["16 A / F100101102 Section Q6", "3"],
+			["16 A / F103104105 Section Q6", "3"],
+			["16 A / F106107108 Section Q6", "3"],
+			["16 A / F109110111 Section Q6", "3"],
+			["16 A / F112113114 Section Q6", "3"],
+			["16 A / F115116117 Section Q6", "3"],
+			["16 A / F118119120 Section Q6", "3"],
+			["16 A / F121122123 Section Q6", "3"],
+			["16 A / F124125126 Section Q6", "3"],
+
+			["16 A / F127128129 Section Q7", "3"],
+			["16 A / F130131132 Section Q7", "3"],
+			["16 A / F133134135 Section Q7", "3"],
+			["16 A / F136137138 Section Q7", "3"],
+			["16 A / F139140141 Section Q7", "3"],
+			["16 A / F142143144 Section Q7", "3"],
+			["16 A / F145146147 Section Q7", "3"],
+			["16 A / F148149150 Section Q7", "3"],
+			["16 A / F151152153 Section Q7", "3"],
+
+			["16 A / 0,03 A / F154 Section Q8", "1"],
+			["16 A / 0,03 A / F155 Section Q8", "1"],
+			["16 A / 0,03 A / F156 Section Q8", "1"],
+			["16 A / 0,03 A / F157 Section Q8", "1"],
+			["16 A / 0,03 A / F158 Section Q8", "1"],
+			["16 A / 0,03 A / F159 Section Q8", "1"],
+			["16 A / 0,03 A / F160 Section Q8", "1"],
+			["16 A / 0,03 A / F161 Section Q8", "1"],
+			["16 A / 0,03 A / F162 Section Q8", "1"],
+			["16 A / 0,03 A / F163 Section Q8", "1"],
+			["16 A / 0,03 A / F164 Section Q8", "1"],
+			["16 A / 0,03 A / F165 Section Q8", "1"],
+			["16 A / 0,03 A / F166 Section Q8", "1"],
+			["16 A / 0,03 A / F167 Section Q8", "1"],
+			["16 A / 0,03 A / F168 Section Q8", "1"],
+			["16 A / 0,03 A / F169 Section Q8", "1"],
+			["16 A / 0,03 A / F170 Section Q8", "1"],
+			["16 A / 0,03 A / F171 Section Q8", "1"],
+			["16 A / 0,03 A / F172 Section Q8", "1"],
+			["16 A / 0,03 A / F173 Section Q8", "1"],
+			["16 A / 0,03 A / F174 Section Q8", "1"],
+
+			["16 A / 0,03 A / F175 Section Q9", "1"],
+			["16 A / 0,03 A / F176 Section Q9", "1"],
+			["16 A / 0,03 A / F177 Section Q9", "1"],
+			["16 A / 0,03 A / F178 Section Q9", "1"],
+			["16 A / 0,03 A / F179 Section Q9", "1"],
+			["16 A / 0,03 A / F180 Section Q9", "1"],
+			["16 A / 0,03 A / F181 Section Q9", "1"],
+			["16 A / 0,03 A / F182 Section Q9", "1"],
+			["16 A / 0,03 A / F183 Section Q9", "1"],
+			["16 A / 0,03 A / F184 Section Q9", "1"],
+			["16 A / 0,03 A / F185 Section Q9", "1"],
+			["16 A / 0,03 A / F186 Section Q9", "1"],
+			["16 A / 0,03 A / F187 Section Q9", "1"],
+			["16 A / 0,03 A / F188 Section Q9", "1"],
+			["16 A / 0,03 A / F189 Section Q9", "1"],
+			["16 A / 0,03 A / F190 Section Q9", "1"],
+			["16 A / 0,03 A / F191 Section Q9", "1"],
+			["16 A / 0,03 A / F192 Section Q9", "1"],
+			["16 A / 0,03 A / F193 Section Q9", "1"],
+			["16 A / 0,03 A / F194 Section Q9", "1"],
+			["16 A / 0,03 A / F195 Section Q9", "1"],
+
+
+
+		]
+	]
+
 	# # list of preset options
 	preset_2S_main = [
 		# Description | n_of_poles
