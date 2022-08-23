@@ -158,6 +158,17 @@ class presets():
 		]
 	]
 
+	preset_C = [
+		# Description | n_of_poles
+		[5, 4],
+		[
+			["630 A / FD1", "3"],
+			["630 A / FD2", "3"],
+			["630 A / FD3", "3"],
+			["630 A / FD4", "3"],
+		]
+	]
+
 	preset_2E_main = [
 		# Description | n_of_poles
 		[5, 4],
