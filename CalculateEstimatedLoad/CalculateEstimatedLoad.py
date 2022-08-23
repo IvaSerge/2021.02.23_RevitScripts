@@ -189,7 +189,7 @@ def SetEstimatedValues(_elSys, _testboard):
 		total_est_load = calc_parameters[0]
 		convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
 			total_est_load, DisplayUnitType.DUT_VOLT_AMPERES)
-		rvt_DemandFactor = calc_parameters[1]
+		rvt_DemandFactor = round(calc_parameters[1], 2)
 		# calculate parameters
 		poles_number = calcSystem.PolesNumber
 		if poles_number == 1:
