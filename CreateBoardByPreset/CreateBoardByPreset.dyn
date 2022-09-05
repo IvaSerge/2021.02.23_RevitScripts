@@ -11,7 +11,7 @@
       "Id": "df0078fed02041b2829168ffa0038de4",
       "Name": "Integer Slider",
       "Type": "number",
-      "Value": "5",
+      "Value": "0",
       "MaximumValue": 100.0,
       "MinimumValue": 0.0,
       "StepValue": 1.0,
@@ -603,7 +603,7 @@
       "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Integer",
-      "InputValue": 5,
+      "InputValue": 0,
       "MaximumValue": 100,
       "MinimumValue": 0,
       "StepValue": 1,
@@ -912,8 +912,8 @@
       }
     ],
     "Annotations": [],
-    "X": 581.85043292291971,
-    "Y": -447.63119257419044,
-    "Zoom": 0.863446833004602
+    "X": 270.65306125913128,
+    "Y": -315.17157068487114,
+    "Zoom": 0.5798620349879543
   }
 }
