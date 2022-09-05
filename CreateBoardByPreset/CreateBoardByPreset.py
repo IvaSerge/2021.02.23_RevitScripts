@@ -110,6 +110,10 @@ elif "2E_main" == IN[3]:  # type: ignore
 	user_preset = presets.preset_2E_main
 elif "2E_sub" == IN[3]:  # type: ignore
 	user_preset = presets.preset_2E_sub
+elif "2E1_main" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2E_main
+elif "2E1_sub" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2E_sub
 elif "2H" == IN[3]:  # type: ignore
 	user_preset = presets.preset_2H
 elif "2I" == IN[3]:  # type: ignore

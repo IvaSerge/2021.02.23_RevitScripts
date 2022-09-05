@@ -243,6 +243,120 @@ class presets():
 		]
 	]
 
+	preset_2E1_main = [
+		# Description | n_of_poles
+		[5, 4],
+		[
+			["63 A / Section F1", "3"],
+			["63 A / Section F2", "3"],
+			["63 A / Section F3", "3"],
+			["63 A / Section F4", "3"],
+			["63 A / Section F5", "3"],
+			["63 A / Section F6", "3"],
+			["63 A / Section F7", "3"],
+			["63 A / Section F8", "3"],
+			["63 A / Section F9", "3"],
+			["63 A / Section F10", "3"],
+		]
+	]
+
+	preset_2E1_sub = [
+		# Description | n_of_poles
+		[5, 4],
+		[
+			["32 A / F123", "3"],
+			["32 A / F456", "3"],
+			["32 A / F789", "3"],
+			["32 A / F101112", "3"],
+			["32 A / F131415", "3"],
+			["63 A / F161718", "3"],
+			["63 A / F192021", "3"],
+
+			["16 A / 0,03 A / F22 Section F1", "1"],
+			["16 A / 0,03 A / F23 Section F1", "1"],
+			["16 A / 0,03 A / F24 Section F1", "1"],
+			["16 A / 0,03 A / F25 Section F1", "1"],
+			["16 A / 0,03 A / F26 Section F1", "1"],
+			["16 A / 0,03 A / F27 Section F1", "1"],
+			["16 A / 0,03 A / F28 Section F1", "1"],
+			["16 A / 0,03 A / F29 Section F1", "1"],
+			["16 A / 0,03 A / F30 Section F1", "1"],
+
+			["16 A / 0,03 A / F31 Section F2", "1"],
+			["16 A / 0,03 A / F32 Section F2", "1"],
+			["16 A / 0,03 A / F33 Section F2", "1"],
+			["16 A / 0,03 A / F34 Section F2", "1"],
+			["16 A / 0,03 A / F35 Section F2", "1"],
+			["16 A / 0,03 A / F36 Section F2", "1"],
+			["16 A / 0,03 A / F37 Section F2", "1"],
+			["16 A / 0,03 A / F38 Section F2", "1"],
+			["16 A / 0,03 A / F39 Section F2", "1"],
+
+			["16 A / 0,03 A / F40 Section F3", "1"],
+			["16 A / 0,03 A / F41 Section F3", "1"],
+			["16 A / 0,03 A / F42 Section F3", "1"],
+			["16 A / 0,03 A / F43 Section F3", "1"],
+			["16 A / 0,03 A / F44 Section F3", "1"],
+			["16 A / 0,03 A / F45 Section F3", "1"],
+			["16 A / 0,03 A / F46 Section F3", "1"],
+			["16 A / 0,03 A / F47 Section F3", "1"],
+			["16 A / 0,03 A / F48 Section F3", "1"],
+
+			["16 A / 0,03 A / F49 Section F4", "1"],
+			["16 A / 0,03 A / F50 Section F4", "1"],
+			["16 A / 0,03 A / F51 Section F4", "1"],
+			["16 A / 0,03 A / F52 Section F4", "1"],
+			["16 A / 0,03 A / F53 Section F4", "1"],
+			["16 A / 0,03 A / F54 Section F4", "1"],
+			["16 A / 0,03 A / F55 Section F4", "1"],
+			["16 A / 0,03 A / F56 Section F4", "1"],
+			["16 A / 0,03 A / F57 Section F4", "1"],
+
+			["16 A / 0,03 A / F58 Section F5", "1"],
+			["16 A / 0,03 A / F59 Section F5", "1"],
+			["16 A / 0,03 A / F60 Section F5", "1"],
+			["16 A / 0,03 A / F61 Section F5", "1"],
+			["16 A / 0,03 A / F62 Section F5", "1"],
+			["16 A / 0,03 A / F63 Section F5", "1"],
+			["16 A / 0,03 A / F64 Section F5", "1"],
+			["16 A / 0,03 A / F65 Section F5", "1"],
+			["16 A / 0,03 A / F66 Section F5", "1"],
+
+			["16 A / 0,03 A / F67 Section F6", "1"],
+			["16 A / 0,03 A / F68 Section F6", "1"],
+			["16 A / 0,03 A / F69 Section F6", "1"],
+			["16 A / 0,03 A / F70 Section F6", "1"],
+			["16 A / 0,03 A / F71 Section F6", "1"],
+			["16 A / 0,03 A / F72 Section F6", "1"],
+			["16 A / 0,03 A / F73 Section F6", "1"],
+			["16 A / 0,03 A / F74 Section F6", "1"],
+			["16 A / 0,03 A / F75 Section F6", "1"],
+
+			["16 A / 0,03 A / F76 Section F7", "1"],
+			["16 A / 0,03 A / F77 Section F7", "1"],
+			["16 A / 0,03 A / F78 Section F7", "1"],
+			["16 A / 0,03 A / F79 Section F7", "1"],
+			["16 A / 0,03 A / F80 Section F7", "1"],
+			["16 A / 0,03 A / F81 Section F7", "1"],
+			["16 A / 0,03 A / F82 Section F7", "1"],
+			["16 A / 0,03 A / F83 Section F7", "1"],
+			["16 A / 0,03 A / F84 Section F7", "1"],
+
+			["16 A / F858687 Section F8", "3"],
+			["16 A / F888990 Section F8", "3"],
+			["16 A / F919293 Section F8", "3"],
+
+			["16 A / 0,03 A / F949596 Section F9", "3"],
+			["16 A / 0,03 A / F979899 Section F9", "3"],
+			["16 A / 0,03 A / F100101102 Section F9", "3"],
+
+			["10 A / F103 Section F10", "1"],
+			["10 A / F104 Section F10", "1"],
+			["10 A / F105 Section F10", "1"],
+			["10 A / F106 Section F10", "1"],
+		]
+	]
+
 	preset_2H = [
 		# Description | n_of_poles
 		[5, 4],
