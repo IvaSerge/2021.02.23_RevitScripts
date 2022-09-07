@@ -91,6 +91,7 @@ def flatten_list(data):
 
 
 def get_parval(elem, name):
+	# type: (FamilyInstance, str) -> any
 	"""Get parametr value
 
 	args:
@@ -141,6 +142,7 @@ def category_by_bic_name(_bicString):
 
 
 def param_by_cat(_bic, _name):
+	# type: (Autodesk.Revit.DB.BuiltiInCategory, str) -> Autodesk.Revit.DB.Parameter
 	"""Get parametr in
 
 	args:
@@ -204,6 +206,8 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 		args:
 		_bic: BuiltInCategory.OST_xxx
 		_bip: BuiltInParameter
+		_val: Parameter value
+		_isType: is Type or Instance
 
 		return:
 		list()[Autodesk.Revit.DB.FamilySymbol]
@@ -275,6 +279,7 @@ def ft_to_mm(ft):
 
 
 def elsys_by_brd(_brd):
+	# type: (FamilyInstance) -> list
 	"""Get all systems of electrical board.
 
 		args:
