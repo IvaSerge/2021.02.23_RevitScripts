@@ -21,6 +21,9 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+import itertools
+from itertools import chain
+
 
 def get_parval(elem, name):
 	"""Get parametr value
@@ -141,6 +144,7 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 
 
 def get_first_ref(_inst):
+	# type: (FamilyInstance) -> FamilyInstance
 	conectors = _inst.MEPModel.ConnectorManager.Connectors
 	if not conectors:
 		return None
@@ -150,6 +154,26 @@ def get_first_ref(_inst):
 		if con_neibor:
 			return con_neibor[0].Owner
 	return None
+
+
+def get_parameter_list(_elements, _parameters):
+	"""Get pair: element_to_set - parameter value
+
+		args:
+		_elements[0]: Family instance for setting parameters
+		_elements[0]: Family instance for getting parameters
+		_parameters: List of parameter names to get-set
+
+		return: [element, param_name, param_value]
+	"""
+
+	element_to_set = _elements[0]
+	element_to_read = _elements[1]
+	values_list = list()
+	for param in _parameters:
+		param_value = get_parval(element_to_read, param)
+		values_list.append([element_to_set, param, param_value])
+	return values_list
 
 
 global doc
@@ -165,29 +189,42 @@ outlist = list()
 cab_fitting_cat = BuiltInCategory.OST_CableTrayFitting
 param_name = "Raceway Service"
 param_id = 79571
+PARAM_NAMES = [
+	"Raceway Service",
+	"Cable Tray ID",
+	"TSLA_SCOPE_ID",
+	"Tool Prio",
+	"Phase Created"]
 
 
 cab_fittings = inst_by_cat_strparamvalue(cab_fitting_cat, param_id, "", False)
 neighbors = [get_first_ref(i) for i in cab_fittings]
-result_list = zip(cab_fittings, neighbors)
-ouitlist = [i[0] for i in result_list if not(i[1])]
+neighbor_pairs = zip(cab_fittings, neighbors)
 
-# get parameter values
-result_params = [[i[0], get_parval(i[1], param_name)]
-	for i in result_list if i[1]]
+# that's error need to be clarified
+without_neighbor = [i[0] for i in neighbor_pairs if not i[1]]
 
-outlist.extend(
-	[i[0] for i in result_params if not(i[1])]
-)
+# filter pairs only with neighbor
+neighbor_pairs = [i for i in neighbor_pairs if i[1]]
+
+# filter out instances witch naghbor have empty "Raceway Service"
+instances_raceway_empty = [i[0] for i in neighbor_pairs if not get_parval(i[1], "Raceway Service")]
+
+pairs_with_raceway = [i for i in neighbor_pairs if get_parval(i[1], "Raceway Service")]
+
+# read parameters
+pairs_to_set = [get_parameter_list(i, PARAM_NAMES) for i in pairs_with_raceway]
+pairs_to_set = list(itertools.chain.from_iterable(pairs_to_set))
+
 
 # set parameters
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-map(lambda x:
-	setup_param_value(x[0], param_name, x[1]), result_params)
+func_set_param = lambda x: setup_param_value(x[0], x[1], x[2])
+map(func_set_param, pairs_to_set)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = outlist
+OUT = without_neighbor, instances_raceway_empty
