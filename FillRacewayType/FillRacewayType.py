@@ -194,7 +194,8 @@ PARAM_NAMES = [
 	"Cable Tray ID",
 	"TSLA_SCOPE_ID",
 	"Tool Prio",
-	"Phase Created"]
+	"Phase Created",
+	"Tool Scope ID"]
 
 
 cab_fittings = inst_by_cat_strparamvalue(cab_fitting_cat, param_id, "", False)
