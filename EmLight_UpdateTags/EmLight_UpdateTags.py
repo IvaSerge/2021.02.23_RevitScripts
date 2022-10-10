@@ -24,6 +24,8 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+# ================ Python imports
+import re
 
 # ================ local imports
 import EmLight_SearchInSys
@@ -143,8 +145,8 @@ def update_subboard_name(board_inst):
 		return None
 
 	current_board = board_inst
-	main_board = board_inst.Name
 	main_circ_num = brd_main_circuit.CircuitNumber
+	main_board = board_inst.Name
 
 	while True:
 		if current_board:
@@ -161,13 +163,26 @@ def update_subboard_name(board_inst):
 			except:
 				break
 		else:
-			main_board = current_board.Name
 			main_circ_num = next_system.CircuitNumber
+			main_board = current_board.Name
 			break
 
-	name = main_board + ": " + main_circ_num
-	board_inst.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_NAME).Set(name)
+	# convert circuit number to int
+	regexp = re.compile(r"^\D*(\d+)")
+	check = regexp.match(main_circ_num)
+	main_circ_num = check.group(1)
+	main_circ_num = int(main_circ_num)
 
+	# convert circuit number to USV name
+	if main_circ_num % 20 == 0:
+		n_subsection = main_circ_num // 20
+	else:
+		n_subsection = main_circ_num // 20 + 1
+
+	n_element = main_circ_num - (n_subsection - 1) * 20
+
+	name = main_board + ":" + str(n_subsection) + "." + str(n_element)
+	board_inst.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_NAME).Set(name)
 	return name
 
 
@@ -193,45 +208,51 @@ quasi_boards = FilteredElementCollector(doc).\
 	ToElements()
 
 elem_status = CheckoutStatus.OwnedByOtherUser
-quasi_boards = [i for i in quasi_boards
-	if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != elem_status]
+quasi_boards = [
+	i for i in quasi_boards
+	if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != elem_status and
+	any([
+		"CP1-KE3W2C05" in i.Name,  # Emergency lighting panel hard coded
+		"CP1-KE3L2B05" in i.Name  # Emergency lighting panel hard coded
+	])]
 
-# =================== part 2 of the script
-# renumerate lighting fixtures in panel
-if calc_by_panel:
-	# get all circuits of the panel
-	em_board = UnwrapElement(IN[3])  # type: ignore
-	circuits = elsys_by_brd(em_board)[1]
-else:
-	# get only current circuit of the element
-	# means, that only 1 circuit (connector) in faliy possible
-	el_fixture = UnwrapElement(IN[3])  # type: ignore
-	circuits = el_fixture.MEPModel.ElectricalSystems
-	if circuits:
-		circuits = [i for i in el_fixture.MEPModel.ElectricalSystems]
+# # =================== part 2 of the script
+# # renumerate lighting fixtures in panel
+# if calc_by_panel:
+# 	# get all circuits of the panel
+# 	em_board = UnwrapElement(IN[3])  # type: ignore
+# 	circuits = elsys_by_brd(em_board)[1]
+# else:
+# 	# get only current circuit of the element
+# 	# means, that only 1 circuit (connector) in faliy possible
+# 	el_fixture = UnwrapElement(IN[3])  # type: ignore
+# 	circuits = el_fixture.MEPModel.ElectricalSystems
+# 	if circuits:
+# 		circuits = [i for i in el_fixture.MEPModel.ElectricalSystems]
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-# =================== part 1 of the script
+# =================== part 3 of the script
 # Set parameters for all quasi_boards
 # it does not matter, if calc_by_panel.
 # All quasi panels, that are avaliable, will be updated.
 brd_updated = map(update_subboard_name, quasi_boards)
 
-# =================== part 2 of the script
-# Set parameters to lighting fixtures
-outlist = list()
-for circuit in circuits:
-	# TODO check if circuit is electrical
-	elems_in_circuit = searchInDeep(circuit, [])
-	outlist.append(elems_in_circuit)
-	if elems_in_circuit:
-		for i, elem in enumerate(elems_in_circuit):
-			outlist.append([elem, "E_Light_number", str(i + 1)])
-			setup_param_value(elem, "E_Light_number", str(i + 1))
+# # =================== part 4 of the script
+# # Set parameters to lighting fixtures
+# outlist = list()
+# for circuit in circuits:
+# 	# TODO check if circuit is electrical
+# 	elems_in_circuit = searchInDeep(circuit, [])
+# 	outlist.append(elems_in_circuit)
+# 	if elems_in_circuit:
+# 		for i, elem in enumerate(elems_in_circuit):
+# 			outlist.append([elem, "E_Light_number", str(i + 1)])
+# 			setup_param_value(elem, "E_Light_number", str(i + 1))
 
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
-OUT = circuits
+# OUT = circuits
+OUT = brd_updated
