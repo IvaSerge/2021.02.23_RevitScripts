@@ -33,6 +33,7 @@ from RevitServices.Transactions import TransactionManager
 
 # ================ python imports
 from operator import itemgetter
+import re
 
 
 def getByCatAndStrParam(_bic, _bip, _val, _isType):
@@ -164,6 +165,35 @@ def setup_param_value(elem, name, pValue):
 	return elem
 
 
+def circuit_number_to_usv_link(_main_circ_num):
+	# type: (str) -> str
+	"""Convert Revit circuit number to realistic link to the panel
+
+	args:
+		main_circ_num - revit circuit number
+	return:
+		value_str - converterd number
+	"""
+	main_circ_num = str(_main_circ_num)
+
+	# convert circuit number to int
+	regexp = re.compile(r"^\D*(\d+)")
+	check = regexp.match(main_circ_num)
+	main_circ_num = check.group(1)
+	main_circ_num = int(main_circ_num)
+
+	# convert circuit number to USV name
+	if main_circ_num % 20 == 0:
+		n_subsection = main_circ_num // 20
+	else:
+		n_subsection = main_circ_num // 20 + 1
+	n_element = main_circ_num - (n_subsection - 1) * 20
+
+	value_str = str(n_subsection) + "." + str(n_element)
+
+	return value_str
+
+
 global doc
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -204,7 +234,7 @@ type_exit = getByCatAndStrParam(
 
 # for circuit in boards:
 circuits = [i for i in elsys_by_brd(board_inst)[1]
-	if i.SystemType == Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit]
+	if i.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit]
 
 
 circuits.sort(key=lambda x: x.StartSlot)
@@ -213,8 +243,15 @@ circuits_info_list = list()
 for circuit_inst in circuits:
 
 	circuit_num = circuit_inst.CircuitNumber
-	circuit_str = board_inst.Name + ": " + circuit_num
+	circuit_usv_link = circuit_number_to_usv_link(circuit_num)
+
+	circuit_str = board_inst.Name + ":" + circuit_usv_link
 	circuit_name = circuit_inst.LoadName
+	circuit_wire = circuit_inst.WireSizeString
+	if "#2.5" in circuit_wire:
+		circuit_wire_str = "NHXH E30 3x2.5"
+	else:
+		circuit_wire_str = "NHXH E30 3x4"
 
 	# find all elements by "Panel" and "Circuit Number"
 	elems_in_circuit = getByCatAndStrParam(
@@ -229,14 +266,16 @@ for circuit_inst in circuits:
 	# read element parameters
 	params_to_set = list()
 	for elem in elems_in_circuit:
-		try:
-			elem_mark = get_parval(elem.Symbol, "WINDOW_TYPE_ID")
-			elem_panel = circuit_num
-			elem_light_num = get_parval(elem, "E_Light_number")
-			params_to_set.append([elem_mark, elem_panel, int(elem_light_num), circuit_name])
-			# params_to_set.append(elem_mark)
-		except:
-			continue
+		elem_mark = get_parval(elem.Symbol, "WINDOW_TYPE_ID")  # Revit parameter "Type Mark"
+		elem_light_num = get_parval(elem, "E_Light_number")
+		param_list = list()
+		param_list.append(elem_mark)
+		param_list.append(circuit_usv_link)
+		param_list.append(int(elem_light_num))
+		param_list.append(circuit_name)
+		param_list.append(circuit_wire_str)
+		params_to_set.append(param_list)
+
 	params_to_set.sort(key=itemgetter(2))
 	circuits_info_list.append(params_to_set)
 
@@ -259,6 +298,7 @@ for pnt_y, params_to_set in enumerate(circuits_info_list):
 			type_first,
 			view_diagramm)
 		instance_on_view.LookupParameter("Beschriftung 1").Set(params_to_set[0][3])
+		instance_on_view.LookupParameter("Beschriftung 2").Set(params_to_set[0][4])
 		instances_on_view.append(instance_on_view)
 
 	for pnt_x, info in enumerate(params_to_set):
