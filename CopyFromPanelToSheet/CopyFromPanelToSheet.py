@@ -1,3 +1,4 @@
+from operator import indexOf
 import clr
 
 import sys
@@ -24,6 +25,9 @@ doc = DocumentManager.Instance.CurrentDBDocument
 
 
 class Panel():
+	# sheet-panel relation list [[sheet, "Location1,Location2"]]
+	sheet_panel_list = list()
+
 	"""A class to represent Revit panel"""
 	def __init__(self, rvt_panel):
 		# type: (Panel, FamilyInstance) -> None
@@ -34,6 +38,7 @@ class Panel():
 		self.instances = rvt_panel
 		self.panel_name = rvt_panel.Name
 		self.on_sheets = self.find_related_sheet()
+		self.location = self.get_location()
 
 	def find_related_sheet(self):
 		global sheets_list
@@ -43,6 +48,64 @@ class Panel():
 				return_list.append(sheet)
 		return return_list
 
+	def get_location(self):
+		params = self.instances.GetParameters("TSLA_SCOPE_ID")
+		for param in params:
+			if param.Id.IntegerValue == 7955181:
+				return param.AsString()
+
+	def add_info_to_list(self):
+
+		# if location do not exist, no action.
+		if not self.location:
+			return None
+
+		sheets_existing = [i[0] for i in Panel.sheet_panel_list if Panel.sheet_panel_list]
+		sheets_to_add = self.on_sheets
+
+		# check if current sheets are allready in the list
+		if sheets_existing:
+			sheets_existing_names = [i.Name for i in sheets_existing]
+		else:
+			sheets_existing_names = None
+
+		out_list = list()
+		for sheet in sheets_to_add:
+			# if sheet exists in the list allready
+			# if exists - get the sheet index
+			if sheets_existing_names and sheet.Name in sheets_existing_names:
+				sheet_index = sheets_existing_names.index(sheet.Name)
+			else:
+				sheet_index = None
+
+			# location to be add to existing schedule
+			if sheet_index is not None:
+				current_location = Panel.sheet_panel_list[sheet_index][1]
+				if self.location not in current_location:
+					current_location = current_location + "," + self.location
+					Panel.sheet_panel_list[sheet_index][1] = current_location
+					out_list.append([sheet, current_location])
+
+			# location to append to shedule
+			else:
+				Panel.sheet_panel_list.append([sheet, self.location])
+				out_list.append([sheet, self.location])
+
+		return out_list
+
+		# info_list = Panel.sheet_panel_list
+		# panel_name = self.panel_name
+
+		# #find correct sheed by panel name
+
+		# if info_list:
+		# 	for i, inf in enumerate(info_list):
+		# 		if panel_name in inf[0]:
+		# 			panel_name[i][1] = panel_name[i][1] + "," + self.location
+
+
+reload = IN[1]  # type: ignore
+test_panel = UnwrapElement(IN[2])  # type: ignore
 
 # get all panel instances
 panels_list = FilteredElementCollector(doc).\
@@ -56,10 +119,12 @@ sheets_list = FilteredElementCollector(doc).\
 	WhereElementIsNotElementType().\
 	ToElements()
 
-# for each panel create class instance
-# find related lists
-# add info to a global list
-# for each panel find
+test_panel = Panel(test_panel)
+test_panel_two = Panel(panels_list[100])
+Panel.sheet_panel_list.append([test_panel.on_sheets[0], "test"])
+
+test_panel_two.add_info_to_list()
+
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
@@ -68,4 +133,4 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = Panel(panels_list[100]).on_sheets
+OUT = Panel.sheet_panel_list
