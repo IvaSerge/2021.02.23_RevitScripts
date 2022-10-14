@@ -198,7 +198,7 @@
   "View": {
     "Dynamo": {
       "ScaleFactor": 10000.0,
-      "HasRunWithoutCrash": false,
+      "HasRunWithoutCrash": true,
       "IsVisibleInDynamoLibrary": true,
       "Version": "2.3.2.15696",
       "RunType": "Manual",
@@ -234,7 +234,7 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 725.74525792830366,
+        "X": 722.85109770291115,
         "Y": 704.46323687191614
       },
       {
@@ -269,8 +269,8 @@
       }
     ],
     "Annotations": [],
-    "X": 366.59440480049352,
-    "Y": -174.09865066844827,
-    "Zoom": 0.82030952543106561
+    "X": -327.605961537757,
+    "Y": -538.12708373847818,
+    "Zoom": 1.0365701158073322
   }
 }

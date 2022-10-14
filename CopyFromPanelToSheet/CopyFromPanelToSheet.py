@@ -90,22 +90,10 @@ class Panel():
 			else:
 				Panel.sheet_panel_list.append([sheet, self.location])
 				out_list.append([sheet, self.location])
-
 		return out_list
-
-		# info_list = Panel.sheet_panel_list
-		# panel_name = self.panel_name
-
-		# #find correct sheed by panel name
-
-		# if info_list:
-		# 	for i, inf in enumerate(info_list):
-		# 		if panel_name in inf[0]:
-		# 			panel_name[i][1] = panel_name[i][1] + "," + self.location
 
 
 reload = IN[1]  # type: ignore
-test_panel = UnwrapElement(IN[2])  # type: ignore
 
 # get all panel instances
 panels_list = FilteredElementCollector(doc).\
@@ -119,16 +107,15 @@ sheets_list = FilteredElementCollector(doc).\
 	WhereElementIsNotElementType().\
 	ToElements()
 
-test_panel = Panel(test_panel)
-test_panel_two = Panel(panels_list[100])
-Panel.sheet_panel_list.append([test_panel.on_sheets[0], "test"])
-
-test_panel_two.add_info_to_list()
-
+map(lambda x: Panel(x).add_info_to_list(), panels_list)
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
+for sheet in Panel.sheet_panel_list:
+	sheet_inst = sheet[0]
+	sheet_location = sheet[1]
+	sheet_inst.LookupParameter("Shop Name").Set(sheet_location)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
