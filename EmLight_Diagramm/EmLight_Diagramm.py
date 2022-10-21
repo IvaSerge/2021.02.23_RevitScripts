@@ -247,11 +247,19 @@ for circuit_inst in circuits:
 
 	circuit_str = board_inst.Name + ":" + circuit_usv_link
 	circuit_name = circuit_inst.LoadName
-	circuit_wire = circuit_inst.WireSizeString
-	if "#2.5" in circuit_wire:
+	circuit_wire_size = circuit_inst.WireSizeString
+	circuit_wire_type = circuit_inst.WireType.Name
+
+	if "#2.5" in circuit_wire_size and "NYM" in circuit_wire_type:
+		circuit_wire_str = "NYM 3x2.5"
+	elif "#2.5" in circuit_wire_size and "NHXH E30" in circuit_wire_type:
 		circuit_wire_str = "NHXH E30 3x2.5"
-	else:
+	elif "4" in circuit_wire_size and "NYM" in circuit_wire_type:
+		circuit_wire_str = "NYM 3x4"
+	elif "4" in circuit_wire_size and "NHXH E30" in circuit_wire_type:
 		circuit_wire_str = "NHXH E30 3x4"
+	else:
+		circuit_wire_str = ""
 
 	# find all elements by "Panel" and "Circuit Number"
 	elems_in_circuit = getByCatAndStrParam(
