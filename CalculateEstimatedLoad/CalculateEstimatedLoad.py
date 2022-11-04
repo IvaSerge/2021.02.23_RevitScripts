@@ -176,6 +176,13 @@ def SetEstimatedValues(_elSys, _testboard):
 		param List[str] - list of installed values
 
 	"""
+
+	# If circuit owned by other - return None
+	elem_stat = Autodesk.Revit.DB.WorksharingUtils.GetCheckoutStatus(
+		doc, _elSys.Id)
+	if elem_stat == Autodesk.Revit.DB.CheckoutStatus.OwnedByOtherUser:
+		return None
+
 	# check if it is a real circuit
 	# it it is spare or space - no actions requiered
 	circ_type = _elSys.CircuitType
