@@ -27,10 +27,11 @@
         }
       ],
       "Replication": "Disabled",
-      "Description": "Auswahl zwischen True und False"
+      "Description": "Selection between a true and false."
     },
     {
       "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
+      "Engine": "IronPython2",
       "VariableInputPorts": true,
       "NodeType": "ExtensionNode",
       "Id": "2d5996559be141609f0239af77174c49",
@@ -75,7 +76,7 @@
         }
       ],
       "Replication": "Disabled",
-      "Description": "Führt ein IronPython-Skript aus einer Zeichenfolge aus."
+      "Description": "Runs a Python script from a string."
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
@@ -86,7 +87,7 @@
         {
           "Id": "c17b2fe230244ed2abc2c515ffc1edd3",
           "Name": "file",
-          "Description": "var",
+          "Description": "File object to read text from\n\nvar",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -96,7 +97,7 @@
       "Outputs": [
         {
           "Id": "0c0f3de7a008471d9c3e3aa4859858d0",
-          "Name": "str",
+          "Name": "string",
           "Description": "Contents of the text file.",
           "UsingDefaultValue": false,
           "Level": 2,
@@ -134,7 +135,7 @@
         }
       ],
       "Replication": "Disabled",
-      "Description": "Erstellt ein Dateiobjekt aus einem Pfad."
+      "Description": "Creates a file object from a path."
     },
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
@@ -154,45 +155,73 @@
         }
       ],
       "Replication": "Disabled",
-      "Description": "Erstellt eine Zeichenfolge."
+      "Description": "Creates a string."
     }
   ],
   "Connectors": [
     {
       "Start": "ef9d7fd5abed4398b74fdbba5f356c6c",
       "End": "f1ced3c8000d4c729c4cdde79c88a77f",
-      "Id": "4734e1badb1143e599f226e5a3253696"
+      "Id": "4734e1badb1143e599f226e5a3253696",
+      "IsHidden": "False"
     },
     {
       "Start": "0c0f3de7a008471d9c3e3aa4859858d0",
       "End": "bb170739472447139597e4f0e7c71d5e",
-      "Id": "4a1e87526b814e91b4af2724d9e0776a"
+      "Id": "4a1e87526b814e91b4af2724d9e0776a",
+      "IsHidden": "False"
     },
     {
       "Start": "13b796f7084240e0a84bf3333898e5e1",
       "End": "c17b2fe230244ed2abc2c515ffc1edd3",
-      "Id": "1bdba669938d432cb557903e27e599dc"
+      "Id": "1bdba669938d432cb557903e27e599dc",
+      "IsHidden": "False"
     },
     {
       "Start": "13b796f7084240e0a84bf3333898e5e1",
       "End": "166aa7d726124a9fa4cb95664a069252",
-      "Id": "0b2c89439aa949fc85924afc091b6d8d"
+      "Id": "0b2c89439aa949fc85924afc091b6d8d",
+      "IsHidden": "False"
     },
     {
       "Start": "24e320b0a8844744b7c6b6bf89539764",
       "End": "c1793981a2564442b958a5e8fbf8a6a3",
-      "Id": "6c6625a2c4904cb2abd6e4db423d8c32"
+      "Id": "6c6625a2c4904cb2abd6e4db423d8c32",
+      "IsHidden": "False"
     }
   ],
   "Dependencies": [],
   "NodeLibraryDependencies": [],
+  "Thumbnail": null,
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.13",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "2.0",
+      "Data": {}
+    }
+  ],
+  "Author": "None provided",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
   "Bindings": [],
   "View": {
     "Dynamo": {
       "ScaleFactor": 10000.0,
       "HasRunWithoutCrash": true,
       "IsVisibleInDynamoLibrary": true,
-      "Version": "2.3.2.15696",
+      "Version": "2.13.1.3887",
       "RunType": "Manual",
       "RunPeriod": "1000"
     },
@@ -208,10 +237,11 @@
       "UpY": 0.62114778027827733,
       "UpZ": -0.52530105607252375
     },
+    "ConnectorPins": [],
     "NodeViews": [
       {
-        "ShowGeometry": true,
         "Name": "Reload",
+        "ShowGeometry": true,
         "Id": "d4faef3825fc49ce8fedebdcd48067ca",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -220,8 +250,8 @@
         "Y": 696.01257043241719
       },
       {
-        "ShowGeometry": true,
         "Name": "Python Script From String",
+        "ShowGeometry": true,
         "Id": "2d5996559be141609f0239af77174c49",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -230,8 +260,8 @@
         "Y": 625.73314247585859
       },
       {
-        "ShowGeometry": true,
         "Name": "FileSystem.ReadText",
+        "ShowGeometry": true,
         "Id": "049c9e4fe54243ae95472446422290a1",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -240,8 +270,8 @@
         "Y": 555.44225808811859
       },
       {
-        "ShowGeometry": true,
         "Name": "File From Path",
+        "ShowGeometry": true,
         "Id": "d8be777a5f294a3fb93ed94ba6d6b87b",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -250,8 +280,8 @@
         "Y": 624.51198116686533
       },
       {
-        "ShowGeometry": true,
         "Name": "String",
+        "ShowGeometry": true,
         "Id": "0eb69237dd0c4dc187884facd965d90a",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -261,8 +291,8 @@
       }
     ],
     "Annotations": [],
-    "X": -519.34704623545531,
-    "Y": -543.50796918808044,
-    "Zoom": 1.0056974302656416
+    "X": -42.091167986102391,
+    "Y": -338.59772348104968,
+    "Zoom": 0.95949514250383683
   }
 }

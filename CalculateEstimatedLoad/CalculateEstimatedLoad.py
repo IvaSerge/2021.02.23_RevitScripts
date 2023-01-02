@@ -49,8 +49,8 @@ def elsys_by_brd(_brd):
 		1 - main electrical circuit
 		2 - list of connectet low circuits
 	"""
-	allsys = _brd.MEPModel.ElectricalSystems
-	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	allsys = _brd.MEPModel.GetElectricalSystems()
+	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
 	if lowsys:
 		lowsysId = [i.Id for i in lowsys]
 		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
@@ -195,7 +195,7 @@ def SetEstimatedValues(_elSys, _testboard):
 		calc_parameters = get_estimated_load(_elSys, _testboard)
 		total_est_load = calc_parameters[0]
 		convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
-			total_est_load, DisplayUnitType.DUT_VOLT_AMPERES)
+			total_est_load, UnitTypeId.VoltAmperes)
 		rvt_DemandFactor = round(calc_parameters[1], 2)
 		# calculate parameters
 		poles_number = calcSystem.PolesNumber
@@ -210,7 +210,7 @@ def SetEstimatedValues(_elSys, _testboard):
 		total_est_load = rvt_TotalInstalledLoad
 		rvt_current = _elSys.ApparentCurrent
 		current_estimated = round(UnitUtils.ConvertFromInternalUnits(
-			rvt_current, DisplayUnitType.DUT_AMPERES) * 10) / 10
+			rvt_current, UnitTypeId.Amperes) * 10) / 10
 
 	# Write parameters in Circuit
 	calcSystem.LookupParameter("E_DemandFactor").Set(rvt_DemandFactor)
@@ -242,7 +242,7 @@ testParam = BuiltInParameter.SYMBOL_NAME_PARAM
 pvp = ParameterValueProvider(ElementId(int(testParam)))
 fnrvStr = FilterStringEquals()
 filter = ElementParameterFilter(
-	FilterStringRule(pvp, fnrvStr, DISTR_SYS_NAME, False))
+	FilterStringRule(pvp, fnrvStr, DISTR_SYS_NAME))
 
 distrSys = FilteredElementCollector(doc).\
 	OfCategory(BuiltInCategory.OST_ElecDistributionSys).\
@@ -275,9 +275,9 @@ else:
 		ToElements()
 
 	voltage_230 = UnitUtils.ConvertToInternalUnits(
-		230, DisplayUnitType.DUT_VOLTS)
+		230, UnitTypeId.Volts)
 	voltage_400 = UnitUtils.ConvertToInternalUnits(
-		400, DisplayUnitType.DUT_VOLTS)
+		400, UnitTypeId.Volts)
 
 	circuits_to_calculate = [
 		i for i in circuits_to_calculate

@@ -123,7 +123,7 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 	if _isType:
 		fnrvStr = FilterStringEquals()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
+		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
 		elem = FilteredElementCollector(doc).\
 			OfCategory(_bic).\
@@ -133,7 +133,7 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 	else:
 		fnrvStr = FilterStringEquals()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
+		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
 		elem = FilteredElementCollector(doc).\
 			OfCategory(_bic).\

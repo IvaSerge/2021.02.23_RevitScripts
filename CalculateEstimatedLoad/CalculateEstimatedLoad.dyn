@@ -12,7 +12,16 @@
       "Name": "Calculate_all",
       "Type": "boolean",
       "Value": "false",
-      "Description": "Selection between a true and false."
+      "Description": "Selection between a true and false.",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "3e8fa534ada44a069e10d9cafda1f3e1",
+      "Name": "Board to modifi",
+      "Type": "hostSelection",
+      "Value": "dcbab5ad-a506-46d5-a06f-f184c9a46744-007ab87b",
+      "Description": "Select a model element from the document.",
+      "SelectedIndex": 0
     }
   ],
   "Outputs": [],
@@ -35,10 +44,11 @@
         }
       ],
       "Replication": "Disabled",
-      "Description": "Auswahl zwischen True und False"
+      "Description": "Selection between a true and false."
     },
     {
       "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
+      "Engine": "IronPython2",
       "VariableInputPorts": true,
       "NodeType": "ExtensionNode",
       "Id": "2d5996559be141609f0239af77174c49",
@@ -110,7 +120,7 @@
         }
       ],
       "Replication": "Disabled",
-      "Description": "Führt ein IronPython-Skript aus einer Zeichenfolge aus."
+      "Description": "Runs a Python script from a string."
     },
     {
       "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
@@ -121,7 +131,7 @@
         {
           "Id": "c17b2fe230244ed2abc2c515ffc1edd3",
           "Name": "file",
-          "Description": "var",
+          "Description": "File object to read text from\n\nvar",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -131,7 +141,7 @@
       "Outputs": [
         {
           "Id": "0c0f3de7a008471d9c3e3aa4859858d0",
-          "Name": "str",
+          "Name": "string",
           "Description": "Contents of the text file.",
           "UsingDefaultValue": false,
           "Level": 2,
@@ -169,7 +179,7 @@
         }
       ],
       "Replication": "Disabled",
-      "Description": "Erstellt ein Dateiobjekt aus einem Pfad."
+      "Description": "Creates a file object from a path."
     },
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
@@ -189,7 +199,7 @@
         }
       ],
       "Replication": "Disabled",
-      "Description": "Erstellt eine Zeichenfolge."
+      "Description": "Creates a string."
     },
     {
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
@@ -235,7 +245,9 @@
     {
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
-      "InstanceId": [],
+      "InstanceId": [
+        "dcbab5ad-a506-46d5-a06f-f184c9a46744-007ab87b"
+      ],
       "Id": "3e8fa534ada44a069e10d9cafda1f3e1",
       "Inputs": [],
       "Outputs": [
@@ -256,53 +268,84 @@
     {
       "Start": "ef9d7fd5abed4398b74fdbba5f356c6c",
       "End": "f1ced3c8000d4c729c4cdde79c88a77f",
-      "Id": "4734e1badb1143e599f226e5a3253696"
+      "Id": "4734e1badb1143e599f226e5a3253696",
+      "IsHidden": "False"
     },
     {
       "Start": "0c0f3de7a008471d9c3e3aa4859858d0",
       "End": "bb170739472447139597e4f0e7c71d5e",
-      "Id": "4a1e87526b814e91b4af2724d9e0776a"
+      "Id": "4a1e87526b814e91b4af2724d9e0776a",
+      "IsHidden": "False"
     },
     {
       "Start": "13b796f7084240e0a84bf3333898e5e1",
       "End": "c17b2fe230244ed2abc2c515ffc1edd3",
-      "Id": "1bdba669938d432cb557903e27e599dc"
+      "Id": "1bdba669938d432cb557903e27e599dc",
+      "IsHidden": "False"
     },
     {
       "Start": "13b796f7084240e0a84bf3333898e5e1",
       "End": "166aa7d726124a9fa4cb95664a069252",
-      "Id": "0b2c89439aa949fc85924afc091b6d8d"
+      "Id": "0b2c89439aa949fc85924afc091b6d8d",
+      "IsHidden": "False"
     },
     {
       "Start": "24e320b0a8844744b7c6b6bf89539764",
       "End": "c1793981a2564442b958a5e8fbf8a6a3",
-      "Id": "6c6625a2c4904cb2abd6e4db423d8c32"
+      "Id": "6c6625a2c4904cb2abd6e4db423d8c32",
+      "IsHidden": "False"
     },
     {
       "Start": "4a370685e9064c0d9647496bd19a2cd8",
       "End": "cabf55a19d0b4d95ba8bf922a21a0529",
-      "Id": "29d67772de2c414faa278dab8a718f95"
+      "Id": "29d67772de2c414faa278dab8a718f95",
+      "IsHidden": "False"
     },
     {
       "Start": "946dcae159fd4f17b14851075a96f217",
       "End": "394baed6abe94e14b9ea263449041237",
-      "Id": "2c9adabbc3fd4b29ab92d060f47a8f66"
+      "Id": "2c9adabbc3fd4b29ab92d060f47a8f66",
+      "IsHidden": "False"
     },
     {
       "Start": "3043dbe9d0d44ff3a0a3c50f133ac2f3",
       "End": "2d03435a82aa4dbab0989bdd2277ec20",
-      "Id": "cdf3894cf57546b5aafe07578aeb1b71"
+      "Id": "cdf3894cf57546b5aafe07578aeb1b71",
+      "IsHidden": "False"
     }
   ],
   "Dependencies": [],
   "NodeLibraryDependencies": [],
+  "Thumbnail": null,
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.13",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "2.0",
+      "Data": {}
+    }
+  ],
+  "Author": "None provided",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
   "Bindings": [],
   "View": {
     "Dynamo": {
       "ScaleFactor": 10000.0,
       "HasRunWithoutCrash": true,
       "IsVisibleInDynamoLibrary": true,
-      "Version": "2.3.0.5885",
+      "Version": "2.13.1.3887",
       "RunType": "Manual",
       "RunPeriod": "1000"
     },
@@ -318,91 +361,92 @@
       "UpY": 0.62114778027827733,
       "UpZ": -0.52530105607252375
     },
+    "ConnectorPins": [],
     "NodeViews": [
       {
+        "Name": "Reload",
+        "ShowGeometry": true,
         "Id": "d4faef3825fc49ce8fedebdcd48067ca",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
-        "Name": "Reload",
-        "ShowGeometry": true,
         "Excluded": false,
-        "X": 494.88848012897324,
-        "Y": 741.50636382788332
+        "X": 523.36350320414954,
+        "Y": 851.21639826173612
       },
       {
+        "Name": "Python Script From String",
+        "ShowGeometry": true,
         "Id": "2d5996559be141609f0239af77174c49",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
-        "Name": "Python Script From String",
-        "ShowGeometry": true,
         "Excluded": false,
-        "X": 882.19608653585385,
-        "Y": 625.73314247585859
+        "X": 962.82965681677786,
+        "Y": 787.91657360908016
       },
       {
+        "Name": "FileSystem.ReadText",
+        "ShowGeometry": true,
         "Id": "049c9e4fe54243ae95472446422290a1",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
-        "Name": "FileSystem.ReadText",
-        "ShowGeometry": true,
         "Excluded": false,
-        "X": 508.76551481907165,
-        "Y": 555.44225808811859
+        "X": 484.94195996334417,
+        "Y": 626.912922655301
       },
       {
+        "Name": "File From Path",
+        "ShowGeometry": true,
         "Id": "d8be777a5f294a3fb93ed94ba6d6b87b",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
-        "Name": "File From Path",
-        "ShowGeometry": true,
         "Excluded": false,
-        "X": 273.91903276657411,
-        "Y": 624.51198116686533
+        "X": 107.79078026092884,
+        "Y": 628.467415750333
       },
       {
+        "Name": "String",
+        "ShowGeometry": true,
         "Id": "0eb69237dd0c4dc187884facd965d90a",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
-        "Name": "String",
-        "ShowGeometry": true,
         "Excluded": false,
-        "X": 8.7190327665745144,
-        "Y": 624.51198116686533
+        "X": -157.40921973907075,
+        "Y": 628.467415750333
       },
       {
+        "Name": "TEST_board_type",
+        "ShowGeometry": true,
         "Id": "f979315b07914f3695b407f9d63192dc",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
-        "Name": "TEST_board_type",
-        "ShowGeometry": true,
         "Excluded": false,
-        "X": 483.90842510579705,
-        "Y": 1102.5018347863518
+        "X": 517.88119160921815,
+        "Y": 1304.757216928992
       },
       {
+        "Name": "Calculate_all",
+        "ShowGeometry": true,
         "Id": "38a1c8ae383c40e4b57526ea42438a56",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
-        "Name": "Calculate_all",
-        "ShowGeometry": true,
         "Excluded": false,
-        "X": 492.08362539135942,
-        "Y": 995.05598969673838
+        "X": 520.55864846653571,
+        "Y": 1151.4968432706719
       },
       {
+        "Name": "Board to modifi",
+        "ShowGeometry": true,
         "Id": "3e8fa534ada44a069e10d9cafda1f3e1",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
-        "Name": "Board to modifi",
-        "ShowGeometry": true,
         "Excluded": false,
-        "X": 467.81421123734953,
-        "Y": 856.35589322964609
+        "X": 523.77795145374989,
+        "Y": 984.39173909098145
       }
     ],
     "Annotations": [],
-    "X": -88.201613397718234,
-    "Y": -277.35671847971969,
-    "Zoom": 0.71203455872074706
+    "X": -222.00952734855719,
+    "Y": -509.460727681128,
+    "Zoom": 0.71675875840133729
   }
 }
