@@ -46,15 +46,15 @@ def get_sys_by_selection():
 	# check if selection is electrical board
 	# OST_ElectricalEquipment.Id == -2001040
 	if sel_obj.Category.Id == ElementId(-2001040):
-		sys_el = sel_obj.MEPModel.ElectricalSystems
-		sys_all = [x.Id for x in sel_obj.MEPModel.AssignedElectricalSystems]
+		sys_el = sel_obj.MEPModel.GetElectricalSystems()
+		sys_all = [x.Id for x in sel_obj.MEPModel.GetAssignedElectricalSystems()]
 		el_sys_list = [x for x in sys_el if x.Id not in sys_all]
 		# filter out electrical circuit only
 		el_sys_list = [
 			x for x in el_sys_list
 			if x.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
 	else:
-		el_sys_list = [x for x in sel_obj.MEPModel.ElectricalSystems]
+		el_sys_list = [x for x in sel_obj.MEPModel.GetElectricalSystems()]
 	return el_sys_list
 
 
@@ -66,8 +66,8 @@ def elsys_by_brd(_brd):
 		1 - main electrical circuit
 		2 - list of connectet low circuits
 	"""
-	allsys = _brd.MEPModel.ElectricalSystems
-	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	allsys = _brd.MEPModel.GetElectricalSystems()
+	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
 	# board have upper and lower circuits
 	if lowsys and allsys:
 		lowsysId = [i.Id for i in lowsys]
@@ -140,7 +140,7 @@ def get_el_sys(_elem):
 		el_sys = elsys_by_brd(_elem)[0]
 	else:
 		sys_type = Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit
-		el_sys = _elem.MEPModel.ElectricalSystems
+		el_sys = _elem.MEPModel.GetElectricalSystems()
 		el_sys = [i for i in el_sys if i.SystemType == sys_type][0]
 	return el_sys
 
@@ -160,7 +160,7 @@ testParam = BuiltInParameter.SYMBOL_NAME_PARAM
 pvp = ParameterValueProvider(ElementId(int(testParam)))
 fnrvStr = FilterStringEquals()
 filter = ElementParameterFilter(
-	FilterStringRule(pvp, fnrvStr, DISTR_SYS_NAME, False))
+	FilterStringRule(pvp, fnrvStr, DISTR_SYS_NAME))
 
 distrSys = FilteredElementCollector(doc).\
 	OfCategory(BuiltInCategory.OST_ElecDistributionSys).\
@@ -193,9 +193,9 @@ if calc_all:
 		ToElements()
 
 	voltage_230 = UnitUtils.ConvertToInternalUnits(
-		230, DisplayUnitType.DUT_VOLTS)
+		230, UnitTypeId.Volts)
 	voltage_400 = UnitUtils.ConvertToInternalUnits(
-		400, DisplayUnitType.DUT_VOLTS)
+		400, UnitTypeId.Volts)
 
 	circuits_to_calculate = [
 		i for i in circuits_to_calculate
