@@ -35,6 +35,13 @@ def elsys_by_brd(_brd):
 	"""
 	allsys = _brd.MEPModel.ElectricalSystems
 	lowsys = _brd.MEPModel.AssignedElectricalSystems
+
+	# filter out non Power circuits
+	allsys = [i for i in allsys
+		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+	lowsys = [i for i in lowsys
+		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+
 	# board have upper and lower circuits
 	if lowsys and allsys:
 		lowsysId = [i.Id for i in lowsys]

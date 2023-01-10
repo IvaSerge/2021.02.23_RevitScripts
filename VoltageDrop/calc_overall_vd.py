@@ -39,6 +39,13 @@ def elsys_by_brd(_brd):
 	"""
 	allsys = _brd.MEPModel.GetElectricalSystems()
 	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
+
+	# filter out non Power circuits
+	allsys = [i for i in allsys
+		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+	lowsys = [i for i in lowsys
+		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+
 	# board have upper and lower circuits
 	if lowsys and allsys:
 		lowsysId = [i.Id for i in lowsys]
@@ -153,6 +160,7 @@ def get_vd(_el_sys):
 	cat_el_sys = category_by_bic_name("OST_ElectricalCircuit").Id
 	low_nets = [i for i in low_elem_list if i.Category.Id == cat_el_sys]
 
-	vd_list = [calc_circuit_vd(i) for i in low_nets]
+	# vd_list = [calc_circuit_vd(i) for i in low_nets]
 
-	return _el_sys, vd_list
+	# return _el_sys, vd_list
+	return low_nets

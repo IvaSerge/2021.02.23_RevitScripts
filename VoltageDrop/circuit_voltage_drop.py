@@ -133,7 +133,10 @@ def calc_circuit_vd(_el_sys):
 	points_info = zip(points_current, points_lenght)
 
 	# get R, X from the data base
-	el_sys_cable_size = _el_sys.WireSizeString
+	try:
+		el_sys_cable_size = _el_sys.WireSizeString
+	except:
+		raise ValueError("Circuit ID: \"%d\" " % _el_sys.Id.IntegerValue)
 	cable_info = get_cable(el_sys_cable_size)
 
 	# Z calculation

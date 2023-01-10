@@ -126,12 +126,13 @@ def get_parval(elem, name):
 
 
 def get_bip(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
+	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
+	param = None
+	for i, i_name in enumerate(builtInParams):
+		if i_name == paramName:
+			param = [i for i in System.Enum.GetValues(BuiltInParameter)][i]
+			break			
+	return param
 
 
 def category_by_bic_name(_bicString):
@@ -291,6 +292,13 @@ def elsys_by_brd(_brd):
 	"""
 	allsys = _brd.MEPModel.ElectricalSystems
 	lowsys = _brd.MEPModel.AssignedElectricalSystems
+
+		# filter out non Power circuits
+	allsys = [i for i in allsys
+		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+	lowsys = [i for i in lowsys
+		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+
 	if lowsys:
 		lowsysId = [i.Id for i in lowsys]
 		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
