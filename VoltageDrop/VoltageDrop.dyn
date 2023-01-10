@@ -19,7 +19,7 @@
       "Id": "14b859b8ea7141b1a6fc65b7a3becf55",
       "Name": "calc_all",
       "Type": "boolean",
-      "Value": "true",
+      "Value": "false",
       "Description": "Selection between a true and false.",
       "SelectedIndex": 0
     }
@@ -186,7 +186,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "14b859b8ea7141b1a6fc65b7a3becf55",
       "Inputs": [],
       "Outputs": [
@@ -308,7 +308,7 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 911.60329288669743,
+        "X": 914.28529681645534,
         "Y": 629.26200723795989
       },
       {
@@ -353,8 +353,8 @@
       }
     ],
     "Annotations": [],
-    "X": -121.79233737616812,
-    "Y": -206.12409599056116,
-    "Zoom": 0.96260983682736789
+    "X": -690.314034057246,
+    "Y": -464.42611385679857,
+    "Zoom": 0.92423552403447784
   }
 }
