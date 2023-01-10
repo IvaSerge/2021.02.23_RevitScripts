@@ -130,8 +130,8 @@ def get_bip(paramName):
 	param = None
 	for i, i_name in enumerate(builtInParams):
 		if i_name == paramName:
-			param = [i for i in System.Enum.GetValues(BuiltInParameter)][i]
-			break			
+			param = System.Enum.GetValues(BuiltInParameter)[i]
+			break
 	return param
 
 

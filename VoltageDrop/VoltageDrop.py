@@ -125,12 +125,13 @@ def get_parval(elem, name):
 
 
 def get_bip(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
+	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
+	param = None
+	for i, i_name in enumerate(builtInParams):
+		if i_name == paramName:
+			param = System.Enum.GetValues(BuiltInParameter)[i]
+			break
+	return param
 
 
 def get_el_sys(_elem):
@@ -214,7 +215,6 @@ if calc_all:
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-# accrodting to script, all pathes would be changed to "all devices"
 vd_list = [get_vd(circuit) for circuit in circuits_to_calculate]
 
 for i in vd_list:

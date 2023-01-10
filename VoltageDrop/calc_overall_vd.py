@@ -103,34 +103,38 @@ def get_parval(elem, name):
 
 
 def get_bip(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
+	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
+	param = None
+	for i, i_name in enumerate(builtInParams):
+		if i_name == paramName:
+			param = System.Enum.GetValues(BuiltInParameter)[i]
+			break
+	return param
 
 
 def category_by_bic_name(_bicString):
-	global doc
-	bicList = System.Enum.GetValues(BuiltInCategory)
-	bic = [i for i in bicList if _bicString == i.ToString()][0]
-	return Category.GetCategory(doc, bic)  # type: ignore
+	builtInCats = [i for i in System.Enum.GetNames(BuiltInCategory)]
+	bic = None
+	for i, i_name in enumerate(builtInCats):
+		if i_name == _bicString:
+			bic = System.Enum.GetValues(BuiltInCategory)[i]
+			break
+	return bic
 
 
 def get_low_elem(_up_elem):
 	"""Get the next lower element of the net"""
 
 	# check what is it
-	cat_el_sys = category_by_bic_name("OST_ElectricalCircuit").Id
-	cat_brd = category_by_bic_name("OST_ElectricalEquipment").Id
+	cat_el_sys = category_by_bic_name("OST_ElectricalCircuit")
+	cat_brd = category_by_bic_name("OST_ElectricalEquipment")
 
 	# it is electrical system
-	if _up_elem.Category.Id == cat_el_sys:
+	if _up_elem.Category.BuiltInCategory == cat_el_sys:
 		return _up_elem.BaseEquipment
 
 	# it is board
-	if _up_elem.Category.Id == cat_brd:
+	if _up_elem.Category.BuiltInCategory == cat_brd:
 		return elsys_by_brd(_up_elem)[0]
 
 	return None
@@ -157,8 +161,8 @@ def get_vd(_el_sys):
 			low_elem_list.append(low_elem)
 		else:
 			break
-	cat_el_sys = category_by_bic_name("OST_ElectricalCircuit").Id
-	low_nets = [i for i in low_elem_list if i.Category.Id == cat_el_sys]
+	cat_el_sys = category_by_bic_name("OST_ElectricalCircuit")
+	low_nets = [i for i in low_elem_list if i.Category.BuiltInCategory == cat_el_sys]
 
 	vd_list = [calc_circuit_vd(i) for i in low_nets]
 
