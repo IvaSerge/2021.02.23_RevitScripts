@@ -119,6 +119,9 @@ def update_subboard_name(board_inst):
 	current_board = board_inst
 
 	while True:
+		if not current_board:
+			return None
+
 		board_is_quasi = current_board.Symbol.Family.Name == "QUASI_Connector"
 
 		if board_is_quasi:
@@ -169,4 +172,5 @@ brd_updated = map(update_subboard_name, elemList)
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
-OUT = brd_updated
+# OUT = brd_updated
+OUT = elemList
