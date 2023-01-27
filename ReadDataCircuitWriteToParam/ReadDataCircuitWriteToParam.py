@@ -38,9 +38,9 @@ def elsys_by_brd(_brd):
 
 	# filter out non Power circuits
 	allsys = [i for i in allsys
-		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+		if i.CircuitType == Electrical.CircuitType.Circuit]
 	lowsys = [i for i in lowsys
-		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+		if i.CircuitType == Electrical.CircuitType.Circuit]
 
 	# board have upper and lower circuits
 	if lowsys and allsys:
@@ -143,7 +143,7 @@ app = uiapp.Application
 
 fnrvStr = FilterStringEquals()
 pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
-frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector", False)
+frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector")
 filter = ElementParameterFilter(frule)
 
 electroBoards = FilteredElementCollector(doc).\
