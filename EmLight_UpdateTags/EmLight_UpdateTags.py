@@ -40,8 +40,8 @@ def elsys_by_brd(_brd):
 		1 - main electrical circuit
 		2 - list of connectet low circuits
 	"""
-	allsys = _brd.MEPModel.ElectricalSystems
-	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	allsys = _brd.MEPModel.GetElectricalSystems()
+	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
 	
 	# filter out non Power circuits
 	allsys = [i for i in allsys
@@ -233,9 +233,9 @@ quasi_boards = [
 # 	# get only current circuit of the element
 # 	# means, that only 1 circuit (connector) in faliy possible
 # 	el_fixture = UnwrapElement(IN[3])  # type: ignore
-# 	circuits = el_fixture.MEPModel.ElectricalSystems
+# 	circuits = el_fixture.MEPModel.GetElectricalSystems()
 # 	if circuits:
-# 		circuits = [i for i in el_fixture.MEPModel.ElectricalSystems]
+# 		circuits = [i for i in el_fixture.MEPModel.GetElectricalSystems()]
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)

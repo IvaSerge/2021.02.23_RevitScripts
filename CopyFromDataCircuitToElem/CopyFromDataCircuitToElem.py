@@ -103,15 +103,15 @@ def get_sys_by_selection(sel_obj):
 		# check if selection is electrical board
 		# OST_ElectricalEquipment.Id == -2001040
 		if sel_obj.Category.Id == ElementId(-2001040):
-			sys_el = sel_obj.MEPModel.ElectricalSystems
-			sys_all = [x.Id for x in sel_obj.MEPModel.AssignedElectricalSystems]
+			sys_el = sel_obj.MEPModel.GetElectricalSystems()
+			sys_all = [x.Id for x in sel_obj.MEPModel.GetAssignedElectricalSystems()]
 			el_sys_list = [x for x in sys_el if x.Id in sys_all]
 			# filter out electrical circuit only
 			el_sys_list = [
 				x for x in el_sys_list
 				if x.SystemType == Electrical.ElectricalSystemType.Data]
 		else:
-			el_sys_list = [x for x in sel_obj.MEPModel.ElectricalSystems]
+			el_sys_list = [x for x in sel_obj.MEPModel.GetElectricalSystems()]
 		return el_sys_list
 
 

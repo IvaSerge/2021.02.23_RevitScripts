@@ -73,8 +73,8 @@ def elsys_by_brd(_brd):
 		1 - main electrical circuit
 		2 - list of connectet low circuits
 	"""
-	allsys = _brd.MEPModel.ElectricalSystems
-	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	allsys = _brd.MEPModel.GetElectricalSystems()
+	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
 	# board have upper and lower circuits
 	if lowsys and allsys:
 		lowsysId = [i.Id for i in lowsys]

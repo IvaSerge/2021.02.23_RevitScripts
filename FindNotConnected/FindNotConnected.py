@@ -43,7 +43,7 @@ lightings = FilteredElementCollector(doc).\
 
 outlist = list()
 for lighting in lightings:
-	el_sys = lighting.MEPModel.ElectricalSystems
+	el_sys = lighting.MEPModel.GetElectricalSystems()
 
 	# electrical system not found
 	if not el_sys:

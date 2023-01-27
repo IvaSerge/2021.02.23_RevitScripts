@@ -72,8 +72,8 @@ def getSystems(_brd):
 		1 - main electrical circuit
 		2 - list of connectet low circuits
 	"""
-	allsys = _brd.MEPModel.ElectricalSystems
-	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	allsys = _brd.MEPModel.GetElectricalSystems()
+	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
 	if lowsys:
 		lowsysId = [i.Id for i in lowsys]
 		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]

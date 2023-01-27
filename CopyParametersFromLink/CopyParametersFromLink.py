@@ -147,8 +147,8 @@ info_list = get_info(elem_linked, elem, params_dat)
 # TODO Update for electircal panels
 
 
-if elem.MEPModel.ElectricalSystems:
-	el_sys = list(elem.MEPModel.ElectricalSystems)
+if elem.MEPModel.GetElectricalSystems():
+	el_sys = list(elem.MEPModel.GetElectricalSystems())
 	el_sys = el_sys[0]
 else:
 	el_sys = None
