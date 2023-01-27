@@ -27,33 +27,6 @@ from RevitServices.Transactions import TransactionManager
 # ================ Python imports
 import re
 
-# ================ Local imports
-
-
-def get_sys_by_selection():
-	"""
-	Get system by selected object
-	"""
-	el_sys_list = list()
-	# get system by selected object
-	sel = uidoc.Selection.PickObject(  # type: ignore
-		Autodesk.Revit.UI.Selection.ObjectType.Element, "")
-	sel_obj = doc.GetElement(sel.ElementId)  # type: ignore
-
-	# check if selection is electrical board
-	# OST_ElectricalEquipment.Id == -2001040
-	if sel_obj.Category.Id == ElementId(-2001040):
-		sys_el = sel_obj.MEPModel.ElectricalSystems
-		sys_all = [x.Id for x in sel_obj.MEPModel.AssignedElectricalSystems]
-		el_sys_list = [x for x in sys_el if x.Id not in sys_all]
-		# filter out electrical circuit only
-		el_sys_list = [
-			x for x in el_sys_list
-			if x.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
-	else:
-		el_sys_list = [x for x in sel_obj.MEPModel.ElectricalSystems]
-	return el_sys_list
-
 
 def elsys_by_brd(_brd):
 	"""Get all systems of electrical board.
@@ -63,14 +36,14 @@ def elsys_by_brd(_brd):
 		1 - main electrical circuit
 		2 - list of connectet low circuits
 	"""
-	allsys = _brd.MEPModel.ElectricalSystems
-	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	allsys = _brd.MEPModel.GetElectricalSystems()
+	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
 
 	# filter out non Power circuits
 	allsys = [i for i in allsys
-		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+		if i.CircuitType == Electrical.CircuitType.Circuit]
 	lowsys = [i for i in lowsys
-		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+		if i.CircuitType == Electrical.CircuitType.Circuit]
 
 	# board have upper and lower circuits
 	if lowsys and allsys:
@@ -206,18 +179,13 @@ def write_DALI_info(_el_board):
 
 	# get electrical circuits by board
 
-	circuits = [i for i in _el_board.MEPModel.AssignedElectricalSystems]
-	if _el_board.MEPModel.AssignedElectricalSystems:
-		circuits = [i for i in _el_board.MEPModel.AssignedElectricalSystems]
-	else:
-		return None
+	sys_all = elsys_by_brd(sel_obj)[1]
+	# filter out electrical circuit only
+	circuits = [
+		x for x in sys_all
+		if x.CircuitType == Electrical.CircuitType.Circuit]
 
 	circuits.sort(key=get_first_circuit_number)
-	# dali_switchgear = None
-
-	# clear out spares and reserves
-	circuits = [i for i in circuits
-		if i.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit]
 
 	# for every circuit get ammount of fixtures in circuit
 	total_fixtures = 0
@@ -241,6 +209,18 @@ def write_DALI_info(_el_board):
 	return circuits
 
 
+def write_circuit_info(info_list):
+	# # write parameter to circuit
+	with SubTransaction(doc) as sub_tr:
+		sub_tr.Start()
+		par_name = "E_Light_number"
+		for i in info_list:
+			elem = i[0]
+			value = str(i[1])
+			setup_param_value(elem, par_name, value)
+	sub_tr.Commit()
+
+
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
@@ -250,103 +230,36 @@ app = uiapp.Application
 reload = IN[1]  # type: ignore
 calc_all = IN[2]  # type: ignore
 info_list = list()
+boards_list = list()
+
 
 # only 1 element to calculate
 if not calc_all:
-	circuits_to_calculate = get_sys_by_selection()
+	# get selected object
+	sel = uidoc.Selection.PickObject(  # type: ignore
+		Autodesk.Revit.UI.Selection.ObjectType.Element, "")
+	sel_obj = doc.GetElement(sel.ElementId)  # type: ignore
+	# TODO: Add here check of selection
+	boards_list.append(sel_obj)
 
-# get all electrical systems
-if calc_all:
-	# get all circuits in the model
-	# electrical circuit type ID == 6
-	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
-	pvp = ParameterValueProvider(ElementId(int(testParam)))
-	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
-	filter = ElementParameterFilter(sysRule)
-
-	circuits_to_calculate = FilteredElementCollector(doc).\
-		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
-		WhereElementIsNotElementType().WherePasses(filter).\
-		ToElements()
-
-	voltage_230 = UnitUtils.ConvertToInternalUnits(
-		230, DisplayUnitType.DUT_VOLTS)
-	voltage_400 = UnitUtils.ConvertToInternalUnits(
-		400, DisplayUnitType.DUT_VOLTS)
-
-	circuits_to_calculate = [
-		i for i in circuits_to_calculate
-		if i.Voltage == voltage_230 or i.Voltage == voltage_400
-	]
-
-	# filter out not owned circuits
-	circuits_to_calculate = [
-		i for i in circuits_to_calculate
-		if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != CheckoutStatus.OwnedByOtherUser
-	]
-
-	# Filtering out not connected circuits
-	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
-
-	# get electrical boards
-	# filter only 3A and 3B boards
-
-	# get all circuits in the model
-	# electrical circuit type ID == 6
-	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
-	pvp = ParameterValueProvider(ElementId(int(testParam)))
-	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
-	filter = ElementParameterFilter(sysRule)
-
-	boards_to_calculate = FilteredElementCollector(doc).\
-		OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
-		WhereElementIsNotElementType().\
-		ToElements()
-
-	boards_to_calculate = [i
-		for i in boards_to_calculate
-		if any(
-			["typ-3A" in i.Symbol.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM).AsString(),
-			"typ 3B" in i.Symbol.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM).AsString()])]
-
-
-for circuit in circuits_to_calculate:
-	info = get_sys_elements(circuit, [])
-	info_list.append(info)
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-# write parameter to circuit
-with SubTransaction(doc) as sub_tr:
-	sub_tr.Start()
-	par_name = "E_Light_number"
-	for i in info_list:
-		elem = i[0]
-		value = str(i[1])
-		setup_param_value(elem, par_name, value)
-	sub_tr.Commit()
+# for board in board_list:
+board = boards_list[0]
+circuits_to_calculate = elsys_by_brd(board)[1]
 
+if circuits_to_calculate:
+	for circuit in circuits_to_calculate:
+		info = get_sys_elements(circuit, [])
+		info_list.append(info)
 
-# calculate DALI swithcgear in panel
-with SubTransaction(doc) as sub_tr:
-	# only for all panels
-	if calc_all:
-		sub_tr.Start()
-
-		for board in boards_to_calculate:
-			try:
-				write_DALI_info(board)
-			except:
-				OUT = board
-
-		sub_tr.Commit()
-		pass
-
-	else:
-		pass
+# write_circuit_info(info_list)
+# write_DALI_info(sel_obj)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = circuits_to_calculate
+OUT = info_list
+# OUT = [i.Name for i in write_DALI_info(sel_obj)]
