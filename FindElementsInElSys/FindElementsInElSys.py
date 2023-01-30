@@ -128,8 +128,8 @@ def setup_param_value(elem, name, pValue):
 	return elem
 
 
-def get_sys_elements(_el_sys, all_elements=list()):
-	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem, list()) -> list
+def get_sys_elements(_el_sys):
+	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list
 
 	"""Get count of all elements of the system including subsystems\n
 		args:
@@ -144,25 +144,32 @@ def get_sys_elements(_el_sys, all_elements=list()):
 	sys_board_name = str(_el_sys.PanelName)
 	sys_nummer = str(_el_sys.CircuitNumber)
 	sys_name_string = sys_board_name + ": " + sys_nummer
-	sys_elements = _el_sys.Elements
+	sys_elements = [i for i in _el_sys.Elements]
 
-	# find if there any electrical board in the system
-	for elem in sys_elements:
-		# if the element is board and it's name == upperpanel.circuit numer
-		# OST_ElectricalEquipment.Id == -2001040
-		if elem.Category.Id == ElementId(-2001040):
-			board_name = elem.Name
-			# the board is quasi sub-board of the system
-			if board_name == sys_name_string:
-				# get subsystems of the board
-				low_systems = elsys_by_brd(elem)[1]
-				if low_systems:
-					for low_sys in low_systems:
-						get_sys_elements(low_sys, all_elements)
-		else:
-			all_elements.append(elem)
-	elem_count = len(all_elements)
-	return _el_sys, elem_count
+	# find all systems with the main panel as quasy panel
+
+	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM
+	pvp = ParameterValueProvider(ElementId(int(testParam)))
+	fnrvStr = FilterStringEquals()
+	filter = ElementParameterFilter(
+		FilterStringRule(pvp, fnrvStr, sys_name_string))
+
+	sub_systems = FilteredElementCollector(doc).\
+		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
+		WherePasses(filter).\
+		ToElements()
+
+	# for all the systems get elemets list
+	if sub_systems:
+		for system in sub_systems:
+			elems = system.Elements
+			if elems:
+				for elem in elems:
+					sys_elements.append(elem)
+
+	# from element list filter out quasy panels
+	sys_elements = [i for i in sys_elements if i.Name != sys_name_string]
+	return _el_sys, len(sys_elements)
 
 
 def get_first_circuit_number(_circuit):
@@ -178,7 +185,6 @@ def write_DALI_info(_el_board):
 	# type: (Autodesk.Revit.DB.FamilyInstance) -> list
 
 	# get electrical circuits by board
-
 	sys_all = elsys_by_brd(sel_obj)[1]
 	# filter out electrical circuit only
 	circuits = [
@@ -211,14 +217,11 @@ def write_DALI_info(_el_board):
 
 def write_circuit_info(info_list):
 	# # write parameter to circuit
-	with SubTransaction(doc) as sub_tr:
-		sub_tr.Start()
-		par_name = "E_Light_number"
-		for i in info_list:
-			elem = i[0]
-			value = str(i[1])
-			setup_param_value(elem, par_name, value)
-	sub_tr.Commit()
+	par_name = "E_Light_number"
+	for i in info_list:
+		elem = i[0]
+		value = str(i[1])
+		setup_param_value(elem, par_name, value)
 
 
 # ================ GLOBAL VARIABLES
@@ -249,17 +252,17 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 # for board in board_list:
 board = boards_list[0]
 circuits_to_calculate = elsys_by_brd(board)[1]
+circuits_to_calculate.sort(key=get_first_circuit_number)
 
 if circuits_to_calculate:
 	for circuit in circuits_to_calculate:
-		info = get_sys_elements(circuit, [])
+		info = get_sys_elements(circuit)
 		info_list.append(info)
 
-# write_circuit_info(info_list)
-# write_DALI_info(sel_obj)
+write_circuit_info(info_list)
+write_DALI_info(sel_obj)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
 OUT = info_list
-# OUT = [i.Name for i in write_DALI_info(sel_obj)]

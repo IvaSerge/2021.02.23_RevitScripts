@@ -29,7 +29,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "d4faef3825fc49ce8fedebdcd48067ca",
       "Inputs": [],
       "Outputs": [
@@ -307,8 +307,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 494.88848012897324,
-        "Y": 741.50636382788332
+        "X": 495.82883960083666,
+        "Y": 735.864206996703
       },
       {
         "Name": "Python Script From String",
@@ -362,8 +362,8 @@
       }
     ],
     "Annotations": [],
-    "X": -186.54497340279562,
-    "Y": -510.56202711462697,
-    "Zoom": 1.0634231162881103
+    "X": -214.47330743015539,
+    "Y": -488.1603010976205,
+    "Zoom": 1.1679984817209461
   }
 }
