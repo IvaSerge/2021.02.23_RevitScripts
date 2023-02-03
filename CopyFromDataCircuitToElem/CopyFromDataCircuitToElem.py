@@ -85,12 +85,13 @@ def setup_param_value(elem, name, pValue):
 
 
 def get_bip(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
+	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
+	param = None
+	for i, i_name in enumerate(builtInParams):
+		if i_name == paramName:
+			param = System.Enum.GetValues(BuiltInParameter)[i]
+			break
+	return param
 
 
 def get_sys_by_selection(sel_obj):
@@ -109,7 +110,9 @@ def get_sys_by_selection(sel_obj):
 			# filter out electrical circuit only
 			el_sys_list = [
 				x for x in el_sys_list
-				if x.SystemType == Electrical.ElectricalSystemType.Data]
+				if all([
+					x.SystemType == Electrical.ElectricalSystemType.Data,
+					x.CircuitType == Electrical.CircuitType.Circuit])]
 		else:
 			el_sys_list = [x for x in sel_obj.MEPModel.GetElectricalSystems()]
 		return el_sys_list
@@ -120,7 +123,7 @@ def get_circuit_info(_el_circuit, _param_list):
 	search_list = zip([_el_circuit] * len(_param_list), _param_list)
 	found_list = [get_parval(i[0], i[1]) for i in search_list]
 	set_list = zip(_param_list, found_list)
-	elem_list = [i for i in circuit.Elements]
+	elem_list = [i for i in _el_circuit.Elements]
 	for elem in elem_list:
 		for info in set_list:
 			outlist.append([elem, info[0], info[1]])
@@ -148,7 +151,10 @@ if calc_all:
 		.OfCategory(BuiltInCategory.OST_ElectricalCircuit)\
 		.WhereElementIsNotElementType()\
 		.ToElements()
-	circuit_list = [sys for sys in all_systems if sys.SystemType == Autodesk.Revit.DB.Electrical.ElectricalSystemType.Data]
+	circuit_list = [sys for sys in all_systems
+		if all([
+			sys.SystemType == Electrical.ElectricalSystemType.Data,
+			sys.CircuitType == Electrical.CircuitType.Circuit])]
 
 if not calc_all:
 	test_elem = UnwrapElement(IN[3])  # type: ignore
