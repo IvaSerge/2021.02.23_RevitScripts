@@ -27,14 +27,27 @@ from RevitServices.Transactions import TransactionManager
 import presets
 from presets import *
 
+import itertools
+from itertools import cycle
 
-def GetParVal(elem, name):
+
+def get_parval(elem, name):
+	# type: (FamilyInstance, str) -> any
+	"""Get parametr value
+
+	args:
+		elem - family instance or type
+		name - parameter name
+	return:
+		value - parameter value
+	"""
+
 	value = None
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
 	if not(param):
-		param = elem.get_Parameter(GetBuiltInParam(name))
+		param = elem.get_Parameter(get_bip(name))
 
 	# get paremeter Value if found
 	try:
@@ -53,13 +66,14 @@ def GetParVal(elem, name):
 	return value
 
 
-def GetBuiltInParam(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
+def get_bip(paramName):
+	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
+	param = None
+	for i, i_name in enumerate(builtInParams):
+		if i_name == paramName:
+			param = System.Enum.GetValues(BuiltInParameter)[i]
+			break
+	return param
 
 
 def getSystems(_brd):
@@ -88,6 +102,31 @@ def getSystems(_brd):
 		return [i for i in allsys][0], None
 
 
+def setup_param_value(elem, name, pValue):
+
+	# check element staus
+	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
+
+	if elem_status == CheckoutStatus.OwnedByOtherUser:
+		return None
+
+	# custom parameter
+	param = elem.LookupParameter(name)
+	# check is it a BuiltIn parameter if not found
+	if not(param):
+		try:
+			param = elem.get_Parameter(get_bip(name)).Set(pValue)
+		except:
+			pass
+
+	if param:
+		try:
+			param.Set(pValue)
+		except:
+			pass
+	return elem
+
+
 global doc
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -106,6 +145,10 @@ elif "3A_sub" == IN[3]:  # type: ignore
 	user_preset = presets.preset_3A_sub
 elif "3B_sub" == IN[3]:  # type: ignore
 	user_preset = presets.preset_3B_sub
+elif "2A" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2A
+elif "2C" == IN[3]:  # type: ignore
+	user_preset = presets.preset_2C
 elif "2E_main" == IN[3]:  # type: ignore
 	user_preset = presets.preset_2E_main
 elif "2E_sub" == IN[3]:  # type: ignore
@@ -155,22 +198,28 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 
 # TODO: CHECK IF THE SCHEDULE IS EMPTY!
 
-options_list = user_preset[1]
-options_column = user_preset[0]
-
-for i, option in enumerate(options_list, start=2):
+for i, values in enumerate(user_preset, start=2):
 	# in view create Spare
 	try:
 		board_schedule.AddSpare(i, 1)
 	except:
 		continue
-	# Set options to columns
-	for column, opt_to_set in zip(options_column, option):
-		board_schedule.SetParamValue(SectionType.Body, i, column, opt_to_set)
+
+	# Set parameters
+	circuit_spare = board_schedule.GetCircuitByCell(i, 1)
+	params_to_set = zip(
+		cycle([circuit_spare]),
+		presets.parameters_to_set,
+		values)
+	func_to_set = lambda x: setup_param_value(x[0], x[1], x[2])
+	map(func_to_set, params_to_set)
 	doc.Regenerate()
 
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = options_list, options_column
+# # OUT = options_list, options_column
+
+# # OUT = options_list, options_params
+OUT = user_preset
