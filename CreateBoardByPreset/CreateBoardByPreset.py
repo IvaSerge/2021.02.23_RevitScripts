@@ -14,6 +14,9 @@ from System import Array
 from System.Collections.Generic import *
 
 # ================ Revit imports
+clr.AddReference('RevitAPIUI')
+from Autodesk.Revit.UI import *
+
 clr.AddReference('RevitAPI')
 import Autodesk
 from Autodesk.Revit.DB import *
@@ -136,59 +139,61 @@ app = uiapp.Application
 reload = IN[1]  # type: ignore
 
 # get FamilyInstance of the board, that need to be converted
-board_to_convert = UnwrapElement(IN[2])  # type: ignore
+board_to_convert = uidoc.Selection.PickObject(
+	Autodesk.Revit.UI.Selection.ObjectType.Element,
+	"Select panel").ElementId
 
 # get preset
-if not(IN[3]):  # type: ignore
+if not(IN[2]):  # type: ignore
 	raise ValueError("No preset found")
-elif "3A_sub" == IN[3]:  # type: ignore
+elif "3A_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_3A_sub
-elif "3B_sub" == IN[3]:  # type: ignore
+elif "3B_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_3B_sub
-elif "2A" == IN[3]:  # type: ignore
+elif "2A" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2A
-elif "2C" == IN[3]:  # type: ignore
+elif "2C" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2C
-elif "2E_main" == IN[3]:  # type: ignore
+elif "2E_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2E_main
-elif "2E_sub" == IN[3]:  # type: ignore
+elif "2E_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2E_sub
-elif "2E1_main" == IN[3]:  # type: ignore
+elif "2E1_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2E1_main
-elif "2E1_sub" == IN[3]:  # type: ignore
+elif "2E1_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2E1_sub
-elif "2H" == IN[3]:  # type: ignore
+elif "2H" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2H
-elif "2I" == IN[3]:  # type: ignore
+elif "2I" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2I
-elif "2J_main" == IN[3]:  # type: ignore
+elif "2J_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2J_main
-elif "2J_sub" == IN[3]:  # type: ignore
+elif "2J_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2J_sub
-elif "2R_main" == IN[3]:  # type: ignore
+elif "2R_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2R_main
-elif "2R_sub" == IN[3]:  # type: ignore
+elif "2R_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2R_sub
-elif "2R2_main" == IN[3]:  # type: ignore
+elif "2R2_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2R2_main
-elif "2R2_sub" == IN[3]:  # type: ignore
+elif "2R2_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2R2_sub
-elif "2S_main" == IN[3]:  # type: ignore
+elif "2S_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2S_main
-elif "2S_sub" == IN[3]:  # type: ignore
+elif "2S_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2S_sub
-elif "2T_main" == IN[3]:  # type: ignore
+elif "2T_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2T_main
-elif "2U_main" == IN[3]:  # type: ignore
+elif "2U_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2U_main
-elif "2U_sub" == IN[3]:  # type: ignore
+elif "2U_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2U_sub
 
 # get PanelScheduleView if no view found - create Default
 board_schedule = [x for x in FilteredElementCollector(doc).
 	OfClass(Autodesk.Revit.DB.Electrical.PanelScheduleView).
 	ToElements()
-	if x.TargetId == board_to_convert.Id]
+	if x.TargetId == board_to_convert]
 if board_schedule:
 	board_schedule = board_schedule[0]  # type: Autodesk.Revit.DB.Electrical.PanelScheduleView
 
@@ -219,7 +224,6 @@ for i, values in enumerate(user_preset, start=2):
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-# # OUT = options_list, options_column
 
-# # OUT = options_list, options_params
-OUT = user_preset
+# OUT = user_preset
+OUT = board_schedule

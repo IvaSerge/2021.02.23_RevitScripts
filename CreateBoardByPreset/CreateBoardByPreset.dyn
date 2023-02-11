@@ -84,15 +84,6 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
-        },
-        {
-          "Id": "4644526c7f40463da9663338d9962434",
-          "Name": "IN[3]",
-          "Description": "Input #3",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -660,25 +651,6 @@
       ],
       "Replication": "Disabled",
       "Description": "A slider that produces integer values."
-    },
-    {
-      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
-      "NodeType": "ExtensionNode",
-      "InstanceId": [],
-      "Id": "d8b3905a00ef4f4a879bf90acaabf692",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "b597092292254d2e986d1215d9fc5398",
-          "Name": "Element",
-          "Description": "The selected elements.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled"
     }
   ],
   "Connectors": [
@@ -840,8 +812,8 @@
     },
     {
       "Start": "a2ae96803ba341428e8db21792fad3a4",
-      "End": "4644526c7f40463da9663338d9962434",
-      "Id": "9aa0b710110b4e16bc07e1aaa6a55a56",
+      "End": "2d03435a82aa4dbab0989bdd2277ec20",
+      "Id": "3b6ad5e89b3d40c7a8c317a4e3e351e8",
       "IsHidden": "False"
     },
     {
@@ -854,12 +826,6 @@
       "Start": "43e8729d13a14fa79741ed8ca8511cc7",
       "End": "ea68af4063ed40cf8318f06be7579977",
       "Id": "919cb419662240ecbfcab65eb05f00f4",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "b597092292254d2e986d1215d9fc5398",
-      "End": "2d03435a82aa4dbab0989bdd2277ec20",
-      "Id": "92e7653f2f06486da923947cb6e90384",
       "IsHidden": "False"
     }
   ],
@@ -1001,21 +967,11 @@
         "Excluded": false,
         "X": 380.12651953053262,
         "Y": 1290.60105967642
-      },
-      {
-        "Name": "Select Model Element",
-        "ShowGeometry": true,
-        "Id": "d8b3905a00ef4f4a879bf90acaabf692",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 811.01856415061582,
-        "Y": 972.36053522778525
       }
     ],
     "Annotations": [],
-    "X": -165.52818775020046,
-    "Y": -805.78400358672525,
-    "Zoom": 1.0238544882996918
+    "X": -1059.7036341843755,
+    "Y": -520.08018065409931,
+    "Zoom": 0.89991043271621529
   }
 }
