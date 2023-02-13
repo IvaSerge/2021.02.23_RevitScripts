@@ -361,9 +361,9 @@ class presets():
 		["250ETU / Q4 / 1xd120mm", 3, 250],
 		["160ETU / Q5 / 1xd70mm", 3, 160],
 		["160ETU / Q6 / 1xd70mm", 3, 160],
-		["100ETU / Q7 / 1xd70mm", 3, 160],
-		["100ETU / Q8 / 1xd70mm", 3, 160],
-		["100ETU / Q9 / 1xd70mm", 3, 160],
+		["100ETU / Q7 / 1xd70mm", 3, 100],
+		["100ETU / Q8 / 1xd70mm", 3, 100],
+		["100ETU / Q9 / 1xd70mm", 3, 100],
 	]
 
 	# list of preset options
