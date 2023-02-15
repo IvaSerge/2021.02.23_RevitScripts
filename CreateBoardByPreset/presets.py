@@ -339,18 +339,18 @@ class presets():
 	preset_2H = [
 		# Description | n_of_poles
 		["N/A", 3],
-		["100ETU / Q3 / 1xd35mm", 3, 100],
-		["100ETU / Q4 / 1xd35mm", 3, 100],
-		["100ETU / Q5 / 1xd35mm", 3, 100],
-		["100ETU / Q6 / 1xd35mm", 3, 100],
-		["100ETU / Q7 / 1xd35mm", 3, 100],
-		["100ETU / Q8 / 1xd35mm", 3, 100],
-		["100ETU / Q9 / 1xd35mm", 3, 100],
-		["100ETU / Q10 / 1xd35mm", 3, 100],
-		["100ETU / Q11 / 1xd35mm", 3, 100],
-		["100ETU / Q12 / 1xd35mm", 3, 100],
-		["100ETU / Q13 / 1xd35mm", 3, 100],
-		["100ETU / Q14 / 1xd35mm", 3, 100],
+		["100ETU / Q3 / 1xd35mm", 3, 160],
+		["100ETU / Q4 / 1xd35mm", 3, 160],
+		["100ETU / Q5 / 1xd35mm", 3, 160],
+		["100ETU / Q6 / 1xd35mm", 3, 160],
+		["100ETU / Q7 / 1xd35mm", 3, 160],
+		["100ETU / Q8 / 1xd35mm", 3, 160],
+		["100ETU / Q9 / 1xd35mm", 3, 160],
+		["100ETU / Q10 / 1xd35mm", 3, 160],
+		["100ETU / Q11 / 1xd35mm", 3, 160],
+		["100ETU / Q12 / 1xd35mm", 3, 160],
+		["100ETU / Q13 / 1xd35mm", 3, 160],
+		["100ETU / Q14 / 1xd35mm", 3, 160],
 	]
 
 	preset_2I = [
