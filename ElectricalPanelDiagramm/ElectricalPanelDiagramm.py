@@ -48,39 +48,48 @@ toolsrvt.UnwrapElement = UnwrapElement  # type: ignore
 
 # hard coded parameters
 circuits_param_to_set = ["RBS_ELEC_CIRCUIT_FRAME_PARAM"]
-diag_header_point = [-0.968982357543896, 1.67170722337784, 0]
-diag_body_point = [-0.965701517648883, 1.44502170713041, 0]
+# panel_params_to_set =
+header_point = [-0.968982357543896, 1.67170722337784, 0]
+body_point = [-0.965701517648883, 1.44502170713041, 0]
 shedule_origin = [-1.20512832374472, 1.68093458558256, 0]
 
-diag_header_symbol = type_by_bic_fam_type(
+header_symbol = type_by_bic_fam_type(
 	BuiltInCategory.OST_GenericAnnotation,
 	"Panel main FD",
 	"Panel main FD")
 
-diag_body_symbol = type_by_bic_fam_type(
+body_symbol = type_by_bic_fam_type(
 	BuiltInCategory.OST_GenericAnnotation,
 	"Panel FD",
 	"Panel FD")
 
 
-elements_to_create = list()
-
 # get panel
 panel_inst = toolsrvt.unwrap(IN[3])  # type: ignore
 circuits = elsys_by_brd(panel_inst)[1]
 
-# get circuit parameters to transfer to 2D diagramm
+# HEADER diagramm for panel
+header_diag = Diagramm()
+header_diag.isert_point = XYZ(
+	header_point[0],
+	header_point[1],
+	header_point[2])
+header_diag.symbol_type = header_symbol
+diagramms_list.append(header_diag)
+
+
+# BODY diagramms for circuits
 for i, circuit in enumerate(circuits):
-	diagramm = Diagramm()
-	diagramm.params = [[i, get_parval(circuit, i)] for i in circuits_param_to_set]
+	body_diag = Diagramm()
+	body_diag.params = [[i, get_parval(circuit, i)] for i in circuits_param_to_set]
 	step_y = 0.0623365636168
 	step_current = step_y * i
-	diagramm.isert_point = XYZ(
-		diag_body_point[0],
-		diag_body_point[1] - step_current,
-		diag_body_point[2])
-	diagramm.symbol_type = diag_body_symbol
-	diagramms_list.append(diagramm)
+	body_diag.isert_point = XYZ(
+		body_point[0],
+		body_point[1] - step_current,
+		body_point[2])
+	body_diag.symbol_type = body_symbol
+	diagramms_list.append(body_diag)
 
 	# isPanel
 	# referTo (layout)
@@ -90,9 +99,6 @@ for i, circuit in enumerate(circuits):
 obj_on_sheet = UnwrapElement(IN[2])  # type: ignore
 sheet_obj = doc.GetElement(obj_on_sheet.OwnerViewId)
 
-
-# get 2D diagramms
-
 # set parameters to 2D families
 
 # TODO: Clean the layout
@@ -100,8 +106,8 @@ sheet_obj = doc.GetElement(obj_on_sheet.OwnerViewId)
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-for diagramm in diagramms_list:
-	diagramm.instance = diagramm.create_diag_on_sheet(doc, sheet_obj)
+for body_diag in diagramms_list:
+	body_diag.instance = body_diag.create_diag_on_sheet(doc, sheet_obj)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
