@@ -224,37 +224,37 @@ def get_bip(paramName):
 # 	return elem
 
 
-# def type_by_bic_fam_type(_bic, _fnam, _tnam):
-# 	"""Get Type by family category, family name and type
+def type_by_bic_fam_type(_bic, _fnam, _tnam):
+	"""Get Type by family category, family name and type
 
-# 		args:
-# 		_bic: BuiltInCategory.OST_xxx
-# 		_fnam (str): family name
-# 		_tnam (str): type name
+		args:
+		_bic: BuiltInCategory.OST_xxx
+		_fnam (str): family name
+		_tnam (str): type name
 
-# 		return:
-# 		Autodesk.Revit.DB.FamilySymbol
-# 	"""
+		return:
+		Autodesk.Revit.DB.FamilySymbol
+	"""
 
-# 	fnrvStr = FilterStringEquals()
+	fnrvStr = FilterStringEquals()
 
-# 	pvpType = ParameterValueProvider(ElementId(int(BuiltInParameter.SYMBOL_NAME_PARAM)))
-# 	pvpFam = ParameterValueProvider(ElementId(int(BuiltInParameter.ALL_MODEL_FAMILY_NAME)))
+	pvpType = ParameterValueProvider(ElementId(int(BuiltInParameter.SYMBOL_NAME_PARAM)))
+	pvpFam = ParameterValueProvider(ElementId(int(BuiltInParameter.ALL_MODEL_FAMILY_NAME)))
 
-# 	fruleF = FilterStringRule(pvpFam, fnrvStr, _fnam, False)
-# 	filterF = ElementParameterFilter(fruleF)
+	fruleF = FilterStringRule(pvpFam, fnrvStr, _fnam)
+	filterF = ElementParameterFilter(fruleF)
 
-# 	fruleT = FilterStringRule(pvpType, fnrvStr, _tnam, False)
-# 	filterT = ElementParameterFilter(fruleT)
+	fruleT = FilterStringRule(pvpType, fnrvStr, _tnam)
+	filterT = ElementParameterFilter(fruleT)
 
-# 	filter = LogicalAndFilter(filterT, filterF)
+	filter = LogicalAndFilter(filterT, filterF)
 
-# 	elem = FilteredElementCollector(doc).\
-# 		OfCategory(_bic).\
-# 		WhereElementIsElementType().\
-# 		WherePasses(filter).\
-# 		FirstElement()
-# 	return elem
+	elem = FilteredElementCollector(doc).\
+		OfCategory(_bic).\
+		WhereElementIsElementType().\
+		WherePasses(filter).\
+		FirstElement()
+	return elem
 
 
 def mm_to_ft(mm):
@@ -299,3 +299,6 @@ def elsys_by_brd(_brd):
 		return mainboardsys, lowsys
 	else:
 		return [i for i in allsys][0], None
+
+
+global doc
