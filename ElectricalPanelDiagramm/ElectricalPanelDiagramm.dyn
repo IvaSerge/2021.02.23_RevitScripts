@@ -11,7 +11,7 @@
       "Id": "247389cd36b8437db0c2971fb3851598",
       "Name": "String",
       "Type": "string",
-      "Value": "EmLight_Diagramm.py",
+      "Value": "ElectricalPanelDiagramm.py",
       "Description": "Creates a string.",
       "SelectedIndex": 0
     },
@@ -104,7 +104,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
@@ -183,7 +183,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "EmLight_Diagramm.py",
+      "InputValue": "ElectricalPanelDiagramm.py",
       "Id": "247389cd36b8437db0c2971fb3851598",
       "Inputs": [],
       "Outputs": [
@@ -288,7 +288,7 @@
   ],
   "Dependencies": [],
   "NodeLibraryDependencies": [],
-  "Thumbnail": null,
+  "Thumbnail": "",
   "GraphDocumentationURL": null,
   "ExtensionWorkspaceData": [
     {
@@ -342,8 +342,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1758.9462034444498,
-        "Y": 154.83156153298683
+        "X": 1741.9580546497327,
+        "Y": 204.38032885091172
       },
       {
         "Name": "Reload",
@@ -352,8 +352,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1234.6417012477411,
-        "Y": 229.34813830945541
+        "X": 1292.3358759361386,
+        "Y": 312.143571994521
       },
       {
         "Name": "FileSystem.ReadText",
@@ -362,8 +362,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1185.998324263747,
-        "Y": -80.3513941184197
+        "X": 1244.999966657899,
+        "Y": -68.282876355979511
       },
       {
         "Name": "File From Path",
@@ -382,8 +382,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 650.48573411746577,
-        "Y": 86.25012621823214
+        "X": 599.217038070676,
+        "Y": 79.504245159444054
       },
       {
         "Name": "Diagramm_name",
@@ -392,8 +392,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1221.7500125242429,
-        "Y": 521.96279782205283
+        "X": 1245.9198719910746,
+        "Y": 525.11538818729173
       },
       {
         "Name": "Right Panel",
@@ -402,8 +402,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1249.55460336581,
-        "Y": 703.8620844917026
+        "X": 1273.7244628326416,
+        "Y": 707.0146748569415
       }
     ],
     "Annotations": [
@@ -419,19 +419,19 @@
           "a108da49379641ca865ea36de5eab38e"
         ],
         "HasNestedGroups": false,
-        "Left": 1211.7500125242429,
-        "Top": 448.96279782205283,
+        "Left": 1235.9198719910746,
+        "Top": 452.11538818729173,
         "Width": 246.0,
         "Height": 405.89928666964977,
         "FontSize": 36.0,
-        "InitialTop": 521.96279782205283,
-        "InitialHeight": 362.89928666964948,
+        "InitialTop": 525.11538818729173,
+        "InitialHeight": 326.89928666964977,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": -251.74706659162644,
-    "Y": 45.663508616796094,
-    "Zoom": 0.74119302674130383
+    "X": -192.72629247673626,
+    "Y": 113.90460137700958,
+    "Zoom": 0.66101209805175987
   }
 }

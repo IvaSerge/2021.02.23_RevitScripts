@@ -5,8 +5,8 @@ import sys
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
 
-clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
-from Microsoft.Office.Interop import Excel  # type: ignore
+dir_path = IN[0].DirectoryName  # type: ignore
+sys.path.append(dir_path)
 
 import System
 from System import Array
@@ -35,10 +35,35 @@ uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 view = doc.ActiveView
 
-# =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
+# ================ Python imports
+import toolsrvt
+# from toolsrvt import test
 
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
+# get panel
 
-OUT = doc
+# get circuits of the panel
+
+# get circuit parameters to transfer to 2D diagramm
+
+# get shedule
+
+# get 2D diagramms
+
+# get shedule insert point
+
+# calculate 2D families insert points
+
+# insert shedule on the layout
+
+# insert 2D diagramms on layout
+
+# set parameters to 2D families
+
+
+# # =========Start transaction
+# TransactionManager.Instance.EnsureInTransaction(doc)
+
+# # =========End transaction
+# TransactionManager.Instance.TransactionTaskDone()
+
+OUT = toolsrvt.test()
