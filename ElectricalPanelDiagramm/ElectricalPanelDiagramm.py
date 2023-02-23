@@ -8,12 +8,6 @@ sys.path.append(pyt_path)
 dir_path = IN[0].DirectoryName  # type: ignore
 sys.path.append(dir_path)
 
-import System
-from System import Array
-from System.Collections.Generic import *
-
-System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo("en-US")
-from System.Runtime.InteropServices import Marshal
 
 # ================ Revit imports
 clr.AddReference('RevitAPI')
@@ -36,16 +30,33 @@ app = uiapp.Application
 view = doc.ActiveView
 
 # ================ Python imports
+import importlib
+from importlib import reload
 import toolsrvt
-# from toolsrvt import test
+reload(toolsrvt)
+from toolsrvt import *
+toolsrvt.UnwrapElement = UnwrapElement  # type: ignore
+import itertools
+
+
+reload = IN[1]  # type: ignore
 
 # get panel
-
-# get circuits of the panel
+panel_inst = toolsrvt.unwrap(IN[3])  # type: ignore
+circuits = elsys_by_brd(panel_inst)[1]
 
 # get circuit parameters to transfer to 2D diagramm
+circuits_param_to_set = ["RBS_ELEC_CIRCUIT_FRAME_PARAM"]
+circuit = circuits[0]
+circuits_par_val = [[circuit, get_parval(circuit, i)] for i in circuits_param_to_set]
+
+
+# isPanel
+# referTo (layout)
+
 
 # get shedule
+shedule_name = IN[2]  # type: ignore
 
 # get 2D diagramms
 
@@ -66,4 +77,5 @@ import toolsrvt
 # # =========End transaction
 # TransactionManager.Instance.TransactionTaskDone()
 
-OUT = toolsrvt.test()
+# OUT = dir(UnwrapElement)
+OUT = circuits_par_val

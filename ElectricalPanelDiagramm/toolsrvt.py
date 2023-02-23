@@ -10,9 +10,6 @@ import System
 from System import Array
 from System.Collections.Generic import *
 
-System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo("en-US")
-from System.Runtime.InteropServices import Marshal
-
 # ================ Revit imports
 clr.AddReference('RevitAPI')
 import Autodesk
@@ -126,148 +123,148 @@ def get_bip(paramName):
 	return param
 
 
-def category_by_bic_name(_bicString):
-	global doc
-	bicList = System.Enum.GetValues(BuiltInCategory)
-	bic = [i for i in bicList if _bicString == i.ToString()][0]
-	return Category.GetCategory(doc, bic)
+# def category_by_bic_name(_bicString):
+# 	global doc
+# 	bicList = System.Enum.GetValues(BuiltInCategory)
+# 	bic = [i for i in bicList if _bicString == i.ToString()][0]
+# 	return Category.GetCategory(doc, bic)
 
 
-def param_by_cat(_bic, _name):
-	# type: (Autodesk.Revit.DB.BuiltiInCategory, str) -> Autodesk.Revit.DB.Parameter
-	"""Get parametr in
+# def param_by_cat(_bic, _name):
+# 	# type: (Autodesk.Revit.DB.BuiltiInCategory, str) -> Autodesk.Revit.DB.Parameter
+# 	"""Get parametr in
 
-	args:
-		_bic (BuiltiInCategory.OST_xxx): category
-		_name (str): parameter name
-	return:
-		param (Autodesk.Revit.DB.Parameter) - parameter
-	"""
-	# check Type parameter
-	elem = FilteredElementCollector(doc).\
-		OfCategory(_bic).\
-		WhereElementIsElementType().\
-		FirstElement()
-	param = elem.LookupParameter(_name)
-	if param:
-		return param
+# 	args:
+# 		_bic (BuiltiInCategory.OST_xxx): category
+# 		_name (str): parameter name
+# 	return:
+# 		param (Autodesk.Revit.DB.Parameter) - parameter
+# 	"""
+# 	# check Type parameter
+# 	elem = FilteredElementCollector(doc).\
+# 		OfCategory(_bic).\
+# 		WhereElementIsElementType().\
+# 		FirstElement()
+# 	param = elem.LookupParameter(_name)
+# 	if param:
+# 		return param
 
-	# check instance parameter
-	# ATTENTION! instance is first in!
-	# Be sure that all instances has the parameter.
-	elem = FilteredElementCollector(doc).\
-		OfCategory(_bic).\
-		WhereElementIsNotElementType().\
-		FirstElement()
-	param = elem.LookupParameter(_name)
-	if param:
-		return param
+# 	# check instance parameter
+# 	# ATTENTION! instance is first in!
+# 	# Be sure that all instances has the parameter.
+# 	elem = FilteredElementCollector(doc).\
+# 		OfCategory(_bic).\
+# 		WhereElementIsNotElementType().\
+# 		FirstElement()
+# 	param = elem.LookupParameter(_name)
+# 	if param:
+# 		return param
 
-	# Not found
-	return None
-
-
-def setup_param_value(elem, name, pValue):
-
-	# check element staus
-	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
-
-	if elem_status == CheckoutStatus.OwnedByOtherUser:
-		return None
-
-	# custom parameter
-	param = elem.LookupParameter(name)
-	# check is it a BuiltIn parameter if not found
-	if not(param):
-		try:
-			param = elem.get_Parameter(get_bip(name)).Set(pValue)
-		except:
-			pass
-
-	if param:
-		try:
-			param.Set(pValue)
-		except:
-			pass
-	return elem
+# 	# Not found
+# 	return None
 
 
-def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
-	"""Get all family instances by category and parameter value
+# def setup_param_value(elem, name, pValue):
 
-		args:
-		_bic: BuiltInCategory.OST_xxx
-		_bip: BuiltInParameter
-		_val: Parameter value
-		_isType: is Type or Instance
+# 	# check element staus
+# 	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
 
-		return:
-		list()[Autodesk.Revit.DB.FamilySymbol]
-	"""
-	if _isType:
-		fnrvStr = FilterStringEquals()
-		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
-		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
-			OfCategory(_bic).\
-			WhereElementIsElementType().\
-			WherePasses(filter).\
-			ToElements()
-	else:
-		fnrvStr = FilterStringEquals()
-		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
-		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
-			OfCategory(_bic).\
-			WhereElementIsNotElementType().\
-			WherePasses(filter).\
-			ToElements()
-	return elem
+# 	if elem_status == CheckoutStatus.OwnedByOtherUser:
+# 		return None
+
+# 	# custom parameter
+# 	param = elem.LookupParameter(name)
+# 	# check is it a BuiltIn parameter if not found
+# 	if not(param):
+# 		try:
+# 			param = elem.get_Parameter(get_bip(name)).Set(pValue)
+# 		except:
+# 			pass
+
+# 	if param:
+# 		try:
+# 			param.Set(pValue)
+# 		except:
+# 			pass
+# 	return elem
 
 
-def type_by_bic_fam_type(_bic, _fnam, _tnam):
-	"""Get Type by family category, family name and type
+# def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
+# 	"""Get all family instances by category and parameter value
 
-		args:
-		_bic: BuiltInCategory.OST_xxx
-		_fnam (str): family name
-		_tnam (str): type name
+# 		args:
+# 		_bic: BuiltInCategory.OST_xxx
+# 		_bip: BuiltInParameter
+# 		_val: Parameter value
+# 		_isType: is Type or Instance
 
-		return:
-		Autodesk.Revit.DB.FamilySymbol
-	"""
+# 		return:
+# 		list()[Autodesk.Revit.DB.FamilySymbol]
+# 	"""
+# 	if _isType:
+# 		fnrvStr = FilterStringEquals()
+# 		pvp = ParameterValueProvider(ElementId(int(_bip)))
+# 		frule = FilterStringRule(pvp, fnrvStr, _val, False)
+# 		filter = ElementParameterFilter(frule)
+# 		elem = FilteredElementCollector(doc).\
+# 			OfCategory(_bic).\
+# 			WhereElementIsElementType().\
+# 			WherePasses(filter).\
+# 			ToElements()
+# 	else:
+# 		fnrvStr = FilterStringEquals()
+# 		pvp = ParameterValueProvider(ElementId(int(_bip)))
+# 		frule = FilterStringRule(pvp, fnrvStr, _val, False)
+# 		filter = ElementParameterFilter(frule)
+# 		elem = FilteredElementCollector(doc).\
+# 			OfCategory(_bic).\
+# 			WhereElementIsNotElementType().\
+# 			WherePasses(filter).\
+# 			ToElements()
+# 	return elem
 
-	fnrvStr = FilterStringEquals()
 
-	pvpType = ParameterValueProvider(ElementId(int(BuiltInParameter.SYMBOL_NAME_PARAM)))
-	pvpFam = ParameterValueProvider(ElementId(int(BuiltInParameter.ALL_MODEL_FAMILY_NAME)))
+# def type_by_bic_fam_type(_bic, _fnam, _tnam):
+# 	"""Get Type by family category, family name and type
 
-	fruleF = FilterStringRule(pvpFam, fnrvStr, _fnam, False)
-	filterF = ElementParameterFilter(fruleF)
+# 		args:
+# 		_bic: BuiltInCategory.OST_xxx
+# 		_fnam (str): family name
+# 		_tnam (str): type name
 
-	fruleT = FilterStringRule(pvpType, fnrvStr, _tnam, False)
-	filterT = ElementParameterFilter(fruleT)
+# 		return:
+# 		Autodesk.Revit.DB.FamilySymbol
+# 	"""
 
-	filter = LogicalAndFilter(filterT, filterF)
+# 	fnrvStr = FilterStringEquals()
 
-	elem = FilteredElementCollector(doc).\
-		OfCategory(_bic).\
-		WhereElementIsElementType().\
-		WherePasses(filter).\
-		FirstElement()
-	return elem
+# 	pvpType = ParameterValueProvider(ElementId(int(BuiltInParameter.SYMBOL_NAME_PARAM)))
+# 	pvpFam = ParameterValueProvider(ElementId(int(BuiltInParameter.ALL_MODEL_FAMILY_NAME)))
+
+# 	fruleF = FilterStringRule(pvpFam, fnrvStr, _fnam, False)
+# 	filterF = ElementParameterFilter(fruleF)
+
+# 	fruleT = FilterStringRule(pvpType, fnrvStr, _tnam, False)
+# 	filterT = ElementParameterFilter(fruleT)
+
+# 	filter = LogicalAndFilter(filterT, filterF)
+
+# 	elem = FilteredElementCollector(doc).\
+# 		OfCategory(_bic).\
+# 		WhereElementIsElementType().\
+# 		WherePasses(filter).\
+# 		FirstElement()
+# 	return elem
 
 
 def mm_to_ft(mm):
 	return 3.2808 * mm / 1000
 
 
-def ft_to_mm(ft):
-	mm = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(
-		ft, Autodesk.Revit.DB.DisplayUnitType.DUT_MILLIMETERS)
-	return mm
+# def ft_to_mm(ft):
+# 	mm = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(
+# 		ft, Autodesk.Revit.DB.DisplayUnitType.DUT_MILLIMETERS)
+# 	return mm
 
 
 def elsys_by_brd(_brd):
@@ -284,7 +281,7 @@ def elsys_by_brd(_brd):
 	allsys = _brd.MEPModel.GetElectricalSystems()
 	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
 
-		# filter out non Power circuits
+	# filter out non Power circuits
 	allsys = [i for i in allsys
 		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
 	lowsys = [i for i in lowsys
@@ -302,7 +299,3 @@ def elsys_by_brd(_brd):
 		return mainboardsys, lowsys
 	else:
 		return [i for i in allsys][0], None
-
-
-def test():
-	return "test"
