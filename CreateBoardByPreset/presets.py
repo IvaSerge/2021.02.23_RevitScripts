@@ -361,9 +361,9 @@ class presets():
 		["250ETU / Q4 / 1xd120mm", 3, 250],
 		["160ETU / Q5 / 1xd70mm", 3, 160],
 		["160ETU / Q6 / 1xd70mm", 3, 160],
-		["100ETU / Q7 / 1xd70mm", 3, 100],
-		["100ETU / Q8 / 1xd70mm", 3, 100],
-		["100ETU / Q9 / 1xd70mm", 3, 100],
+		["100ETU / Q7 / 1xd35mm", 3, 160],
+		["100ETU / Q8 / 1xd35mm", 3, 160],
+		["100ETU / Q9 / 1xd35mm", 3, 160],
 	]
 
 	# list of preset options
@@ -402,12 +402,12 @@ class presets():
 
 	# list of preset options
 	preset_2R_main = [
-		["63TMTU / Section 0Q2 / 1xd16mm", 3, 63],
-		["63TMTU / Section 0Q3 / 1xd16mm", 3, 63],
-		["63TMTU / Section 0Q4 / 1xd16mm", 3, 63],
-		["63TMTU / Section 0Q5 / 1xd16mm", 3, 63],
-		["63TMTU / Section 0Q6 / 1xd16mm", 3, 63],
-		["63TMTU / Section 0Q7 / 1xd16mm", 3, 63],
+		["63TMTU / Section 0Q2 / 1xd16mm", 3, 160],
+		["63TMTU / Section 0Q3 / 1xd16mm", 3, 160],
+		["63TMTU / Section 0Q4 / 1xd16mm", 3, 160],
+		["63TMTU / Section 0Q5 / 1xd16mm", 3, 160],
+		["63TMTU / Section 0Q6 / 1xd16mm", 3, 160],
+		["63TMTU / Section 0Q7 / 1xd16mm", 3, 160],
 		["160TMTU/ 0Q8 / 1xd70mm", 3, 160],
 	]
 
@@ -462,14 +462,14 @@ class presets():
 	# list of preset options
 	preset_2R2_main = [
 		# Description | n_of_poles
-		["100TMTU / Section 0Q2 / 1xd35mm", 3, 100],
-		["100TMTU / Section 0Q3 / 1xd35mm", 3, 100],
-		["100TMTU / Section 0Q4 / 1xd35mm", 3, 100],
-		["100TMTU / Section 0Q5 / 1xd35mm", 3, 100],
-		["100TMTU / Section 0Q6 / 1xd35mm", 3, 100],
-		["100TMTU / Section 0Q7 / 1xd35mm", 3, 100],
-		["100TMTU / Section 0Q8 / 1xd35mm", 3, 100],
-		["100TMTU / Section 0Q9 / 1xd35mm", 3, 100],
+		["100TMTU / Section 0Q2 / 1xd35mm", 3, 160],
+		["100TMTU / Section 0Q3 / 1xd35mm", 3, 160],
+		["100TMTU / Section 0Q4 / 1xd35mm", 3, 160],
+		["100TMTU / Section 0Q5 / 1xd35mm", 3, 160],
+		["100TMTU / Section 0Q6 / 1xd35mm", 3, 160],
+		["100TMTU / Section 0Q7 / 1xd35mm", 3, 160],
+		["100TMTU / Section 0Q8 / 1xd35mm", 3, 160],
+		["100TMTU / Section 0Q9 / 1xd35mm", 3, 160],
 		["160ETU / 0Q10 / 1xd120mm", 3, 160],
 	]
 
@@ -622,17 +622,17 @@ class presets():
 	preset_2T_main = [
 		# Description | n_of_poles
 		["800ETU / Main switch Q1 / 4xd150mm", 3, 800],
-		["63ETU / Section Q2 / 1xd16mm", 3, 63],
+		["63ETU / Section Q2 / 1xd16mm", 3, 100],
 		["400ETU / Q3 / cu30x10mm", 3, 400],
-		["100ETU / Q4 / cu25x5mm", 3, 100],
-		["100ETU / Q5 / cu25x5mm", 3, 100],
-		["100ETU / Q6 / cu25x5mm", 3, 100],
-		["100ETU / Q7 / cu25x5mm", 3, 100],
-		["100ETU / Q8 / cu25x5mm", 3, 100],
-		["100ETU / Q9 / cu25x5mm", 3, 100],
-		["100ETU / Q10 / cu25x5mm", 3, 100],
-		["100ETU / Q11 / cu25x5mm", 3, 100],
-		["100ETU / Q12 / cu25x5mm", 3, 100],
+		["100ETU / Q4 / cu25x5mm", 3, 160],
+		["100ETU / Q5 / cu25x5mm", 3, 160],
+		["100ETU / Q6 / cu25x5mm", 3, 160],
+		["100ETU / Q7 / cu25x5mm", 3, 160],
+		["100ETU / Q8 / cu25x5mm", 3, 160],
+		["100ETU / Q9 / cu25x5mm", 3, 160],
+		["100ETU / Q10 / cu25x5mm", 3, 160],
+		["100ETU / Q11 / cu25x5mm", 3, 160],
+		["100ETU / Q12 / cu25x5mm", 3, 160],
 	]
 
 	# TODO
