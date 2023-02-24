@@ -123,6 +123,22 @@ def get_bip(paramName):
 	return param
 
 
+def setup_param_value(elem, name, pValue):
+
+	# check element staus
+	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
+	if elem_status == CheckoutStatus.OwnedByOtherUser:
+		return None
+
+	# custom parameter
+	param = elem.LookupParameter(name)
+	# check is it a BuiltIn parameter if not found
+	if not(param):
+		param = elem.get_Parameter(get_bip(name))
+	param.Set(pValue)
+	return param
+
+
 # def category_by_bic_name(_bicString):
 # 	global doc
 # 	bicList = System.Enum.GetValues(BuiltInCategory)
@@ -164,23 +180,6 @@ def get_bip(paramName):
 # 	return None
 
 
-# def setup_param_value(elem, name, pValue):
-
-# 	# check element staus
-# 	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
-
-# 	if elem_status == CheckoutStatus.OwnedByOtherUser:
-# 		return None
-
-# 	# custom parameter
-# 	param = elem.LookupParameter(name)
-# 	# check is it a BuiltIn parameter if not found
-# 	if not(param):
-# 		try:
-# 			param = elem.get_Parameter(get_bip(name)).Set(pValue)
-# 		except:
-# 			pass
-
 # 	if param:
 # 		try:
 # 			param.Set(pValue)
@@ -189,39 +188,39 @@ def get_bip(paramName):
 # 	return elem
 
 
-# def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
-# 	"""Get all family instances by category and parameter value
+def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
+	"""Get all family instances by category and parameter value
 
-# 		args:
-# 		_bic: BuiltInCategory.OST_xxx
-# 		_bip: BuiltInParameter
-# 		_val: Parameter value
-# 		_isType: is Type or Instance
+		args:
+		_bic: BuiltInCategory.OST_xxx
+		_bip: BuiltInParameter
+		_val: Parameter value
+		_isType: is Type or Instance
 
-# 		return:
-# 		list()[Autodesk.Revit.DB.FamilySymbol]
-# 	"""
-# 	if _isType:
-# 		fnrvStr = FilterStringEquals()
-# 		pvp = ParameterValueProvider(ElementId(int(_bip)))
-# 		frule = FilterStringRule(pvp, fnrvStr, _val, False)
-# 		filter = ElementParameterFilter(frule)
-# 		elem = FilteredElementCollector(doc).\
-# 			OfCategory(_bic).\
-# 			WhereElementIsElementType().\
-# 			WherePasses(filter).\
-# 			ToElements()
-# 	else:
-# 		fnrvStr = FilterStringEquals()
-# 		pvp = ParameterValueProvider(ElementId(int(_bip)))
-# 		frule = FilterStringRule(pvp, fnrvStr, _val, False)
-# 		filter = ElementParameterFilter(frule)
-# 		elem = FilteredElementCollector(doc).\
-# 			OfCategory(_bic).\
-# 			WhereElementIsNotElementType().\
-# 			WherePasses(filter).\
-# 			ToElements()
-# 	return elem
+		return:
+		list()[Autodesk.Revit.DB.FamilySymbol]
+	"""
+	if _isType:
+		fnrvStr = FilterStringContains()
+		pvp = ParameterValueProvider(ElementId(int(_bip)))
+		frule = FilterStringRule(pvp, fnrvStr, _val)
+		filter = ElementParameterFilter(frule)
+		elem = FilteredElementCollector(doc).\
+			OfCategory(_bic).\
+			WhereElementIsElementType().\
+			WherePasses(filter).\
+			ToElements()
+	else:
+		fnrvStr = FilterStringContains()
+		pvp = ParameterValueProvider(ElementId(int(_bip)))
+		frule = FilterStringRule(pvp, fnrvStr, _val)
+		filter = ElementParameterFilter(frule)
+		elem = FilteredElementCollector(doc).\
+			OfCategory(_bic).\
+			WhereElementIsNotElementType().\
+			WherePasses(filter).\
+			ToElements()
+	return elem
 
 
 def type_by_bic_fam_type(_bic, _fnam, _tnam):

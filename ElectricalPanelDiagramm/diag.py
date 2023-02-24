@@ -41,6 +41,12 @@ clr.ImportExtensions(Revit.GeometryConversion)
 clr.ImportExtensions(Revit.GeometryReferences)
 
 # ================ Python imports
+import importlib
+from importlib import reload
+
+# ================ local imports
+import toolsrvt
+reload(toolsrvt)
 
 
 class Diagramm():
@@ -56,3 +62,14 @@ class Diagramm():
 			self.symbol_type,
 			_sheet)
 		return dia_inst
+
+	def set_parameters(self):
+		for param_info in self.params:
+			param_name = param_info[0]
+			param_val = param_info[1]
+			toolsrvt.setup_param_value(
+				self.instance,
+				param_name,
+				param_val)
+
+		return param_name, param_val
