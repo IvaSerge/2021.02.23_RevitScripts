@@ -23,6 +23,10 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
+import System
+from System import Array
+from System.Collections.Generic import *
+
 import importlib
 from importlib import reload
 
@@ -56,7 +60,7 @@ panel_params_to_set = [
 
 header_point = [-0.919769759118699, 1.67170722337784, 0]
 body_point = [-0.916488919223686, 1.44502170713041, 0]
-shedule_origin = [-1.20512832374472, 1.68093458558256, 0]
+shedule_origin = [-1.15591572531952, 1.68093458558256, 0]
 
 header_symbol = type_by_bic_fam_type(
 	BuiltInCategory.OST_GenericAnnotation,
@@ -132,10 +136,17 @@ obj_on_sheet = UnwrapElement(IN[2])  # type: ignore
 sheet_obj = doc.GetElement(obj_on_sheet.OwnerViewId)
 
 
+# find instances to be removed
+filter_instance_body = FamilyInstanceFilter(doc, body_symbol.Id)
+filter_instance_header = FamilyInstanceFilter(doc, header_symbol.Id)
+filter_all = LogicalOrFilter([filter_instance_body, filter_instance_header])
+to_remove_id = List[ElementId](sheet_obj.GetDependentElements(filter_all))
+
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-# # TODO: clean sheet
+# clean sheet
+doc.Delete(to_remove_id)
 
 # create diagramms on sheet
 for body_diag in diagramms_list:
@@ -148,5 +159,6 @@ for body_diag in diagramms_list:
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-# OUT = panel_connected_layout
-OUT = Diagramm.set_parameters(diagramms_list[0])
+
+OUT = to_remove_id
+# OUT = [i.instance for i in diagramms_list]
