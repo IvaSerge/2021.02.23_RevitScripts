@@ -125,16 +125,20 @@ for i, circuit in enumerate(circuits):
 		body_point[1] - step_current,
 		body_point[2])
 	body_diag.symbol_type = body_symbol
+
+	# TODO: add diagramm symbol and reference
+
 	diagramms_list.append(body_diag)
 
-# 	# isPanel
-# 	# referTo (sheet)
 
 # ================ SHEET Info
 # get sheet
 obj_on_sheet = UnwrapElement(IN[2])  # type: ignore
 sheet_obj = doc.GetElement(obj_on_sheet.OwnerViewId)
 
+# ================ SHEDULE
+# find shedule to be installed
+shedule_view = Diagramm.get_shedule_view(doc, panel_inst, sheet_obj)
 
 # find instances to be removed
 filter_instance_body = FamilyInstanceFilter(doc, body_symbol.Id)
@@ -156,9 +160,13 @@ for body_diag in diagramms_list:
 for body_diag in diagramms_list:
 	Diagramm.set_parameters(body_diag)
 
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
+# create shedule instance
+if shedule_view:
+	shedule_inst = Electrical.PanelScheduleSheetInstance.Create(doc, shedule_view.Id, sheet_obj)
+	shedule_inst.Origin = XYZ(shedule_origin[0], shedule_origin[1], shedule_origin[2])
+
+# # =========End transaction
+# TransactionManager.Instance.TransactionTaskDone()
 
 
-OUT = to_remove_id
-# OUT = [i.instance for i in diagramms_list]
+OUT = shedule_view, [i.instance for i in diagramms_list]

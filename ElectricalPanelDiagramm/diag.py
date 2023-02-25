@@ -73,3 +73,31 @@ class Diagramm():
 				param_val)
 
 		return param_name, param_val
+
+	@staticmethod
+	def get_shedule_view(doc, panel_inst, view_inst):
+		panel_name = panel_inst.Name
+		shedule_view = None
+		shedule_graphics = None
+
+		# check if shedule view is on sheet
+		# If found - No action requiered
+		owner_filter = ElementOwnerViewFilter(view_inst.Id)
+		shedule_graphics = FilteredElementCollector(doc).\
+			OfCategory(BuiltInCategory.OST_PanelScheduleGraphics).\
+			WhereElementIsNotElementType().\
+			WherePasses(owner_filter).\
+			ToElements()
+		shedule_graphics = [i for i in shedule_graphics if panel_name in i.Name]
+		if shedule_graphics:
+			return None
+
+		# get shedule view
+		shedule_view = FilteredElementCollector(doc).\
+			OfClass(Autodesk.Revit.DB.Electrical.PanelScheduleView).\
+			WhereElementIsNotElementType().\
+			ToElements()
+		shedule_view = [i for i in shedule_view if i.Name == panel_name]
+		if shedule_view:
+			shedule_view = shedule_view[0]
+		return shedule_view
