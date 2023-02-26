@@ -52,7 +52,7 @@ reload(toolsrvt)
 class Diagramm():
 	def __init__(self):
 		self.isert_point = None
-		self.params = None
+		self.params = list()
 		self.symbol_type = None
 		self.instance = None
 
@@ -101,3 +101,39 @@ class Diagramm():
 		if shedule_view:
 			shedule_view = shedule_view[0]
 		return shedule_view
+
+	def get_circuit_symbol(self, circuit: Autodesk.Revit.DB.Electrical.ElectricalSystem):
+		# NONE (Spare or Space)
+		if circuit.CircuitType != Autodesk.Revit.DB.Electrical.CircuitType.Circuit:
+			return None
+
+		# Check if element in the circuit is panel.
+		# 1. Circuit contains only 1 element
+		# 2. This element is electrical panel by category
+		# 3. Element not Quasy
+		circuit_first_element = list(circuit.Elements)[0]
+		elem_is_alone = len(list(circuit.Elements)) == 1  # 1
+		elem_category = circuit_first_element.Category.Id == ElementId(-2001040)
+		elem_not_quasy = "QUASI" not in circuit_first_element.Symbol.Family.Name
+		elem_is_panel = all([elem_is_alone, elem_category, elem_not_quasy])
+		if elem_is_panel:
+			self.params.append(["Panel", 1])
+
+		# get reference
+		if elem_is_panel:
+			refer_sheet = toolsrvt.inst_by_cat_strparamvalue(
+				BuiltInCategory.OST_Sheets,
+				BuiltInParameter.SHEET_NAME,
+				circuit.LoadName,
+				False)
+			if refer_sheet:
+				refer_sheet = refer_sheet[0]
+				refer_sheet_number = refer_sheet.SheetNumber
+				self.params.append(["Reference", refer_sheet_number])
+				return None
+			else:
+				self.params.append(["Reference", "N/A"])
+				return None
+
+		# POC symbol - all other
+		self.params.append(["POC", 1])

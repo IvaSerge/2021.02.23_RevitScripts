@@ -125,9 +125,7 @@ for i, circuit in enumerate(circuits):
 		body_point[1] - step_current,
 		body_point[2])
 	body_diag.symbol_type = body_symbol
-
-	# TODO: add diagramm symbol and reference
-
+	body_diag.get_circuit_symbol(circuit)
 	diagramms_list.append(body_diag)
 
 
@@ -156,6 +154,8 @@ doc.Delete(to_remove_id)
 for body_diag in diagramms_list:
 	body_diag.instance = body_diag.create_diag_on_sheet(doc, sheet_obj)
 
+doc.Regenerate()
+
 # set parameters
 for body_diag in diagramms_list:
 	Diagramm.set_parameters(body_diag)
@@ -165,8 +165,8 @@ if shedule_view:
 	shedule_inst = Electrical.PanelScheduleSheetInstance.Create(doc, shedule_view.Id, sheet_obj)
 	shedule_inst.Origin = XYZ(shedule_origin[0], shedule_origin[1], shedule_origin[2])
 
-# # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
 
 OUT = shedule_view, [i.instance for i in diagramms_list]
