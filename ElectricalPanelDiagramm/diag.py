@@ -73,17 +73,19 @@ class Diagramm():
 		"Panel FD",
 		"Panel FD")
 
-	def __init__(self):
+	def __init__(self, sheet_obj):
+		self.sheet = sheet_obj
 		self.isert_point = None
 		self.params = list()
 		self.symbol_type = None
 		self.instance = None
+		self.doc = sheet_obj.Document
 
-	def create_diag_on_sheet(self, doc, _sheet):
-		dia_inst = doc.Create.NewFamilyInstance(
+	def create_diag_on_sheet(self):
+		dia_inst = self.doc.Create.NewFamilyInstance(
 			self.isert_point,
 			self.symbol_type,
-			_sheet)
+			self.sheet)
 		return dia_inst
 
 	def set_parameters(self):
@@ -161,23 +163,21 @@ class Diagramm():
 		# POC symbol - all other
 		self.params.append(["POC", 1])
 
-	@staticmethod
-	def get_header_info(panel_inst):
+	def get_header_info(self, panel_inst):
 		circuits_all = toolsrvt.elsys_by_brd(panel_inst)
 		circuits_main = circuits_all[0]
-		header_diag = Diagramm()
-		header_diag.isert_point = XYZ(
+		self.isert_point = XYZ(
 			Diagramm.header_point[0],
 			Diagramm.header_point[1],
 			Diagramm.header_point[2])
-		header_diag.symbol_type = Diagramm.header_symbol
-		header_diag.params = [[i, toolsrvt.get_parval(panel_inst, i)]
+		self.symbol_type = Diagramm.header_symbol
+		self.params = [[i, toolsrvt.get_parval(panel_inst, i)]
 			for i in Diagramm.panel_params_to_set]
 
 		# panel connected from
 		if circuits_main:
 			panel_connected_name = circuits_main.BaseEquipment.Name
-			header_diag.params.append(["Panel name", panel_connected_name])
+			self.params.append(["Panel name", panel_connected_name])
 		else:
 			panel_connected_name = None
 
@@ -192,12 +192,11 @@ class Diagramm():
 			if panel_connected_sheet:
 				panel_connected_sheet_number = panel_connected_sheet[0].get_Parameter(
 					BuiltInParameter.SHEET_NUMBER).AsString()
-				header_diag.params.append(["Reference", panel_connected_sheet_number])
+				self.params.append(["Reference", panel_connected_sheet_number])
 
 		# circuit number
 		circuits_main_number = circuits_main.CircuitNumber
-		header_diag.params.append(["RBS_ELEC_CIRCUIT_NUMBER", circuits_main_number])
-		return header_diag
+		self.params.append(["RBS_ELEC_CIRCUIT_NUMBER", circuits_main_number])
 
 	@staticmethod
 	def get_body_info(panel_inst):

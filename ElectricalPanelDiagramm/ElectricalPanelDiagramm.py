@@ -58,27 +58,30 @@ panel_inst = toolsrvt.unwrap(IN[3])  # type: ignore
 obj_on_sheet = UnwrapElement(IN[2])  # type: ignore
 sheet_obj = doc.GetElement(obj_on_sheet.OwnerViewId)
 
-header_diag = Diagramm
-header_diag = Diagramm.get_header_info(panel_inst)
+# ================ Header info
+header_diag = Diagramm(sheet_obj)
+header_diag.get_header_info(panel_inst)
 diagramms_list.append(header_diag)
+
+# ================ Body info
 body_diag_list = Diagramm.get_body_info(panel_inst)
-diagramms_list.extend(body_diag_list)
+
 
 # ================ SHEDULE
-# find shedule to be installed
-shedule_view = Diagramm.get_shedule_view(doc, panel_inst, sheet_obj)
-items_on_sheet_to_remove = Diagramm.get_ID_to_remove(sheet_obj)
+# # find shedule to be installed
+# shedule_view = Diagramm.get_shedule_view(doc, panel_inst, sheet_obj)
+# items_on_sheet_to_remove = Diagramm.get_ID_to_remove(sheet_obj)
 
 
-# # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
 # # clean items on sheet(s)
 # doc.Delete(items_on_sheet_to_remove)
 
-# # create diagramms on sheet
-# for body_diag in diagramms_list:
-# 	body_diag.instance = body_diag.create_diag_on_sheet(doc, sheet_obj)
+# create diagramms on sheet
+# for diagramm in diagramms_list:
+# 	diagramm.instance = diagramm.create_diag_on_sheet()
 
 # doc.Regenerate()
 
@@ -99,4 +102,4 @@ items_on_sheet_to_remove = Diagramm.get_ID_to_remove(sheet_obj)
 
 
 # OUT = shedule_view, [i.instance for i in diagramms_list]
-OUT = items_on_sheet_to_remove
+OUT = diagramms_list[0].params
