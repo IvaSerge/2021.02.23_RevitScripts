@@ -50,6 +50,29 @@ reload(toolsrvt)
 
 
 class Diagramm():
+	# hard coded parameters
+	circuits_param_to_set = ["RBS_ELEC_CIRCUIT_FRAME_PARAM"]
+	panel_params_to_set = [
+		"_IR(LTPU)", "_tr(LTD)",
+		"_Isd(STPU)", "_tsd(STD)",
+		"_Ii(INST)",
+		"_Ig(GFPU)", "_tg(GFD)"]
+
+	header_point = [-0.919769759118699, 1.67170722337784, 0]
+	body_point = [-0.916488919223686, 1.44502170713041, 0]
+	shedule_origin = [-1.15591572531952, 1.68093458558256, 0]
+	step_y = 0.0623365636168
+
+	header_symbol = toolsrvt.type_by_bic_fam_type(
+		BuiltInCategory.OST_GenericAnnotation,
+		"Panel main FD",
+		"Panel main FD")
+
+	body_symbol = toolsrvt.type_by_bic_fam_type(
+		BuiltInCategory.OST_GenericAnnotation,
+		"Panel FD",
+		"Panel FD")
+
 	def __init__(self):
 		self.isert_point = None
 		self.params = list()
@@ -137,3 +160,73 @@ class Diagramm():
 
 		# POC symbol - all other
 		self.params.append(["POC", 1])
+
+	@staticmethod
+	def get_header_info(panel_inst):
+		circuits_all = toolsrvt.elsys_by_brd(panel_inst)
+		circuits_main = circuits_all[0]
+		header_diag = Diagramm()
+		header_diag.isert_point = XYZ(
+			Diagramm.header_point[0],
+			Diagramm.header_point[1],
+			Diagramm.header_point[2])
+		header_diag.symbol_type = Diagramm.header_symbol
+		header_diag.params = [[i, toolsrvt.get_parval(panel_inst, i)]
+			for i in Diagramm.panel_params_to_set]
+
+		# panel connected from
+		if circuits_main:
+			panel_connected_name = circuits_main.BaseEquipment.Name
+			header_diag.params.append(["Panel name", panel_connected_name])
+		else:
+			panel_connected_name = None
+
+		# connected from panel - Refer to sheet name
+		if panel_connected_name:
+			# panel_connected_layout = SHEET_NAME inst_by_cat_strparamvalue
+			panel_connected_sheet = toolsrvt.inst_by_cat_strparamvalue(
+				BuiltInCategory.OST_Sheets,
+				BuiltInParameter.SHEET_NAME,
+				panel_connected_name,
+				False)
+			if panel_connected_sheet:
+				panel_connected_sheet_number = panel_connected_sheet[0].get_Parameter(
+					BuiltInParameter.SHEET_NUMBER).AsString()
+				header_diag.params.append(["Reference", panel_connected_sheet_number])
+
+		# circuit number
+		circuits_main_number = circuits_main.CircuitNumber
+		header_diag.params.append(["RBS_ELEC_CIRCUIT_NUMBER", circuits_main_number])
+		return header_diag
+
+	@staticmethod
+	def get_body_info(panel_inst):
+		diagramm_list = list()
+		circuits_all = toolsrvt.elsys_by_brd(panel_inst)
+		circuits = circuits_all[1]
+		# ================ BODY diagramms for circuits
+		for i, circuit in enumerate(circuits):
+			body_diag = Diagramm()
+			body_diag.params = [[
+				i,
+				toolsrvt.get_parval(circuit, i)]
+				for i in Diagramm.circuits_param_to_set]
+
+			step_current = Diagramm.step_y * i
+			body_diag.isert_point = XYZ(
+				Diagramm.body_point[0],
+				Diagramm.body_point[1] - step_current,
+				Diagramm.body_point[2])
+			body_diag.symbol_type = Diagramm.body_symbol
+			body_diag.get_circuit_symbol(circuit)
+			diagramm_list.append(body_diag)
+		return diagramm_list
+
+	def get_ID_to_remove(sheet_obj):
+		doc = sheet_obj.Document
+		# find instances to be removed
+		filter_instance_body = FamilyInstanceFilter(doc, Diagramm.body_symbol.Id)
+		filter_instance_header = FamilyInstanceFilter(doc, Diagramm.header_symbol.Id)
+		filter_all = LogicalOrFilter([filter_instance_body, filter_instance_header])
+		to_remove_id = List[ElementId](sheet_obj.GetDependentElements(filter_all))
+		return to_remove_id
