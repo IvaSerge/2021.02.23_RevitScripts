@@ -44,37 +44,65 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 view = doc.ActiveView
-reload = IN[1]  # type: ignore
 diagramms_list = list()
 items_on_sheet_to_remove = list()
+pairs_list = list()
 
 toolsrvt.doc = doc
 toolsrvt.UnwrapElement = UnwrapElement  # type: ignore
 
+Diagramm.header_symbol = toolsrvt.type_by_bic_fam_type(
+	doc,
+	BuiltInCategory.OST_GenericAnnotation,
+	"Panel main FD",
+	"Panel main FD")
+
+Diagramm.body_symbol = toolsrvt.type_by_bic_fam_type(
+	doc,
+	BuiltInCategory.OST_GenericAnnotation,
+	"Panel FD",
+	"Panel FD")
+
 # ================ IN DATA
-# get panel
-panel_inst = toolsrvt.unwrap(IN[3])  # type: ignore
-# get sheet
-obj_on_sheet = UnwrapElement(IN[2])  # type: ignore
-sheet_obj = doc.GetElement(obj_on_sheet.OwnerViewId)
+reload_obj = IN[1]  # type: ignore
+# update_all
+update_all = IN[2]  # type: ignore
 
-# ================ Header info
-header_diag = Diagramm(sheet_obj)
-header_diag.get_header_info(panel_inst)
-diagramms_list.append(header_diag)
+if not update_all:
+	# get sheet
+	obj_on_sheet = UnwrapElement(IN[3])  # type: ignore
+	sheet_inst = doc.GetElement(obj_on_sheet.OwnerViewId)
+	# get panel
+	panel_inst = toolsrvt.unwrap(IN[4])  # type: ignore
+	pairs_list.append([panel_inst, sheet_inst])
+	# find shedule to be installed
+	shedule_view = Diagramm.get_shedule_view(doc, panel_inst, sheet_inst)
 
-# ================ Body info
-body_diag_list = Diagramm.get_body_info(panel_inst)
+else:
+	pairs_list = diag.get_pairs(doc)
 
+
+# for pair in pairs_list:
+# 	panel_inst = pair[0]
+# 	sheet_inst = pair[1]
+
+# 	# ================ Header info
+# 	header_diag = Diagramm(sheet_inst)
+# 	header_diag.get_header_info(panel_inst)
+# 	diagramms_list.append(header_diag)
+
+# 	# ================ Body info
+# 	body_diag_list = Diagramm.get_body_info(sheet_inst, panel_inst)
+# 	diagramms_list.extend(body_diag_list)
 
 # ================ SHEDULE
-# # find shedule to be installed
-# shedule_view = Diagramm.get_shedule_view(doc, panel_inst, sheet_obj)
-# items_on_sheet_to_remove = Diagramm.get_ID_to_remove(sheet_obj)
+# find shedule to be installed
+# shedule_view = Diagramm.get_shedule_view(doc, panel_inst, sheet_inst)
+# items_on_sheet_to_remove = Diagramm.get_ID_to_remove(sheet_inst)
 
 
-# =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
+# # =========Start transaction
+# TransactionManager.Instance.EnsureInTransaction(doc)
 
 # # clean items on sheet(s)
 # doc.Delete(items_on_sheet_to_remove)
@@ -91,7 +119,7 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 
 # # create shedule instance
 # if shedule_view:
-# 	shedule_inst = Electrical.PanelScheduleSheetInstance.Create(doc, shedule_view.Id, sheet_obj)
+# 	shedule_inst = Electrical.PanelScheduleSheetInstance.Create(doc, shedule_view.Id, sheet_inst)
 # 	shedule_inst.Origin = XYZ(
 # 		Diagramm.shedule_origin[0],
 # 		Diagramm.shedule_origin[1],
@@ -102,4 +130,4 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 
 
 # OUT = shedule_view, [i.instance for i in diagramms_list]
-OUT = diagramms_list[0].params
+OUT = pairs_list

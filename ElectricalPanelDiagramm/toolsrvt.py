@@ -223,10 +223,11 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 	return elem
 
 
-def type_by_bic_fam_type(_bic, _fnam, _tnam):
+def type_by_bic_fam_type(doc, _bic, _fnam, _tnam):
 	"""Get Type by family category, family name and type
 
 		args:
+		doc: active document
 		_bic: BuiltInCategory.OST_xxx
 		_fnam (str): family name
 		_tnam (str): type name

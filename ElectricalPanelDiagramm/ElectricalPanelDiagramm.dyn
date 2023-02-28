@@ -19,7 +19,7 @@
       "Id": "a108da49379641ca865ea36de5eab38e",
       "Name": "Panel",
       "Type": "hostSelection",
-      "Value": "dffbc168-2409-447f-bd5f-92e0e69dc9db-00a9bde1",
+      "Value": "ab70cc7e-cf35-4492-a54c-8ccdb42d15a5-00b7a011",
       "Description": "Select a model element from the document.",
       "SelectedIndex": 0
     },
@@ -29,6 +29,14 @@
       "Type": "hostSelection",
       "Value": "33a90d69-53b3-4878-b3e8-34d91e7701fa-00bbbb59",
       "Description": "Select a model element from the document.",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "35b5d72267034a7296fa47e3214f85f5",
+      "Name": "Update_All",
+      "Type": "boolean",
+      "Value": "false",
+      "Description": "Selection between a true and false.",
       "SelectedIndex": 0
     }
   ],
@@ -85,6 +93,15 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
+        },
+        {
+          "Id": "f9ec5b8e07a34b348ed4fdf58db13fcf",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -104,7 +121,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
@@ -204,7 +221,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "dffbc168-2409-447f-bd5f-92e0e69dc9db-00a9bde1"
+        "ab70cc7e-cf35-4492-a54c-8ccdb42d15a5-00b7a011"
       ],
       "Id": "a108da49379641ca865ea36de5eab38e",
       "Inputs": [],
@@ -241,6 +258,26 @@
         }
       ],
       "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "35b5d72267034a7296fa47e3214f85f5",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6034e7722e254a578d1aecaa3f2544a5",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
     }
   ],
   "Connectors": [
@@ -276,14 +313,20 @@
     },
     {
       "Start": "4ba96f7c2ff94947a5206a94385b5ee2",
-      "End": "e59c98df47e5435c835fedaae42ab651",
-      "Id": "bd3ac09cc89c425793b86f495d394821",
+      "End": "f9ec5b8e07a34b348ed4fdf58db13fcf",
+      "Id": "9498bea8782546a89afe3d6c9836404a",
       "IsHidden": "False"
     },
     {
       "Start": "eac62bf3996c426d9a709e63e9326016",
+      "End": "e59c98df47e5435c835fedaae42ab651",
+      "Id": "c992aeddf98d4edcb2a801c11ad2dc80",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "6034e7722e254a578d1aecaa3f2544a5",
       "End": "dea01028c0d14c778e215769761eb86e",
-      "Id": "ced510d80c4c4b1290e1502a81ef0ea8",
+      "Id": "81c1de5ef60745ccb82e47a1e5b4d9c2",
       "IsHidden": "False"
     }
   ],
@@ -343,8 +386,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1743.4686878105617,
-        "Y": 208.91222833340754
+        "X": 1897.8512954124526,
+        "Y": 150.30401618824527
       },
       {
         "Name": "Reload",
@@ -353,8 +396,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1292.33587593614,
-        "Y": 312.143571994521
+        "X": 1302.7140165977819,
+        "Y": 278.04396696341172
       },
       {
         "Name": "FileSystem.ReadText",
@@ -393,8 +436,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1312.6091947652951,
-        "Y": 758.53694466770946
+        "X": 1305.4087288865778,
+        "Y": 906.77184380639517
       },
       {
         "Name": "ElementOnView",
@@ -403,15 +446,25 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1309.2171580643142,
-        "Y": 586.33633861790327
+        "X": 1302.0166921855944,
+        "Y": 734.57123775658852
+      },
+      {
+        "Name": "Update_All",
+        "ShowGeometry": true,
+        "Id": "35b5d72267034a7296fa47e3214f85f5",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1302.8307664948336,
+        "Y": 508.05907227823661
       }
     ],
     "Annotations": [
       {
         "Id": "9f279e02016147819151631581c653bc",
         "Title": "IN",
-        "DescriptionText": "<Double click here to edit group description>",
+        "DescriptionText": "IN box",
         "IsExpanded": true,
         "WidthAdjustment": 0.0,
         "HeightAdjustment": 0.0,
@@ -420,19 +473,40 @@
           "dd2a5375a58445c9adbdfcd9c2842d66"
         ],
         "HasNestedGroups": false,
-        "Left": 1299.2171580643142,
-        "Top": 504.33633861790327,
-        "Width": 219.39203670098095,
-        "Height": 405.2006060498062,
+        "Left": 1292.0166921855944,
+        "Top": 661.57123775658852,
+        "Width": 215.39203670098345,
+        "Height": 396.20060604980677,
         "FontSize": 36.0,
-        "InitialTop": 586.33633861790327,
+        "InitialTop": 734.57123775658852,
         "InitialHeight": 317.2006060498062,
-        "TextblockHeight": 72.0,
+        "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
+      },
+      {
+        "Id": "2e3cba54eef24f1f8a83e6f51c0450ad",
+        "Title": "Update",
+        "DescriptionText": "Update all sheets",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "35b5d72267034a7296fa47e3214f85f5"
+        ],
+        "HasNestedGroups": false,
+        "Left": 1292.8307664948336,
+        "Top": 435.05907227823661,
+        "Width": 209.0,
+        "Height": 205.0,
+        "FontSize": 36.0,
+        "InitialTop": 508.05907227823661,
+        "InitialHeight": 162.0,
+        "TextblockHeight": 63.0,
+        "Background": "#FFD4B6DB"
       }
     ],
-    "X": -986.92128375074662,
-    "Y": -199.609538429208,
-    "Zoom": 0.729243988250662
+    "X": -322.21011078453228,
+    "Y": -1.061247703055642,
+    "Zoom": 0.69956066734214994
   }
 }

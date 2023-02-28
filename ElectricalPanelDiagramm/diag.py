@@ -62,16 +62,8 @@ class Diagramm():
 	body_point = [-0.916488919223686, 1.44502170713041, 0]
 	shedule_origin = [-1.15591572531952, 1.68093458558256, 0]
 	step_y = 0.0623365636168
-
-	header_symbol = toolsrvt.type_by_bic_fam_type(
-		BuiltInCategory.OST_GenericAnnotation,
-		"Panel main FD",
-		"Panel main FD")
-
-	body_symbol = toolsrvt.type_by_bic_fam_type(
-		BuiltInCategory.OST_GenericAnnotation,
-		"Panel FD",
-		"Panel FD")
+	header_symbol = None
+	body_symbol = None
 
 	def __init__(self, sheet_obj):
 		self.sheet = sheet_obj
@@ -199,13 +191,13 @@ class Diagramm():
 		self.params.append(["RBS_ELEC_CIRCUIT_NUMBER", circuits_main_number])
 
 	@staticmethod
-	def get_body_info(panel_inst):
+	def get_body_info(sheet_obj, panel_inst):
 		diagramm_list = list()
 		circuits_all = toolsrvt.elsys_by_brd(panel_inst)
 		circuits = circuits_all[1]
 		# ================ BODY diagramms for circuits
 		for i, circuit in enumerate(circuits):
-			body_diag = Diagramm()
+			body_diag = Diagramm(sheet_obj)
 			body_diag.params = [[
 				i,
 				toolsrvt.get_parval(circuit, i)]
@@ -229,3 +221,36 @@ class Diagramm():
 		filter_all = LogicalOrFilter([filter_instance_body, filter_instance_header])
 		to_remove_id = List[ElementId](sheet_obj.GetDependentElements(filter_all))
 		return to_remove_id
+
+
+def get_pairs(doc):
+	# get all panels
+	c_panel_symbol_Id = toolsrvt.type_by_bic_fam_type(
+		doc,
+		BuiltInCategory.OST_ElectricalEquipment,
+		"Switchboard",
+		"TYPE 2C 1800x2200x600mm").Id
+
+	a_panel_symbol_Id = toolsrvt.type_by_bic_fam_type(
+		doc,
+		BuiltInCategory.OST_ElectricalEquipment,
+		"Switchboard",
+		"TYPE 2A 1800x2200x600mm").Id
+
+	filter_panel_c = FamilyInstanceFilter(doc, c_panel_symbol_Id)
+	filter_panel_a = FamilyInstanceFilter(doc, a_panel_symbol_Id)
+
+	filter_or = LogicalOrFilter(
+		filter_panel_c,
+		filter_panel_a)
+
+	panels_found = FilteredElementCollector(doc).\
+		OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
+		WherePasses(filter_or).\
+		ToElements()
+
+	# all instances of 2A
+	# get all sheets
+	# get all sheet names
+	# if panel name in sheet name: create pair and add to pair list
+	return panels_found
