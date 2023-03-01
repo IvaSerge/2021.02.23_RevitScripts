@@ -80,54 +80,54 @@ if not update_all:
 
 else:
 	pairs_list = diag.get_pairs(doc)
+	shedule_view = None
 
 
-# for pair in pairs_list:
-# 	panel_inst = pair[0]
-# 	sheet_inst = pair[1]
+for pair in pairs_list:
+	panel_inst = pair[0]
+	sheet_inst = pair[1]
 
-# 	# ================ Header info
-# 	header_diag = Diagramm(sheet_inst)
-# 	header_diag.get_header_info(panel_inst)
-# 	diagramms_list.append(header_diag)
+	# ================ Header info
+	header_diag = Diagramm(sheet_inst)
+	header_diag.get_header_info(panel_inst)
+	diagramms_list.append(header_diag)
 
-# 	# ================ Body info
-# 	body_diag_list = Diagramm.get_body_info(sheet_inst, panel_inst)
-# 	diagramms_list.extend(body_diag_list)
+	# ================ Body info
+	body_diag_list = Diagramm.get_body_info(sheet_inst, panel_inst)
+	diagramms_list.extend(body_diag_list)
 
-# ================ SHEDULE
-# find shedule to be installed
-# shedule_view = Diagramm.get_shedule_view(doc, panel_inst, sheet_inst)
-# items_on_sheet_to_remove = Diagramm.get_ID_to_remove(sheet_inst)
+	# ================ Remove items on sheet
+	items_on_sheet_to_remove.extend(Diagramm.get_ID_to_remove(sheet_inst))
 
 
-# # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
-# # clean items on sheet(s)
-# doc.Delete(items_on_sheet_to_remove)
+# clean items on sheet(s)
+for item in items_on_sheet_to_remove:
+	doc.Delete(item)
 
-# create diagramms on sheet
-# for diagramm in diagramms_list:
-# 	diagramm.instance = diagramm.create_diag_on_sheet()
+# create diagramm on sheet only for
+for diagramm in diagramms_list:
+	diagramm.instance = diagramm.create_diag_on_sheet()
 
-# doc.Regenerate()
+doc.Regenerate()
 
 # # set parameters
-# for body_diag in diagramms_list:
-# 	Diagramm.set_parameters(body_diag)
+for body_diag in diagramms_list:
+	Diagramm.set_parameters(body_diag)
 
-# # create shedule instance
-# if shedule_view:
-# 	shedule_inst = Electrical.PanelScheduleSheetInstance.Create(doc, shedule_view.Id, sheet_inst)
-# 	shedule_inst.Origin = XYZ(
-# 		Diagramm.shedule_origin[0],
-# 		Diagramm.shedule_origin[1],
-# 		Diagramm.shedule_origin[2])
+# create shedule instance
+if shedule_view:
+	shedule_inst = Electrical.PanelScheduleSheetInstance.Create(doc, shedule_view.Id, sheet_inst)
+	shedule_inst.Origin = XYZ(
+		Diagramm.shedule_origin[0],
+		Diagramm.shedule_origin[1],
+		Diagramm.shedule_origin[2])
 
-# # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
 
 # OUT = shedule_view, [i.instance for i in diagramms_list]
-OUT = pairs_list
+OUT = diagramms_list[2].params

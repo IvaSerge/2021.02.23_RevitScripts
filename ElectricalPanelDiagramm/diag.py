@@ -122,6 +122,8 @@ class Diagramm():
 	def get_circuit_symbol(self, circuit: Autodesk.Revit.DB.Electrical.ElectricalSystem):
 		# NONE (Spare or Space)
 		if circuit.CircuitType != Autodesk.Revit.DB.Electrical.CircuitType.Circuit:
+			self.params.append(["Panel", 0])
+			self.params.append(["Reference", ""])
 			return None
 
 		# Check if element in the circuit is panel.
@@ -133,11 +135,11 @@ class Diagramm():
 		elem_category = circuit_first_element.Category.Id == ElementId(-2001040)
 		elem_not_quasy = "QUASI" not in circuit_first_element.Symbol.Family.Name
 		elem_is_panel = all([elem_is_alone, elem_category, elem_not_quasy])
+
 		if elem_is_panel:
 			self.params.append(["Panel", 1])
+			# get reference
 
-		# get reference
-		if elem_is_panel:
 			refer_sheet = toolsrvt.inst_by_cat_strparamvalue(
 				BuiltInCategory.OST_Sheets,
 				BuiltInParameter.SHEET_NAME,
@@ -153,7 +155,9 @@ class Diagramm():
 				return None
 
 		# POC symbol - all other
+		self.params.append(["Panel", 0])
 		self.params.append(["POC", 1])
+		self.params.append(["Reference", ""])
 
 	def get_header_info(self, panel_inst):
 		circuits_all = toolsrvt.elsys_by_brd(panel_inst)
@@ -219,7 +223,7 @@ class Diagramm():
 		filter_instance_body = FamilyInstanceFilter(doc, Diagramm.body_symbol.Id)
 		filter_instance_header = FamilyInstanceFilter(doc, Diagramm.header_symbol.Id)
 		filter_all = LogicalOrFilter([filter_instance_body, filter_instance_header])
-		to_remove_id = List[ElementId](sheet_obj.GetDependentElements(filter_all))
+		to_remove_id = sheet_obj.GetDependentElements(filter_all)
 		return to_remove_id
 
 
@@ -248,9 +252,18 @@ def get_pairs(doc):
 		OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
 		WherePasses(filter_or).\
 		ToElements()
-
-	# all instances of 2A
-	# get all sheets
-	# get all sheet names
 	# if panel name in sheet name: create pair and add to pair list
-	return panels_found
+	pairs = [[i, get_sheet_by_panel(i)[0]]
+		for i in panels_found
+		if get_sheet_by_panel(i)]
+	return pairs
+
+
+def get_sheet_by_panel(panel_inst):
+	panel_name = panel_inst.Name
+	panel_connected_sheet = toolsrvt.inst_by_cat_strparamvalue(
+		BuiltInCategory.OST_Sheets,
+		BuiltInParameter.SHEET_NAME,
+		panel_name,
+		False)
+	return panel_connected_sheet
