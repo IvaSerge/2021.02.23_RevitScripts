@@ -64,6 +64,7 @@ class Diagramm():
 	step_y = 0.0623365636168
 	header_symbol = None
 	body_symbol = None
+	foot_symbol = None
 
 	def __init__(self, sheet_obj):
 		self.sheet = sheet_obj
@@ -81,6 +82,8 @@ class Diagramm():
 		return dia_inst
 
 	def set_parameters(self):
+		if not self.params:
+			return None
 		for param_info in self.params:
 			param_name = param_info[0]
 			param_val = param_info[1]
@@ -88,7 +91,6 @@ class Diagramm():
 				self.instance,
 				param_name,
 				param_val)
-
 		return param_name, param_val
 
 	@staticmethod
@@ -217,12 +219,29 @@ class Diagramm():
 			diagramm_list.append(body_diag)
 		return diagramm_list
 
+	@staticmethod
+	def get_footer_info(sheet_obj, panel_inst):
+		circuits_all = toolsrvt.elsys_by_brd(panel_inst)
+		circuits = circuits_all[1]
+		circuits_total = len(circuits)
+		footer_diag = Diagramm(sheet_obj)
+		footer_diag.symbol_type = Diagramm.foot_symbol
+		footer_diag.isert_point = XYZ(
+			Diagramm.body_point[0],
+			Diagramm.body_point[1] - Diagramm.step_y * circuits_total,
+			Diagramm.body_point[2])
+		return footer_diag
+
 	def get_ID_to_remove(sheet_obj):
 		doc = sheet_obj.Document
 		# find instances to be removed
-		filter_instance_body = FamilyInstanceFilter(doc, Diagramm.body_symbol.Id)
 		filter_instance_header = FamilyInstanceFilter(doc, Diagramm.header_symbol.Id)
-		filter_all = LogicalOrFilter([filter_instance_body, filter_instance_header])
+		filter_instance_body = FamilyInstanceFilter(doc, Diagramm.body_symbol.Id)
+		filter_instance_footer = FamilyInstanceFilter(doc, Diagramm.foot_symbol.Id)
+
+		filter_all = LogicalOrFilter([filter_instance_body, 
+			filter_instance_header,
+			filter_instance_footer])
 		to_remove_id = sheet_obj.GetDependentElements(filter_all)
 		return to_remove_id
 

@@ -63,6 +63,12 @@ Diagramm.body_symbol = toolsrvt.type_by_bic_fam_type(
 	"Panel FD",
 	"Panel FD")
 
+Diagramm.foot_symbol = toolsrvt.type_by_bic_fam_type(
+	doc,
+	BuiltInCategory.OST_GenericAnnotation,
+	"Panel FD_Footer",
+	"Panel FD_Footer")
+
 # ================ IN DATA
 reload_obj = IN[1]  # type: ignore
 # update_all
@@ -95,6 +101,10 @@ for pair in pairs_list:
 	# ================ Body info
 	body_diag_list = Diagramm.get_body_info(sheet_inst, panel_inst)
 	diagramms_list.extend(body_diag_list)
+
+	# ================ Footer info
+	footer_diag_list = Diagramm.get_footer_info(sheet_inst, panel_inst)
+	diagramms_list.append(footer_diag_list)
 
 	# ================ Remove items on sheet
 	items_on_sheet_to_remove.extend(Diagramm.get_ID_to_remove(sheet_inst))
