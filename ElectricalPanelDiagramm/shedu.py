@@ -54,17 +54,17 @@ reload(diag)
 class Shedule(diag.Diagramm):
 	# hard coded parameters
 
-	shedule_origin = [-1.15591572531952, 1.87274442257217, 0]
+	shedule_origin = XYZ(-1.15591572531952, 1.87274442257217, 0)
 	elevation_origin = None
-	notes_origin = None
+	notes_origin = XYZ(0.480601866060708, 0.602081540683848, 0)
 
 	def __init__(self, sheet_rvt):
 		# type: (Shedule, ViewSheet) -> Shedule
 		self.sheet = sheet_rvt
 		self.insert_point = None
-		# self.params = list()
+		self.params = list()
 		self.symbol_type = None
-		# self.instance = None
+		self.instance = None
 		self.doc = sheet_rvt.Document
 
 	# def set_diag_types(cls, doc):
@@ -115,3 +115,19 @@ class Shedule(diag.Diagramm):
 			shedule_view = shedule_view[0]
 			self.symbol_type = shedule_view
 			self.insert_point = self.shedule_origin
+
+	def create_elem_on_sheet(self):
+		if not self.symbol_type:
+			return None
+		doc = self.doc
+
+		if isinstance(self.symbol_type, Autodesk.Revit.DB.Electrical.PanelScheduleView):
+			self.instance = Electrical.PanelScheduleSheetInstance.Create(
+				doc, self.symbol_type.Id, self.sheet)
+			self.instance.Origin = self.insert_point
+		else:
+			Viewport.Create(
+				doc,
+				ElementId(12354366),
+				ElementId(12514870),
+				self.notes_origin)
