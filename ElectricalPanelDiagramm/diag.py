@@ -58,9 +58,9 @@ class Diagramm():
 		"_Ii(INST)",
 		"_Ig(GFPU)", "_tg(GFD)"]
 
-	header_point = [-0.919769759118699, 1.67170722337784, 0]
-	body_point = [-0.916488919223686, 1.44502170713041, 0]
-	shedule_origin = [-1.15591572531952, 1.68093458558256, 0]
+	header_point = [-0.919769759118699, 1.86351706036745, 0]
+	body_point = [-0.916488919223686, 1.63683154412002, 0]
+	shedule_origin = [-1.15591572531952, 1.87274442257217, 0]
 	step_y = 0.0623365636168
 	header_symbol = None
 	body_symbol = None
@@ -68,15 +68,15 @@ class Diagramm():
 
 	def __init__(self, sheet_obj):
 		self.sheet = sheet_obj
-		self.isert_point = None
+		self.insert_point = None
 		self.params = list()
 		self.symbol_type = None
 		self.instance = None
 		self.doc = sheet_obj.Document
 
-	def create_diag_on_sheet(self):
+	def create_elem_on_sheet(self):
 		dia_inst = self.doc.Create.NewFamilyInstance(
-			self.isert_point,
+			self.insert_point,
 			self.symbol_type,
 			self.sheet)
 		return dia_inst
@@ -93,33 +93,25 @@ class Diagramm():
 				param_val)
 		return param_name, param_val
 
-	@staticmethod
-	def get_shedule_view(doc, panel_inst, view_inst):
-		panel_name = panel_inst.Name
-		shedule_view = None
-		shedule_graphics = None
+	@classmethod
+	def set_diag_types(cls, doc):
+		cls.header_symbol = toolsrvt.type_by_bic_fam_type(
+			doc,
+			BuiltInCategory.OST_GenericAnnotation,
+			"Panel main FD",
+			"Panel main FD")
 
-		# check if shedule view is on sheet
-		# If found - No action requiered
-		owner_filter = ElementOwnerViewFilter(view_inst.Id)
-		shedule_graphics = FilteredElementCollector(doc).\
-			OfCategory(BuiltInCategory.OST_PanelScheduleGraphics).\
-			WhereElementIsNotElementType().\
-			WherePasses(owner_filter).\
-			ToElements()
-		shedule_graphics = [i for i in shedule_graphics if panel_name in i.Name]
-		if shedule_graphics:
-			return None
+		cls.body_symbol = toolsrvt.type_by_bic_fam_type(
+			doc,
+			BuiltInCategory.OST_GenericAnnotation,
+			"Panel FD",
+			"Panel FD")
 
-		# get shedule view
-		shedule_view = FilteredElementCollector(doc).\
-			OfClass(Autodesk.Revit.DB.Electrical.PanelScheduleView).\
-			WhereElementIsNotElementType().\
-			ToElements()
-		shedule_view = [i for i in shedule_view if i.Name == panel_name]
-		if shedule_view:
-			shedule_view = shedule_view[0]
-		return shedule_view
+		cls.foot_symbol = toolsrvt.type_by_bic_fam_type(
+			doc,
+			BuiltInCategory.OST_GenericAnnotation,
+			"Panel FD_Footer",
+			"Panel FD_Footer")
 
 	def get_circuit_symbol(self, circuit: Autodesk.Revit.DB.Electrical.ElectricalSystem):
 		# NONE (Spare or Space)
@@ -164,13 +156,13 @@ class Diagramm():
 	def get_header_info(self, panel_inst):
 		circuits_all = toolsrvt.elsys_by_brd(panel_inst)
 		circuits_main = circuits_all[0]
-		self.isert_point = XYZ(
-			Diagramm.header_point[0],
-			Diagramm.header_point[1],
-			Diagramm.header_point[2])
-		self.symbol_type = Diagramm.header_symbol
+		self.insert_point = XYZ(
+			self.header_point[0],
+			self.header_point[1],
+			self.header_point[2])
+		self.symbol_type = self.header_symbol
 		self.params = [[i, toolsrvt.get_parval(panel_inst, i)]
-			for i in Diagramm.panel_params_to_set]
+			for i in self.panel_params_to_set]
 
 		# panel connected from
 		if circuits_main:
@@ -196,8 +188,8 @@ class Diagramm():
 		circuits_main_number = circuits_main.CircuitNumber
 		self.params.append(["RBS_ELEC_CIRCUIT_NUMBER", circuits_main_number])
 
-	@staticmethod
-	def get_body_info(sheet_obj, panel_inst):
+	@classmethod
+	def get_body_info(cls, sheet_obj, panel_inst):
 		diagramm_list = list()
 		circuits_all = toolsrvt.elsys_by_brd(panel_inst)
 		circuits = circuits_all[1]
@@ -209,37 +201,38 @@ class Diagramm():
 				toolsrvt.get_parval(circuit, i)]
 				for i in Diagramm.circuits_param_to_set]
 
-			step_current = Diagramm.step_y * i
-			body_diag.isert_point = XYZ(
-				Diagramm.body_point[0],
-				Diagramm.body_point[1] - step_current,
-				Diagramm.body_point[2])
-			body_diag.symbol_type = Diagramm.body_symbol
+			step_current = body_diag.step_y * i
+			body_diag.insert_point = XYZ(
+				cls.body_point[0],
+				cls.body_point[1] - step_current,
+				cls.body_point[2])
+			body_diag.symbol_type = cls.body_symbol
 			body_diag.get_circuit_symbol(circuit)
 			diagramm_list.append(body_diag)
 		return diagramm_list
 
-	@staticmethod
-	def get_footer_info(sheet_obj, panel_inst):
+	@classmethod
+	def get_footer_info(cls, sheet_obj, panel_inst):
 		circuits_all = toolsrvt.elsys_by_brd(panel_inst)
 		circuits = circuits_all[1]
 		circuits_total = len(circuits)
 		footer_diag = Diagramm(sheet_obj)
-		footer_diag.symbol_type = Diagramm.foot_symbol
-		footer_diag.isert_point = XYZ(
-			Diagramm.body_point[0],
-			Diagramm.body_point[1] - Diagramm.step_y * circuits_total,
-			Diagramm.body_point[2])
+		footer_diag.symbol_type = cls.foot_symbol
+		footer_diag.insert_point = XYZ(
+			cls.body_point[0],
+			cls.body_point[1] - cls.step_y * circuits_total,
+			cls.body_point[2])
 		return footer_diag
 
-	def get_ID_to_remove(sheet_obj):
+	@classmethod
+	def get_ID_to_remove(cls, sheet_obj):
 		doc = sheet_obj.Document
 		# find instances to be removed
-		filter_instance_header = FamilyInstanceFilter(doc, Diagramm.header_symbol.Id)
-		filter_instance_body = FamilyInstanceFilter(doc, Diagramm.body_symbol.Id)
-		filter_instance_footer = FamilyInstanceFilter(doc, Diagramm.foot_symbol.Id)
+		filter_instance_header = FamilyInstanceFilter(doc, cls.header_symbol.Id)
+		filter_instance_body = FamilyInstanceFilter(doc, cls.body_symbol.Id)
+		filter_instance_footer = FamilyInstanceFilter(doc, cls.foot_symbol.Id)
 
-		filter_all = LogicalOrFilter([filter_instance_body, 
+		filter_all = LogicalOrFilter([filter_instance_body,
 			filter_instance_header,
 			filter_instance_footer])
 		to_remove_id = sheet_obj.GetDependentElements(filter_all)
