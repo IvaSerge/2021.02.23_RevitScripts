@@ -67,25 +67,6 @@ class Shedule(diag.Diagramm):
 		self.instance = None
 		self.doc = sheet_rvt.Document
 
-	# def set_diag_types(cls, doc):
-	# 	cls.elevation_2A = toolsrvt.type_by_bic_fam_type(
-	# 		doc,
-	# 		BuiltInCategory.OST_GenericAnnotation,
-	# 		"Panel main FD",
-	# 		"Panel main FD")
-
-	# 	cls.elevation_2C = toolsrvt.type_by_bic_fam_type(
-	# 		doc,
-	# 		BuiltInCategory.OST_GenericAnnotation,
-	# 		"Panel FD",
-	# 		"Panel FD")
-
-	# 	cls.notes = toolsrvt.type_by_bic_fam_type(
-	# 		doc,
-	# 		BuiltInCategory.OST_GenericAnnotation,
-	# 		"Panel FD_Footer",
-	# 		"Panel FD_Footer")
-
 	def get_shedule_view(self, panel_inst):
 		panel_name = panel_inst.Name
 		view_inst = self.sheet
@@ -116,6 +97,9 @@ class Shedule(diag.Diagramm):
 			self.symbol_type = shedule_view
 			self.insert_point = self.shedule_origin
 
+	# @classmethod
+	# def get_legend_by_name(self, panel_inst):
+
 	def create_elem_on_sheet(self):
 		if not self.symbol_type:
 			return None
@@ -126,8 +110,10 @@ class Shedule(diag.Diagramm):
 				doc, self.symbol_type.Id, self.sheet)
 			self.instance.Origin = self.insert_point
 		else:
-			Viewport.Create(
-				doc,
-				ElementId(12354366),
-				ElementId(12514870),
-				self.notes_origin)
+			self.symbol_type = doc.GetElement(ElementId(12514870))
+			if Autodesk.Revit.DB.Viewport.CanAddViewToSheet(doc, self.sheet.Id, self.symbol_type.Id):
+				Autodesk.Revit.DB.Viewport.Create(
+					doc,
+					self.sheet.Id,
+					ElementId(12514870),
+					self.notes_origin)

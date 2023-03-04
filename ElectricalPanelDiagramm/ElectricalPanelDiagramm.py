@@ -68,10 +68,6 @@ if not update_all:
 	# get panel
 	panel_inst = toolsrvt.unwrap(IN[4])  # type: ignore
 	pairs_list.append([panel_inst, sheet_rvt])
-	# find shedule to be installed
-	shedule_obj = Shedule(sheet_rvt)
-	shedule_obj.get_shedule_view(panel_inst)
-	shedules_list.append(shedule_obj)
 
 else:
 	pairs_list = diag.get_pairs(doc)
@@ -101,9 +97,10 @@ for pair in pairs_list:
 	shedules_list.append(shedule_obj)
 
 	# ================ Notes
-	shedule_obj = Shedule(sheet_rvt)
-	shedule_obj.get_notes_view(panel_inst)
-	shedules_list.append(shedule_obj)
+	notes_obj = Shedule(sheet_rvt)
+	# shedule_obj.get_notes_view(panel_inst)
+	notes_obj.symbol_type = 111
+	shedules_list.append(notes_obj)
 
 	# ================ Remove items on sheet
 	items_on_sheet_to_remove.extend(Diagramm.get_ID_to_remove(sheet_rvt))
@@ -113,9 +110,9 @@ diagramms_list.extend(shedules_list)
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-# # clean items on sheet(s)
-# for item in items_on_sheet_to_remove:
-# 	doc.Delete(item)
+# clean items on sheet(s)
+for item in items_on_sheet_to_remove:
+	doc.Delete(item)
 
 # create diagramm on sheet only for
 for diagramm in diagramms_list:
@@ -131,5 +128,5 @@ for body_diag in diagramms_list:
 TransactionManager.Instance.TransactionTaskDone()
 
 
-# OUT = [i.symbol_type for i in diagramms_list]
-OUT = shedules_list[0].instance
+OUT = [i.symbol_type for i in diagramms_list]
+l
