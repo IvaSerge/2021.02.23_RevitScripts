@@ -129,4 +129,3 @@ TransactionManager.Instance.TransactionTaskDone()
 
 
 OUT = [i.symbol_type for i in diagramms_list]
-l
