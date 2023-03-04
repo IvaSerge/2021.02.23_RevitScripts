@@ -55,6 +55,7 @@ pairs_list = list()
 toolsrvt.doc = doc
 toolsrvt.UnwrapElement = UnwrapElement  # type: ignore
 Diagramm.set_diag_types(doc)
+Shedule.set_diag_types(doc)
 
 # ================ IN DATA
 reload_obj = IN[1]  # type: ignore
@@ -98,8 +99,8 @@ for pair in pairs_list:
 
 	# ================ Notes
 	notes_obj = Shedule(sheet_rvt)
-	# shedule_obj.get_notes_view(panel_inst)
-	notes_obj.symbol_type = 111
+	notes_obj.symbol_type = notes_obj.notes_type
+	notes_obj.insert_point = notes_obj.notes_origin
 	shedules_list.append(notes_obj)
 
 	# ================ Remove items on sheet

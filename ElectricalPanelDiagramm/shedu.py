@@ -56,7 +56,9 @@ class Shedule(diag.Diagramm):
 
 	shedule_origin = XYZ(-1.15591572531952, 1.87274442257217, 0)
 	elevation_origin = None
+	elevation_type = None
 	notes_origin = XYZ(0.480601866060708, 0.602081540683848, 0)
+	notes_type = None
 
 	def __init__(self, sheet_rvt):
 		# type: (Shedule, ViewSheet) -> Shedule
@@ -66,6 +68,14 @@ class Shedule(diag.Diagramm):
 		self.symbol_type = None
 		self.instance = None
 		self.doc = sheet_rvt.Document
+
+	@classmethod
+	def set_diag_types(cls, doc):
+		cls.notes_type = toolsrvt.inst_by_cat_strparamvalue(
+			BuiltInCategory.OST_Views,
+			BuiltInParameter.VIEW_NAME,
+			"E_Panel_General Notes",
+			False)
 
 	def get_shedule_view(self, panel_inst):
 		panel_name = panel_inst.Name
@@ -97,9 +107,6 @@ class Shedule(diag.Diagramm):
 			self.symbol_type = shedule_view
 			self.insert_point = self.shedule_origin
 
-	# @classmethod
-	# def get_legend_by_name(self, panel_inst):
-
 	def create_elem_on_sheet(self):
 		if not self.symbol_type:
 			return None
@@ -115,5 +122,5 @@ class Shedule(diag.Diagramm):
 				Autodesk.Revit.DB.Viewport.Create(
 					doc,
 					self.sheet.Id,
-					ElementId(12514870),
-					self.notes_origin)
+					self.symbol_type,
+					self.insert_point)
