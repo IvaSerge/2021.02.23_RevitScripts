@@ -97,11 +97,17 @@ for pair in pairs_list:
 	shedule_obj.get_shedule_view(panel_inst)
 	shedules_list.append(shedule_obj)
 
-	# ================ Notes
+	# ================ General notes
 	notes_obj = Shedule(sheet_rvt)
 	notes_obj.symbol_type = notes_obj.notes_type
 	notes_obj.insert_point = notes_obj.notes_origin
 	shedules_list.append(notes_obj)
+
+	# ================ Elevation of the panel
+	elevation_obj = Shedule(sheet_rvt)
+	elevation_obj.get_elevation_symbol(panel_inst)
+	elevation_obj.insert_point = elevation_obj.elevation_origin
+	shedules_list.append(elevation_obj)
 
 	# ================ Remove items on sheet
 	items_on_sheet_to_remove.extend(Diagramm.get_ID_to_remove(sheet_rvt))
@@ -121,12 +127,11 @@ for diagramm in diagramms_list:
 
 doc.Regenerate()
 
-# # set parameters
+# set parameters
 for body_diag in diagramms_list:
 	Diagramm.set_parameters(body_diag)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-
-OUT = [i.symbol_type for i in diagramms_list]
+OUT = [[i.sheet.Id, i.symbol_type, i.insert_point] for i in shedules_list]

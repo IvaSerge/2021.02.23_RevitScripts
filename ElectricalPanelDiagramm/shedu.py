@@ -43,6 +43,7 @@ clr.ImportExtensions(Revit.GeometryReferences)
 # ================ Python imports
 import importlib
 from importlib import reload
+import re
 
 # ================ local imports
 import toolsrvt
@@ -55,7 +56,7 @@ class Shedule(diag.Diagramm):
 	# hard coded parameters
 
 	shedule_origin = XYZ(-1.15591572531952, 1.87274442257217, 0)
-	elevation_origin = None
+	elevation_origin = XYZ(0.476593699179163, 1.55815285531456, 0)
 	elevation_type = None
 	notes_origin = XYZ(0.480601866060708, 0.602081540683848, 0)
 	notes_type = None
@@ -75,7 +76,7 @@ class Shedule(diag.Diagramm):
 			BuiltInCategory.OST_Views,
 			BuiltInParameter.VIEW_NAME,
 			"E_Panel_General Notes",
-			False)
+			False)[0]
 
 	def get_shedule_view(self, panel_inst):
 		panel_name = panel_inst.Name
@@ -107,6 +108,19 @@ class Shedule(diag.Diagramm):
 			self.symbol_type = shedule_view
 			self.insert_point = self.shedule_origin
 
+	def get_elevation_symbol(self, panel):
+		# get panel model
+		panel_type_str = panel.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString()
+		regexp = re.compile(r"TYPE\s\d\D\d?")
+		type_name = regexp.search(panel_type_str).group(0)
+
+		# get type by name
+		shedule_view = toolsrvt.inst_by_cat_strparamvalue(
+			BuiltInCategory.OST_Views,
+			BuiltInParameter.VIEW_NAME,
+			type_name, False)
+		self.symbol_type = shedule_view[0]
+
 	def create_elem_on_sheet(self):
 		if not self.symbol_type:
 			return None
@@ -117,10 +131,9 @@ class Shedule(diag.Diagramm):
 				doc, self.symbol_type.Id, self.sheet)
 			self.instance.Origin = self.insert_point
 		else:
-			self.symbol_type = doc.GetElement(ElementId(12514870))
 			if Autodesk.Revit.DB.Viewport.CanAddViewToSheet(doc, self.sheet.Id, self.symbol_type.Id):
 				Autodesk.Revit.DB.Viewport.Create(
 					doc,
 					self.sheet.Id,
-					self.symbol_type,
+					self.symbol_type.Id,
 					self.insert_point)
