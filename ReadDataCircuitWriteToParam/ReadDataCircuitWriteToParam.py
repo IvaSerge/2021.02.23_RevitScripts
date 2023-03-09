@@ -78,7 +78,7 @@ def get_parval(elem, name):
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
-	if not(param):
+	if not param:
 		param = elem.get_Parameter(get_bip(name))
 
 	# get paremeter Value if found

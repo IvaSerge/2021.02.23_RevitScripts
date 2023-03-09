@@ -64,7 +64,7 @@ for lighting in lightings:
 			"CP1-KE3L2B05" in panel_name
 		])
 
-	if not(emerg_panel):
+	if not emerg_panel:
 		outlist.append(lighting.Id.ToString())
 
 OUT = outlist
