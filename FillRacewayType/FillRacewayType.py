@@ -39,7 +39,7 @@ def get_parval(elem, name):
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
-	if not(param):
+	if not param:
 		param = elem.get_Parameter(get_bip(name))
 
 	# get paremeter Value if found
@@ -79,7 +79,7 @@ def setup_param_value(elem, name, pValue):
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
-	if not(param):
+	if not param:
 		try:
 			param = elem.get_Parameter(get_bip(name)).Set(pValue)
 		except:
@@ -195,7 +195,8 @@ PARAM_NAMES = [
 	"TSLA_SCOPE_ID",
 	"Tool Prio",
 	"Phase Created",
-	"Tool Scope ID"]
+	"Tool Scope ID",
+	"ELEM_PARTITION_PARAM"]
 
 
 cab_fittings = inst_by_cat_strparamvalue(cab_fitting_cat, param_id, "", False)
