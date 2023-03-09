@@ -73,6 +73,7 @@ class Shedule(diag.Diagramm):
 	@classmethod
 	def set_diag_types(cls, doc):
 		cls.notes_type = toolsrvt.inst_by_cat_strparamvalue(
+			doc,
 			BuiltInCategory.OST_Views,
 			BuiltInParameter.VIEW_NAME,
 			"E_Panel_General Notes",
@@ -116,6 +117,7 @@ class Shedule(diag.Diagramm):
 
 		# get type by name
 		shedule_view = toolsrvt.inst_by_cat_strparamvalue(
+			self.doc,
 			BuiltInCategory.OST_Views,
 			BuiltInParameter.VIEW_NAME,
 			type_name, False)

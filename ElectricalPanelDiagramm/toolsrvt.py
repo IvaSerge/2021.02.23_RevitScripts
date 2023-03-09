@@ -44,9 +44,11 @@ import re
 import operator
 from operator import itemgetter, attrgetter
 import itertools
+from types import FunctionType
 
 
 def process_list(_func, _list):
+	# type: (FunctionType, list) -> any
 	return map(
 		lambda x: process_list(_func, x)
 		if type(x) == list else _func(x), _list)
@@ -93,7 +95,7 @@ def get_parval(elem, name):
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
-	if not(param):
+	if not param:
 		param = elem.get_Parameter(get_bip(name))
 
 	# get paremeter Value if found
@@ -126,6 +128,7 @@ def get_bip(paramName):
 def setup_param_value(elem, name, pValue):
 
 	# check element staus
+	doc = elem.Document
 	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
 	if elem_status == CheckoutStatus.OwnedByOtherUser:
 		return None
@@ -133,7 +136,7 @@ def setup_param_value(elem, name, pValue):
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
-	if not(param):
+	if not param:
 		param = elem.get_Parameter(get_bip(name))
 	param.Set(pValue)
 	return param
@@ -188,10 +191,11 @@ def setup_param_value(elem, name, pValue):
 # 	return elem
 
 
-def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
+def inst_by_cat_strparamvalue(_doc, _bic, _bip, _val, _isType):
 	"""Get all family instances by category and parameter value
 
 		args:
+		_doc: Active document
 		_bic: BuiltInCategory.OST_xxx
 		_bip: BuiltInParameter
 		_val: Parameter value
@@ -205,7 +209,7 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
 		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
+		elem = FilteredElementCollector(_doc).\
 			OfCategory(_bic).\
 			WhereElementIsElementType().\
 			WherePasses(filter).\
@@ -215,7 +219,7 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
 		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
+		elem = FilteredElementCollector(_doc).\
 			OfCategory(_bic).\
 			WhereElementIsNotElementType().\
 			WherePasses(filter).\
@@ -223,11 +227,11 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 	return elem
 
 
-def type_by_bic_fam_type(doc, _bic, _fnam, _tnam):
+def type_by_bic_fam_type(_doc, _bic, _fnam, _tnam):
 	"""Get Type by family category, family name and type
 
 		args:
-		doc: active document
+		_doc: active document
 		_bic: BuiltInCategory.OST_xxx
 		_fnam (str): family name
 		_tnam (str): type name
@@ -249,7 +253,7 @@ def type_by_bic_fam_type(doc, _bic, _fnam, _tnam):
 
 	filter = LogicalAndFilter(filterT, filterF)
 
-	elem = FilteredElementCollector(doc).\
+	elem = FilteredElementCollector(_doc).\
 		OfCategory(_bic).\
 		WhereElementIsElementType().\
 		WherePasses(filter).\
@@ -299,6 +303,3 @@ def elsys_by_brd(_brd):
 		return mainboardsys, lowsys
 	else:
 		return [i for i in allsys][0], None
-
-
-global doc

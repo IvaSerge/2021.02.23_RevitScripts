@@ -135,6 +135,7 @@ class Diagramm():
 			# get reference
 
 			refer_sheet = toolsrvt.inst_by_cat_strparamvalue(
+				self.doc,
 				BuiltInCategory.OST_Sheets,
 				BuiltInParameter.SHEET_NAME,
 				circuit.LoadName,
@@ -173,8 +174,8 @@ class Diagramm():
 
 		# connected from panel - Refer to sheet name
 		if panel_connected_name:
-			# panel_connected_layout = SHEET_NAME inst_by_cat_strparamvalue
 			panel_connected_sheet = toolsrvt.inst_by_cat_strparamvalue(
+				self.doc,
 				BuiltInCategory.OST_Sheets,
 				BuiltInParameter.SHEET_NAME,
 				panel_connected_name,
@@ -272,8 +273,10 @@ def get_pairs(doc):
 
 
 def get_sheet_by_panel(panel_inst):
+	doc = panel_inst.Document
 	panel_name = panel_inst.Name
 	panel_connected_sheet = toolsrvt.inst_by_cat_strparamvalue(
+		doc,
 		BuiltInCategory.OST_Sheets,
 		BuiltInParameter.SHEET_NAME,
 		panel_name,
