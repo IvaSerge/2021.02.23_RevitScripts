@@ -56,7 +56,7 @@ class Shedule(diag.Diagramm):
 	# hard coded parameters
 
 	shedule_origin = XYZ(-1.15591572531952, 1.87274442257217, 0)
-	elevation_origin = XYZ(0.476593699179163, 1.55815285531456, 0)
+	elevation_origin = XYZ(0.476593699179163, 1.48433395767677, 0)
 	elevation_type = None
 	notes_origin = XYZ(0.480601866060708, 0.602081540683848, 0)
 	notes_type = None
