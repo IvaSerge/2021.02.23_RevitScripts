@@ -49,7 +49,7 @@ def get_parval(elem, name):
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
-	if not(param):
+	if not param:
 		param = elem.get_Parameter(get_bip(name))
 
 	# get paremeter Value if found
@@ -116,7 +116,7 @@ def setup_param_value(elem, name, pValue):
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
-	if not(param):
+	if not param:
 		try:
 			param = elem.get_Parameter(get_bip(name)).Set(pValue)
 		except:
@@ -144,7 +144,7 @@ board_to_convert = uidoc.Selection.PickObject(
 	"Select panel").ElementId
 
 # get preset
-if not(IN[2]):  # type: ignore
+if not IN[2]:  # type: ignore
 	raise ValueError("No preset found")
 elif "3A_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_3A_sub
