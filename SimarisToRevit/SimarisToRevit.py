@@ -30,10 +30,16 @@ from System.Collections.Generic import *
 import importlib
 from importlib import reload
 
+import csv
+import re
+
 # ================ local imports
 import toolsrvt
 reload(toolsrvt)
 from toolsrvt import *
+
+import csvreader
+reload(csvreader)
 
 
 # ================ GLOBAL VARIABLES
@@ -43,4 +49,34 @@ uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 view = doc.ActiveView
 
-OUT = None
+reload_IN = IN[1]  # type: ignore
+csv_sortcircuit = dir_path + "\\" + IN[2]  # type: ignore
+csv_breakers = dir_path + "\\" + IN[3]  # type: ignore
+outlist = list()
+
+param_toset_cb = [
+	"_Breaker_Type",
+	"RBS_ELEC_CIRCUIT_FRAME_PARAM",
+	"_IR(LTPU)",
+	"_tr(LTD)",
+	"_Isd(STPU)",
+	"_tsd(STD)",
+	"_Ii(INST)",
+	"_Ig(GFPU)",
+	"_tg(GFD)"]
+
+# ================ get info for circuit breaker settings
+
+cbreakers_list = csvreader.get_breakers_info(csv_breakers)
+elem_list = csvreader.csv_to_rvt_elements(cbreakers_list, doc)
+# for electrical panel
+# for electrical circuit
+
+
+# re_panel_name =
+# ================ get Ik of electrical circuit
+
+
+# ================ set parameters
+
+OUT = elem_list
