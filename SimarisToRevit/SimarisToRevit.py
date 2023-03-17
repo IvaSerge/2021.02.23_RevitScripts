@@ -68,15 +68,10 @@ param_toset_cb = [
 # ================ get info for circuit breaker settings
 
 cbreakers_list = csvreader.get_breakers_info(csv_breakers)
-elem_list = csvreader.csv_to_rvt_elements(cbreakers_list, doc)
-# for electrical panel
-# for electrical circuit
-
-
-# re_panel_name =
-# ================ get Ik of electrical circuit
+cb_paramts_toset_list = csvreader.csv_to_rvt_elements(cbreakers_list, doc)
 
 
 # ================ set parameters
 
-OUT = elem_list
+
+OUT = cb_paramts_toset_list

@@ -66,8 +66,11 @@ def get_breakers_info(csv_breakers):
 			breaker_parameters += [row[15]]
 			breaker_parameters += row[17:]
 
-			cbreakers_list.append(breaker_parameters)
+			# change "," "." and * 1000 for frame parameter
+			if "," in breaker_parameters[3]:
+				breaker_parameters[3] = float(breaker_parameters[3].replace(",", ".")) * 1000
 
+			cbreakers_list.append(breaker_parameters)
 	return cbreakers_list
 
 
@@ -91,16 +94,29 @@ def csv_to_rvt_elements(csv_info, doc):
 			continue
 
 		circuit_number = int(row[1])
+		panel_rvt = toolsrvt.inst_by_cat_strparamvalue(
+			doc,
+			BuiltInCategory.OST_ElectricalEquipment,
+			BuiltInParameter.RBS_ELEC_PANEL_NAME,
+			panel_name,
+			False)
+		# TODO: check if panel is not unique - write report
+		# check panel name is equal to panel name
+		panel_rvt = [i for i in panel_rvt if i.Name == panel_name][0]
+
+		# "0" is main circuit breaker of the panel
 		if circuit_number == 0:
-			panel_rvt = toolsrvt.inst_by_cat_strparamvalue(
-				doc,
-				BuiltInCategory.OST_ElectricalEquipment,
-				BuiltInParameter.RBS_ELEC_PANEL_NAME,
-				panel_name,
-				False)
-			# check panel name is equal to panel name
-			panel_rvt = [i for i in panel_rvt if i.Name == panel_name][0]
+			pass
 			panels_list = [panel_rvt] * len(param_toset_cb)
 			param_values = zip(panels_list, param_toset_cb, row[2:])
 			elem_list.append(param_values)
+
+		# "%n" is branch circuit of the panel
+		else:
+			circutit_rvt = toolsrvt.elsys_by_brd(panel_rvt)[1][circuit_number - 1]
+			circutit_list = [circutit_rvt] * len(param_toset_cb)
+			param_values = zip(circutit_list, param_toset_cb, row[2:])
+			elem_list.append(param_values)
+
+			# TODO: if circuit not found - write report
 	return elem_list
