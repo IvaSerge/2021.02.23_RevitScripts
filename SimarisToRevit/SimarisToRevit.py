@@ -54,24 +54,25 @@ csv_sortcircuit = dir_path + "\\" + IN[2]  # type: ignore
 csv_breakers = dir_path + "\\" + IN[3]  # type: ignore
 outlist = list()
 
-param_toset_cb = [
-	"_Breaker_Type",
-	"RBS_ELEC_CIRCUIT_FRAME_PARAM",
-	"_IR(LTPU)",
-	"_tr(LTD)",
-	"_Isd(STPU)",
-	"_tsd(STD)",
-	"_Ii(INST)",
-	"_Ig(GFPU)",
-	"_tg(GFD)"]
-
 # ================ get info for circuit breaker settings
-
 cbreakers_list = csvreader.get_breakers_info(csv_breakers)
-cb_paramts_toset_list = csvreader.csv_to_rvt_elements(cbreakers_list, doc)
+cb_paramts_to_set = csvreader.csv_to_rvt_elements(cbreakers_list, doc)
 
+
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
 # ================ set parameters
+for i in cb_paramts_to_set:
+	if not i:
+		continue
+	elems = list(i)
+	elem_rvt = elems[0]
+	p_name = elems[1]
+	p_value = elems[2]
+	toolsrvt.setup_param_value(elem_rvt, p_name, p_value)
 
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
-OUT = cb_paramts_toset_list
+OUT = cb_paramts_to_set

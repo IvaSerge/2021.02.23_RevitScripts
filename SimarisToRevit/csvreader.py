@@ -61,23 +61,30 @@ def get_breakers_info(csv_breakers):
 
 			breaker_parameters.append(panel_name)
 			breaker_parameters.append(circuit_number)
-			breaker_parameters += row[1:5]
+			breaker_parameters += row[2:5]
 			breaker_parameters += row[6:8]
 			breaker_parameters += [row[15]]
 			breaker_parameters += row[17:]
 
 			# change "," "." and * 1000 for frame parameter
-			if "," in breaker_parameters[3]:
-				breaker_parameters[3] = float(breaker_parameters[3].replace(",", ".")) * 1000
+			if "," in breaker_parameters[2]:
+				breaker_parameters[2] = float(breaker_parameters[2].replace(",", ".")) * 1000
 
 			cbreakers_list.append(breaker_parameters)
 	return cbreakers_list
 
 
 def csv_to_rvt_elements(csv_info, doc):
-	param_toset_cb = [
-		"_Breaker_Type",
+	param_toset_circuits = [
 		"RBS_ELEC_CIRCUIT_FRAME_PARAM",
+		"_IR(LTPU)",
+		"_tr(LTD)",
+		"_Isd(STPU)",
+		"_tsd(STD)",
+		"_Ii(INST)",
+		"_Ig(GFPU)",
+		"_tg(GFD)"]
+	param_toset_panel = [
 		"_IR(LTPU)",
 		"_tr(LTD)",
 		"_Isd(STPU)",
@@ -107,16 +114,21 @@ def csv_to_rvt_elements(csv_info, doc):
 		# "0" is main circuit breaker of the panel
 		if circuit_number == 0:
 			pass
-			panels_list = [panel_rvt] * len(param_toset_cb)
-			param_values = zip(panels_list, param_toset_cb, row[2:])
-			elem_list.append(param_values)
+			panels_list = [panel_rvt] * len(param_toset_panel)
+			param_values = zip(panels_list, param_toset_panel, row[2:])
+			elem_list.extend(param_values)
 
 		# "%n" is branch circuit of the panel
 		else:
 			circutit_rvt = toolsrvt.elsys_by_brd(panel_rvt)[1][circuit_number - 1]
-			circutit_list = [circutit_rvt] * len(param_toset_cb)
-			param_values = zip(circutit_list, param_toset_cb, row[2:])
-			elem_list.append(param_values)
+			# check circuit is not a SPARE
+			if circutit_rvt.CircuitType != Electrical.CircuitType.Circuit:
+				# TODO add this circuit to error list
+				continue
+
+			circutit_list = [circutit_rvt] * len(param_toset_circuits)
+			param_values = zip(circutit_list, param_toset_circuits, row[2:])
+			elem_list.extend(param_values)
 
 			# TODO: if circuit not found - write report
 	return elem_list
