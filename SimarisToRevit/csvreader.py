@@ -43,11 +43,11 @@ def get_breakers_info(csv_breakers):
 	"""
 
 	cbreakers_list = list()
-	re_circuit_number = re.compile(r"(?<=\[)*.(?=\])")
+	re_circuit_number = re.compile(r"(?<=\[).*(?=\])")
 	re_panel_name = re.compile(r".+(?=\[)")
 
 	with open(csv_breakers, mode='r') as csv_file:
-		csv_reader = csv.reader(csv_file, delimiter=';', quoting=csv.QUOTE_MINIMAL)
+		csv_reader = csv.reader(csv_file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
 		for row in csv_reader:
 			breaker_parameters = list()
 
@@ -66,11 +66,11 @@ def get_breakers_info(csv_breakers):
 			breaker_parameters += [row[15]]
 			breaker_parameters += row[17:]
 
-			# change "," "." and * 1000 for frame parameter
+			# change "," "." for frame
 			if "," in breaker_parameters[2]:
-				breaker_parameters[2] = float(breaker_parameters[2].replace(",", ".")) * 1000
-
+				breaker_parameters[2] = float(breaker_parameters[2].replace(",", ""))
 			cbreakers_list.append(breaker_parameters)
+
 	return cbreakers_list
 
 
@@ -85,7 +85,7 @@ def csv_to_rvt_elements(csv_info, doc):
 		"_Ig(GFPU)",
 		"_tg(GFD)"]
 	param_toset_panel = [
-		"RBS_ELEC_PANEL_MCB_RATING_PARAM"
+		"RBS_ELEC_PANEL_MCB_RATING_PARAM",
 		"_IR(LTPU)",
 		"_tr(LTD)",
 		"_Isd(STPU)",
@@ -114,7 +114,6 @@ def csv_to_rvt_elements(csv_info, doc):
 
 		# "0" is main circuit breaker of the panel
 		if circuit_number == 0:
-			pass
 			panels_list = [panel_rvt] * len(param_toset_panel)
 			param_values = zip(panels_list, param_toset_panel, row[2:])
 			elem_list.extend(param_values)

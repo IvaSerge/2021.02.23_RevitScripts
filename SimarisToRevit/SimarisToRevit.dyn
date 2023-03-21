@@ -16,18 +16,10 @@
       "SelectedIndex": 0
     },
     {
-      "Id": "675ebf51d6c5434fb4f34017fec7e2e1",
-      "Name": "Short-circuit currents",
-      "Type": "string",
-      "Value": "CB1_Short-circuit currents.csv",
-      "Description": "Creates a string.",
-      "SelectedIndex": 0
-    },
-    {
       "Id": "15d805eb8b764fd4845400f3600b40e5",
       "Name": "Switch settings",
       "Type": "string",
-      "Value": "CB1_Switch settings.csv",
+      "Value": "CB1_switch_settings_lv_CB1-SUBN3_4.csv",
       "Description": "Creates a string.",
       "SelectedIndex": 0
     }
@@ -72,15 +64,6 @@
           "Id": "dea01028c0d14c778e215769761eb86e",
           "Name": "IN[2]",
           "Description": "Input #2",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "20c5967bc9ce4871a24dc2309b612e9f",
-          "Name": "IN[3]",
-          "Description": "Input #3",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -203,32 +186,12 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "CB1_Short-circuit currents.csv",
-      "Id": "675ebf51d6c5434fb4f34017fec7e2e1",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "2287bf1330f6414284a011ea69766639",
-          "Name": "",
-          "Description": "String",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Creates a string."
-    },
-    {
-      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
-      "NodeType": "StringInputNode",
-      "InputValue": "CB1_Switch settings.csv",
+      "InputValue": "CB1_switch_settings_lv_CB1-SUBN3_4.csv",
       "Id": "15d805eb8b764fd4845400f3600b40e5",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "188a4a1d129548beaa3cba81eec3e58f",
+          "Id": "e0f814d4dffe41d5899a2b81ac85c535",
           "Name": "",
           "Description": "String",
           "UsingDefaultValue": false,
@@ -273,15 +236,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "2287bf1330f6414284a011ea69766639",
+      "Start": "e0f814d4dffe41d5899a2b81ac85c535",
       "End": "dea01028c0d14c778e215769761eb86e",
-      "Id": "1377b8a3aff5498f92d42e043386e574",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "188a4a1d129548beaa3cba81eec3e58f",
-      "End": "20c5967bc9ce4871a24dc2309b612e9f",
-      "Id": "6c5cb35ae62b4c0ca0d2d796c961a3f2",
+      "Id": "4beceeff0a7f48b8a53f8c17d3d21a19",
       "IsHidden": "False"
     }
   ],
@@ -385,24 +342,14 @@
         "Y": 90.870456948313631
       },
       {
-        "Name": "Short-circuit currents",
-        "ShowGeometry": true,
-        "Id": "675ebf51d6c5434fb4f34017fec7e2e1",
-        "IsSetAsInput": true,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 1145.4571282856141,
-        "Y": 549.38989723127054
-      },
-      {
         "Name": "Switch settings",
         "ShowGeometry": true,
         "Id": "15d805eb8b764fd4845400f3600b40e5",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1143.8246689130199,
-        "Y": 686.34742940294109
+        "X": 1174.81256578424,
+        "Y": 574.497147958538
       }
     ],
     "Annotations": [
@@ -435,23 +382,22 @@
         "WidthAdjustment": 0.0,
         "HeightAdjustment": 0.0,
         "Nodes": [
-          "675ebf51d6c5434fb4f34017fec7e2e1",
           "15d805eb8b764fd4845400f3600b40e5"
         ],
         "HasNestedGroups": false,
-        "Left": 1133.8246689130199,
-        "Top": 476.38989723127054,
-        "Width": 259.0,
-        "Height": 341.95753217167055,
+        "Left": 1164.81256578424,
+        "Top": 501.497147958538,
+        "Width": 257.0,
+        "Height": 224.0,
         "FontSize": 36.0,
-        "InitialTop": 549.38989723127054,
-        "InitialHeight": 281.95753217167055,
+        "InitialTop": 574.497147958538,
+        "InitialHeight": 281.957532171671,
         "TextblockHeight": 63.0,
         "Background": "#FFFFC999"
       }
     ],
-    "X": -1428.694907433556,
-    "Y": -383.69881297753938,
-    "Zoom": 0.99928992904441749
+    "X": -804.157291685817,
+    "Y": -185.94791887393973,
+    "Zoom": 0.71951961380834584
   }
 }

@@ -50,8 +50,7 @@ app = uiapp.Application
 view = doc.ActiveView
 
 reload_IN = IN[1]  # type: ignore
-csv_sortcircuit = dir_path + "\\" + IN[2]  # type: ignore
-csv_breakers = dir_path + "\\" + IN[3]  # type: ignore
+csv_breakers = dir_path + "\\" + IN[2]  # type: ignore
 outlist = list()
 
 # ================ get info for circuit breaker settings
@@ -75,4 +74,4 @@ for i in cb_paramts_to_set:
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = cb_paramts_to_set
+OUT = cbreakers_list
