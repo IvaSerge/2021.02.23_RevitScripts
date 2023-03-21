@@ -27,7 +27,7 @@
       "Id": "15d805eb8b764fd4845400f3600b40e5",
       "Name": "Switch settings",
       "Type": "string",
-      "Value": "CB1_switch_settings.csv",
+      "Value": "CB1_Switch settings.csv",
       "Description": "Creates a string.",
       "SelectedIndex": 0
     }
@@ -104,7 +104,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
@@ -223,7 +223,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "CB1_switch_settings.csv",
+      "InputValue": "CB1_Switch settings.csv",
       "Id": "15d805eb8b764fd4845400f3600b40e5",
       "Inputs": [],
       "Outputs": [
@@ -287,7 +287,7 @@
   ],
   "Dependencies": [],
   "NodeLibraryDependencies": [],
-  "Thumbnail": null,
+  "Thumbnail": "",
   "GraphDocumentationURL": null,
   "ExtensionWorkspaceData": [
     {
@@ -341,8 +341,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1597.4704905833744,
-        "Y": 69.346227188167632
+        "X": 1652.4727406638015,
+        "Y": 221.72951019787479
       },
       {
         "Name": "Reload",
@@ -423,7 +423,7 @@
         "Height": 205.0,
         "FontSize": 36.0,
         "InitialTop": 290.93910259017014,
-        "InitialHeight": 162.0,
+        "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       },
@@ -441,17 +441,17 @@
         "HasNestedGroups": false,
         "Left": 1133.8246689130199,
         "Top": 476.38989723127054,
-        "Width": 256.63245937259421,
-        "Height": 360.95753217167055,
+        "Width": 259.0,
+        "Height": 341.95753217167055,
         "FontSize": 36.0,
         "InitialTop": 549.38989723127054,
-        "InitialHeight": 342.61599584491694,
+        "InitialHeight": 281.95753217167055,
         "TextblockHeight": 63.0,
         "Background": "#FFFFC999"
       }
     ],
-    "X": -256.25725706765547,
-    "Y": 73.835129970652645,
-    "Zoom": 0.79675223782035276
+    "X": -1428.694907433556,
+    "Y": -383.69881297753938,
+    "Zoom": 0.99928992904441749
   }
 }
