@@ -85,6 +85,7 @@ def csv_to_rvt_elements(csv_info, doc):
 		"_Ig(GFPU)",
 		"_tg(GFD)"]
 	param_toset_panel = [
+		"RBS_ELEC_PANEL_MCB_RATING_PARAM"
 		"_IR(LTPU)",
 		"_tr(LTD)",
 		"_Isd(STPU)",
