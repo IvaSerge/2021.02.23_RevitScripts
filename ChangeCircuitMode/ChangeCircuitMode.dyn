@@ -1,0 +1,276 @@
+{
+  "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "ChangeCircuitMode",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "247389cd36b8437db0c2971fb3851598",
+      "Name": "String",
+      "Type": "string",
+      "Value": "ChangeCircuitMode.py",
+      "Description": "Creates a string."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
+      "VariableInputPorts": true,
+      "NodeType": "ExtensionNode",
+      "Id": "1b79df6695194458b3633e0bed15cd64",
+      "Inputs": [
+        {
+          "Id": "f77fa4bc7b15462e94816c963a486648",
+          "Name": "script",
+          "Description": "Python script to run.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "47f4a056f13f43868341f1b01a274f7e",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0ce557ba57ea4f53840d30d83a6db2f5",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0ffe33e7c7f34f6a8d151e5ab16336dc",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs a IronPython script from a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "ad531ae1b87d458d89230df621752f91",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0c50f0a5e8394f019a078e6850124104",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.IO.FileSystem.ReadText@var",
+      "Id": "508e1ae226144bda9f28c842aeae9af8",
+      "Inputs": [
+        {
+          "Id": "e3c70fc4d4f14aff8aa26e1f060f57f2",
+          "Name": "file",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e7849bae2b704038b9a1ce4cee46d4fc",
+          "Name": "str",
+          "Description": "Contents of the text file.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Reads a text file and returns the contents as a string.\n\nFileSystem.ReadText (file: var): string"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.FileObject, CoreNodeModels",
+      "NodeType": "ExtensionNode",
+      "Id": "f5f2e95993264fd5b7943ab8bac7453c",
+      "Inputs": [
+        {
+          "Id": "b505712d4efc41cd97c3c4dc0c84d9e6",
+          "Name": "path",
+          "Description": "Path to the file.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2ce9610afe59481aa813a31da14f8501",
+          "Name": "file",
+          "Description": "File object",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a file object from a path."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "ChangeCircuitMode.py",
+      "Id": "247389cd36b8437db0c2971fb3851598",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "26ebc66651a646cda0966943be75c7d2",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "0c50f0a5e8394f019a078e6850124104",
+      "End": "0ce557ba57ea4f53840d30d83a6db2f5",
+      "Id": "fb503b92c8fd42ab9bf81ecab94118b7"
+    },
+    {
+      "Start": "e7849bae2b704038b9a1ce4cee46d4fc",
+      "End": "f77fa4bc7b15462e94816c963a486648",
+      "Id": "1ef977db6c684532b2d699b962f43f23"
+    },
+    {
+      "Start": "2ce9610afe59481aa813a31da14f8501",
+      "End": "47f4a056f13f43868341f1b01a274f7e",
+      "Id": "16769b54c70a4521a738946c5dea4d33"
+    },
+    {
+      "Start": "2ce9610afe59481aa813a31da14f8501",
+      "End": "e3c70fc4d4f14aff8aa26e1f060f57f2",
+      "Id": "5ddf6818722f4612a56012ce87453e49"
+    },
+    {
+      "Start": "26ebc66651a646cda0966943be75c7d2",
+      "End": "b505712d4efc41cd97c3c4dc0c84d9e6",
+      "Id": "dc0a98baa73b4ab2b23bb5d741aeb4e5"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.3.0.5885",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -11.454592161698105,
+      "EyeY": 12.409141508506295,
+      "EyeZ": 55.363862114874195,
+      "LookX": 11.454592161698105,
+      "LookY": -12.409141508506295,
+      "LookZ": -55.363862114874195,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script From String",
+        "Id": "1b79df6695194458b3633e0bed15cd64",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1487.4622366065003,
+        "Y": 74.9657980722939
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Reload",
+        "Id": "ad531ae1b87d458d89230df621752f91",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1167.4196696472279,
+        "Y": 165.33485263100829
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "FileSystem.ReadText",
+        "Id": "508e1ae226144bda9f28c842aeae9af8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1150.5322161699632,
+        "Y": 17.180403139486202
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "File From Path",
+        "Id": "f5f2e95993264fd5b7943ab8bac7453c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 915.68573411746524,
+        "Y": 86.25012621823214
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String",
+        "Id": "247389cd36b8437db0c2971fb3851598",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 650.48573411746577,
+        "Y": 86.25012621823214
+      }
+    ],
+    "Annotations": [],
+    "X": -418.6165597087379,
+    "Y": 166.75294629026945,
+    "Zoom": 0.91068069898010184
+  }
+}

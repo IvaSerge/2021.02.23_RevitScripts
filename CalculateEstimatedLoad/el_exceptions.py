@@ -32,6 +32,11 @@ def test_exceptions(_elSys):
 	# if the first element of the circuit type contains "ELECTRICAL_RCPT"
 	test_RCPT = "ELECTRICAL_RCPT" in str(first_elem.Name)
 
+	# if the first element is Quasi point
+	if "QUASI_Connector" in str(first_elem.Symbol.FamilyName):
+		# that is not exception
+		return False
+
 	any_tests = any([
 		test_board_CP1,
 		test_RCPT])

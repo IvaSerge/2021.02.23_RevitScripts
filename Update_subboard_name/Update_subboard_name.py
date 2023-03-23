@@ -4,6 +4,8 @@ import clr
 import sys
 # sys.path.append(r"C:\Program Files\Dynamo 0.8")
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
+sys.path.append(pyt_path)
+sys.path.append(IN[0].DirectoryName)  # type: ignore
 
 import System
 from System import Array
@@ -22,12 +24,6 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
-import circuit_voltage_drop
-from circuit_voltage_drop import calc_circuit_vd
-
-import cable_catalogue
-from cable_catalogue import get_cable
-
 
 def elsys_by_brd(_brd):
 	"""Get all systems of electrical board.
@@ -42,9 +38,9 @@ def elsys_by_brd(_brd):
 
 	# filter out non Power circuits
 	allsys = [i for i in allsys
-		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+		if i.CircuitType == Electrical.CircuitType.Circuit]
 	lowsys = [i for i in lowsys
-		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+		if i.CircuitType == Electrical.CircuitType.Circuit]
 
 	# board have upper and lower circuits
 	if lowsys and allsys:
@@ -82,7 +78,7 @@ def get_parval(elem, name):
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
-	if not(param):
+	if not param:
 		param = elem.get_Parameter(get_bip(name))
 
 	# get paremeter Value if found
@@ -103,67 +99,78 @@ def get_parval(elem, name):
 
 
 def get_bip(paramName):
-	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
-	param = None
-	for i, i_name in enumerate(builtInParams):
-		if i_name == paramName:
-			param = System.Enum.GetValues(BuiltInParameter)[i]
-			break
-	return param
+	builtInParams = System.Enum.GetValues(BuiltInParameter)
+	param = []
+	for i in builtInParams:
+		if i.ToString() == paramName:
+			param.append(i)
+			return i
 
 
-def category_by_bic_name(_bicString):
-	builtInCats = [i for i in System.Enum.GetNames(BuiltInCategory)]
-	bic = None
-	for i, i_name in enumerate(builtInCats):
-		if i_name == _bicString:
-			bic = System.Enum.GetValues(BuiltInCategory)[i]
-			break
-	return bic
-
-
-def get_low_elem(_up_elem):
-	"""Get the next lower element of the net"""
-
-	# check what is it
-	cat_el_sys = category_by_bic_name("OST_ElectricalCircuit")
-	cat_brd = category_by_bic_name("OST_ElectricalEquipment")
-
-	# it is electrical system
-	if _up_elem.Category.BuiltInCategory == cat_el_sys:
-		return _up_elem.BaseEquipment
-
-	# it is board
-	if _up_elem.Category.BuiltInCategory == cat_brd:
-		return elsys_by_brd(_up_elem)[0]
-
-	return None
-
-
-def get_vd(_el_sys):
-	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list
-	"""Calculate total voltage drop of circuit.
-
-		args:
-			_el_sys: electrical system
-
-		return:
-			list()
+def update_subboard_name(board_inst):
 	"""
+	Board type "QUASI_Connector" symbol is subboard.
+	Board name need to be changed according to current circuit name
+	"""
+	brd_main_circuit = elsys_by_brd(board_inst)[0]
+	if not brd_main_circuit:
+		return None
 
-	low_elem_list = list()
-	low_elem_list.append(_el_sys)
-	low_elem = _el_sys
+	current_board = board_inst
 
 	while True:
-		low_elem = get_low_elem(low_elem)
-		if low_elem:
-			low_elem_list.append(low_elem)
+		if not current_board:
+			return None
+
+		board_is_quasi = current_board.Symbol.Family.Name == "QUASI_Connector"
+
+		if board_is_quasi:
+			# get upper board
+			next_system = elsys_by_brd(current_board)[0]
+			next_board = next_system.BaseEquipment
+			current_board = next_board
 		else:
+			main_board = current_board.Name
+			main_circ_num = next_system.CircuitNumber
 			break
-	cat_el_sys = category_by_bic_name("OST_ElectricalCircuit")
-	low_nets = [i for i in low_elem_list if i.Category.BuiltInCategory == cat_el_sys]
 
-	vd_list = [calc_circuit_vd(i) for i in low_nets]
+	name = main_board + ": " + main_circ_num
+	board_inst.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_NAME).Set(name)
+	return name
 
-	return _el_sys, vd_list
+
+doc = DocumentManager.Instance.CurrentDBDocument
+uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
+uiapp = DocumentManager.Instance.CurrentUIApplication
+app = uiapp.Application
+
+fnrvStr = FilterStringEquals()
+pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
+frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector")
+filter = ElementParameterFilter(frule)
+
+electroBoards = FilteredElementCollector(doc).\
+	OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
+	WhereElementIsNotElementType().\
+	WherePasses(filter).\
+	ToElements()
+
+reload = IN[1]  # type: ignore
+calc_all = IN[2]  # type: ignore
+
+if calc_all:
+	elemList = electroBoards
+
+if not calc_all:
+	elemList = [UnwrapElement(IN[3])]  # type: ignore
+
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
+
+brd_updated = map(update_subboard_name, elemList)
+
+TransactionManager.Instance.TransactionTaskDone()
+# =========End transaction
+
+# OUT = brd_updated
+OUT = elemList

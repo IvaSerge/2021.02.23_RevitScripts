@@ -25,13 +25,10 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
-
+import re
+from operator import itemgetter
 
 # ================ Local imports
-import circuit_voltage_drop
-from circuit_voltage_drop import calc_circuit_vd
-import calc_overall_vd
-from calc_overall_vd import get_vd
 
 
 def get_sys_by_selection():
@@ -43,6 +40,7 @@ def get_sys_by_selection():
 	sel = uidoc.Selection.PickObject(  # type: ignore
 		Autodesk.Revit.UI.Selection.ObjectType.Element, "")
 	sel_obj = doc.GetElement(sel.ElementId)  # type: ignore
+
 	# check if selection is electrical board
 	# OST_ElectricalEquipment.Id == -2001040
 	if sel_obj.Category.Id == ElementId(-2001040):
@@ -58,39 +56,20 @@ def get_sys_by_selection():
 	return el_sys_list
 
 
-def elsys_by_brd(_brd):
-	"""Get all systems of electrical board.
-		args:
-		_brd - electrical board FamilyInstance
-		return list(1, 2) where:
-		1 - main electrical circuit
-		2 - list of connectet low circuits
-	"""
-	allsys = _brd.MEPModel.GetElectricalSystems()
-	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
-	# board have upper and lower circuits
-	if lowsys and allsys:
-		lowsysId = [i.Id for i in lowsys]
-		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
-		# board have no main circuit
-		if len(mainboardsysLst) == 0:
-			mainboardsys = None
-		else:
-			mainboardsys = mainboardsysLst[0]
-		lowsys = [i for i in allsys if i.Id in lowsysId]
-		lowsys.sort(key=lambda x: get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER"))
-		return mainboardsys, lowsys
+def get_circuit_number(_circuit_number_str):
+	# type: (Autodesk.Revit.DB.Autodesk.Revit.DB.Electrical.ElectricalSystem) -> int
+	"""Used for circuit sorting"""
+	regexp = re.compile(r"^[A-Za-z]*(\d+)")
+	check = regexp.match(_circuit_number_str)
+	return int(check.group(1))
 
-	# board have no circuits
-	if not allsys and not lowsys:
-		return None, None
 
-	# board have only main circuit
-	if not lowsys:
-		return [i for i in allsys][0], None
+def get_param_values(elem, params):
+	return [get_parval(elem, i) for i in params]
 
 
 def get_parval(elem, name):
+	# type: (FamilyInstance, str) -> any
 	"""Get parametr value
 
 	args:
@@ -125,63 +104,31 @@ def get_parval(elem, name):
 
 
 def get_bip(paramName):
-	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
-	param = None
-	for i, i_name in enumerate(builtInParams):
-		if i_name == paramName:
-			param = System.Enum.GetValues(BuiltInParameter)[i]
-			break
-	return param
-
-
-def get_el_sys(_elem):
-	elem_cat = _elem.Category.Id.IntegerValue
-	# check if it is electrical board
-	if elem_cat == -2001040:
-		el_sys = elsys_by_brd(_elem)[0]
-	else:
-		sys_type = Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit
-		el_sys = _elem.MEPModel.GetElectricalSystems()
-		el_sys = [i for i in el_sys if i.SystemType == sys_type][0]
-	return el_sys
+	builtInParams = System.Enum.GetValues(BuiltInParameter)
+	param = []
+	for i in builtInParams:
+		if i.ToString() == paramName:
+			param.append(i)
+			return i
 
 
 # ================ GLOBAL VARIABLES
-global doc  # type: ignore
 doc = DocumentManager.Instance.CurrentDBDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 app = uiapp.Application
-DISTR_SYS_NAME = "230/400V"
-
-calc_overall_vd.doc = doc
-
-# find and set distribution system
-testParam = BuiltInParameter.SYMBOL_NAME_PARAM
-pvp = ParameterValueProvider(ElementId(int(testParam)))
-fnrvStr = FilterStringEquals()
-filter = ElementParameterFilter(
-	FilterStringRule(pvp, fnrvStr, DISTR_SYS_NAME))
-
-distrSys = FilteredElementCollector(doc).\
-	OfCategory(BuiltInCategory.OST_ElecDistributionSys).\
-	WhereElementIsElementType().\
-	WherePasses(filter).\
-	ToElements()[0].Id
 
 reload = IN[1]  # type: ignore
 calc_all = IN[2]  # type: ignore
-outlist = list()
+info_list = list()
 
 # only 1 element to calculate
 if not calc_all:
 	circuits_to_calculate = get_sys_by_selection()
 
-# get all electrical systems that are modifiable
+# get all electrical systems
 if calc_all:
 	# get all circuits in the model
-	# Get all electrical circuits
-	# Circuit type need to be electrilca only
 	# electrical circuit type ID == 6
 	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
 	pvp = ParameterValueProvider(ElementId(int(testParam)))
@@ -194,41 +141,46 @@ if calc_all:
 		ToElements()
 
 	voltage_230 = UnitUtils.ConvertToInternalUnits(
-		230, UnitTypeId.Volts)
+		230, UnitTypeId.VoltAmperes)
 	voltage_400 = UnitUtils.ConvertToInternalUnits(
-		400, UnitTypeId.Volts)
+		400, UnitTypeId.VoltAmperes)
 
 	circuits_to_calculate = [
 		i for i in circuits_to_calculate
 		if i.Voltage == voltage_230 or i.Voltage == voltage_400
 	]
 
-	# filter out not owned circuits
-	circuits_to_calculate = [
-		i for i in circuits_to_calculate
-		if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != CheckoutStatus.OwnedByOtherUser
-	]
+	# Filtering circuits for requiered panels only
+	filtered_circuits = list()
+	for i in circuits_to_calculate:
+		base_panel = i.BaseEquipment
+		if not base_panel:
+			continue
+		model_name = base_panel.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_MODEL).AsString()
+		if not model_name:
+			continue
+		filter_model_name = any([
+			"2A" in model_name,
+			"2C" in model_name,
+			"2K" in model_name,
+		])
 
-	# Filtering out not connected circuits
-	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
+		if filter_model_name:
+			filtered_circuits.append(i)
 
-# =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
+# read circuit parameters
+params = [
+	"Panel",
+	"Circuit Number",
+	"Trip",
+	"Frame",
+	"_Breaker_Type"]
 
-vd_list = [get_vd(circuit) for circuit in circuits_to_calculate]
 
-for i in vd_list:
-	el_sys = i[0]
-	# skiped not owned system
-	if WorksharingUtils.GetCheckoutStatus(doc, el_sys.Id) == CheckoutStatus.OwnedByOtherUser:
-		continue
+param_val_list = [get_param_values(i, params) for i in filtered_circuits]
+sort_key = lambda x: (x[0], get_circuit_number(x[1]))
+param_val_list.sort(key=sort_key)
 
-	el_vd = str(round(i[1][0] * 100) / 100)
-	el_vd_overall = str(round(sum(i[1]) * 100) / 100)
-	el_sys.LookupParameter("CP_Voltage Drop").Set(el_vd)
-	el_sys.LookupParameter("CP_Voltage Drop Overall").Set(el_vd_overall)
+param_val_list.insert(0, params)
 
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
-
-OUT = vd_list
+OUT = param_val_list

@@ -1,32 +1,28 @@
-# ================ system imports
 import clr
 
 import sys
 # sys.path.append(r"C:\Program Files\Dynamo 0.8")
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
+sys.path.append(pyt_path)
+
+clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
+from Microsoft.Office.Interop import Excel  # type: ignore
 
 import System
 from System import Array
 from System.Collections.Generic import *
 
-# ================ Revit imports
-clr.AddReference('RevitAPIUI')
-from Autodesk.Revit.UI import *
+System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo("en-US")
+from System.Runtime.InteropServices import Marshal
 
+# ================ Revit imports
 clr.AddReference('RevitAPI')
 import Autodesk
 from Autodesk.Revit.DB import *
 
-clr.AddReference("RevitServices")
-import RevitServices
-from RevitServices.Persistence import DocumentManager
-from RevitServices.Transactions import TransactionManager
-
-import circuit_voltage_drop
-from circuit_voltage_drop import calc_circuit_vd
-
-import cable_catalogue
-from cable_catalogue import get_cable
+# ================ Python imports
+import operator
+from operator import itemgetter, attrgetter
 
 
 def elsys_by_brd(_brd):
@@ -45,7 +41,7 @@ def elsys_by_brd(_brd):
 		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
 	lowsys = [i for i in lowsys
 		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
-
+	
 	# board have upper and lower circuits
 	if lowsys and allsys:
 		lowsysId = [i.Id for i in lowsys]
@@ -103,67 +99,56 @@ def get_parval(elem, name):
 
 
 def get_bip(paramName):
-	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
-	param = None
-	for i, i_name in enumerate(builtInParams):
-		if i_name == paramName:
-			param = System.Enum.GetValues(BuiltInParameter)[i]
-			break
-	return param
+	builtInParams = System.Enum.GetValues(BuiltInParameter)
+	param = []
+	for i in builtInParams:
+		if i.ToString() == paramName:
+			param.append(i)
+			return i
 
 
-def category_by_bic_name(_bicString):
-	builtInCats = [i for i in System.Enum.GetNames(BuiltInCategory)]
-	bic = None
-	for i, i_name in enumerate(builtInCats):
-		if i_name == _bicString:
-			bic = System.Enum.GetValues(BuiltInCategory)[i]
-			break
-	return bic
+def sort_list_by_point(start_point, point_list, elems):
+	list_len = len(point_list)
+	start_pnt_list = [start_point] * list_len
+	calc_dist = zip(point_list, start_pnt_list)
+	sort_dist = [x[0].DistanceTo(x[1]) for x in calc_dist]
+	sort_list = zip(elems, sort_dist)
+	return [x[0] for x in sorted(sort_list, key=itemgetter(1))]
 
 
-def get_low_elem(_up_elem):
-	"""Get the next lower element of the net"""
+def getElemInSys(el_sys):
+	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list()
+	"""Get elements is circuit and all Quasi boards
+	"""
+	elems = [i for i in el_sys.Elements]
+	if len(elems) == 1:
+		return elems
 
-	# check what is it
-	cat_el_sys = category_by_bic_name("OST_ElectricalCircuit")
-	cat_brd = category_by_bic_name("OST_ElectricalEquipment")
-
-	# it is electrical system
-	if _up_elem.Category.BuiltInCategory == cat_el_sys:
-		return _up_elem.BaseEquipment
-
-	# it is board
-	if _up_elem.Category.BuiltInCategory == cat_brd:
-		return elsys_by_brd(_up_elem)[0]
-
-	return None
+	# sort elems by location
+	start_point = el_sys.BaseEquipment.Location.Point
+	point_list = [i.Location.Point for i in elems]
+	sorted_elems = sort_list_by_point(start_point, point_list, elems)
+	return sorted_elems
 
 
-def get_vd(_el_sys):
-	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list
-	"""Calculate total voltage drop of circuit.
-
-		args:
-			_el_sys: electrical system
-
-		return:
-			list()
+def searchInDeep(el_sys, elem_list=list()):
+	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem, list()) -> list()
+	"""Check if Quasi elements are in circuit. Return list of elements.
 	"""
 
-	low_elem_list = list()
-	low_elem_list.append(_el_sys)
-	low_elem = _el_sys
+	# ATTENTION: 2 circuits in Quasi element not allowed
+	# ATTENTION: only 1st circuit will be calculated
+	elems = getElemInSys(el_sys)
 
-	while True:
-		low_elem = get_low_elem(low_elem)
-		if low_elem:
-			low_elem_list.append(low_elem)
+	for elem in elems:
+		if elem.Symbol.Family.Name == "QUASI_Connector":
+			# get first circuit
+			low_sys = elsys_by_brd(elem)[1]
+			if low_sys:
+				low_sys = low_sys[0]
+				searchInDeep(low_sys, elem_list)
+
 		else:
-			break
-	cat_el_sys = category_by_bic_name("OST_ElectricalCircuit")
-	low_nets = [i for i in low_elem_list if i.Category.BuiltInCategory == cat_el_sys]
+			elem_list.append(elem)
 
-	vd_list = [calc_circuit_vd(i) for i in low_nets]
-
-	return _el_sys, vd_list
+	return elem_list

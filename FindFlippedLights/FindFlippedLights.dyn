@@ -2,7 +2,7 @@
   "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
   "IsCustomNode": false,
   "Description": "",
-  "Name": "CopyFromDoc",
+  "Name": "FindFlippedLights",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -11,8 +11,15 @@
       "Id": "0eb69237dd0c4dc187884facd965d90a",
       "Name": "String",
       "Type": "string",
-      "Value": "CopyFromDoc.py",
+      "Value": "FindFlippedLights.py",
       "Description": "Erstellt eine Zeichenfolge."
+    },
+    {
+      "Id": "f0c35a1a54cd46a59816ac6342b08c68",
+      "Name": "String",
+      "Type": "string",
+      "Value": "",
+      "Description": "Creates a string."
     }
   ],
   "Outputs": [],
@@ -20,7 +27,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "d4faef3825fc49ce8fedebdcd48067ca",
       "Inputs": [],
       "Outputs": [
@@ -147,7 +154,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "CopyFromDoc.py",
+      "InputValue": "FindFlippedLights.py",
       "Id": "0eb69237dd0c4dc187884facd965d90a",
       "Inputs": [],
       "Outputs": [
@@ -163,6 +170,86 @@
       ],
       "Replication": "Disabled",
       "Description": "Erstellt eine Zeichenfolge."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSOffice.Data.ExportCSV@string,var[][]",
+      "Id": "8b17b7251a1f4489a9f1b001078d625d",
+      "Inputs": [
+        {
+          "Id": "8ea53d6a8f6440c2bb17182d59efcab4",
+          "Name": "filePath",
+          "Description": "Path to write to\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "011bed530c4e4cffbfe1b52c47f203d8",
+          "Name": "data",
+          "Description": "List of lists to write into CSV\n\nvar[][]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "975e11e574f14646a562d44f25088503",
+          "Name": "void",
+          "Description": "void",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Write a list of lists into a file using a comma-separated values format. Outer list represents rows, inner lists represent columns.\n\nData.ExportCSV (filePath: string, data: var[][]): void"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "",
+      "Id": "f0c35a1a54cd46a59816ac6342b08c68",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8884659e5b2a434e8abc8eceee89e40c",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
+      "HintPath": "C:\\04 Git\\2021.02.23_RevitScripts\\FindFlippedLights\\FindFlippedLights.csv",
+      "InputValue": ".\\FindFlippedLights.csv",
+      "NodeType": "ExtensionNode",
+      "Id": "bbd3c4241faa4eaeb2cf87562100dab3",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "e3abdf0011b043419393af664a0e1070",
+          "Name": "",
+          "Description": "Filename",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows you to select a file on the system to get its filename"
     }
   ],
   "Connectors": [
@@ -170,6 +257,11 @@
       "Start": "ef9d7fd5abed4398b74fdbba5f356c6c",
       "End": "f1ced3c8000d4c729c4cdde79c88a77f",
       "Id": "4734e1badb1143e599f226e5a3253696"
+    },
+    {
+      "Start": "e338fe7403ae470eb5206baf5fed837a",
+      "End": "011bed530c4e4cffbfe1b52c47f203d8",
+      "Id": "45c1dc0dd77e42d49fb17b8d574ed286"
     },
     {
       "Start": "0c0f3de7a008471d9c3e3aa4859858d0",
@@ -190,16 +282,22 @@
       "Start": "24e320b0a8844744b7c6b6bf89539764",
       "End": "c1793981a2564442b958a5e8fbf8a6a3",
       "Id": "6c6625a2c4904cb2abd6e4db423d8c32"
+    },
+    {
+      "Start": "e3abdf0011b043419393af664a0e1070",
+      "End": "8ea53d6a8f6440c2bb17182d59efcab4",
+      "Id": "ac9f2d8afe6b4e8d9c1deb3df23ce19b"
     }
   ],
   "Dependencies": [],
+  "NodeLibraryDependencies": [],
   "Bindings": [],
   "View": {
     "Dynamo": {
       "ScaleFactor": 10000.0,
       "HasRunWithoutCrash": true,
       "IsVisibleInDynamoLibrary": true,
-      "Version": "2.0.3.8810",
+      "Version": "2.3.0.5885",
       "RunType": "Manual",
       "RunPeriod": "1000"
     },
@@ -223,8 +321,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 493.706596439658,
-        "Y": 744.17991342143921
+        "X": 338.43765152142305,
+        "Y": 820.23645822394087
       },
       {
         "ShowGeometry": true,
@@ -233,8 +331,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 886.714773087099,
-        "Y": 605.399052995255
+        "X": 725.74525792830366,
+        "Y": 704.46323687191614
       },
       {
         "ShowGeometry": true,
@@ -243,8 +341,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 508.76551481907165,
-        "Y": 555.44225808811859
+        "X": 352.31468621152146,
+        "Y": 634.17235248417614
       },
       {
         "ShowGeometry": true,
@@ -253,8 +351,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 273.91903276657411,
-        "Y": 624.51198116686533
+        "X": 117.4682041590238,
+        "Y": 703.24207556292288
       },
       {
         "ShowGeometry": true,
@@ -263,13 +361,43 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 8.7190327665745144,
-        "Y": 624.51198116686533
+        "X": -147.73179584097556,
+        "Y": 703.24207556292288
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Data.ExportCSV",
+        "Id": "8b17b7251a1f4489a9f1b001078d625d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1347.7083325378719,
+        "Y": 691.78316619515863
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "String",
+        "Id": "f0c35a1a54cd46a59816ac6342b08c68",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1159.3275375780638,
+        "Y": 776.395465889923
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "File Path",
+        "Id": "bbd3c4241faa4eaeb2cf87562100dab3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 902.246454167365,
+        "Y": 508.2717640103881
       }
     ],
     "Annotations": [],
-    "X": -96.326750975640749,
-    "Y": -45.7203000876176,
-    "Zoom": 0.57574916898387074
+    "X": -536.40559519950648,
+    "Y": -269.09865066844827,
+    "Zoom": 0.82030952543106561
   }
 }

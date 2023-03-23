@@ -1,21 +1,14 @@
+
 import clr
 
 import sys
 # sys.path.append(r"C:\Program Files\Dynamo 0.8")
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
-dir_path = IN[0].DirectoryName  # type: ignore
-sys.path.append(dir_path)
-
-clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
-from Microsoft.Office.Interop import Excel  # type: ignore
 
 import System
 from System import Array
 from System.Collections.Generic import *
-
-System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo("en-US")
-from System.Runtime.InteropServices import Marshal
 
 # ================ Revit imports
 clr.AddReference('RevitAPI')
@@ -51,16 +44,11 @@ import re
 import operator
 from operator import itemgetter, attrgetter
 import itertools
-
-global doc
-doc = DocumentManager.Instance.CurrentDBDocument
-uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
-uiapp = DocumentManager.Instance.CurrentUIApplication
-app = uiapp.Application
-view = doc.ActiveView
+from types import FunctionType
 
 
 def process_list(_func, _list):
+	# type: (FunctionType, list) -> any
 	return map(
 		lambda x: process_list(_func, x)
 		if type(x) == list else _func(x), _list)
@@ -137,52 +125,11 @@ def get_bip(paramName):
 	return param
 
 
-def category_by_bic_name(_bicString):
-	global doc
-	bicList = System.Enum.GetValues(BuiltInCategory)
-	bic = [i for i in bicList if _bicString == i.ToString()][0]
-	return Category.GetCategory(doc, bic)
-
-
-def param_by_cat(_bic, _name):
-	# type: (Autodesk.Revit.DB.BuiltiInCategory, str) -> Autodesk.Revit.DB.Parameter
-	"""Get parametr in
-
-	args:
-		_bic (BuiltiInCategory.OST_xxx): category
-		_name (str): parameter name
-	return:
-		param (Autodesk.Revit.DB.Parameter) - parameter
-	"""
-	# check Type parameter
-	elem = FilteredElementCollector(doc).\
-		OfCategory(_bic).\
-		WhereElementIsElementType().\
-		FirstElement()
-	param = elem.LookupParameter(_name)
-	if param:
-		return param
-
-	# check instance parameter
-	# ATTENTION! instance is first in!
-	# Be sure that all instances has the parameter.
-	elem = FilteredElementCollector(doc).\
-		OfCategory(_bic).\
-		WhereElementIsNotElementType().\
-		FirstElement()
-	param = elem.LookupParameter(_name)
-	if param:
-		return param
-
-	# Not found
-	return None
-
-
 def setup_param_value(elem, name, pValue):
 
 	# check element staus
+	doc = elem.Document
 	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
-
 	if elem_status == CheckoutStatus.OwnedByOtherUser:
 		return None
 
@@ -190,23 +137,65 @@ def setup_param_value(elem, name, pValue):
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
 	if not param:
-		try:
-			param = elem.get_Parameter(get_bip(name)).Set(pValue)
-		except:
-			pass
-
-	if param:
-		try:
-			param.Set(pValue)
-		except:
-			pass
-	return elem
+		param = elem.get_Parameter(get_bip(name))
+	param.Set(pValue)
+	return param
 
 
-def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
+# def category_by_bic_name(_bicString):
+# 	global doc
+# 	bicList = System.Enum.GetValues(BuiltInCategory)
+# 	bic = [i for i in bicList if _bicString == i.ToString()][0]
+# 	return Category.GetCategory(doc, bic)
+
+
+# def param_by_cat(_bic, _name):
+# 	# type: (Autodesk.Revit.DB.BuiltiInCategory, str) -> Autodesk.Revit.DB.Parameter
+# 	"""Get parametr in
+
+# 	args:
+# 		_bic (BuiltiInCategory.OST_xxx): category
+# 		_name (str): parameter name
+# 	return:
+# 		param (Autodesk.Revit.DB.Parameter) - parameter
+# 	"""
+# 	# check Type parameter
+# 	elem = FilteredElementCollector(doc).\
+# 		OfCategory(_bic).\
+# 		WhereElementIsElementType().\
+# 		FirstElement()
+# 	param = elem.LookupParameter(_name)
+# 	if param:
+# 		return param
+
+# 	# check instance parameter
+# 	# ATTENTION! instance is first in!
+# 	# Be sure that all instances has the parameter.
+# 	elem = FilteredElementCollector(doc).\
+# 		OfCategory(_bic).\
+# 		WhereElementIsNotElementType().\
+# 		FirstElement()
+# 	param = elem.LookupParameter(_name)
+# 	if param:
+# 		return param
+
+# 	# Not found
+# 	return None
+
+
+# 	if param:
+# 		try:
+# 			param.Set(pValue)
+# 		except:
+# 			pass
+# 	return elem
+
+
+def inst_by_cat_strparamvalue(_doc, _bic, _bip, _val, _isType):
 	"""Get all family instances by category and parameter value
 
 		args:
+		_doc: Active document
 		_bic: BuiltInCategory.OST_xxx
 		_bip: BuiltInParameter
 		_val: Parameter value
@@ -216,21 +205,21 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 		list()[Autodesk.Revit.DB.FamilySymbol]
 	"""
 	if _isType:
-		fnrvStr = FilterStringEquals()
+		fnrvStr = FilterStringContains()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
+		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
+		elem = FilteredElementCollector(_doc).\
 			OfCategory(_bic).\
 			WhereElementIsElementType().\
 			WherePasses(filter).\
 			ToElements()
 	else:
-		fnrvStr = FilterStringEquals()
+		fnrvStr = FilterStringContains()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
+		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
+		elem = FilteredElementCollector(_doc).\
 			OfCategory(_bic).\
 			WhereElementIsNotElementType().\
 			WherePasses(filter).\
@@ -238,10 +227,11 @@ def inst_by_cat_strparamvalue(_bic, _bip, _val, _isType):
 	return elem
 
 
-def type_by_bic_fam_type(_bic, _fnam, _tnam):
+def type_by_bic_fam_type(_doc, _bic, _fnam, _tnam):
 	"""Get Type by family category, family name and type
 
 		args:
+		_doc: active document
 		_bic: BuiltInCategory.OST_xxx
 		_fnam (str): family name
 		_tnam (str): type name
@@ -255,15 +245,15 @@ def type_by_bic_fam_type(_bic, _fnam, _tnam):
 	pvpType = ParameterValueProvider(ElementId(int(BuiltInParameter.SYMBOL_NAME_PARAM)))
 	pvpFam = ParameterValueProvider(ElementId(int(BuiltInParameter.ALL_MODEL_FAMILY_NAME)))
 
-	fruleF = FilterStringRule(pvpFam, fnrvStr, _fnam, False)
+	fruleF = FilterStringRule(pvpFam, fnrvStr, _fnam)
 	filterF = ElementParameterFilter(fruleF)
 
-	fruleT = FilterStringRule(pvpType, fnrvStr, _tnam, False)
+	fruleT = FilterStringRule(pvpType, fnrvStr, _tnam)
 	filterT = ElementParameterFilter(fruleT)
 
 	filter = LogicalAndFilter(filterT, filterF)
 
-	elem = FilteredElementCollector(doc).\
+	elem = FilteredElementCollector(_doc).\
 		OfCategory(_bic).\
 		WhereElementIsElementType().\
 		WherePasses(filter).\
@@ -275,10 +265,10 @@ def mm_to_ft(mm):
 	return 3.2808 * mm / 1000
 
 
-def ft_to_mm(ft):
-	mm = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(
-		ft, Autodesk.Revit.DB.DisplayUnitType.DUT_MILLIMETERS)
-	return mm
+# def ft_to_mm(ft):
+# 	mm = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(
+# 		ft, Autodesk.Revit.DB.DisplayUnitType.DUT_MILLIMETERS)
+# 	return mm
 
 
 def elsys_by_brd(_brd):
@@ -295,7 +285,7 @@ def elsys_by_brd(_brd):
 	allsys = _brd.MEPModel.GetElectricalSystems()
 	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
 
-		# filter out non Power circuits
+	# filter out non Power circuits
 	allsys = [i for i in allsys
 		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
 	lowsys = [i for i in lowsys
@@ -313,35 +303,3 @@ def elsys_by_brd(_brd):
 		return mainboardsys, lowsys
 	else:
 		return [i for i in allsys][0], None
-
-
-# array = ModelCurveArray() # создание массива Array
-# array.Append(UnwrapElement(i)) # положить элементы в массив
-
-# Ids=List[ElementId]() #Icollection в данном случае для ElementId
-# Ids.Add(UnwrapElement(i).Id) # добавить элементы в Icollection
-
-# получение всех элементов категории OST_Wire кроме их типов
-# wires = FilteredElementCollector(doc).OfCategory(BuiltInCategory.OST_Wire).WhereElementIsNotElementType().ToElements()
-# dstype=[]
-# for i in wires:
-# 	dstype.append(i.ToDSType(True))
-# OUT = IN[0].split(‘/’) # разделить данные типа String по символу '/'
-
-# ModelCurve to Line Dynamo
-# UnwrapElement(IN[0]).GeometryCurve.ToProtoType()
-
-# Line Dynamo to ModelLine
-# ModelCurve.ByCurve(IN[0])
-
-# получение параметра по его BuiltIn значению
-# OUT = UnwrapElement(IN[0]).get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM).AsValueString()
-# в зависимости от параметра окончание может быть также AsString() AsDouble()
-
-# =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
-
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
-
-# new.ToDSType(False)

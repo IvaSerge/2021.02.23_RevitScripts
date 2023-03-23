@@ -49,8 +49,15 @@ def elsys_by_brd(_brd):
 		1 - main electrical circuit
 		2 - list of connectet low circuits
 	"""
-	allsys = _brd.MEPModel.ElectricalSystems
-	lowsys = _brd.MEPModel.AssignedElectricalSystems
+	allsys = _brd.MEPModel.GetElectricalSystems()
+	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
+
+	# filter out non Power circuits
+	allsys = [i for i in allsys
+		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+	lowsys = [i for i in lowsys
+		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
+
 	if lowsys:
 		lowsysId = [i.Id for i in lowsys]
 		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
@@ -142,45 +149,26 @@ def get_estimated_load(_elSys, _testboard):
 	global doc
 	calcSystem = _elSys
 
-	# Main board of electrical system
-	mainBoard = calcSystem.BaseEquipment
-	row_and_schedule = get_circuit_row(_elSys)
-	calcSystem_row = row_and_schedule[0]
-	mainBoard_schedule = row_and_schedule[0]
+	# perform changes in subtransaction
+	with SubTransaction(doc) as sub_tr:
+		sub_tr.Start()
 
-	# reconnect system from Main to Test board
-	calcSystem.SelectPanel(_testboard)
-	doc.Regenerate()
+		# reconnect system from Main to Test board
+		calcSystem.SelectPanel(_testboard)
+		doc.Regenerate()
 
-	# Get parameters from test board
-	rvt_DemandFactor = _testboard.get_Parameter(
-		BuiltInParameter.
-		RBS_ELEC_PANEL_TOTAL_DEMAND_FACTOR_PARAM).AsDouble()
+		# Get parameters from test board
+		rvt_DemandFactor = _testboard.get_Parameter(
+			BuiltInParameter.
+			RBS_ELEC_PANEL_TOTAL_DEMAND_FACTOR_PARAM).AsDouble()
 
-	rvt_TotalEstLoad = _testboard.get_Parameter(
-		BuiltInParameter.
-		RBS_ELEC_PANEL_TOTALESTLOAD_PARAM).AsDouble()
+		rvt_TotalEstLoad = _testboard.get_Parameter(
+			BuiltInParameter.
+			RBS_ELEC_PANEL_TOTALESTLOAD_PARAM).AsDouble()
 
-	convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
-		rvt_TotalEstLoad, DisplayUnitType.DUT_VOLT_AMPERES)
+		sub_tr.RollBack()
 
-	# reconnect circuit back
-	calcSystem.SelectPanel(mainBoard)
-	doc.Regenerate()
-
-	calcSystem_row_new = get_circuit_row(_elSys)[0]
-
-	# there was no schedule. Reconection not reqiuered
-	if not calcSystem_row or not mainBoard_schedule:
-		return convert_TotalEstLoad, rvt_DemandFactor
-
-	# the system is on correct place - no reconection
-	if calcSystem_row == calcSystem_row_new:
-		return convert_TotalEstLoad, rvt_DemandFactor
-
-		mainBoard_schedule.MoveSlotTo(calcSystem_row_new, 1, calcSystem_row, 1)
-
-	return convert_TotalEstLoad, rvt_DemandFactor
+	return rvt_TotalEstLoad, rvt_DemandFactor  # convert_TotalEstLoad, rvt_DemandFactor
 
 
 def SetEstimatedValues(_elSys, _testboard):
@@ -195,6 +183,13 @@ def SetEstimatedValues(_elSys, _testboard):
 		param List[str] - list of installed values
 
 	"""
+
+	# If circuit owned by other - return None
+	elem_stat = Autodesk.Revit.DB.WorksharingUtils.GetCheckoutStatus(
+		doc, _elSys.Id)
+	if elem_stat == Autodesk.Revit.DB.CheckoutStatus.OwnedByOtherUser:
+		return None
+
 	# check if it is a real circuit
 	# it it is spare or space - no actions requiered
 	circ_type = _elSys.CircuitType
@@ -206,21 +201,23 @@ def SetEstimatedValues(_elSys, _testboard):
 	if test_exceptions(_elSys):
 		calc_parameters = get_estimated_load(_elSys, _testboard)
 		total_est_load = calc_parameters[0]
-		rvt_DemandFactor = calc_parameters[1]
-			# calculate parameters
+		convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
+			total_est_load, UnitTypeId.VoltAmperes)
+		rvt_DemandFactor = round(calc_parameters[1], 2)
+		# calculate parameters
 		poles_number = calcSystem.PolesNumber
 		if poles_number == 1:
 			current_estimated = round(
-				(total_est_load / 230) * 10) / 10
+				(convert_TotalEstLoad / 230) * 10) / 10
 		else:
-			current_estimated = round((total_est_load / (400 * sqrt(3))) * 10) / 10
+			current_estimated = round((convert_TotalEstLoad / (400 * sqrt(3))) * 10) / 10
 	else:
 		# if not an exception - demand factor == 1
 		rvt_DemandFactor = 1
 		total_est_load = rvt_TotalInstalledLoad
 		rvt_current = _elSys.ApparentCurrent
 		current_estimated = round(UnitUtils.ConvertFromInternalUnits(
-			rvt_current, DisplayUnitType.DUT_AMPERES) * 10) / 10
+			rvt_current, UnitTypeId.Amperes) * 10) / 10
 
 	# Write parameters in Circuit
 	calcSystem.LookupParameter("E_DemandFactor").Set(rvt_DemandFactor)
@@ -252,7 +249,7 @@ testParam = BuiltInParameter.SYMBOL_NAME_PARAM
 pvp = ParameterValueProvider(ElementId(int(testParam)))
 fnrvStr = FilterStringEquals()
 filter = ElementParameterFilter(
-	FilterStringRule(pvp, fnrvStr, DISTR_SYS_NAME, False))
+	FilterStringRule(pvp, fnrvStr, DISTR_SYS_NAME))
 
 distrSys = FilteredElementCollector(doc).\
 	OfCategory(BuiltInCategory.OST_ElecDistributionSys).\
@@ -285,9 +282,9 @@ else:
 		ToElements()
 
 	voltage_230 = UnitUtils.ConvertToInternalUnits(
-		230, DisplayUnitType.DUT_VOLTS)
+		230, UnitTypeId.Volts)
 	voltage_400 = UnitUtils.ConvertToInternalUnits(
-		400, DisplayUnitType.DUT_VOLTS)
+		400, UnitTypeId.Volts)
 
 	circuits_to_calculate = [
 		i for i in circuits_to_calculate
@@ -319,4 +316,4 @@ doc.Delete(TESTBOARD.Id)
 TransactionManager.Instance.TransactionTaskDone()
 
 # OUT = param_info
-OUT = circuits_to_calculate
+OUT = param_info
