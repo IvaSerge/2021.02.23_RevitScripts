@@ -303,3 +303,8 @@ def elsys_by_brd(_brd):
 		return mainboardsys, lowsys
 	else:
 		return [i for i in allsys][0], None
+
+
+def category_by_bic_name(doc, _bicString):
+	bic_value = System.Enum.Parse(BuiltInCategory, _bicString)
+	return Autodesk.Revit.DB.Category.GetCategory(doc, bic_value)
