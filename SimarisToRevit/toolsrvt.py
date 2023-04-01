@@ -142,11 +142,9 @@ def setup_param_value(elem, name, pValue):
 	return param
 
 
-# def category_by_bic_name(_bicString):
-# 	global doc
-# 	bicList = System.Enum.GetValues(BuiltInCategory)
-# 	bic = [i for i in bicList if _bicString == i.ToString()][0]
-# 	return Category.GetCategory(doc, bic)
+def category_by_bic_name(doc, _bicString):
+	bic_value = System.Enum.Parse(BuiltInCategory, _bicString)
+	return Autodesk.Revit.DB.Category.GetCategory(doc, bic_value)
 
 
 # def param_by_cat(_bic, _name):
