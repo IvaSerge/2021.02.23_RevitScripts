@@ -2,7 +2,7 @@
   "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
   "IsCustomNode": false,
   "Description": "",
-  "Name": "ReadDataCircuitWriteToParam",
+  "Name": "Update_subboard_name",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -11,7 +11,7 @@
       "Id": "247389cd36b8437db0c2971fb3851598",
       "Name": "String",
       "Type": "string",
-      "Value": "ReadDataCircuitWriteToParam.py",
+      "Value": "Update_subboard_name.py",
       "Description": "Creates a string.",
       "SelectedIndex": 0
     },
@@ -175,7 +175,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "ReadDataCircuitWriteToParam.py",
+      "InputValue": "Update_subboard_name.py",
       "Id": "247389cd36b8437db0c2971fb3851598",
       "Inputs": [],
       "Outputs": [
@@ -399,8 +399,8 @@
       }
     ],
     "Annotations": [],
-    "X": -880.06442682594729,
-    "Y": 63.21520402425881,
+    "X": -641.06442682594729,
+    "Y": 54.21520402425881,
     "Zoom": 1.0890077704832035
   }
 }
