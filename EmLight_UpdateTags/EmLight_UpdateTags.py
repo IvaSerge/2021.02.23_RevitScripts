@@ -26,9 +26,11 @@ from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
 import re
+import importlib
 
 # ================ local imports
 import EmLight_SearchInSys
+importlib.reload(EmLight_SearchInSys)
 from EmLight_SearchInSys import *
 
 
@@ -42,7 +44,7 @@ def elsys_by_brd(_brd):
 	"""
 	allsys = _brd.MEPModel.GetElectricalSystems()
 	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
-	
+
 	# filter out non Power circuits
 	allsys = [i for i in allsys
 		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
@@ -85,7 +87,7 @@ def get_parval(elem, name):
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
-	if not(param):
+	if not param:
 		param = elem.get_Parameter(get_bip(name))
 
 	# get paremeter Value if found
@@ -106,12 +108,13 @@ def get_parval(elem, name):
 
 
 def get_bip(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
+	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
+	param = None
+	for i, i_name in enumerate(builtInParams):
+		if i_name == paramName:
+			param = System.Enum.GetValues(BuiltInParameter)[i]
+			break
+	return param
 
 
 def setup_param_value(elem, name, pValue):
@@ -125,7 +128,7 @@ def setup_param_value(elem, name, pValue):
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
-	if not(param):
+	if not param:
 		try:
 			param = elem.get_Parameter(get_bip(name)).Set(pValue)
 		except:
@@ -203,7 +206,7 @@ calc_by_panel = IN[2]  # type: ignore
 
 fnrvStr = FilterStringEquals()
 pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
-frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector", False)
+frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector")
 filter = ElementParameterFilter(frule)
 
 # =================== part 1 of the script

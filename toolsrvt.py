@@ -301,4 +301,3 @@ def elsys_by_brd(_brd):
 		return mainboardsys, lowsys
 	else:
 		return [i for i in allsys][0], None
-

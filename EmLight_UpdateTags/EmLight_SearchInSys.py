@@ -5,9 +5,6 @@ import sys
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
 
-clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
-from Microsoft.Office.Interop import Excel  # type: ignore
-
 import System
 from System import Array
 from System.Collections.Generic import *
@@ -65,6 +62,7 @@ def elsys_by_brd(_brd):
 
 
 def get_parval(elem, name):
+	# type: (FamilyInstance, str) -> any
 	"""Get parametr value
 
 	args:
@@ -99,12 +97,13 @@ def get_parval(elem, name):
 
 
 def get_bip(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
+	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
+	param = None
+	for i, i_name in enumerate(builtInParams):
+		if i_name == paramName:
+			param = System.Enum.GetValues(BuiltInParameter)[i]
+			break
+	return param
 
 
 def sort_list_by_point(start_point, point_list, elems):
