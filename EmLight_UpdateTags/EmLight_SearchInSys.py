@@ -41,7 +41,7 @@ def elsys_by_brd(_brd):
 		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
 	lowsys = [i for i in lowsys
 		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
-	
+
 	# board have upper and lower circuits
 	if lowsys and allsys:
 		lowsysId = [i.Id for i in lowsys]
@@ -78,7 +78,7 @@ def get_parval(elem, name):
 	# custom parameter
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
-	if not(param):
+	if not param:
 		param = elem.get_Parameter(get_bip(name))
 
 	# get paremeter Value if found
