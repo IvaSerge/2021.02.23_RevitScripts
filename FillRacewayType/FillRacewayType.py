@@ -26,10 +26,11 @@ from itertools import chain
 
 
 def get_parval(elem, name):
+	# type: (FamilyInstance, str) -> any
 	"""Get parametr value
 
 	args:
-		elem - family instance or type\n
+		elem - family instance or type
 		name - parameter name
 	return:
 		value - parameter value
@@ -42,8 +43,8 @@ def get_parval(elem, name):
 	if not param:
 		param = elem.get_Parameter(get_bip(name))
 
-	# get paremeter Value if found
-	try:
+	if param:
+		# get paremeter Value if found
 		storeType = param.StorageType
 		# value = storeType
 		if storeType == StorageType.String:
@@ -53,19 +54,19 @@ def get_parval(elem, name):
 		elif storeType == StorageType.Double:
 			value = param.AsDouble()
 		elif storeType == StorageType.ElementId:
-			value = param.AsValueString()
-	except:
-		pass
+			value: ElementId = param.AsElementId()
+
 	return value
 
 
 def get_bip(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
+	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
+	param = None
+	for i, i_name in enumerate(builtInParams):
+		if i_name == paramName:
+			param = System.Enum.GetValues(BuiltInParameter)[i]
+			break
+	return param
 
 
 def setup_param_value(elem, name, pValue):
@@ -80,16 +81,10 @@ def setup_param_value(elem, name, pValue):
 	param = elem.LookupParameter(name)
 	# check is it a BuiltIn parameter if not found
 	if not param:
-		try:
-			param = elem.get_Parameter(get_bip(name)).Set(pValue)
-		except:
-			pass
-
+		param = elem.get_Parameter(get_bip(name))
 	if param:
-		try:
-			param.Set(pValue)
-		except:
-			pass
+		param.Set(pValue)
+
 	return elem
 
 
@@ -201,7 +196,7 @@ PARAM_NAMES = [
 
 cab_fittings = inst_by_cat_strparamvalue(cab_fitting_cat, param_id, "", False)
 neighbors = [get_first_ref(i) for i in cab_fittings]
-neighbor_pairs = zip(cab_fittings, neighbors)
+neighbor_pairs = list(zip(cab_fittings, neighbors))
 
 # that's error need to be clarified
 without_neighbor = [i[0] for i in neighbor_pairs if not i[1]]
@@ -223,8 +218,8 @@ pairs_to_set = list(itertools.chain.from_iterable(pairs_to_set))
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-func_set_param = lambda x: setup_param_value(x[0], x[1], x[2])
-map(func_set_param, pairs_to_set)
+for i in pairs_to_set:
+	setup_param_value(i[0], i[1], i[2])
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()

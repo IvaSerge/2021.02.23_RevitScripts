@@ -31,7 +31,7 @@
     },
     {
       "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
-      "Engine": "IronPython2",
+      "Engine": "CPython3",
       "VariableInputPorts": true,
       "NodeType": "ExtensionNode",
       "Id": "2d5996559be141609f0239af77174c49",
@@ -192,7 +192,7 @@
   ],
   "Dependencies": [],
   "NodeLibraryDependencies": [],
-  "Thumbnail": null,
+  "Thumbnail": "",
   "GraphDocumentationURL": null,
   "ExtensionWorkspaceData": [
     {
@@ -256,8 +256,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 882.19608653585385,
-        "Y": 625.73314247585859
+        "X": 882.835738706616,
+        "Y": 625.733142475859
       },
       {
         "Name": "FileSystem.ReadText",
@@ -291,8 +291,8 @@
       }
     ],
     "Annotations": [],
-    "X": -42.091167986102391,
-    "Y": -338.59772348104968,
-    "Zoom": 0.95949514250383683
+    "X": -423.99727591539624,
+    "Y": -491.07698601179186,
+    "Zoom": 0.92636808449654473
   }
 }
