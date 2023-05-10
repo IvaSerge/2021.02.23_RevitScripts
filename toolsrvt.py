@@ -98,8 +98,8 @@ def get_parval(elem, name):
 	if not param:
 		param = elem.get_Parameter(get_bip(name))
 
-	# get paremeter Value if found
-	try:
+	if param:
+		# get paremeter Value if found
 		storeType = param.StorageType
 		# value = storeType
 		if storeType == StorageType.String:
@@ -109,9 +109,10 @@ def get_parval(elem, name):
 		elif storeType == StorageType.Double:
 			value = param.AsDouble()
 		elif storeType == StorageType.ElementId:
-			value = param.AsValueString()
-	except:
-		pass
+			value: ElementId = param.AsElementId()
+	else:
+		raise Exception("No parameter found")
+
 	return value
 
 
@@ -128,8 +129,8 @@ def get_bip(paramName):
 def setup_param_value(elem, name, pValue):
 
 	# check element staus
-	doc = elem.Document
-	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
+	elem_status = WorksharingUtils.GetCheckoutStatus(elem.Document, elem.Id)
+
 	if elem_status == CheckoutStatus.OwnedByOtherUser:
 		return None
 
@@ -138,8 +139,12 @@ def setup_param_value(elem, name, pValue):
 	# check is it a BuiltIn parameter if not found
 	if not param:
 		param = elem.get_Parameter(get_bip(name))
-	param.Set(pValue)
-	return param
+
+	if param:
+		param.Set(pValue)
+	else:
+		raise Exception("No parameter found")
+	return elem
 
 
 def category_by_bic_name(doc, _bicString):
