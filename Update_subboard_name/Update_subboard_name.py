@@ -99,12 +99,13 @@ def get_parval(elem, name):
 
 
 def get_bip(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
+	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
+	param = None
+	for i, i_name in enumerate(builtInParams):
+		if i_name == paramName:
+			param = System.Enum.GetValues(BuiltInParameter)[i]
+			break
+	return param
 
 
 def update_subboard_name(board_inst):
@@ -159,7 +160,11 @@ reload = IN[1]  # type: ignore
 calc_all = IN[2]  # type: ignore
 
 if calc_all:
-	elemList = electroBoards
+	elemList = list()
+	# filter out emergency lighting Quasys
+	# use EmLight_UpdateTags to tag them correctly
+	elemList = [i for i in electroBoards if
+		"NOT" not in i.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString()]
 
 if not calc_all:
 	elemList = [UnwrapElement(IN[3])]  # type: ignore
@@ -172,5 +177,4 @@ brd_updated = map(update_subboard_name, elemList)
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
-# OUT = brd_updated
-OUT = elemList
+OUT = brd_updated
