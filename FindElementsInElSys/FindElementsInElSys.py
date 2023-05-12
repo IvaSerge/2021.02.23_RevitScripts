@@ -26,101 +26,9 @@ from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
 import re
-
-
-def elsys_by_brd(_brd):
-	# type: (FamilyInstance) -> list
-	"""Get all systems of electrical board.
-
-		args:
-		_brd - electrical board FamilyInstance
-
-		return list(1, 2) where:
-		1 - main electrical circuit
-		2 - list of connectet low circuits
-	"""
-	allsys = _brd.MEPModel.GetElectricalSystems()
-	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
-
-	# filter out non Power circuits
-	allsys = [i for i in allsys
-		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
-	lowsys = [i for i in lowsys
-		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
-
-	if lowsys:
-		lowsysId = [i.Id for i in lowsys]
-		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
-		if len(mainboardsysLst) == 0:
-			mainboardsys = None
-		else:
-			mainboardsys = mainboardsysLst[0]
-		lowsys = [i for i in allsys if i.Id in lowsysId]
-		lowsys.sort(key=lambda x: float(get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER")))
-		return mainboardsys, lowsys
-	else:
-		return [i for i in allsys][0], None
-
-
-def get_parval(elem, name):
-	"""Get parametr value
-
-	args:
-		elem - family instance or type
-		name - parameter name
-	return:
-		value - parameter value
-	"""
-
-	value = None
-	# custom parameter
-	param = elem.LookupParameter(name)
-	# check is it a BuiltIn parameter if not found
-	if not param:
-		param = elem.get_Parameter(get_bip(name))
-
-	# get paremeter Value if found
-	try:
-		storeType = param.StorageType
-		# value = storeType
-		if storeType == StorageType.String:
-			value = param.AsString()
-		elif storeType == StorageType.Integer:
-			value = param.AsDouble()
-		elif storeType == StorageType.Double:
-			value = param.AsDouble()
-		elif storeType == StorageType.ElementId:
-			value = param.AsValueString()
-	except:
-		pass
-	return value
-
-
-def get_bip(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
-
-
-def setup_param_value(elem, name, pValue):
-	# custom parameter
-	param = elem.LookupParameter(name)
-	# check is it a BuiltIn parameter if not found
-	if not param:
-		try:
-			param = elem.get_Parameter(get_bip(name)).Set(pValue)
-		except:
-			pass
-
-	if param:
-		try:
-			param.Set(pValue)
-		except:
-			pass
-	return elem
+import importlib
+import toolsrvt
+importlib.reload(toolsrvt)
 
 
 def get_sys_elements(_el_sys):
@@ -176,42 +84,48 @@ def get_first_circuit_number(_circuit):
 	return int(check.group(1))
 
 
-def write_DALI_info(_el_board):
+def get_DALI_info(_el_board):
 	# type: (Autodesk.Revit.DB.FamilyInstance) -> list
 
+	outlist = list()
+
 	# filter out electrical circuit only
-	circuits = elsys_by_brd(_el_board)[1]
+	circuits = toolsrvt.elsys_by_brd(_el_board)[1]
 	elems_in_circuits = [int(i.LookupParameter("E_Light_number").AsString()) for i in circuits]
 
-	# # for every circuit get ammount of fixtures in circuit
-	# total_fixtures = 0
-	# current_switch = 1
-	# for circuit in circuits:
-	# 	fixtures_in_circuit = int(circuit.LookupParameter("E_Light_number").AsString())
+	current_switch = 1
+	total_fixtures = 0
+	terminal_occupied = 0
+	for elems in elems_in_circuits:
+		# not possible situation
+		# it is possible to connect max 64 lightings to 1 switchgear
+		check = all([total_fixtures + elems <= 64, terminal_occupied < 4])
+		if elems > 64:
+			outlist.append("ERR")
 
-	# 	# it is possible to connect 64 lightings to 1 switchgear
-	# 	# 64 lightings can be connected, 0 in reserve
-	# 	if fixtures_in_circuit + total_fixtures > 64:
-	# 		# not possible to connect to the device
-	# 		# switch to other device
-	# 		total_fixtures = fixtures_in_circuit
-	# 		current_switch += 1
-	# 	else:
-	# 		# possible to connect to the device
-	# 		total_fixtures += fixtures_in_circuit
+		# we are Ok with terminals and lightings
+		elif check:
+			total_fixtures += elems
+			terminal_occupied += 1
+			outlist.append("DALI_" + str(current_switch))
 
-	# 	str_switch = "DALI_" + str(current_switch)
-	# 	circuit.LookupParameter("Switching Unit").Set(str_switch)
-	return elems_in_circuits
+		# no free terminals or more than 64 lights
+		# use next switch
+		else:
+			current_switch += 1
+			total_fixtures = elems
+			terminal_occupied = 1
+			outlist.append("DALI_" + str(current_switch))
+
+	return zip(circuits, outlist)
 
 
-def write_circuit_info(info_list):
+def write_info(info_list, par_name):
 	# # write parameter to circuit
-	par_name = "E_Light_number"
 	for i in info_list:
 		elem = i[0]
 		value = str(i[1])
-		setup_param_value(elem, par_name, value)
+		toolsrvt.setup_param_value(elem, par_name, value)
 
 
 # ================ GLOBAL VARIABLES
@@ -234,7 +148,7 @@ if not calc_all:
 	# sel_obj = doc.GetElement(sel.ElementId)  # type: ignore
 	# # TODO: Add here check of selection
 	# boards_list.append(sel_obj)
-	boards_list.append(UnwrapElement(IN[3]))
+	boards_list.append(UnwrapElement(IN[3]))  # type: ignore
 
 
 # =========Start transaction
@@ -242,20 +156,21 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 
 # for board in board_list:
 board = boards_list[0]
-circuits_to_calculate = elsys_by_brd(board)[1]
+circuits_to_calculate = toolsrvt.elsys_by_brd(board)[1]
 
 if circuits_to_calculate:
 	for circuit in circuits_to_calculate:
 		info = get_sys_elements(circuit)
 		info_list.append(info)
 
-# write_circuit_info(info_list)
+write_info(info_list, "E_Light_number")
+doc.Regenerate()
 
-# for board in boards_list:
-# write_DALI_info(board)
+info_DALIL = get_DALI_info(board)
+write_info(info_DALIL, "Switching Unit")
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
 # OUT = info_list
-OUT = write_DALI_info(board)
+OUT = get_DALI_info(board)
