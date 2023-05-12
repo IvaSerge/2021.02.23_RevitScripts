@@ -29,9 +29,12 @@ import re
 
 
 def elsys_by_brd(_brd):
+	# type: (FamilyInstance) -> list
 	"""Get all systems of electrical board.
+
 		args:
 		_brd - electrical board FamilyInstance
+
 		return list(1, 2) where:
 		1 - main electrical circuit
 		2 - list of connectet low circuits
@@ -41,29 +44,21 @@ def elsys_by_brd(_brd):
 
 	# filter out non Power circuits
 	allsys = [i for i in allsys
-		if i.CircuitType == Electrical.CircuitType.Circuit]
+		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
 	lowsys = [i for i in lowsys
-		if i.CircuitType == Electrical.CircuitType.Circuit]
+		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
 
-	# board have upper and lower circuits
-	if lowsys and allsys:
+	if lowsys:
 		lowsysId = [i.Id for i in lowsys]
 		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
-		# board have no main circuit
 		if len(mainboardsysLst) == 0:
 			mainboardsys = None
 		else:
 			mainboardsys = mainboardsysLst[0]
 		lowsys = [i for i in allsys if i.Id in lowsysId]
-		lowsys.sort(key=lambda x: get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER"))
+		lowsys.sort(key=lambda x: float(get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER")))
 		return mainboardsys, lowsys
-
-	# board have no circuits
-	if not allsys and not lowsys:
-		return None, None
-
-	# board have only main circuit
-	if not lowsys:
+	else:
 		return [i for i in allsys][0], None
 
 
@@ -184,35 +179,30 @@ def get_first_circuit_number(_circuit):
 def write_DALI_info(_el_board):
 	# type: (Autodesk.Revit.DB.FamilyInstance) -> list
 
-	# get electrical circuits by board
-	sys_all = elsys_by_brd(sel_obj)[1]
 	# filter out electrical circuit only
-	circuits = [
-		x for x in sys_all
-		if x.CircuitType == Electrical.CircuitType.Circuit]
+	circuits = elsys_by_brd(_el_board)[1]
+	elems_in_circuits = [int(i.LookupParameter("E_Light_number").AsString()) for i in circuits]
 
-	circuits.sort(key=get_first_circuit_number)
+	# # for every circuit get ammount of fixtures in circuit
+	# total_fixtures = 0
+	# current_switch = 1
+	# for circuit in circuits:
+	# 	fixtures_in_circuit = int(circuit.LookupParameter("E_Light_number").AsString())
 
-	# for every circuit get ammount of fixtures in circuit
-	total_fixtures = 0
-	current_switch = 1
-	for circuit in circuits:
-		fixtures_in_circuit = int(circuit.LookupParameter("E_Light_number").AsString())
+	# 	# it is possible to connect 64 lightings to 1 switchgear
+	# 	# 64 lightings can be connected, 0 in reserve
+	# 	if fixtures_in_circuit + total_fixtures > 64:
+	# 		# not possible to connect to the device
+	# 		# switch to other device
+	# 		total_fixtures = fixtures_in_circuit
+	# 		current_switch += 1
+	# 	else:
+	# 		# possible to connect to the device
+	# 		total_fixtures += fixtures_in_circuit
 
-		# it is possible to connect 64 lightings to 1 switchgear
-		# 64 lightings can be connected, 0 in reserve
-		if fixtures_in_circuit + total_fixtures > 64:
-			# not possible to connect to the device
-			# switch to other device
-			total_fixtures = fixtures_in_circuit
-			current_switch += 1
-		else:
-			# possible to connect to the device
-			total_fixtures += fixtures_in_circuit
-
-		str_switch = "DALI_" + str(current_switch)
-		circuit.LookupParameter("Switching Unit").Set(str_switch)
-	return circuits
+	# 	str_switch = "DALI_" + str(current_switch)
+	# 	circuit.LookupParameter("Switching Unit").Set(str_switch)
+	return elems_in_circuits
 
 
 def write_circuit_info(info_list):
@@ -238,12 +228,13 @@ boards_list = list()
 
 # only 1 element to calculate
 if not calc_all:
-	# get selected object
-	sel = uidoc.Selection.PickObject(  # type: ignore
-		Autodesk.Revit.UI.Selection.ObjectType.Element, "")
-	sel_obj = doc.GetElement(sel.ElementId)  # type: ignore
-	# TODO: Add here check of selection
-	boards_list.append(sel_obj)
+	# # get selected object
+	# sel = uidoc.Selection.PickObject(  # type: ignore
+	# 	Autodesk.Revit.UI.Selection.ObjectType.Element, "")
+	# sel_obj = doc.GetElement(sel.ElementId)  # type: ignore
+	# # TODO: Add here check of selection
+	# boards_list.append(sel_obj)
+	boards_list.append(UnwrapElement(IN[3]))
 
 
 # =========Start transaction
@@ -252,17 +243,19 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 # for board in board_list:
 board = boards_list[0]
 circuits_to_calculate = elsys_by_brd(board)[1]
-circuits_to_calculate.sort(key=get_first_circuit_number)
 
 if circuits_to_calculate:
 	for circuit in circuits_to_calculate:
 		info = get_sys_elements(circuit)
 		info_list.append(info)
 
-write_circuit_info(info_list)
-write_DALI_info(sel_obj)
+# write_circuit_info(info_list)
+
+# for board in boards_list:
+# write_DALI_info(board)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = info_list
+# OUT = info_list
+OUT = write_DALI_info(board)
