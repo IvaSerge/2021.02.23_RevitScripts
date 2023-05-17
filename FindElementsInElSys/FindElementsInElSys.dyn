@@ -48,7 +48,7 @@
     },
     {
       "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
-      "Engine": "IronPython2",
+      "Engine": "CPython3",
       "VariableInputPorts": true,
       "NodeType": "ExtensionNode",
       "Id": "2d5996559be141609f0239af77174c49",
@@ -211,6 +211,27 @@
       ],
       "Replication": "Disabled",
       "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "c3e0eee3-7ffd-4132-a017-7984a029383c-00d1fc0b"
+      ],
+      "Id": "d282c5da7b3b4c3f9beb52ca507936c1",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0701eff054d141ab9bdeeb23f2f0056a",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
     }
   ],
   "Connectors": [
@@ -248,6 +269,12 @@
       "Start": "4f19dd7097cc4eceb0b8019a66d74265",
       "End": "2d03435a82aa4dbab0989bdd2277ec20",
       "Id": "dbaf7477fc27497aa449d153a9f00205",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0701eff054d141ab9bdeeb23f2f0056a",
+      "End": "4961f038e5294105878c39b2abb64c0d",
+      "Id": "cf78f6868fa4499d9b95ad6a8cffee4c",
       "IsHidden": "False"
     }
   ],
@@ -307,8 +334,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 495.82883960083666,
-        "Y": 735.864206996703
+        "X": 494.80688526492622,
+        "Y": 727.68857230941956
       },
       {
         "Name": "Python Script From String",
@@ -359,11 +386,21 @@
         "Excluded": false,
         "X": 505.57786039674886,
         "Y": 902.03846483120321
+      },
+      {
+        "Name": "Select Model Element",
+        "ShowGeometry": true,
+        "Id": "d282c5da7b3b4c3f9beb52ca507936c1",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 438.17113851442889,
+        "Y": 1089.9898118530191
       }
     ],
     "Annotations": [],
-    "X": -214.47330743015539,
-    "Y": -488.1603010976205,
-    "Zoom": 1.1679984817209461
+    "X": -526.1127519969757,
+    "Y": -274.08245999753763,
+    "Zoom": 0.97851730244790081
   }
 }

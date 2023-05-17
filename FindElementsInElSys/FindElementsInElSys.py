@@ -142,13 +142,9 @@ boards_list = list()
 
 # only 1 element to calculate
 if not calc_all:
-	# # get selected object
-	# sel = uidoc.Selection.PickObject(  # type: ignore
-	# 	Autodesk.Revit.UI.Selection.ObjectType.Element, "")
-	# sel_obj = doc.GetElement(sel.ElementId)  # type: ignore
-	# # TODO: Add here check of selection
-	# boards_list.append(sel_obj)
 	boards_list.append(UnwrapElement(IN[3]))  # type: ignore
+
+# TODO: For all lighting panels LN
 
 
 # =========Start transaction
