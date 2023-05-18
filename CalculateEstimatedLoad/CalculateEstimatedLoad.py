@@ -31,88 +31,11 @@ from math import sqrt
 import el_exceptions
 from el_exceptions import test_exceptions
 
+import importlib
 
-def GetBuiltInParam(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
-
-
-def elsys_by_brd(_brd):
-	"""Get all systems of electrical board.
-		args:
-		_brd - electrical board FamilyInstance
-		return list(1, 2) where:
-		1 - main electrical circuit
-		2 - list of connectet low circuits
-	"""
-	allsys = _brd.MEPModel.GetElectricalSystems()
-	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
-
-	# filter out non Power circuits
-	allsys = [i for i in allsys
-		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
-	lowsys = [i for i in lowsys
-		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
-
-	if lowsys:
-		lowsysId = [i.Id for i in lowsys]
-		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
-		if len(mainboardsysLst) == 0:
-			mainboardsys = None
-		else:
-			mainboardsys = mainboardsysLst[0]
-		lowsys = [i for i in allsys if i.Id in lowsysId]
-		lowsys.sort(key=lambda x: get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER"))
-		return mainboardsys, lowsys
-	else:
-		return [i for i in allsys][0], None
-
-
-def get_bip(paramName):
-	# type: (str) -> BuiltInParameter
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
-
-
-def get_parval(elem, name):
-	"""Get parametr value
-	args:
-		elem - family instance or type
-		name - parameter name
-	return:
-		value - parameter value
-	"""
-
-	value = None
-	# custom parameter
-	param = elem.LookupParameter(name)
-	# check is it a BuiltIn parameter if not found
-	if not(param):
-		param = elem.get_Parameter(get_bip(name))
-
-	# get paremeter Value if found
-	try:
-		storeType = param.StorageType
-		# value = storeType
-		if storeType == StorageType.String:
-			value = param.AsString()
-		elif storeType == StorageType.Integer:
-			value = param.AsDouble()
-		elif storeType == StorageType.Double:
-			value = param.AsDouble()
-		elif storeType == StorageType.ElementId:
-			value = param.AsValueString()
-	except:
-		pass
-	return value
+# ================ local imports
+import toolsrvt
+importlib.reload(toolsrvt)
 
 
 def get_circuit_row(_el_sys):
@@ -202,7 +125,7 @@ def SetEstimatedValues(_elSys, _testboard):
 		calc_parameters = get_estimated_load(_elSys, _testboard)
 		total_est_load = calc_parameters[0]
 		convert_TotalEstLoad = UnitUtils.ConvertFromInternalUnits(
-			total_est_load, UnitTypeId.VoltAmperes)
+			total_est_load, UnitTypeId.VoltAmperes)  # type: ignore
 		rvt_DemandFactor = round(calc_parameters[1], 2)
 		# calculate parameters
 		poles_number = calcSystem.PolesNumber
@@ -216,8 +139,8 @@ def SetEstimatedValues(_elSys, _testboard):
 		rvt_DemandFactor = 1
 		total_est_load = rvt_TotalInstalledLoad
 		rvt_current = _elSys.ApparentCurrent
-		current_estimated = round(UnitUtils.ConvertFromInternalUnits(
-			rvt_current, UnitTypeId.Amperes) * 10) / 10
+		current_estimated = round(UnitUtils.ConvertFromInternalUnits(rvt_current,
+			UnitTypeId.Amperes) * 10) / 10  # type: ignore
 
 	# Write parameters in Circuit
 	calcSystem.LookupParameter("E_DemandFactor").Set(rvt_DemandFactor)
@@ -257,63 +180,63 @@ distrSys = FilteredElementCollector(doc).\
 	WherePasses(filter).\
 	ToElements()[0].Id
 
-if not(calculate_all):
-	# get all assigned circuits in the panel
-	panel_assigned_circuits = elsys_by_brd(panel_instance)
+# if not calculate_all:
+# 	# get all assigned circuits in the panel
+# 	panel_assigned_circuits = toolsrvt.elsys_by_brd(panel_instance)
 
-	# check if there is any circuit in the Panel
-	if len(panel_assigned_circuits[1]) == 0:
-		raise ValueError("No circuits found")
-	else:
-		circuits_to_calculate = panel_assigned_circuits[1]
-else:
-	# get all circuits in the model
-	# Get all electrical circuits
-	# Circuit type need to be electrilca only
-	# electrical circuit type ID == 6
-	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
-	pvp = ParameterValueProvider(ElementId(int(testParam)))
-	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
-	filter = ElementParameterFilter(sysRule)
+# 	# check if there is any circuit in the Panel
+# 	if len(panel_assigned_circuits[1]) == 0:
+# 		raise ValueError("No circuits found")
+# 	else:
+# 		circuits_to_calculate = panel_assigned_circuits[1]
+# else:
+# 	# get all circuits in the model
+# 	# Get all electrical circuits
+# 	# Circuit type need to be electrilca only
+# 	# electrical circuit type ID == 6
+# 	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
+# 	pvp = ParameterValueProvider(ElementId(int(testParam)))
+# 	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
+# 	filter = ElementParameterFilter(sysRule)
 
-	circuits_to_calculate = FilteredElementCollector(doc).\
-		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
-		WhereElementIsNotElementType().WherePasses(filter).\
-		ToElements()
+# 	circuits_to_calculate = FilteredElementCollector(doc).\
+# 		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
+# 		WhereElementIsNotElementType().WherePasses(filter).\
+# 		ToElements()
 
-	voltage_230 = UnitUtils.ConvertToInternalUnits(
-		230, UnitTypeId.Volts)
-	voltage_400 = UnitUtils.ConvertToInternalUnits(
-		400, UnitTypeId.Volts)
+# 	voltage_230 = UnitUtils.ConvertToInternalUnits(
+# 		230, UnitTypeId.Volts)
+# 	voltage_400 = UnitUtils.ConvertToInternalUnits(
+# 		400, UnitTypeId.Volts)
 
-	circuits_to_calculate = [
-		i for i in circuits_to_calculate
-		if i.Voltage == voltage_230 or i.Voltage == voltage_400
-	]
+# 	circuits_to_calculate = [
+# 		i for i in circuits_to_calculate
+# 		if i.Voltage == voltage_230 or i.Voltage == voltage_400
+# 	]
 
-	# filter out not owned circuits
-	circuits_to_calculate = [
-		i for i in circuits_to_calculate
-		if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != CheckoutStatus.OwnedByOtherUser
-	]
+# 	# filter out not owned circuits
+# 	circuits_to_calculate = [
+# 		i for i in circuits_to_calculate
+# 		if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != CheckoutStatus.OwnedByOtherUser
+# 	]
 
-	# Filtering out not connected circuits
-	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
+# 	# Filtering out not connected circuits
+# 	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
 
-# =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
+# # =========Start transaction
+# TransactionManager.Instance.EnsureInTransaction(doc)
 
-TESTBOARD = doc.Create.NewFamilyInstance(
-	XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
-TESTBOARD.get_Parameter(
-	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
+# TESTBOARD = doc.Create.NewFamilyInstance(
+# 	XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
+# TESTBOARD.get_Parameter(
+# 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
-param_info = [SetEstimatedValues(x, TESTBOARD) for x in circuits_to_calculate]
+# param_info = [SetEstimatedValues(x, TESTBOARD) for x in circuits_to_calculate]
 
-doc.Delete(TESTBOARD.Id)
+# doc.Delete(TESTBOARD.Id)
 
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
+# # =========End transaction
+# TransactionManager.Instance.TransactionTaskDone()
 
 # OUT = param_info
-OUT = param_info
+OUT = distrSys
