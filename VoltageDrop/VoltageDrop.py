@@ -193,10 +193,8 @@ if calc_all:
 		WhereElementIsNotElementType().WherePasses(filter).\
 		ToElements()
 
-	voltage_230 = UnitUtils.ConvertToInternalUnits(
-		230, UnitTypeId.Volts)
-	voltage_400 = UnitUtils.ConvertToInternalUnits(
-		400, UnitTypeId.Volts)
+	voltage_230 = UnitUtils.ConvertToInternalUnits(230, UnitTypeId.Volts)  # type: ignore
+	voltage_400 = UnitUtils.ConvertToInternalUnits(400, UnitTypeId.Volts)  # type: ignore
 
 	circuits_to_calculate = [
 		i for i in circuits_to_calculate

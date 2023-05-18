@@ -31,8 +31,7 @@ from cable_catalogue import get_cable
 
 
 def ft_to_km(ft):
-	meters = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(
-		ft, UnitTypeId.Meters)
+	meters = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(ft, UnitTypeId.Meters)  # type: ignore
 	return meters / 1000
 
 
@@ -162,7 +161,6 @@ def calc_circuit_vd(_el_sys):
 		calc_vd = lambda x: math.sqrt(3) * x[0] * el_sys_Z * x[1]
 
 	points_vd = sum(map(calc_vd, points_info))
-	sys_voltage = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(
-		_el_sys.Voltage, UnitTypeId.Volts)
+	sys_voltage = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(_el_sys.Voltage, UnitTypeId.Volts)  # type: ignore
 
 	return points_vd * 100 / sys_voltage

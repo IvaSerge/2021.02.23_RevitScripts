@@ -74,7 +74,7 @@ def get_cable(section):
 		section (str): cross-section of cable`
 	"""
 	# parameter is empty
-	if not(section):
+	if not section:
 		return None
 
 	global cab_lst
