@@ -99,7 +99,7 @@ def getSystems(_brd):
 		else:
 			mainboardsys = mainboardsysLst[0]
 		lowsys = [i for i in allsys if i.Id in lowsysId]
-		lowsys.sort(key=lambda x: x.CircuitNumber)
+		lowsys.sort(key=lambda x: x.StartSlot)
 		return mainboardsys, lowsys
 	else:
 		return [i for i in allsys][0], None

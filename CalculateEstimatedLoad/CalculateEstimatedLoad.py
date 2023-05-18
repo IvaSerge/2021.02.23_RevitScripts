@@ -180,6 +180,7 @@ distrSys = FilteredElementCollector(doc).\
 	WherePasses(filter).\
 	ToElements()[0].Id
 
+panel_assigned_circuits = toolsrvt.elsys_by_brd(panel_instance)
 # if not calculate_all:
 # 	# get all assigned circuits in the panel
 # 	panel_assigned_circuits = toolsrvt.elsys_by_brd(panel_instance)
@@ -239,4 +240,4 @@ distrSys = FilteredElementCollector(doc).\
 # TransactionManager.Instance.TransactionTaskDone()
 
 # OUT = param_info
-OUT = distrSys
+OUT = panel_assigned_circuits

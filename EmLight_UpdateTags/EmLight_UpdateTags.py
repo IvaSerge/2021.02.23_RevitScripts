@@ -61,7 +61,7 @@ def elsys_by_brd(_brd):
 		else:
 			mainboardsys = mainboardsysLst[0]
 		lowsys = [i for i in allsys if i.Id in lowsysId]
-		lowsys.sort(key=lambda x: get_parval(x, "RBS_ELEC_CIRCUIT_NUMBER"))
+		lowsys.sort(key=lambda x: x.StartSlot)
 		return mainboardsys, lowsys
 
 	# board have no circuits
