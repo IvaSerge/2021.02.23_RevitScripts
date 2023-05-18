@@ -174,70 +174,68 @@ fnrvStr = FilterStringEquals()
 filter = ElementParameterFilter(
 	FilterStringRule(pvp, fnrvStr, DISTR_SYS_NAME))
 
+voltage_230 = UnitUtils.ConvertToInternalUnits(230, UnitTypeId.Volts)  # type: ignore
+voltage_400 = UnitUtils.ConvertToInternalUnits(400, UnitTypeId.Volts)  # type: ignore
+
 distrSys = FilteredElementCollector(doc).\
 	OfCategory(BuiltInCategory.OST_ElecDistributionSys).\
 	WhereElementIsElementType().\
 	WherePasses(filter).\
 	ToElements()[0].Id
 
-panel_assigned_circuits = toolsrvt.elsys_by_brd(panel_instance)
-# if not calculate_all:
-# 	# get all assigned circuits in the panel
-# 	panel_assigned_circuits = toolsrvt.elsys_by_brd(panel_instance)
+if not calculate_all:
+	# get all assigned circuits in the panel
+	panel_assigned_circuits = toolsrvt.elsys_by_brd(panel_instance)
 
-# 	# check if there is any circuit in the Panel
-# 	if len(panel_assigned_circuits[1]) == 0:
-# 		raise ValueError("No circuits found")
-# 	else:
-# 		circuits_to_calculate = panel_assigned_circuits[1]
-# else:
-# 	# get all circuits in the model
-# 	# Get all electrical circuits
-# 	# Circuit type need to be electrilca only
-# 	# electrical circuit type ID == 6
-# 	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
-# 	pvp = ParameterValueProvider(ElementId(int(testParam)))
-# 	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
-# 	filter = ElementParameterFilter(sysRule)
+	# check if there is any circuit in the Panel
+	if len(panel_assigned_circuits[1]) == 0:
+		raise ValueError("No circuits found")
+	else:
+		circuits_to_calculate = panel_assigned_circuits[1]
+else:
+	# get all circuits in the model
+	# Get all electrical circuits
+	# Circuit type need to be electrilca only
+	# electrical circuit type ID == 6
+	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
+	pvp = ParameterValueProvider(ElementId(int(testParam)))
+	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
+	filter = ElementParameterFilter(sysRule)
 
-# 	circuits_to_calculate = FilteredElementCollector(doc).\
-# 		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
-# 		WhereElementIsNotElementType().WherePasses(filter).\
-# 		ToElements()
+	circuits_to_calculate = FilteredElementCollector(doc).\
+		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
+		WhereElementIsNotElementType().WherePasses(filter).\
+		ToElements()
 
-# 	voltage_230 = UnitUtils.ConvertToInternalUnits(
-# 		230, UnitTypeId.Volts)
-# 	voltage_400 = UnitUtils.ConvertToInternalUnits(
-# 		400, UnitTypeId.Volts)
+	circuits_to_calculate = [
+		i for i in circuits_to_calculate
+		if all([
+			i.SystemType == Electrical.ElectricalSystemType.PowerCircuit,
+			any([i.Voltage == voltage_230, i.Voltage == voltage_400]),
+			i.BaseEquipment,
+			WorksharingUtils.GetCheckoutStatus(doc, i.Id) != CheckoutStatus.OwnedByOtherUser
+		])]
 
-# 	circuits_to_calculate = [
-# 		i for i in circuits_to_calculate
-# 		if i.Voltage == voltage_230 or i.Voltage == voltage_400
-# 	]
 
-# 	# filter out not owned circuits
-# 	circuits_to_calculate = [
-# 		i for i in circuits_to_calculate
-# 		if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != CheckoutStatus.OwnedByOtherUser
-# 	]
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
-# 	# Filtering out not connected circuits
-# 	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
+try:
+	TESTBOARD = doc.Create.NewFamilyInstance(
+		XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
+	TESTBOARD.get_Parameter(
+		BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
-# # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
+	for circuit in circuits_to_calculate:
+		SetEstimatedValues(circuit, TESTBOARD)
 
-# TESTBOARD = doc.Create.NewFamilyInstance(
-# 	XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
-# TESTBOARD.get_Parameter(
-# 	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
+	doc.Delete(TESTBOARD.Id)
+except:
+	param_info = circuit.Id
+	doc.Delete(TESTBOARD.Id)
 
-# param_info = [SetEstimatedValues(x, TESTBOARD) for x in circuits_to_calculate]
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
-# doc.Delete(TESTBOARD.Id)
-
-# # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
-
-# OUT = param_info
-OUT = panel_assigned_circuits
+OUT = circuits_to_calculate
+# OUT = voltage_230
