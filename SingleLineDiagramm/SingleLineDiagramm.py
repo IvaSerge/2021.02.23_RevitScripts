@@ -23,20 +23,19 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
-import System
-from System import Array
-from System.Collections.Generic import *
+import collections
+from collections import deque
 
 import importlib
 from importlib import reload
-
-import csv
-import re
 
 # ================ local imports
 import toolsrvt
 reload(toolsrvt)
 from toolsrvt import *
+
+import el_panel
+reload(el_panel)
 
 
 # ================ GLOBAL VARIABLES
@@ -47,12 +46,14 @@ app = uiapp.Application
 view = doc.ActiveView
 
 reload_IN = IN[1]  # type: ignore
+rvt_start_panel = UnwrapElement(IN[2])  # type: ignore
 
-# =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
+panels_list = el_panel.el_panel.panels_by_start_panel(rvt_start_panel)
 
+# # =========Start transaction
+# TransactionManager.Instance.EnsureInTransaction(doc)
 
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
+# # =========End transaction
+# TransactionManager.Instance.TransactionTaskDone()
 
-OUT = None
+OUT = panels_list.index_row

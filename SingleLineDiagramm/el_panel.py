@@ -1,22 +1,17 @@
 """modue to represent electrical panel as node of graph"""
 import clr
 
-import sys
-# sys.path.append(r"C:\Program Files\Dynamo 0.8")
-pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
-sys.path.append(pyt_path)
-
-dir_path = IN[0].DirectoryName  # type: ignore
-sys.path.append(dir_path)
-
-
 # ================ Revit imports
 clr.AddReference('RevitAPI')
 import Autodesk
 from Autodesk.Revit.DB import *
 
+# ================ local imports
+import toolsrvt
+
 
 class el_panel:
+
 	def __init__(self, _rvt_panel):
 		# type: (Autodesk.Revit.DB.Electrical.ElectricalEquipment) -> any
 		"""
@@ -25,4 +20,30 @@ class el_panel:
 		self.rvt_panel = _rvt_panel  # type: Autodesk.Revit.DB.Electrical.ElectricalEquipment
 		self.index_row: int
 		self.index_column: int
-		self.circuits_to_check: list[Autodesk.Revit.DB.Electrical.ElectricalSystem]
+		self.circuits_to_check = toolsrvt.elsys_by_brd(_rvt_panel)[1]
+
+	@staticmethod
+	def panels_by_start_panel(_rvt_panel):
+		# type: (Autodesk.Revit.DB.Electrical.ElectricalEquipment) -> list[el_panel]
+		"""Get list of dependend panels. Important to set correct index of each panel
+
+		args:\\
+		_rvt_panel - start panel of the tree
+
+		return:\\
+		list of extended panel objects
+		"""
+		outlist = list()
+		total_panels: int
+		panels_to_check = list()
+
+		start_elem = el_panel(_rvt_panel)
+		start_elem.index_row, start_elem.index_column = 0, 0
+
+		panels_to_check.append(start_elem)
+		outlist.append(start_elem)
+
+		while panels_to_check:
+			panels_to_check.pop()
+
+		return start_elem
