@@ -48,7 +48,7 @@ view = doc.ActiveView
 reload_IN = IN[1]  # type: ignore
 rvt_start_panel = UnwrapElement(IN[2])  # type: ignore
 
-panels_list = el_panel.el_panel.panels_by_start_panel(rvt_start_panel)
+panels_list = el_panel.panels_by_start_panel(rvt_start_panel)
 
 # # =========Start transaction
 # TransactionManager.Instance.EnsureInTransaction(doc)
@@ -56,4 +56,4 @@ panels_list = el_panel.el_panel.panels_by_start_panel(rvt_start_panel)
 # # =========End transaction
 # TransactionManager.Instance.TransactionTaskDone()
 
-OUT = panels_list.index_row
+OUT = panels_list

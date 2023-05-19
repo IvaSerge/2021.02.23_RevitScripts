@@ -10,6 +10,40 @@ from Autodesk.Revit.DB import *
 import toolsrvt
 
 
+def panels_by_start_panel(_rvt_panel):
+		# type: (Autodesk.Revit.DB.Electrical.ElectricalEquipment) -> list[el_panel]
+		"""Get list of dependend panels. Important to set correct index of each panel
+
+		args:\\
+		_rvt_panel - start panel of the tree
+
+		return:\\
+		list of extended panel objects
+		"""
+		outlist = list()
+		total_panels = 0
+		panels_to_check = list()
+
+		start_elem = el_panel(_rvt_panel)
+		start_elem.index_row, start_elem.index_column = total_panels, 0
+
+		panels_to_check.append(start_elem)
+		outlist.append(start_elem)
+
+		# while panels_to_check:
+		current_panel: el_panel = panels_to_check[-1]
+		next_panel = current_panel.find_upper_panel()
+
+		if next_panel:
+			next_panel_obj = el_panel(next_panel)
+			next_panel_obj.index_column = current_panel.index_column + 1
+			total_panels += 1
+			next_panel_obj.index_row = total_panels
+			panels_to_check.append(next_panel_obj)
+
+		return panels_to_check
+
+
 class el_panel:
 
 	def __init__(self, _rvt_panel):
@@ -22,28 +56,22 @@ class el_panel:
 		self.index_column: int
 		self.circuits_to_check = toolsrvt.elsys_by_brd(_rvt_panel)[1]
 
-	@staticmethod
-	def panels_by_start_panel(_rvt_panel):
-		# type: (Autodesk.Revit.DB.Electrical.ElectricalEquipment) -> list[el_panel]
-		"""Get list of dependend panels. Important to set correct index of each panel
-
-		args:\\
-		_rvt_panel - start panel of the tree
-
-		return:\\
-		list of extended panel objects
+	def find_upper_panel(self):
+		# type: (el_panel) -> Autodesk.Revit.DB.Electrical.ElectricalEquipment
 		"""
-		outlist = list()
-		total_panels: int
-		panels_to_check = list()
+		find the first upper panel
+		"""
 
-		start_elem = el_panel(_rvt_panel)
-		start_elem.index_row, start_elem.index_column = 0, 0
+		# no circuits - no panels
+		if not self.circuits_to_check:
+			return None
 
-		panels_to_check.append(start_elem)
-		outlist.append(start_elem)
+		while self.circuits_to_check:
+			current_circuit = self.circuits_to_check.pop(0)
 
-		while panels_to_check:
-			panels_to_check.pop()
+			# check if there is a panel in the circuit and return it
+			circuit_elements = [i for i in current_circuit.Elements]
+			if len(circuit_elements) == 1 and circuit_elements[0].Category.Id == ElementId(-2001040):
+				return circuit_elements[0]
 
-		return start_elem
+		return None
