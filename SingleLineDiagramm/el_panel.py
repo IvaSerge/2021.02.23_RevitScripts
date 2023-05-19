@@ -77,6 +77,6 @@ class el_panel:
 			# check if there is a panel in the circuit and return it
 			circuit_elements = [i for i in current_circuit.Elements]
 			if len(circuit_elements) == 1 and circuit_elements[0].Category.Id == ElementId(-2001040):
-				return circuit_elements[0]
-
+				if "Quasi" not in circuit_elements[0].Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString():
+					return circuit_elements[0]
 		return None
