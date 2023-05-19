@@ -21,7 +21,7 @@ def panels_by_start_panel(_rvt_panel):
 		list of extended panel objects
 		"""
 		outlist = list()
-		total_panels = 0
+		total_panels = 1
 		panels_to_check = list()
 
 		start_elem = el_panel(_rvt_panel)
@@ -30,18 +30,23 @@ def panels_by_start_panel(_rvt_panel):
 		panels_to_check.append(start_elem)
 		outlist.append(start_elem)
 
-		# while panels_to_check:
-		current_panel: el_panel = panels_to_check[-1]
-		next_panel = current_panel.find_upper_panel()
+		while panels_to_check:
+			# for i in range(3):
+			current_panel: el_panel = panels_to_check[-1]
+			next_panel = current_panel.find_upper_panel()
 
-		if next_panel:
-			next_panel_obj = el_panel(next_panel)
-			next_panel_obj.index_column = current_panel.index_column + 1
-			total_panels += 1
-			next_panel_obj.index_row = total_panels
-			panels_to_check.append(next_panel_obj)
+			if next_panel:
+				next_panel_obj = el_panel(next_panel)
+				next_panel_obj.index_column = current_panel.index_column + 1
+				total_panels += 1
+				next_panel_obj.index_row = total_panels
+				panels_to_check.append(next_panel_obj)
+				outlist.append(next_panel_obj)
+			else:
+				# current panel do not contain upper panels.
+				panels_to_check.pop()
 
-		return panels_to_check
+		return outlist
 
 
 class el_panel:

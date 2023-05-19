@@ -56,4 +56,4 @@ panels_list = el_panel.panels_by_start_panel(rvt_start_panel)
 # # =========End transaction
 # TransactionManager.Instance.TransactionTaskDone()
 
-OUT = panels_list
+OUT = [[i.rvt_panel, i.index_column, i.index_row] for i in panels_list]
