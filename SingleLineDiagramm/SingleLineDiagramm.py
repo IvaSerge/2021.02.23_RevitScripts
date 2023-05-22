@@ -52,6 +52,7 @@ panels_list = el_panel.panels_by_start_panel(rvt_start_panel)
 
 for panel in panels_list:
 	panel.point_by_index()
+	panel.get_anno_type()
 
 # # =========Start transaction
 # TransactionManager.Instance.EnsureInTransaction(doc)
@@ -59,4 +60,4 @@ for panel in panels_list:
 # # =========End transaction
 # TransactionManager.Instance.TransactionTaskDone()
 
-OUT = [[i.rvt_panel, i.index_column, i.index_row, i.insert_point] for i in panels_list]
+OUT = [[i.rvt_panel, i.index_column, i.index_row, i.annotation_type] for i in panels_list]

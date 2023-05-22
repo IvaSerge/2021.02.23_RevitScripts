@@ -62,6 +62,7 @@ class el_panel:
 		self.index_column: int
 		self.circuits_to_check = toolsrvt.elsys_by_brd(_rvt_panel)[1]
 		self.insert_point: XYZ
+		self.annotation_type: Autodesk.Revit.DB.AnnotationSymbol
 
 	def find_upper_panel(self):
 		# type: (el_panel) -> Autodesk.Revit.DB.Electrical.ElectricalEquipment
@@ -87,7 +88,27 @@ class el_panel:
 		doc = self.rvt_panel.Document
 		x_shift = toolsrvt.mm_to_ft(doc, 65)
 		y_shift = toolsrvt.mm_to_ft(doc, 20)
-		point_x = el_panel.start_point.X + self.index_column * x_shift
-		point_y = el_panel.start_point.Y - self.index_row * y_shift
+		point_x = self.start_point.X + self.index_column * x_shift
+		point_y = self.start_point.Y - self.index_row * y_shift
 		point_z = 0
 		self.insert_point = XYZ(point_x, point_y, point_z)
+
+	def get_anno_type(self):
+		doc = self.rvt_panel.Document
+		# Branch panel type
+		if self.index_column == 0 and self.index_row == 0:
+			anno_type = toolsrvt.type_by_bic_fam_type(
+				doc,
+				BuiltInCategory.OST_GenericAnnotation,
+				"2D_SLD_Panel",
+				"Branch")
+
+		# Substation (main panel) type
+		else:
+			anno_type = toolsrvt.type_by_bic_fam_type(
+				doc,
+				BuiltInCategory.OST_GenericAnnotation,
+				"2D_SLD_Panel",
+				"Branch")
+
+		self.annotation_type = anno_type
