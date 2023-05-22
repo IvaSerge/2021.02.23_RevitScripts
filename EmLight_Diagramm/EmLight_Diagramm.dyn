@@ -104,7 +104,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
@@ -433,8 +433,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 785.50324929629994,
-        "Y": 611.52356675969679
+        "X": 808.91864858618567,
+        "Y": 588.10816746981118
       },
       {
         "Name": "Diagramm_name",
@@ -468,8 +468,8 @@
       }
     ],
     "Annotations": [],
-    "X": -576.09703585024477,
-    "Y": 67.130786772023384,
+    "X": -816.09703585024477,
+    "Y": 227.13078677202338,
     "Zoom": 0.89684569287148441
   }
 }
