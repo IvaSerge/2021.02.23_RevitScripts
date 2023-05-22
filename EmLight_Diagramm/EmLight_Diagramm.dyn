@@ -104,7 +104,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
@@ -329,7 +329,7 @@
   ],
   "Dependencies": [],
   "NodeLibraryDependencies": [],
-  "Thumbnail": null,
+  "Thumbnail": "",
   "GraphDocumentationURL": null,
   "ExtensionWorkspaceData": [
     {
@@ -393,8 +393,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1152.3415065660959,
-        "Y": 166.84266893912149
+        "X": 1189.1371340216303,
+        "Y": 251.58411398823165
       },
       {
         "Name": "FileSystem.ReadText",
@@ -433,8 +433,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 808.91864858618567,
-        "Y": 588.10816746981118
+        "X": 845.71427604172038,
+        "Y": 622.67375689773769
       },
       {
         "Name": "Diagramm_name",
@@ -443,8 +443,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1103.7822781800592,
-        "Y": 373.1791018825698
+        "X": 1155.0731528150468,
+        "Y": 408.85971032430041
       },
       {
         "Name": "Right Panel",
@@ -453,8 +453,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1124.9364562613862,
-        "Y": 587.49741797129434
+        "X": 1176.2273308963738,
+        "Y": 623.178026413025
       },
       {
         "Name": "Diagramm_name",
@@ -463,13 +463,13 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 783.18341774735745,
-        "Y": 361.95856949605565
+        "X": 806.59881703724318,
+        "Y": 413.24944413104328
       }
     ],
     "Annotations": [],
-    "X": -816.09703585024477,
-    "Y": 227.13078677202338,
+    "X": -437.09703585024477,
+    "Y": 41.130786772023384,
     "Zoom": 0.89684569287148441
   }
 }
