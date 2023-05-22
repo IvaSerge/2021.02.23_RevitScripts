@@ -12,27 +12,31 @@
       "Name": "String",
       "Type": "string",
       "Value": "EmLight_Diagramm.py",
-      "Description": "Creates a string."
+      "Description": "Creates a string.",
+      "SelectedIndex": 0
     },
     {
       "Id": "704e6265838e4dd2bdc3d1d2cb9ac920",
       "Name": "Diagramm_name",
       "Type": "string",
       "Value": "CP1-KE3L2B05_Emergency lighting",
-      "Description": "Creates a string."
+      "Description": "Creates a string.",
+      "SelectedIndex": 0
     },
     {
       "Id": "ed65fa1657b94c558bcab618fd8787d7",
       "Name": "Diagramm_name",
       "Type": "string",
       "Value": "CP1-KE3W2C05_Emergency lighting",
-      "Description": "Creates a string."
+      "Description": "Creates a string.",
+      "SelectedIndex": 0
     }
   ],
   "Outputs": [],
   "Nodes": [
     {
       "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
+      "Engine": "IronPython2",
       "VariableInputPorts": true,
       "NodeType": "ExtensionNode",
       "Id": "1b79df6695194458b3633e0bed15cd64",
@@ -95,7 +99,7 @@
         }
       ],
       "Replication": "Disabled",
-      "Description": "Runs a IronPython script from a string."
+      "Description": "Runs a Python script from a string."
     },
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
@@ -126,7 +130,7 @@
         {
           "Id": "e3c70fc4d4f14aff8aa26e1f060f57f2",
           "Name": "file",
-          "Description": "var",
+          "Description": "File object to read text from\n\nvar",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -136,7 +140,7 @@
       "Outputs": [
         {
           "Id": "e7849bae2b704038b9a1ce4cee46d4fc",
-          "Name": "str",
+          "Name": "string",
           "Description": "Contents of the text file.",
           "UsingDefaultValue": false,
           "Level": 2,
@@ -283,48 +287,78 @@
     {
       "Start": "0c50f0a5e8394f019a078e6850124104",
       "End": "0ce557ba57ea4f53840d30d83a6db2f5",
-      "Id": "fb503b92c8fd42ab9bf81ecab94118b7"
+      "Id": "fb503b92c8fd42ab9bf81ecab94118b7",
+      "IsHidden": "False"
     },
     {
       "Start": "e7849bae2b704038b9a1ce4cee46d4fc",
       "End": "f77fa4bc7b15462e94816c963a486648",
-      "Id": "1ef977db6c684532b2d699b962f43f23"
+      "Id": "1ef977db6c684532b2d699b962f43f23",
+      "IsHidden": "False"
     },
     {
       "Start": "2ce9610afe59481aa813a31da14f8501",
       "End": "47f4a056f13f43868341f1b01a274f7e",
-      "Id": "16769b54c70a4521a738946c5dea4d33"
+      "Id": "16769b54c70a4521a738946c5dea4d33",
+      "IsHidden": "False"
     },
     {
       "Start": "2ce9610afe59481aa813a31da14f8501",
       "End": "e3c70fc4d4f14aff8aa26e1f060f57f2",
-      "Id": "5ddf6818722f4612a56012ce87453e49"
+      "Id": "5ddf6818722f4612a56012ce87453e49",
+      "IsHidden": "False"
     },
     {
       "Start": "26ebc66651a646cda0966943be75c7d2",
       "End": "b505712d4efc41cd97c3c4dc0c84d9e6",
-      "Id": "dc0a98baa73b4ab2b23bb5d741aeb4e5"
+      "Id": "dc0a98baa73b4ab2b23bb5d741aeb4e5",
+      "IsHidden": "False"
     },
     {
       "Start": "fd5d2c3d4ad4497b877e5166210a6ce0",
       "End": "dea01028c0d14c778e215769761eb86e",
-      "Id": "44f1011a68d9463c86a905095a64330e"
+      "Id": "44f1011a68d9463c86a905095a64330e",
+      "IsHidden": "False"
     },
     {
       "Start": "4ba96f7c2ff94947a5206a94385b5ee2",
       "End": "e59c98df47e5435c835fedaae42ab651",
-      "Id": "bd3ac09cc89c425793b86f495d394821"
+      "Id": "bd3ac09cc89c425793b86f495d394821",
+      "IsHidden": "False"
     }
   ],
   "Dependencies": [],
   "NodeLibraryDependencies": [],
+  "Thumbnail": null,
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.13",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "2.0",
+      "Data": {}
+    }
+  ],
+  "Author": "None provided",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
   "Bindings": [],
   "View": {
     "Dynamo": {
       "ScaleFactor": 1.0,
       "HasRunWithoutCrash": true,
       "IsVisibleInDynamoLibrary": true,
-      "Version": "2.3.0.5885",
+      "Version": "2.13.1.3887",
       "RunType": "Manual",
       "RunPeriod": "1000"
     },
@@ -340,20 +374,21 @@
       "UpY": 1.0,
       "UpZ": 0.0
     },
+    "ConnectorPins": [],
     "NodeViews": [
       {
-        "ShowGeometry": true,
         "Name": "Python Script From String",
+        "ShowGeometry": true,
         "Id": "1b79df6695194458b3633e0bed15cd64",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1384.462918499979,
-        "Y": 79.222778426661876
+        "X": 1671.0228050476276,
+        "Y": 83.6828544818782
       },
       {
-        "ShowGeometry": true,
         "Name": "Reload",
+        "ShowGeometry": true,
         "Id": "ad531ae1b87d458d89230df621752f91",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -362,8 +397,8 @@
         "Y": 166.84266893912149
       },
       {
-        "ShowGeometry": true,
         "Name": "FileSystem.ReadText",
+        "ShowGeometry": true,
         "Id": "508e1ae226144bda9f28c842aeae9af8",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -372,8 +407,8 @@
         "Y": 17.180403139486202
       },
       {
-        "ShowGeometry": true,
         "Name": "File From Path",
+        "ShowGeometry": true,
         "Id": "f5f2e95993264fd5b7943ab8bac7453c",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
@@ -382,8 +417,8 @@
         "Y": 86.25012621823214
       },
       {
-        "ShowGeometry": true,
         "Name": "String",
+        "ShowGeometry": true,
         "Id": "247389cd36b8437db0c2971fb3851598",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
@@ -392,49 +427,49 @@
         "Y": 86.25012621823214
       },
       {
-        "ShowGeometry": true,
         "Name": "Left Panel",
+        "ShowGeometry": true,
         "Id": "fe74da84427042468a648326f7fb22c5",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 853.51940913834869,
-        "Y": 376.25455484703576
+        "X": 785.50324929629994,
+        "Y": 611.52356675969679
       },
       {
-        "ShowGeometry": true,
         "Name": "Diagramm_name",
+        "ShowGeometry": true,
         "Id": "704e6265838e4dd2bdc3d1d2cb9ac920",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
         "X": 1103.7822781800592,
-        "Y": 282.86256176443936
+        "Y": 373.1791018825698
       },
       {
-        "ShowGeometry": true,
         "Name": "Right Panel",
+        "ShowGeometry": true,
         "Id": "a108da49379641ca865ea36de5eab38e",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1105.9811330267166,
-        "Y": 367.83867225189044
+        "X": 1124.9364562613862,
+        "Y": 587.49741797129434
       },
       {
-        "ShowGeometry": true,
         "Name": "Diagramm_name",
+        "ShowGeometry": true,
         "Id": "ed65fa1657b94c558bcab618fd8787d7",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 859.004710686035,
-        "Y": 285.02225754357409
+        "X": 783.18341774735745,
+        "Y": 361.95856949605565
       }
     ],
     "Annotations": [],
-    "X": -746.09703585024477,
-    "Y": -10.869213227976616,
+    "X": -576.09703585024477,
+    "Y": 67.130786772023384,
     "Zoom": 0.89684569287148441
   }
 }

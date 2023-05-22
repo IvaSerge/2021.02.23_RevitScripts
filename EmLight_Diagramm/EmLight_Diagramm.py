@@ -41,7 +41,7 @@ def getByCatAndStrParam(_bic, _bip, _val, _isType):
 	if _isType:
 		fnrvStr = FilterStringEquals()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
+		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
 		elem = FilteredElementCollector(doc).\
 			OfCategory(_bic).\
@@ -51,7 +51,7 @@ def getByCatAndStrParam(_bic, _bip, _val, _isType):
 	else:
 		fnrvStr = FilterStringEquals()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val, False)
+		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
 		elem = FilteredElementCollector(doc).\
 			OfCategory(_bic).\
@@ -248,7 +248,7 @@ for circuit_inst in circuits:
 	circuit_str = board_inst.Name + ":" + circuit_usv_link
 	circuit_name = circuit_inst.LoadName
 	circuit_wire_size = circuit_inst.WireSizeString
-	circuit_wire_type = circuit_inst.WireType.Name
+	circuit_wire_type = circuit_inst.WireType.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString()
 
 	if "#2.5" in circuit_wire_size and "NYM" in circuit_wire_type:
 		circuit_wire_str = "NYM 3x2.5"
