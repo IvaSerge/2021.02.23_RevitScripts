@@ -222,8 +222,10 @@ def type_by_bic_fam_type(_doc, _bic, _fnam, _tnam):
 	return elem
 
 
-def mm_to_ft(mm):
-	return 3.2808 * mm / 1000
+def mm_to_ft(doc, mm):
+	display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Length).GetUnitTypeId()
+	ft = Autodesk.Revit.DB.UnitUtils.ConvertToInternalUnits(mm, display_units)
+	return ft
 
 
 # def ft_to_mm(ft):

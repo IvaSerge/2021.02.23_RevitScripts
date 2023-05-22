@@ -19,7 +19,7 @@
       "Id": "449f2ffe49b34ac7a3c00a13a9b1ca39",
       "Name": "Select Model Element",
       "Type": "hostSelection",
-      "Value": "be5f78d6-cc9a-4560-b00b-1b63c7dacbe2-00d201d1",
+      "Value": "f84ad82a-12c7-4dec-8cfe-ae1064c2e9a9-00aa587f",
       "Description": "Select a model element from the document.",
       "SelectedIndex": 0
     },
@@ -104,7 +104,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
@@ -204,7 +204,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "be5f78d6-cc9a-4560-b00b-1b63c7dacbe2-00d201d1"
+        "f84ad82a-12c7-4dec-8cfe-ae1064c2e9a9-00aa587f"
       ],
       "Id": "449f2ffe49b34ac7a3c00a13a9b1ca39",
       "Inputs": [],
@@ -351,8 +351,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1188.0279867769007,
-        "Y": 290.93910259017014
+        "X": 1183.4247857157716,
+        "Y": 350.54170047165513
       },
       {
         "Name": "FileSystem.ReadText",
@@ -391,8 +391,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1143.3757957493738,
-        "Y": 473.88831609299956
+        "X": 1145.6773962799382,
+        "Y": 506.11072352090224
       },
       {
         "Name": "Select Model Element",
@@ -401,8 +401,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1142.259802731736,
-        "Y": 670.39497075916142
+        "X": 1146.8630037928649,
+        "Y": 686.50617447311265
       }
     ],
     "Annotations": [
@@ -417,19 +417,19 @@
           "ad531ae1b87d458d89230df621752f91"
         ],
         "HasNestedGroups": false,
-        "Left": 1178.0279867769007,
-        "Top": 217.93910259017014,
+        "Left": 1173.4247857157716,
+        "Top": 277.54170047165513,
         "Width": 209.0,
         "Height": 205.0,
         "FontSize": 36.0,
-        "InitialTop": 290.93910259017014,
+        "InitialTop": 350.54170047165513,
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": -437.157291685817,
-    "Y": -49.947918873939727,
-    "Zoom": 0.71951961380834584
+    "X": -707.16917970143527,
+    "Y": 32.371795297471579,
+    "Zoom": 0.8689605226626762
   }
 }

@@ -21,7 +21,7 @@ def panels_by_start_panel(_rvt_panel):
 		list of extended panel objects
 		"""
 		outlist = list()
-		total_panels = 1
+		total_panels = 0
 		panels_to_check = list()
 
 		start_elem = el_panel(_rvt_panel)
@@ -50,6 +50,7 @@ def panels_by_start_panel(_rvt_panel):
 
 
 class el_panel:
+	start_point = XYZ(-1.01165024787389, 1.74930679116264, 0)
 
 	def __init__(self, _rvt_panel):
 		# type: (Autodesk.Revit.DB.Electrical.ElectricalEquipment) -> any
@@ -60,6 +61,7 @@ class el_panel:
 		self.index_row: int
 		self.index_column: int
 		self.circuits_to_check = toolsrvt.elsys_by_brd(_rvt_panel)[1]
+		self.insert_point: XYZ
 
 	def find_upper_panel(self):
 		# type: (el_panel) -> Autodesk.Revit.DB.Electrical.ElectricalEquipment
@@ -80,3 +82,12 @@ class el_panel:
 				if "Quasi" not in circuit_elements[0].Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString():
 					return circuit_elements[0]
 		return None
+
+	def point_by_index(self):
+		doc = self.rvt_panel.Document
+		x_shift = toolsrvt.mm_to_ft(doc, 65)
+		y_shift = toolsrvt.mm_to_ft(doc, 20)
+		point_x = el_panel.start_point.X + self.index_column * x_shift
+		point_y = el_panel.start_point.Y - self.index_row * y_shift
+		point_z = 0
+		self.insert_point = XYZ(point_x, point_y, point_z)
