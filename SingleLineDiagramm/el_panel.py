@@ -185,8 +185,13 @@ class el_panel:
 			"_tr(LTD)_Panel",
 			"_tsd(STD)_Panel"]
 
-		param_values = [toolsrvt.get_parval(self.rvt_panel, p_name) for p_name in params_to_read]
-		self.parameters_to_set.extend(zip(params_to_set, param_values))
+		for p_to_reed, p_to_set in zip(params_to_read, params_to_set):
+			try:
+				p_val = toolsrvt.get_parval(self.rvt_panel, p_to_reed)
+				if p_val:
+					self.parameters_to_set.append(params_to_set, p_val)
+			except:
+				continue
 
 		# type parameters
 		panel_symbol = self.rvt_panel.Symbol
