@@ -98,15 +98,15 @@ class el_panel:
 
 	def get_anno_type(self):
 		doc = self.rvt_panel.Document
-		# Branch panel type
+		# Substation (main panel) type
 		if self.index_column == 0 and self.index_row == 0:
 			anno_type = toolsrvt.type_by_bic_fam_type(
 				doc,
 				BuiltInCategory.OST_GenericAnnotation,
 				"2D_SLD_Panel",
-				"Branch")
+				"LV_Switchgear")
 
-		# Substation (main panel) type
+		# Branch panel type
 		else:
 			anno_type = toolsrvt.type_by_bic_fam_type(
 				doc,
@@ -139,7 +139,7 @@ class el_panel:
 			previous_panel_column = previous_panel.index_column
 			previous_panel_row = previous_panel.index_row
 
-			# distance column is the same or +1
+			# distance column is +1
 			panel_check = any([
 				current_panel_column == previous_panel_column,
 				current_panel_column == previous_panel_column + 1])
@@ -148,7 +148,7 @@ class el_panel:
 				previous_panel_row = previous_panel.index_row
 				row_diff = current_panel_row - previous_panel_row
 
-				if row_diff == 1:
+				if row_diff == 1 and current_panel_column == previous_panel_column + 1:
 					return self.parameters_to_set.append(["L", toolsrvt.mm_to_ft(doc, 18.5)])
 
 				else:
@@ -164,3 +164,50 @@ class el_panel:
 				self.annotation_inst,
 				par_name,
 				par_value)
+
+	def get_panel_parameters(self):
+		# instance parameters
+		params_to_read = [
+			"RBS_ELEC_PANEL_NAME",
+			"_Breaker_Type",
+			"_Ii(INST)",
+			"_IR(LTPU)",
+			"_Isd(STPU)",
+			"_tr(LTD)",
+			"_tsd(STD)"]
+
+		params_to_set = [
+			"RBS_ELEC_PANEL_NAME",
+			"_Breaker_Type_Panel",
+			"_Ii(INST)_Panel",
+			"_IR(LTPU)_Panel",
+			"_Isd(STPU)_Panel",
+			"_tr(LTD)_Panel",
+			"_tsd(STD)_Panel"]
+
+		param_values = [toolsrvt.get_parval(self.rvt_panel, p_name) for p_name in params_to_read]
+		self.parameters_to_set.extend(zip(params_to_set, param_values))
+
+		# type parameters
+		panel_symbol = self.rvt_panel.Symbol
+		panel_type = panel_symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString()
+		self.parameters_to_set.append(["ALL_MODEL_TYPE_NAME", panel_type])
+
+	def get_circuit_parameters(self):
+		circuit = toolsrvt.elsys_by_brd(self.rvt_panel)[0]
+
+		if not circuit:
+			return None
+
+		params_to_read = [
+			"RBS_ELEC_CIRCUIT_LENGTH_PARAM",
+			"RBS_ELEC_CIRCUIT_WIRE_SIZE_PARAM",
+			"RBS_ELEC_CIRCUIT_NUMBER",
+			"_Breaker_Type",
+			"_Ii(INST)",
+			"_IR(LTPU)",
+			"_Isd(STPU)",
+			"_tr(LTD)",
+			"_tsd(STD)"]
+		param_values = [toolsrvt.get_parval(circuit, p_name) for p_name in params_to_read]
+		self.parameters_to_set.extend(zip(params_to_read, param_values))
