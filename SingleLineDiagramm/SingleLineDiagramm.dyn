@@ -17,9 +17,17 @@
     },
     {
       "Id": "449f2ffe49b34ac7a3c00a13a9b1ca39",
-      "Name": "Select Model Element",
+      "Name": "Panel",
       "Type": "hostSelection",
-      "Value": "be5f78d6-cc9a-4560-b00b-1b63c7dacbe2-00d201d1",
+      "Value": "cff248dc-b4e0-4b58-81f8-906377113542-000b0bfe",
+      "Description": "Select a model element from the document.",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "a2d677ff62024396a4eb53cfb2b0a2ba",
+      "Name": "Object on view",
+      "Type": "hostSelection",
+      "Value": "5c47168f-177d-436f-8170-61f24a16a037-00215425",
       "Description": "Select a model element from the document.",
       "SelectedIndex": 0
     }
@@ -196,7 +204,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "be5f78d6-cc9a-4560-b00b-1b63c7dacbe2-00d201d1"
+        "cff248dc-b4e0-4b58-81f8-906377113542-000b0bfe"
       ],
       "Id": "449f2ffe49b34ac7a3c00a13a9b1ca39",
       "Inputs": [],
@@ -214,24 +222,25 @@
       "Replication": "Disabled"
     },
     {
-      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
-      "NodeType": "StringInputNode",
-      "InputValue": "test_4 Unnamed",
-      "Id": "2e8dfe18ec344d32bb80b849fa2ebac5",
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "5c47168f-177d-436f-8170-61f24a16a037-00215425"
+      ],
+      "Id": "a2d677ff62024396a4eb53cfb2b0a2ba",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "987676d431024fc6afe1251c29782db3",
-          "Name": "",
-          "Description": "String",
+          "Id": "7ae73166ed47484aa84f4f8831083117",
+          "Name": "Element",
+          "Description": "The selected elements.",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
         }
       ],
-      "Replication": "Disabled",
-      "Description": "Creates a string."
+      "Replication": "Disabled"
     }
   ],
   "Connectors": [
@@ -272,9 +281,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "987676d431024fc6afe1251c29782db3",
+      "Start": "7ae73166ed47484aa84f4f8831083117",
       "End": "694fddce9a0b4aaa805577febbe1aae7",
-      "Id": "fe506e89227f4f46aeb5c8ec5a88ac7c",
+      "Id": "19ae4ddc1ee74280991333ff9728ac17",
       "IsHidden": "False"
     }
   ],
@@ -378,24 +387,24 @@
         "Y": 90.870456948313631
       },
       {
-        "Name": "Select Model Element",
+        "Name": "Panel",
         "ShowGeometry": true,
         "Id": "449f2ffe49b34ac7a3c00a13a9b1ca39",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1145.6773962799382,
-        "Y": 506.11072352090224
+        "X": 1181.3522045036877,
+        "Y": 546.38873280578071
       },
       {
-        "Name": "String",
+        "Name": "Object on view",
         "ShowGeometry": true,
-        "Id": "2e8dfe18ec344d32bb80b849fa2ebac5",
-        "IsSetAsInput": false,
+        "Id": "a2d677ff62024396a4eb53cfb2b0a2ba",
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1202.8407808050079,
-        "Y": 690.68750871480029
+        "X": 1179.9065562223204,
+        "Y": 753.96917604678549
       }
     ],
     "Annotations": [
@@ -421,8 +430,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": -932.16917970143527,
-    "Y": -244.62820470252842,
+    "X": -853.16917970143527,
+    "Y": -318.62820470252842,
     "Zoom": 0.8689605226626762
   }
 }

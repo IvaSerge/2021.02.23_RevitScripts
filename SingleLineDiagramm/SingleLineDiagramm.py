@@ -49,13 +49,9 @@ reload_IN = IN[1]  # type: ignore
 rvt_start_panel = UnwrapElement(IN[2])  # type: ignore
 
 # select view for diagramm
-sheet_name = IN[3]  # type: ignore
-sheet_diagramm = toolsrvt.inst_by_cat_strparamvalue(
-	doc,
-	BuiltInCategory.OST_Sheets,
-	BuiltInParameter.SHEET_NAME,
-	sheet_name,
-	False)[0]
+sheet_element = UnwrapElement(IN[3])  # type: ignore
+sheet_diagramm_id = sheet_element.OwnerViewId
+sheet_diagramm = doc.GetElement(sheet_diagramm_id)
 
 el_panel.el_panel.sheet = sheet_diagramm
 
