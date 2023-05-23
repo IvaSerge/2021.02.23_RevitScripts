@@ -50,7 +50,8 @@ def panels_by_start_panel(_rvt_panel):
 
 
 class el_panel:
-	start_point = XYZ(-1.01165024787389, 1.74930679116264, 0)
+	start_point = XYZ(-1.01165024787389, -0.284813943745498, 0)
+	sheet: Autodesk.Revit.DB.ViewSheet
 
 	def __init__(self, _rvt_panel):
 		# type: (Autodesk.Revit.DB.Electrical.ElectricalEquipment) -> any
@@ -63,6 +64,8 @@ class el_panel:
 		self.circuits_to_check = toolsrvt.elsys_by_brd(_rvt_panel)[1]
 		self.insert_point: XYZ
 		self.annotation_type: Autodesk.Revit.DB.AnnotationSymbol
+		self.annotation_inst: Autodesk.Revit.DB.AnnotationSymbol
+		self.parameters_to_set = list()
 
 	def find_upper_panel(self):
 		# type: (el_panel) -> Autodesk.Revit.DB.Electrical.ElectricalEquipment
@@ -112,3 +115,42 @@ class el_panel:
 				"Branch")
 
 		self.annotation_type = anno_type
+
+	def create_elem_on_sheet(self):
+		if not self.annotation_type:
+			return None
+		doc = self.rvt_panel.Document
+
+		self.annotation_inst = doc.Create.NewFamilyInstance(
+			self.insert_point,
+			self.annotation_type,
+			self.sheet)
+
+	def get_distance_to_previous(self, panels_list, i_current):
+		doc = self.rvt_panel.Document
+		# that's a first element. Distance is not important
+		if i_current == 0:
+			return None
+
+		current_panel_column = self.index_column
+		current_panel_row = self.index_row
+		# find previous panel
+		for previous_panel in reversed(panels_list[0:i_current]):
+			previous_panel_column = previous_panel.index_column
+			previous_panel_row = previous_panel.index_row
+
+			# distance column is the same or +1
+			panel_check = any([
+				current_panel_column == previous_panel_column,
+				current_panel_column == previous_panel_column + 1])
+
+			if panel_check:
+				previous_panel_row = previous_panel.index_row
+				row_diff = current_panel_row - previous_panel_row
+
+				if row_diff == 1:
+					return self.parameters_to_set.append(["L", toolsrvt.mm_to_ft(doc, 18.5)])
+
+				else:
+					distance = row_diff * toolsrvt.mm_to_ft(doc, 20)
+					return self.parameters_to_set.append(["L", distance])

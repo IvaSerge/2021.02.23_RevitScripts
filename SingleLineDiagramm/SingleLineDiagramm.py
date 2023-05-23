@@ -48,16 +48,34 @@ view = doc.ActiveView
 reload_IN = IN[1]  # type: ignore
 rvt_start_panel = UnwrapElement(IN[2])  # type: ignore
 
+# select view for diagramm
+sheet_name = IN[3]  # type: ignore
+sheet_diagramm = toolsrvt.inst_by_cat_strparamvalue(
+	doc,
+	BuiltInCategory.OST_Sheets,
+	BuiltInParameter.SHEET_NAME,
+	sheet_name,
+	False)[0]
+
+el_panel.el_panel.sheet = sheet_diagramm
+
 panels_list = el_panel.panels_by_start_panel(rvt_start_panel)
 
-for panel in panels_list:
+for i, panel in enumerate(panels_list):
 	panel.point_by_index()
 	panel.get_anno_type()
+	panel.get_distance_to_previous(panels_list, i)
 
 # # =========Start transaction
 # TransactionManager.Instance.EnsureInTransaction(doc)
 
+# for panel in panels_list:
+# 	panel.create_elem_on_sheet()
+
+# 	# panel set parameters
+
+
 # # =========End transaction
 # TransactionManager.Instance.TransactionTaskDone()
 
-OUT = [[i.rvt_panel, i.index_column, i.index_row, i.annotation_type] for i in panels_list]
+OUT = [[i.rvt_panel, i.index_column, i.index_row, i.parameters_to_set] for i in panels_list]

@@ -19,15 +19,7 @@
       "Id": "449f2ffe49b34ac7a3c00a13a9b1ca39",
       "Name": "Select Model Element",
       "Type": "hostSelection",
-      "Value": "f84ad82a-12c7-4dec-8cfe-ae1064c2e9a9-00aa587f",
-      "Description": "Select a model element from the document.",
-      "SelectedIndex": 0
-    },
-    {
-      "Id": "81de6678f5984eb4978f5fc1f2164b0c",
-      "Name": "Select Model Element",
-      "Type": "hostSelection",
-      "Value": "",
+      "Value": "be5f78d6-cc9a-4560-b00b-1b63c7dacbe2-00d201d1",
       "Description": "Select a model element from the document.",
       "SelectedIndex": 0
     }
@@ -204,7 +196,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "f84ad82a-12c7-4dec-8cfe-ae1064c2e9a9-00aa587f"
+        "be5f78d6-cc9a-4560-b00b-1b63c7dacbe2-00d201d1"
       ],
       "Id": "449f2ffe49b34ac7a3c00a13a9b1ca39",
       "Inputs": [],
@@ -222,23 +214,24 @@
       "Replication": "Disabled"
     },
     {
-      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
-      "NodeType": "ExtensionNode",
-      "InstanceId": [],
-      "Id": "81de6678f5984eb4978f5fc1f2164b0c",
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "test_4 Unnamed",
+      "Id": "2e8dfe18ec344d32bb80b849fa2ebac5",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "2f7ed45e4be54b6389ffed2e3ea32e0f",
-          "Name": "Element",
-          "Description": "The selected elements.",
+          "Id": "987676d431024fc6afe1251c29782db3",
+          "Name": "",
+          "Description": "String",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
         }
       ],
-      "Replication": "Disabled"
+      "Replication": "Disabled",
+      "Description": "Creates a string."
     }
   ],
   "Connectors": [
@@ -279,9 +272,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "2f7ed45e4be54b6389ffed2e3ea32e0f",
+      "Start": "987676d431024fc6afe1251c29782db3",
       "End": "694fddce9a0b4aaa805577febbe1aae7",
-      "Id": "1fb90b15a1954fa4bf1624a03fe1ab02",
+      "Id": "fe506e89227f4f46aeb5c8ec5a88ac7c",
       "IsHidden": "False"
     }
   ],
@@ -395,14 +388,14 @@
         "Y": 506.11072352090224
       },
       {
-        "Name": "Select Model Element",
+        "Name": "String",
         "ShowGeometry": true,
-        "Id": "81de6678f5984eb4978f5fc1f2164b0c",
-        "IsSetAsInput": true,
+        "Id": "2e8dfe18ec344d32bb80b849fa2ebac5",
+        "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1146.8630037928649,
-        "Y": 686.50617447311265
+        "X": 1202.8407808050079,
+        "Y": 690.68750871480029
       }
     ],
     "Annotations": [
@@ -428,8 +421,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": -707.16917970143527,
-    "Y": 32.371795297471579,
+    "X": -932.16917970143527,
+    "Y": -244.62820470252842,
     "Zoom": 0.8689605226626762
   }
 }
