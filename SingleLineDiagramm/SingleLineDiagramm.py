@@ -66,16 +66,15 @@ for i, panel in enumerate(panels_list):
 	panel.get_anno_type()
 	panel.get_distance_to_previous(panels_list, i)
 
-# # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
-# for panel in panels_list:
-# 	panel.create_elem_on_sheet()
+for panel in panels_list:
+	panel.create_elem_on_sheet()
+	panel.set_parameters()
 
-# 	# panel set parameters
 
-
-# # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
 OUT = [[i.rvt_panel, i.index_column, i.index_row, i.parameters_to_set] for i in panels_list]

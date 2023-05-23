@@ -154,3 +154,13 @@ class el_panel:
 				else:
 					distance = row_diff * toolsrvt.mm_to_ft(doc, 20)
 					return self.parameters_to_set.append(["L", distance])
+
+	def set_parameters(self):
+		if not self.parameters_to_set:
+			return None
+
+		for par_name, par_value in self.parameters_to_set:
+			toolsrvt.setup_param_value(
+				self.annotation_inst,
+				par_name,
+				par_value)
