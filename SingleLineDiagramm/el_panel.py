@@ -189,7 +189,7 @@ class el_panel:
 			try:
 				p_val = toolsrvt.get_parval(self.rvt_panel, p_to_reed)
 				if p_val:
-					self.parameters_to_set.append(params_to_set, p_val)
+					self.parameters_to_set.append([p_to_set, p_val])
 			except:
 				continue
 
