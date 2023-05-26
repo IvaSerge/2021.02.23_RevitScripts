@@ -62,6 +62,7 @@ for i, panel in enumerate(panels_list):
 	panel.get_anno_type()
 	panel.get_distance_to_previous(panels_list, i)
 	panel.get_panel_parameters()
+	panel.get_control_circuit_parameters()
 	panel.get_circuit_parameters()
 
 # =========Start transaction

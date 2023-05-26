@@ -216,3 +216,31 @@ class el_panel:
 			"_tsd(STD)"]
 		param_values = [toolsrvt.get_parval(circuit, p_name) for p_name in params_to_read]
 		self.parameters_to_set.extend(zip(params_to_read, param_values))
+
+	def get_control_circuit_parameters(self):
+		allsys = self.rvt_panel.MEPModel.GetElectricalSystems()
+		circuits = [i for i in allsys if i.SystemType == Electrical.ElectricalSystemType.Controls]
+
+		if not circuits:
+			return None
+
+		circuit = circuits[0]
+
+		params_to_read = [
+			"_Breaker_Type",
+			"_Ii(INST)",
+			"_IR(LTPU)",
+			"_Isd(STPU)",
+			"_tr(LTD)",
+			"_tsd(STD)"]
+
+		params_to_set = [
+			"_Breaker_Type_Panel",
+			"_Ii(INST)_Panel",
+			"_IR(LTPU)_Panel",
+			"_Isd(STPU)_Panel",
+			"_tr(LTD)_Panel",
+			"_tsd(STD)_Panel"]
+
+		param_values = [toolsrvt.get_parval(circuit, p_name) for p_name in params_to_read]
+		self.parameters_to_set.extend(zip(params_to_set, param_values))
