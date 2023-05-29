@@ -54,7 +54,7 @@ def toPoint(doc, xyz):
 	x = toolsrvt.ft_to_mm(doc, xyz.X)
 	y = toolsrvt.ft_to_mm(doc, xyz.Y)
 	z = toolsrvt.ft_to_mm(doc, xyz.Z)
-	return Autodesk.DesignScript.Geometry.Point.ByCoordinates(x, y, z)
+	return Geometry.Point.ByCoordinates(x, y, z)
 
 
 # ================ GLOBAL VARIABLES
@@ -96,6 +96,4 @@ shortest_grid_name = distance_list[0][0]
 # # =========End transaction
 # TransactionManager.Instance.TransactionTaskDone()
 
-# OUT = [toPoint(doc, i) for i in obj_grids[0].intersections]
-# OUT = [[key, value] for key, value in obj_grids[0].intersections]
 OUT = shortest_grid_name
