@@ -50,6 +50,9 @@ def get_breakers_info(csv_breakers):
 		csv_reader = csv.reader(csv_file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
 		for row in csv_reader:
 			breaker_parameters = list()
+			# check if row is not empty
+			if len(row) < 17:
+				continue
 
 			circuit_number = re_circuit_number.search(row[0])
 			if circuit_number:
@@ -61,16 +64,12 @@ def get_breakers_info(csv_breakers):
 
 			breaker_parameters.append(panel_name)
 			breaker_parameters.append(circuit_number)
-			breaker_parameters += row[2:5]
-			breaker_parameters += row[6:8]
-			breaker_parameters += [row[15]]
+			breaker_parameters.extend(row[2:5])
+			breaker_parameters.extend(row[6:8])
+			breaker_parameters.append(row[15])
 			breaker_parameters += row[17:]
-
-			# change "," "." for frame
-			if "," in breaker_parameters[2]:
-				breaker_parameters[2] = float(breaker_parameters[2].replace(",", ""))
+			breaker_parameters = [i.replace(",", "") for i in breaker_parameters]
 			cbreakers_list.append(breaker_parameters)
-
 	return cbreakers_list
 
 
@@ -120,14 +119,15 @@ def csv_to_rvt_elements(csv_info, doc):
 
 		# "%n" is branch circuit of the panel
 		else:
-			circutit_rvt = toolsrvt.elsys_by_brd(panel_rvt)[1][circuit_number - 1]
-			# check circuit is not a SPARE
-			if circutit_rvt.CircuitType != Electrical.CircuitType.Circuit:
-				# TODO add this circuit to error list
-				continue
-
+			circutits_rvt = toolsrvt.elsys_by_brd(panel_rvt)[1]
+			circutit_rvt = [i for i in circutits_rvt if i.StartSlot == circuit_number][0]
 			circutit_list = [circutit_rvt] * len(param_toset_circuits)
-			param_values = zip(circutit_list, param_toset_circuits, row[2:])
+			# change value for frame to represent Revit value
+			display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Current).GetUnitTypeId()
+			values_list = row[2:]
+			values_list[0] = Autodesk.Revit.DB.UnitUtils.ConvertToInternalUnits(float(values_list[0]), display_units)
+
+			param_values = zip(circutit_list, param_toset_circuits, values_list)
 			elem_list.extend(param_values)
 
 			# TODO: if circuit not found - write report
