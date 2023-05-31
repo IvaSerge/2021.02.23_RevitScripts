@@ -68,11 +68,9 @@ def get_breakers_info(csv_breakers):
 			breaker_parameters.extend(row[6:8])
 			breaker_parameters.append(row[15])
 			breaker_parameters += row[17:]
-			try:
-				breaker_parameters = [i.replace(",", "") for i in breaker_parameters]
-				cbreakers_list.append(breaker_parameters)
-			except:
-				continue
+			breaker_parameters = [i.replace(",", "") if i else None for i in breaker_parameters]
+			cbreakers_list.append(breaker_parameters)
+
 	return cbreakers_list
 
 
@@ -126,6 +124,7 @@ def csv_to_rvt_elements(csv_info, doc):
 			try:
 				circutit_rvt = [i for i in circutits_rvt if i.StartSlot == circuit_number][0]
 			except:
+				# circuit in Simaris do not have analog in Revit model. Situation to be checked
 				error_text = "Circuit not found :" + panel_name + ": " + str(circuit_number)
 				raise ValueError(error_text)
 			circutit_list = [circutit_rvt] * len(param_toset_circuits)
@@ -137,5 +136,4 @@ def csv_to_rvt_elements(csv_info, doc):
 			param_values = zip(circutit_list, param_toset_circuits, values_list)
 			elem_list.extend(param_values)
 
-			# TODO: if circuit not found - write report
 	return elem_list
