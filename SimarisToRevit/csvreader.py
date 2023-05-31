@@ -46,7 +46,7 @@ def get_breakers_info(csv_breakers):
 	re_circuit_number = re.compile(r"(?<=\[).*(?=\])")
 	re_panel_name = re.compile(r".+(?=\[)")
 
-	with open(csv_breakers, mode='r') as csv_file:
+	with open(csv_breakers, mode='r', encoding='utf-8-sig') as csv_file:
 		csv_reader = csv.reader(csv_file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
 		for row in csv_reader:
 			breaker_parameters = list()
@@ -68,8 +68,11 @@ def get_breakers_info(csv_breakers):
 			breaker_parameters.extend(row[6:8])
 			breaker_parameters.append(row[15])
 			breaker_parameters += row[17:]
-			breaker_parameters = [i.replace(",", "") for i in breaker_parameters]
-			cbreakers_list.append(breaker_parameters)
+			try:
+				breaker_parameters = [i.replace(",", "") for i in breaker_parameters]
+				cbreakers_list.append(breaker_parameters)
+			except:
+				continue
 	return cbreakers_list
 
 
@@ -120,7 +123,11 @@ def csv_to_rvt_elements(csv_info, doc):
 		# "%n" is branch circuit of the panel
 		else:
 			circutits_rvt = toolsrvt.elsys_by_brd(panel_rvt)[1]
-			circutit_rvt = [i for i in circutits_rvt if i.StartSlot == circuit_number][0]
+			try:
+				circutit_rvt = [i for i in circutits_rvt if i.StartSlot == circuit_number][0]
+			except:
+				error_text = "Circuit not found :" + panel_name + ": " + str(circuit_number)
+				raise ValueError(error_text)
 			circutit_list = [circutit_rvt] * len(param_toset_circuits)
 			# change value for frame to represent Revit value
 			display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Current).GetUnitTypeId()
