@@ -46,6 +46,19 @@ def get_breakers_info(csv_breakers):
 	re_circuit_number = re.compile(r"(?<=\[).*(?=\])")
 	re_panel_name = re.compile(r".+(?=\[)")
 
+	breaker_trips = {
+		"3WL13504NG611AA2": "ETU76B",  # 3200A in substation
+		"3WL12323NG611AA2": "ETU76B",  # 3200A in substation
+		"3WL11163NG611AA2": "ETU76B",  # 1600A in substation
+		"3WL11163CB611AA2": "ETU25B",  # 1600A in distribution panel
+		"3WA12204AF010AA0": "ETU600",  # 2000A
+		"3VA25106JP320AA0": "ETU550",  # 1000A
+		"3VA24636KP320AA0": "ETU850",  # 630A
+		"3VA23406KP320AA0": "ETU850",  # 400A
+		"3VA22256KP320AA0": "ETU850",  # 250A
+		"3VA21166KP320AA0": "ETU850",  # 160A
+	}
+
 	with open(csv_breakers, mode='r', encoding='utf-8-sig') as csv_file:
 		csv_reader = csv.reader(csv_file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
 		for row in csv_reader:
@@ -64,6 +77,14 @@ def get_breakers_info(csv_breakers):
 
 			breaker_parameters.append(panel_name)
 			breaker_parameters.append(circuit_number)
+
+			# add trip parameter
+			breaker_type = row[1]
+			breaker_trip = breaker_trips.get(breaker_type)
+			if not breaker_trip:
+				breaker_trip = "-"
+
+			breaker_parameters.append(breaker_trip)
 			breaker_parameters.extend(row[2:5])
 			breaker_parameters.extend(row[6:8])
 			breaker_parameters.append(row[15])
@@ -76,6 +97,7 @@ def get_breakers_info(csv_breakers):
 
 def csv_to_rvt_elements(csv_info, doc):
 	param_toset_circuits = [
+		"_Breaker_Type",
 		"RBS_ELEC_CIRCUIT_FRAME_PARAM",
 		"_IR(LTPU)",
 		"_tr(LTD)",
@@ -85,6 +107,7 @@ def csv_to_rvt_elements(csv_info, doc):
 		"_Ig(GFPU)",
 		"_tg(GFD)"]
 	param_toset_panel = [
+		"_Breaker_Type",
 		"RBS_ELEC_PANEL_MCB_RATING_PARAM",
 		"_IR(LTPU)",
 		"_tr(LTD)",
@@ -135,7 +158,7 @@ def csv_to_rvt_elements(csv_info, doc):
 			# change value for frame to represent Revit value
 			display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Current).GetUnitTypeId()
 			values_list = row[2:]
-			values_list[0] = Autodesk.Revit.DB.UnitUtils.ConvertToInternalUnits(float(values_list[0]), display_units)
+			values_list[1] = Autodesk.Revit.DB.UnitUtils.ConvertToInternalUnits(float(values_list[1]), display_units)
 
 			param_values = zip(circutit_list, param_toset_circuits, values_list)
 			elem_list.extend(param_values)
