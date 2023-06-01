@@ -98,8 +98,8 @@ def get_parval(elem, name):
 	if not param:
 		param = elem.get_Parameter(get_bip(name))
 
-	# get paremeter Value if found
-	try:
+	if param:
+		# get paremeter Value if found
 		storeType = param.StorageType
 		# value = storeType
 		if storeType == StorageType.String:
@@ -109,9 +109,10 @@ def get_parval(elem, name):
 		elif storeType == StorageType.Double:
 			value = param.AsDouble()
 		elif storeType == StorageType.ElementId:
-			value = param.AsValueString()
-	except:
-		pass
+			value: ElementId = param.AsElementId()
+	else:
+		raise Exception("No parameter found")
+
 	return value
 
 
@@ -128,8 +129,8 @@ def get_bip(paramName):
 def setup_param_value(elem, name, pValue):
 
 	# check element staus
-	doc = elem.Document
-	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
+	elem_status = WorksharingUtils.GetCheckoutStatus(elem.Document, elem.Id)
+
 	if elem_status == CheckoutStatus.OwnedByOtherUser:
 		return None
 
@@ -138,55 +139,17 @@ def setup_param_value(elem, name, pValue):
 	# check is it a BuiltIn parameter if not found
 	if not param:
 		param = elem.get_Parameter(get_bip(name))
-	param.Set(pValue)
-	return param
+
+	if param:
+		param.Set(pValue)
+	else:
+		raise Exception("No parameter found")
+	return elem
 
 
 def category_by_bic_name(doc, _bicString):
 	bic_value = System.Enum.Parse(BuiltInCategory, _bicString)
 	return Autodesk.Revit.DB.Category.GetCategory(doc, bic_value)
-
-
-# def param_by_cat(_bic, _name):
-# 	# type: (Autodesk.Revit.DB.BuiltiInCategory, str) -> Autodesk.Revit.DB.Parameter
-# 	"""Get parametr in
-
-# 	args:
-# 		_bic (BuiltiInCategory.OST_xxx): category
-# 		_name (str): parameter name
-# 	return:
-# 		param (Autodesk.Revit.DB.Parameter) - parameter
-# 	"""
-# 	# check Type parameter
-# 	elem = FilteredElementCollector(doc).\
-# 		OfCategory(_bic).\
-# 		WhereElementIsElementType().\
-# 		FirstElement()
-# 	param = elem.LookupParameter(_name)
-# 	if param:
-# 		return param
-
-# 	# check instance parameter
-# 	# ATTENTION! instance is first in!
-# 	# Be sure that all instances has the parameter.
-# 	elem = FilteredElementCollector(doc).\
-# 		OfCategory(_bic).\
-# 		WhereElementIsNotElementType().\
-# 		FirstElement()
-# 	param = elem.LookupParameter(_name)
-# 	if param:
-# 		return param
-
-# 	# Not found
-# 	return None
-
-
-# 	if param:
-# 		try:
-# 			param.Set(pValue)
-# 		except:
-# 			pass
-# 	return elem
 
 
 def inst_by_cat_strparamvalue(_doc, _bic, _bip, _val, _isType):
@@ -259,8 +222,10 @@ def type_by_bic_fam_type(_doc, _bic, _fnam, _tnam):
 	return elem
 
 
-def mm_to_ft(mm):
-	return 3.2808 * mm / 1000
+def mm_to_ft(doc, mm):
+	display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Length).GetUnitTypeId()
+	ft = Autodesk.Revit.DB.UnitUtils.ConvertToInternalUnits(mm, display_units)
+	return ft
 
 
 # def ft_to_mm(ft):
