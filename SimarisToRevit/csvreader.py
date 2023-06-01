@@ -110,7 +110,11 @@ def csv_to_rvt_elements(csv_info, doc):
 			False)
 		# TODO: check if panel is not unique - write report
 		# check panel name is equal to panel name
-		panel_rvt = [i for i in panel_rvt if i.Name == panel_name][0]
+		try:
+			panel_rvt = [i for i in panel_rvt if i.Name == panel_name][0]
+		except:
+			error_text = "Panel not found :" + panel_name
+			raise ValueError(error_text)
 
 		# "0" is main circuit breaker of the panel
 		if circuit_number == 0:

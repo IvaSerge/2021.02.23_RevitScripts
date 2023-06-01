@@ -19,7 +19,7 @@
       "Id": "15d805eb8b764fd4845400f3600b40e5",
       "Name": "Switch settings",
       "Type": "string",
-      "Value": "CB1_switch_settings_lv_CB1-SUBN3_4.csv",
+      "Value": "CP1-SUBN3WL4.csv",
       "Description": "Creates a string.",
       "SelectedIndex": 0
     }
@@ -186,7 +186,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "CB1_switch_settings_lv_CB1-SUBN3_4.csv",
+      "InputValue": "CP1-SUBN3WL4.csv",
       "Id": "15d805eb8b764fd4845400f3600b40e5",
       "Inputs": [],
       "Outputs": [
@@ -308,8 +308,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1188.0279867769007,
-        "Y": 290.93910259017014
+        "X": 1190.5988275848556,
+        "Y": 330.78713511347252
       },
       {
         "Name": "FileSystem.ReadText",
@@ -364,12 +364,12 @@
           "ad531ae1b87d458d89230df621752f91"
         ],
         "HasNestedGroups": false,
-        "Left": 1178.0279867769007,
-        "Top": 217.93910259017014,
+        "Left": 1180.5988275848556,
+        "Top": 257.78713511347252,
         "Width": 209.0,
         "Height": 205.0,
         "FontSize": 36.0,
-        "InitialTop": 290.93910259017014,
+        "InitialTop": 330.78713511347252,
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
@@ -387,17 +387,17 @@
         "HasNestedGroups": false,
         "Left": 1164.81256578424,
         "Top": 501.497147958538,
-        "Width": 257.0,
-        "Height": 224.0,
+        "Width": 224.0,
+        "Height": 205.0,
         "FontSize": 36.0,
         "InitialTop": 574.497147958538,
-        "InitialHeight": 281.957532171671,
+        "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFFFC999"
       }
     ],
-    "X": -804.157291685817,
-    "Y": -185.94791887393973,
-    "Zoom": 0.71951961380834584
+    "X": -924.07697675474947,
+    "Y": -168.69967202007405,
+    "Zoom": 0.88964874258165039
   }
 }
