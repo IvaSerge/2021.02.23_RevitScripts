@@ -2,7 +2,7 @@
   "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
   "IsCustomNode": false,
   "Description": "",
-  "Name": "SimarisToRevit",
+  "Name": "FromPanelToCotntrolCircuit",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -11,15 +11,7 @@
       "Id": "247389cd36b8437db0c2971fb3851598",
       "Name": "String",
       "Type": "string",
-      "Value": "SimarisToRevit.py",
-      "Description": "Creates a string.",
-      "SelectedIndex": 0
-    },
-    {
-      "Id": "15d805eb8b764fd4845400f3600b40e5",
-      "Name": "Switch settings",
-      "Type": "string",
-      "Value": "CP1-SUBN3WL4.csv",
+      "Value": "FromPanelToCotntrolCircuit.py",
       "Description": "Creates a string.",
       "SelectedIndex": 0
     }
@@ -59,15 +51,6 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
-        },
-        {
-          "Id": "dea01028c0d14c778e215769761eb86e",
-          "Name": "IN[2]",
-          "Description": "Input #2",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -87,7 +70,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
@@ -166,32 +149,12 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "SimarisToRevit.py",
+      "InputValue": "FromPanelToCotntrolCircuit.py",
       "Id": "247389cd36b8437db0c2971fb3851598",
       "Inputs": [],
       "Outputs": [
         {
           "Id": "26ebc66651a646cda0966943be75c7d2",
-          "Name": "",
-          "Description": "String",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Creates a string."
-    },
-    {
-      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
-      "NodeType": "StringInputNode",
-      "InputValue": "CP1-SUBN3WL4.csv",
-      "Id": "15d805eb8b764fd4845400f3600b40e5",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "e0f814d4dffe41d5899a2b81ac85c535",
           "Name": "",
           "Description": "String",
           "UsingDefaultValue": false,
@@ -233,12 +196,6 @@
       "Start": "26ebc66651a646cda0966943be75c7d2",
       "End": "b505712d4efc41cd97c3c4dc0c84d9e6",
       "Id": "dc0a98baa73b4ab2b23bb5d741aeb4e5",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "e0f814d4dffe41d5899a2b81ac85c535",
-      "End": "dea01028c0d14c778e215769761eb86e",
-      "Id": "4beceeff0a7f48b8a53f8c17d3d21a19",
       "IsHidden": "False"
     }
   ],
@@ -340,16 +297,6 @@
         "Excluded": false,
         "X": 577.71552511868106,
         "Y": 90.870456948313631
-      },
-      {
-        "Name": "Switch settings",
-        "ShowGeometry": true,
-        "Id": "15d805eb8b764fd4845400f3600b40e5",
-        "IsSetAsInput": true,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 1174.81256578424,
-        "Y": 574.497147958538
       }
     ],
     "Annotations": [
@@ -373,31 +320,10 @@
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
-      },
-      {
-        "Id": "329ed190bcdd4c8787df16197706a4d0",
-        "Title": "CSV",
-        "DescriptionText": "csv database from Simaris",
-        "IsExpanded": true,
-        "WidthAdjustment": 0.0,
-        "HeightAdjustment": 0.0,
-        "Nodes": [
-          "15d805eb8b764fd4845400f3600b40e5"
-        ],
-        "HasNestedGroups": false,
-        "Left": 1164.81256578424,
-        "Top": 501.497147958538,
-        "Width": 224.0,
-        "Height": 205.0,
-        "FontSize": 36.0,
-        "InitialTop": 574.497147958538,
-        "InitialHeight": 145.0,
-        "TextblockHeight": 63.0,
-        "Background": "#FFFFC999"
       }
     ],
-    "X": -924.07697675474947,
-    "Y": -168.69967202007405,
-    "Zoom": 0.88964874258165039
+    "X": -932.69244376276629,
+    "Y": -137.06468185393035,
+    "Zoom": 0.91687161302388975
   }
 }

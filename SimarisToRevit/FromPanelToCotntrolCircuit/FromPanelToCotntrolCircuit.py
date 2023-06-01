@@ -94,10 +94,11 @@ el_systems = toolsrvt.inst_by_cat_strparamvalue(
 	"Controls",
 	False)
 
+params_to_set = list()
 # read parameters from panel
-# for el_sys in el_systems:
-# 	sys_parameters = get_parameters_from_panel(el_sys)
-get_parameters_from_panel(el_systems[0])
+for el_sys in el_systems:
+	sys_parameters = get_parameters_from_panel(el_sys)
+	params_to_set.extend(sys_parameters)
 
 # ================ get info for circuit breaker settings
 
@@ -106,9 +107,13 @@ get_parameters_from_panel(el_systems[0])
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 # ================ set parameters
-
+for el_sys in params_to_set:
+	elem = el_sys[0]
+	p_name = el_sys[1]
+	p_value = el_sys[2]
+	setup_param_value(elem, p_name, p_value)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = get_parameters_from_panel(el_systems[0])
+OUT = params_to_set
