@@ -126,6 +126,47 @@ class el_panel:
 			self.annotation_type,
 			self.sheet)
 
+	def find_elem_on_sheet(self):
+		sheet = self.sheet
+		self.annotation_inst = sheet
+		doc = sheet.Document
+		panel_name = self.parameters_to_set[1][1]
+		circuit_number = self.parameters_to_set[5][1]
+
+		fnrvStr = FilterStringEquals()
+
+		pvpType = ParameterValueProvider(ElementId(int(BuiltInParameter.SYMBOL_NAME_PARAM)))
+		pvpFam = ParameterValueProvider(ElementId(int(BuiltInParameter.ALL_MODEL_FAMILY_NAME)))
+
+		fruleF = FilterStringRule(pvpFam, fnrvStr, "2D_SLD_Panel")
+		filterF = ElementParameterFilter(fruleF)
+
+		fruleT = FilterStringRule(pvpType, fnrvStr, "Branch")
+		filterT = ElementParameterFilter(fruleT)
+
+		filter = LogicalAndFilter(filterT, filterF)
+
+		elems = FilteredElementCollector(doc, sheet.Id).\
+			OfCategory(BuiltInCategory.OST_GenericAnnotation).\
+			WhereElementIsNotElementType().\
+			WherePasses(filter).\
+			ToElements()
+
+		if not elems:
+			error_text = "No 2D symbols found on the sheet"
+			raise ValueError(error_text)
+
+		elems = [i for i in elems
+			if all([
+				toolsrvt.get_parval(i, "RBS_ELEC_PANEL_NAME") == panel_name,
+				toolsrvt.get_parval(i, "RBS_ELEC_CIRCUIT_NUMBER") == circuit_number,
+			])]
+		if not elems:
+			error_text = "Branch is new. Create new 2D tree"
+			raise ValueError(error_text)
+
+		self.annotation_inst = elems
+
 	def get_distance_to_previous(self, panels_list, i_current):
 		doc = self.rvt_panel.Document
 		# that's a first element. Distance is not important

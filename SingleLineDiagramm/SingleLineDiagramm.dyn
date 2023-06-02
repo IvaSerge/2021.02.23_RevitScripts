@@ -19,7 +19,7 @@
       "Id": "449f2ffe49b34ac7a3c00a13a9b1ca39",
       "Name": "Panel",
       "Type": "hostSelection",
-      "Value": "cff248dc-b4e0-4b58-81f8-906377113542-000b0c17",
+      "Value": "9bba0ba8-e5d5-4cb7-a183-fb0734f6a310-00078c2d",
       "Description": "Select a model element from the document.",
       "SelectedIndex": 0
     },
@@ -81,6 +81,15 @@
           "Id": "694fddce9a0b4aaa805577febbe1aae7",
           "Name": "IN[3]",
           "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "cfaa83d2b5bc4d78a7fc726e1ade2f32",
+          "Name": "IN[4]",
+          "Description": "Input #4",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -204,7 +213,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "cff248dc-b4e0-4b58-81f8-906377113542-000b0c17"
+        "9bba0ba8-e5d5-4cb7-a183-fb0734f6a310-00078c2d"
       ],
       "Id": "449f2ffe49b34ac7a3c00a13a9b1ca39",
       "Inputs": [],
@@ -241,6 +250,26 @@
         }
       ],
       "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "10cde07222734497ad469ee3b34fd261",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6ea61ac8985545d4b8600ddc1273aa41",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
     }
   ],
   "Connectors": [
@@ -284,6 +313,12 @@
       "Start": "7ae73166ed47484aa84f4f8831083117",
       "End": "694fddce9a0b4aaa805577febbe1aae7",
       "Id": "19ae4ddc1ee74280991333ff9728ac17",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "6ea61ac8985545d4b8600ddc1273aa41",
+      "End": "cfaa83d2b5bc4d78a7fc726e1ade2f32",
+      "Id": "0fb82ed3546c47c2af0d70847c2107d6",
       "IsHidden": "False"
     }
   ],
@@ -393,8 +428,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1181.3522045036877,
-        "Y": 546.38873280578071
+        "X": 940.1006880469115,
+        "Y": 618.90363948643028
       },
       {
         "Name": "Object on view",
@@ -403,8 +438,18 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1179.9065562223204,
-        "Y": 753.96917604678549
+        "X": 926.10438284004726,
+        "Y": 801.38276887644088
+      },
+      {
+        "Name": "Update existing tree (True)",
+        "ShowGeometry": true,
+        "Id": "10cde07222734497ad469ee3b34fd261",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1181.8526528546549,
+        "Y": 1010.6252036720034
       }
     ],
     "Annotations": [
@@ -430,8 +475,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": -955.16917970143527,
-    "Y": -213.62820470252842,
-    "Zoom": 0.8689605226626762
+    "X": -309.79256432517036,
+    "Y": -206.41016449361348,
+    "Zoom": 0.71709393806440835
   }
 }
