@@ -62,8 +62,7 @@ sheet_diagramm = doc.GetElement(sheet_diagramm_id)
 
 el_panel.el_panel.sheet = sheet_diagramm
 
-# panels_list = el_panel.panels_by_start_panel(rvt_start_panel)
-panels_list = [el_panel.panels_by_start_panel(rvt_start_panel)[0]]
+panels_list = el_panel.panels_by_start_panel(rvt_start_panel)
 
 if not update_sheet:
 	# create new elements
