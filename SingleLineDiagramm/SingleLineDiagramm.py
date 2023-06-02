@@ -53,28 +53,42 @@ sheet_element = UnwrapElement(IN[3])  # type: ignore
 sheet_diagramm_id = sheet_element.OwnerViewId
 sheet_diagramm = doc.GetElement(sheet_diagramm_id)
 
+# Update sheet info or create new tree
+update_sheet = IN[4]  # type: ignore
+sheet_diagramm_id = sheet_element.OwnerViewId
+sheet_diagramm = doc.GetElement(sheet_diagramm_id)
+
 el_panel.el_panel.sheet = sheet_diagramm
 
 panels_list = el_panel.panels_by_start_panel(rvt_start_panel)
 
-for i, panel in enumerate(panels_list):
-	panel.point_by_index()
-	panel.get_anno_type()
-	panel.get_distance_to_previous(panels_list, i)
-	panel.get_panel_parameters()
-	# circiut parameters for CP model only. Not actual any more
-	# panel.get_control_circuit_parameters()
-	panel.get_circuit_parameters()
+if not update_sheet:
+	# create new elements
+	for i, panel in enumerate(panels_list):
+		panel.point_by_index()
+		panel.get_anno_type()
+		panel.get_distance_to_previous(panels_list, i)
+		panel.get_panel_parameters()
+		# circiut parameters for CP model only. Not actual any more
+		# panel.get_control_circuit_parameters()
+		panel.get_circuit_parameters()
+
+else:
+	for panel in panels_list:
+		panel.get_panel_parameters()
+		panel.get_circuit_parameters()
+		panel.find_elem_on_sheet()
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 for panel in panels_list:
-	panel.create_elem_on_sheet()
+	if not update_sheet:
+		panel.create_elem_on_sheet()
 	panel.set_parameters()
 
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = [[i.rvt_panel, i.index_column, i.index_row, i.parameters_to_set] for i in panels_list]
+OUT = [[i.rvt_panel, i.index_column, i.index_row, i.annotation_inst] for i in panels_list]
