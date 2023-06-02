@@ -46,7 +46,9 @@ app = uiapp.Application
 view = doc.ActiveView
 
 reload_IN = IN[1]  # type: ignore
-rvt_start_panel = UnwrapElement(IN[2])  # type: ignore
+# rvt_start_panel = UnwrapElement(IN[2])  # type: ignore
+rvt_start_panel_id = IN[2]  # type: ignore
+rvt_start_panel = doc.GetElement(ElementId(rvt_start_panel_id))
 
 # select view for diagramm
 sheet_element = UnwrapElement(IN[3])  # type: ignore
@@ -60,7 +62,8 @@ sheet_diagramm = doc.GetElement(sheet_diagramm_id)
 
 el_panel.el_panel.sheet = sheet_diagramm
 
-panels_list = el_panel.panels_by_start_panel(rvt_start_panel)
+# panels_list = el_panel.panels_by_start_panel(rvt_start_panel)
+panels_list = [el_panel.panels_by_start_panel(rvt_start_panel)[0]]
 
 if not update_sheet:
 	# create new elements
@@ -91,4 +94,4 @@ for panel in panels_list:
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = [[i.rvt_panel, i.index_column, i.index_row, i.annotation_inst] for i in panels_list]
+OUT = [[i.rvt_panel, i.index_column, i.index_row, i.parameters_to_set] for i in panels_list]

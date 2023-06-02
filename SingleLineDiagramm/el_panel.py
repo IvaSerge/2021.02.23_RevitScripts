@@ -218,7 +218,8 @@ class el_panel:
 			"_IR(LTPU)",
 			"_Isd(STPU)",
 			"_tr(LTD)",
-			"_tsd(STD)"]
+			"_tsd(STD)"
+		]
 
 		params_to_set = [
 			"RBS_ELEC_PANEL_NAME",
@@ -227,7 +228,8 @@ class el_panel:
 			"_IR(LTPU)_Panel",
 			"_Isd(STPU)_Panel",
 			"_tr(LTD)_Panel",
-			"_tsd(STD)_Panel"]
+			"_tsd(STD)_Panel"
+		]
 
 		for p_to_reed, p_to_set in zip(params_to_read, params_to_set):
 			try:
