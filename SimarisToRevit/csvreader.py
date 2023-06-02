@@ -47,7 +47,7 @@ def get_breakers_info(csv_breakers):
 	re_panel_name = re.compile(r".+(?=\[)")
 
 	breaker_trips = {
-		"3WL13504NG611AA2": "ETU76B",  # 3200A in substation
+		"3WL13634NG611AA2": "ETU76B",  # 5000A in substation
 		"3WL12323NG611AA2": "ETU76B",  # 3200A in substation
 		"3WL11163NG611AA2": "ETU76B",  # 1600A in substation
 		"3WL11163CB611AA2": "ETU25B",  # 1600A in distribution panel
