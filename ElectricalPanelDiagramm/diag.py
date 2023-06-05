@@ -132,6 +132,7 @@ class Diagramm():
 
 		if elem_is_panel:
 			self.params.append(["Panel", 1])
+			self.params.append(["POC", 0])
 			# get reference
 
 			refer_sheet = toolsrvt.inst_by_cat_strparamvalue(
