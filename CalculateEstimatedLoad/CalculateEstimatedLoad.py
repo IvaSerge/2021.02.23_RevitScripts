@@ -94,18 +94,25 @@ def get_estimated_load(_elSys, _testboard):
 	return rvt_TotalEstLoad, rvt_DemandFactor  # convert_TotalEstLoad, rvt_DemandFactor
 
 
-def SetEstimatedValues(_elSys, _testboard):
+def GetEstimatedValues(_elSys, _testboard):
 	# type: (Electrical.ElectricalSystem, FamilyInstance) -> list[Electrical.ElectricalSystem]
-	"""Copy Estimated values from elecrtical board to the circuit
+	"""Get Estimated values from elecrtical board for the circuit
 
-	args:
-		_elSys: system to be calculated
-		_testboard: temporary board for manipulations
+		args:
+			_elSys: system to be calculated
+			_testboard: temporary board for manipulations
 
-	return:
-		param List[str] - list of installed values
-
+		return:
+			param List[str] - list of installed values
 	"""
+
+	params_to_set = [
+		"E_DemandFactor",
+		"Demand Factor",
+		"E_TotalInstalledLoad",
+		"E_TotalEstLoad",
+		"E_EstCurrent",
+	]
 
 	# If circuit owned by other - return None
 	elem_stat = Autodesk.Revit.DB.WorksharingUtils.GetCheckoutStatus(
@@ -142,13 +149,22 @@ def SetEstimatedValues(_elSys, _testboard):
 		current_estimated = round(UnitUtils.ConvertFromInternalUnits(rvt_current,
 			UnitTypeId.Amperes) * 10) / 10  # type: ignore
 
-	# Write parameters in Circuit
-	calcSystem.LookupParameter("E_DemandFactor").Set(rvt_DemandFactor)
-	calcSystem.LookupParameter("Demand Factor").Set(rvt_DemandFactor)
-	calcSystem.LookupParameter("E_TotalInstalledLoad").Set(rvt_TotalInstalledLoad)
-	calcSystem.LookupParameter("E_TotalEstLoad").Set(total_est_load)
-	calcSystem.LookupParameter("E_EstCurrent").Set(current_estimated)
-	return rvt_DemandFactor, total_est_load, current_estimated
+	circuits = [_elSys] * len(params_to_set)
+	values = [
+		rvt_DemandFactor,
+		rvt_DemandFactor,
+		rvt_TotalInstalledLoad,
+		total_est_load,
+		current_estimated]
+
+	return zip(circuits, params_to_set, values)
+
+
+def SetEstimatedValues(values):
+	elem = values[0]
+	param = values[1]
+	value = values[2]
+	toolsrvt.setup_param_value(elem, param, value)
 
 
 # ================ GLOBAL VARIABLES
@@ -220,22 +236,25 @@ else:
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-try:
-	TESTBOARD = doc.Create.NewFamilyInstance(
-		XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
-	TESTBOARD.get_Parameter(
-		BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
+# try:
+TESTBOARD = doc.Create.NewFamilyInstance(
+	XYZ(0, 0, 0), testBoardType, Structure.StructuralType.NonStructural)
+TESTBOARD.get_Parameter(
+	BuiltInParameter.RBS_FAMILY_CONTENT_DISTRIBUTION_SYSTEM).Set(distrSys)
 
-	for circuit in circuits_to_calculate:
-		SetEstimatedValues(circuit, TESTBOARD)
+values = list()
 
-	doc.Delete(TESTBOARD.Id)
-except:
-	param_info = circuit.Id
-	doc.Delete(TESTBOARD.Id)
+for circuit in circuits_to_calculate:
+	# get values
+	values.extend(GetEstimatedValues(circuit, TESTBOARD))
+
+for value in values:
+	SetEstimatedValues(value)
+
+doc.Delete(TESTBOARD.Id)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = circuits_to_calculate
-# OUT = voltage_230
+# OUT = circuits_to_calculate
+OUT = values

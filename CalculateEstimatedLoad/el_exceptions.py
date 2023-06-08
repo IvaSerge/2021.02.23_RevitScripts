@@ -17,28 +17,28 @@ from Autodesk.Revit.DB import *
 
 # ================ Python imports
 import math
+import toolsrvt
 
 
 def test_exceptions(_elSys):
 	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> bool
-	"""Analise of electrical system if it is an "exception" """
+	"""
+		Analise of electrical system if it is an "exception"
+		all
+	"""
 	el_sys_elements = [i for i in _elSys.Elements]  # type: list[Autodesk.Revit.DB.FamilyInstance]
 	first_elem = el_sys_elements[0]  # type: Autodesk.Revit.DB.FamilyInstance
+	doc = first_elem.Document
 
 	# The fisrst element of the system is electrical board and
-	# board name begins with CP1
-	test_board_CP1 = str(first_elem.Name).startswith("CP1")
-
-	# if the first element of the circuit type contains "ELECTRICAL_RCPT"
-	test_RCPT = "ELECTRICAL_RCPT" in str(first_elem.Name)
+	board_category = toolsrvt.category_by_bic_name(doc, "OST_ElectricalEquipment").Id
+	test_board = first_elem.Category.Id == board_category
 
 	# if the first element is Quasi point
-	if "QUASI_Connector" in str(first_elem.Symbol.FamilyName):
+	if "QUASI" in str(first_elem.Symbol.FamilyName):
 		# that is not exception
 		return False
 
-	any_tests = any([
-		test_board_CP1,
-		test_RCPT])
+	any_tests = any([test_board])
 
 	return any_tests
