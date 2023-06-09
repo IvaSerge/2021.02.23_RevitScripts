@@ -7,7 +7,6 @@ clr.AddReference('RevitAPI')
 import Autodesk
 from Autodesk.Revit.DB import *
 from Autodesk.Revit.DB import BuiltInCategory
-from Autodesk.Revit.DB.Category import GetCategory  # type: ignore
 
 # ================ Python imports
 import operator
@@ -168,8 +167,6 @@ class presets():
 		["63C / Section F4 / 1xd16mm", 3, 63],
 		["63C / Section F5 / 1xd16mm", 3, 63],
 		["63C / Section F6 / 1xd16mm", 3, 63],
-		["Empty", 1],
-		["Empty", 1],
 	]
 
 	preset_2E_sub = [
@@ -338,6 +335,7 @@ class presets():
 
 	preset_2H = [
 		# Description | n_of_poles
+		["N/A", 3],
 		["N/A", 3],
 		["100ETU / Q3 / 1xd35mm", 3, 160],
 		["100ETU / Q4 / 1xd35mm", 3, 160],

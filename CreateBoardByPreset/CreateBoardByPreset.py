@@ -6,9 +6,6 @@ pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
 sys.path.append(IN[0].DirectoryName)  # type: ignore
 
-clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
-from Microsoft.Office.Interop import Excel  # type: ignore
-
 import System
 from System import Array
 from System.Collections.Generic import *
@@ -27,56 +24,18 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 
+import importlib
+from importlib import reload
+
 import presets
+reload(presets)
 from presets import *
+
+import toolsrvt
+reload(toolsrvt)
 
 import itertools
 from itertools import cycle
-
-
-def get_parval(elem, name):
-	# type: (FamilyInstance, str) -> any
-	"""Get parametr value
-
-	args:
-		elem - family instance or type
-		name - parameter name
-	return:
-		value - parameter value
-	"""
-
-	value = None
-	# custom parameter
-	param = elem.LookupParameter(name)
-	# check is it a BuiltIn parameter if not found
-	if not param:
-		param = elem.get_Parameter(get_bip(name))
-
-	# get paremeter Value if found
-	try:
-		storeType = param.StorageType
-		# value = storeType
-		if storeType == StorageType.String:
-			value = param.AsString()
-		elif storeType == StorageType.Integer:
-			value = param.AsDouble()
-		elif storeType == StorageType.Double:
-			value = param.AsDouble()
-		elif storeType == StorageType.ElementId:
-			value = param.AsValueString()
-	except:
-		pass
-	return value
-
-
-def get_bip(paramName):
-	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
-	param = None
-	for i, i_name in enumerate(builtInParams):
-		if i_name == paramName:
-			param = System.Enum.GetValues(BuiltInParameter)[i]
-			break
-	return param
 
 
 def getSystems(_brd):
@@ -103,31 +62,6 @@ def getSystems(_brd):
 		return mainboardsys, lowsys
 	else:
 		return [i for i in allsys][0], None
-
-
-def setup_param_value(elem, name, pValue):
-
-	# check element staus
-	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
-
-	if elem_status == CheckoutStatus.OwnedByOtherUser:
-		return None
-
-	# custom parameter
-	param = elem.LookupParameter(name)
-	# check is it a BuiltIn parameter if not found
-	if not param:
-		try:
-			param = elem.get_Parameter(get_bip(name)).Set(pValue)
-		except:
-			pass
-
-	if param:
-		try:
-			param.Set(pValue)
-		except:
-			pass
-	return elem
 
 
 global doc
@@ -216,8 +150,13 @@ for i, values in enumerate(user_preset, start=2):
 		cycle([circuit_spare]),
 		presets.parameters_to_set,
 		values)
-	func_to_set = lambda x: setup_param_value(x[0], x[1], x[2])
-	map(func_to_set, params_to_set)
+
+	for param_info in params_to_set:
+		elem = param_info[0]
+		p_name = param_info[1]
+		p_value = param_info[2]
+		toolsrvt.setup_param_value(elem, p_name, p_value)
+
 	doc.Regenerate()
 
 
