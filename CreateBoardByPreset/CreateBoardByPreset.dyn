@@ -11,7 +11,7 @@
       "Id": "df0078fed02041b2829168ffa0038de4",
       "Name": "Integer Slider",
       "Type": "number",
-      "Value": "0",
+      "Value": "8",
       "MaximumValue": 100.0,
       "MinimumValue": 0.0,
       "StepValue": 1.0,
@@ -44,7 +44,7 @@
     },
     {
       "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
-      "Engine": "IronPython2",
+      "Engine": "CPython3",
       "VariableInputPorts": true,
       "NodeType": "ExtensionNode",
       "Id": "2d5996559be141609f0239af77174c49",
@@ -632,7 +632,7 @@
       "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Integer",
-      "InputValue": 0,
+      "InputValue": 8,
       "MaximumValue": 100,
       "MinimumValue": 0,
       "StepValue": 1,
@@ -825,7 +825,7 @@
     {
       "Start": "43e8729d13a14fa79741ed8ca8511cc7",
       "End": "ea68af4063ed40cf8318f06be7579977",
-      "Id": "919cb419662240ecbfcab65eb05f00f4",
+      "Id": "13100d509b5d477baf4a1142aed233e5",
       "IsHidden": "False"
     }
   ],
@@ -970,8 +970,8 @@
       }
     ],
     "Annotations": [],
-    "X": -1059.7036341843755,
-    "Y": -520.08018065409931,
-    "Zoom": 0.89991043271621529
+    "X": -580.73686527157042,
+    "Y": -447.50488261602857,
+    "Zoom": 0.73114647531477184
   }
 }
