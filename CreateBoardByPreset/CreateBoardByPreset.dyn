@@ -11,7 +11,7 @@
       "Id": "df0078fed02041b2829168ffa0038de4",
       "Name": "Integer Slider",
       "Type": "number",
-      "Value": "8",
+      "Value": "18",
       "MaximumValue": 100.0,
       "MinimumValue": 0.0,
       "StepValue": 1.0,
@@ -632,7 +632,7 @@
       "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Integer",
-      "InputValue": 8,
+      "InputValue": 18,
       "MaximumValue": 100,
       "MinimumValue": 0,
       "StepValue": 1,
@@ -651,6 +651,36 @@
       ],
       "Replication": "Disabled",
       "Description": "A slider that produces integer values."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "t-1;",
+      "Id": "4032b7a1a6884b7380d088eca0ed043b",
+      "Inputs": [
+        {
+          "Id": "8a300c6fa6e548cf913c2c35d26b8532",
+          "Name": "t",
+          "Description": "t",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "30318ef0c27e42ec83c5e42d71323d1f",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
     }
   ],
   "Connectors": [
@@ -824,8 +854,14 @@
     },
     {
       "Start": "43e8729d13a14fa79741ed8ca8511cc7",
+      "End": "8a300c6fa6e548cf913c2c35d26b8532",
+      "Id": "69c8d2c2b34b42c4b8ce3355c7ace86f",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "30318ef0c27e42ec83c5e42d71323d1f",
       "End": "ea68af4063ed40cf8318f06be7579977",
-      "Id": "13100d509b5d477baf4a1142aed233e5",
+      "Id": "fbbd77e2ac424cafa2a430af14cd9431",
       "IsHidden": "False"
     }
   ],
@@ -965,13 +1001,23 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 380.12651953053262,
-        "Y": 1290.60105967642
+        "X": 193.01880628839689,
+        "Y": 1327.2888465866426
+      },
+      {
+        "Name": "Code Block",
+        "ShowGeometry": true,
+        "Id": "4032b7a1a6884b7380d088eca0ed043b",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 605.43951638761462,
+        "Y": 1321.1659015727394
       }
     ],
     "Annotations": [],
-    "X": -580.73686527157042,
-    "Y": -447.50488261602857,
-    "Zoom": 0.73114647531477184
+    "X": -105.09856167758801,
+    "Y": -878.07839435351571,
+    "Zoom": 0.81771081132290346
   }
 }
