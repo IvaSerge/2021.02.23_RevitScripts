@@ -367,6 +367,7 @@ class presets():
 	# list of preset options
 	preset_2J_main = [
 		# Description | n_of_poles
+		["Main switch 250A / 0Q1", 3, 250],
 		["160ETU / 0Q2 / 1xd70mm", 3, 160],
 		["160ETU / 0Q3 / 1xd70mm", 3, 160],
 		["160ETU / 0Q4 / 1xd70mm", 3, 160],
@@ -400,6 +401,7 @@ class presets():
 
 	# list of preset options
 	preset_2R_main = [
+		["Main switch 315A / 0Q1", 3, 315],
 		["63TMTU / Section 0Q2 / 1xd16mm", 3, 160],
 		["63TMTU / Section 0Q3 / 1xd16mm", 3, 160],
 		["63TMTU / Section 0Q4 / 1xd16mm", 3, 160],
@@ -460,6 +462,7 @@ class presets():
 	# list of preset options
 	preset_2R2_main = [
 		# Description | n_of_poles
+		["Main switch 400A / 0Q1", 3, 400],
 		["100TMTU / Section 0Q2 / 1xd35mm", 3, 160],
 		["100TMTU / Section 0Q3 / 1xd35mm", 3, 160],
 		["100TMTU / Section 0Q4 / 1xd35mm", 3, 160],
