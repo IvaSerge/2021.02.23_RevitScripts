@@ -117,6 +117,7 @@ class Diagramm():
 		# NONE (Spare or Space)
 		if circuit.CircuitType != Autodesk.Revit.DB.Electrical.CircuitType.Circuit:
 			self.params.append(["Panel", 0])
+			self.params.append(["POC", 0])
 			self.params.append(["Reference", ""])
 			return None
 

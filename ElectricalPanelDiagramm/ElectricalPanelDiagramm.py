@@ -97,17 +97,17 @@ for pair in pairs_list:
 	shedule_obj.get_shedule_view(panel_inst)
 	shedules_list.append(shedule_obj)
 
-	# # ================ General notes
-	# notes_obj = Shedule(sheet_rvt)
-	# notes_obj.symbol_type = notes_obj.notes_type
-	# notes_obj.insert_point = notes_obj.notes_origin
-	# shedules_list.append(notes_obj)
+	# ================ General notes
+	notes_obj = Shedule(sheet_rvt)
+	notes_obj.symbol_type = notes_obj.notes_type
+	notes_obj.insert_point = notes_obj.notes_origin
+	shedules_list.append(notes_obj)
 
-	# # ================ Elevation of the panel
-	# elevation_obj = Shedule(sheet_rvt)
-	# elevation_obj.get_elevation_symbol(panel_inst)
-	# elevation_obj.insert_point = elevation_obj.elevation_origin
-	# shedules_list.append(elevation_obj)
+	# ================ Elevation of the panel
+	elevation_obj = Shedule(sheet_rvt)
+	elevation_obj.get_elevation_symbol(panel_inst)
+	elevation_obj.insert_point = elevation_obj.elevation_origin
+	shedules_list.append(elevation_obj)
 
 	# ================ Remove items on sheet
 	items_on_sheet_to_remove.extend(Diagramm.get_ID_to_remove(sheet_rvt))
