@@ -687,13 +687,13 @@ class presets():
 
 		["16B / F252627 Section 0F5", 3, 16],
 		["16B / F282930 Section 0F5", 3, 16],
-		["16B / F313233 Section 0F5", 3, 16],
+		["32B / F313233 Section 0F5", 3, 32],
+		["63B / F343536 Section 0F5", 3, 63],
 
-		["16B / F343536 Section 0F6", 3, 16],
-		["16B / F373839 Section 0F6", 3, 16],
-		["32B / F404142 Section 0F6 / 1xd6mm", 3, 32],
-		["63B / F434445 Section 0F6 / 1xd16mm", 3, 63],
+		["32B / 0,03 A / F373839 Section 0F4 / 1xd6mm", 3, 32],
+		["32B / 0,03 A / F404142 Section 0F6 / 1xd6mm", 3, 32],
+		# ["63B / F434445 Section 0F6 / 1xd16mm", 3, 63],
 
-		["32B / 0,03 A / F464748 Section Q7 / 1xd6mm", 3, 32],
-		["32B / 0,03 A / F495051 Section Q7 / 1xd6mm", 3, 32],
+		# ["32B / 0,03 A / F464748 Section Q7 / 1xd6mm", 3, 32],
+		# ["32B / 0,03 A / F495051 Section Q7 / 1xd6mm", 3, 32],
 	]
