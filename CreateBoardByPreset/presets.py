@@ -636,7 +636,6 @@ class presets():
 		["100ETU / Q12 / cu25x5mm", 3, 160],
 	]
 
-	# TODO
 	preset_2T_sub = [
 		# Description | n_of_poles
 		["16C / 2F1 Section Q2", 1, 16],
