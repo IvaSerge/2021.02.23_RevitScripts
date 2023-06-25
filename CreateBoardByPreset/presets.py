@@ -389,14 +389,14 @@ class presets():
 		["16B / 0,03 A / Q192021 Section Q7", 3, 16],
 		["16B / 0,03 A / Q222324 Section Q7", 3, 16],
 
-		["16B / 0,03 A / Q252627 Section Q8", 3, 16],
-		["16B / 0,03 A / Q282930 Section Q8", 3, 16],
-		["16B / 0,03 A / Q313233 Section Q8", 3, 16],
-		["16B / 0,03 A / Q343536 Section Q8", 3, 16],
-		["16B / 0,03 A / Q373839 Section Q8", 3, 16],
-		["16B / 0,03 A / Q404142 Section Q8", 3, 16],
-		["16B / 0,03 A / Q434445 Section Q8", 3, 16],
-		["16B / 0,03 A / Q464748 Section Q8", 3, 16],
+		["16B / Q252627 Section Q8", 3, 16],
+		["16B / Q282930 Section Q8", 3, 16],
+		["16B / Q313233 Section Q8", 3, 16],
+		["16B / Q343536 Section Q8", 3, 16],
+		["16B / Q373839 Section Q8", 3, 16],
+		["16B / Q404142 Section Q8", 3, 16],
+		["16B / Q434445 Section Q8", 3, 16],
+		["16B / Q464748 Section Q8", 3, 16],
 	]
 
 	# list of preset options
