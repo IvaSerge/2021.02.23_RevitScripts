@@ -202,6 +202,89 @@
       ],
       "Replication": "Disabled",
       "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "\"CP1-SUBN3WL1.csv\";\n\"CP1-SUBN3WL2.csv\";\n\"CP1-SUBN3WL3.csv\";\n\"CP1-SUBN3WL4.csv\";\n\"CP1-SUBN3WL5.csv\";\n\"CP1-SUBN3WL6.csv\";\n\"CP1-SUBN3WL7.csv\";\n\"CP1-SUBN3WL8.csv\";",
+      "Id": "d602487c7990476da229be3581ceb8bc",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "859a86b8534244b1ba70613ecf342881",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "53ae70f3e8754e35bc0a5bead7b5fb12",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ddbc8ded51a542d38f609daf2f3bd02b",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3478a6190daa4b899da114ca7d6f32ea",
+          "Name": "",
+          "Description": "Value of expression at line 4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "60a8efe2f5ea4c8282116b5623cfa7b0",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3cc8e935be64444db0e4a4029df3ddc5",
+          "Name": "",
+          "Description": "Value of expression at line 6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "90ac9d9ca223476084c3cae3a3e59b56",
+          "Name": "",
+          "Description": "Value of expression at line 7",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3e3e4da6d7164bfbaccf45c99ad46bac",
+          "Name": "",
+          "Description": "Value of expression at line 8",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
     }
   ],
   "Connectors": [
@@ -236,9 +319,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "e0f814d4dffe41d5899a2b81ac85c535",
+      "Start": "3e3e4da6d7164bfbaccf45c99ad46bac",
       "End": "dea01028c0d14c778e215769761eb86e",
-      "Id": "4beceeff0a7f48b8a53f8c17d3d21a19",
+      "Id": "467b7b74664e451d9f8044a2edc60c6a",
       "IsHidden": "False"
     }
   ],
@@ -348,8 +431,18 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1174.81256578424,
-        "Y": 574.497147958538
+        "X": 1184.765366827997,
+        "Y": 564.59829018637379
+      },
+      {
+        "Name": "Code Block",
+        "ShowGeometry": true,
+        "Id": "d602487c7990476da229be3581ceb8bc",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1169.4600039735387,
+        "Y": 715.3811634968348
       }
     ],
     "Annotations": [
@@ -385,19 +478,19 @@
           "15d805eb8b764fd4845400f3600b40e5"
         ],
         "HasNestedGroups": false,
-        "Left": 1164.81256578424,
-        "Top": 501.497147958538,
+        "Left": 1174.765366827997,
+        "Top": 491.59829018637379,
         "Width": 224.0,
         "Height": 205.0,
         "FontSize": 36.0,
-        "InitialTop": 574.497147958538,
+        "InitialTop": 564.59829018637379,
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFFFC999"
       }
     ],
-    "X": -924.07697675474947,
-    "Y": -168.69967202007405,
-    "Zoom": 0.88964874258165039
+    "X": -876.13708772503935,
+    "Y": -243.0916379686135,
+    "Zoom": 0.82388103618713637
   }
 }
