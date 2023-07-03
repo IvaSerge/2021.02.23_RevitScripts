@@ -34,6 +34,9 @@ from presets import *
 import toolsrvt
 reload(toolsrvt)
 
+import board_params
+reload(board_params)
+
 import itertools
 from itertools import cycle
 
@@ -73,23 +76,30 @@ app = uiapp.Application
 reload = IN[1]  # type: ignore
 
 # get FamilyInstance of the board, that need to be converted
-board_to_convert = uidoc.Selection.PickObject(
+board_ref = uidoc.Selection.PickObject(
 	Autodesk.Revit.UI.Selection.ObjectType.Element,
-	"Select panel").ElementId
+	"Select panel")
+
+board_to_convert = doc.GetElement(board_ref.ElementId)
 
 # get preset
 if not IN[2]:  # type: ignore
 	raise ValueError("No preset found")
 elif "3A_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_3A_sub
+	board_parameters = board_params.preset_3A_sub
 elif "3B_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_3B_sub
+	board_parameters = board_params.preset_3B_sub
 elif "2A" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2A
+	board_parameters = board_params.preset_2A
 elif "2C" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2C
+	board_parameters = board_params.preset_2C
 elif "2E_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2E_main
+	board_parameters = board_params.preset_2E_main
 elif "2E_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2E_sub
 elif "2E1_main" == IN[2]:  # type: ignore
@@ -129,7 +139,7 @@ elif "2U_sub" == IN[2]:  # type: ignore
 board_schedule = [x for x in FilteredElementCollector(doc).
 	OfClass(Autodesk.Revit.DB.Electrical.PanelScheduleView).
 	ToElements()
-	if x.TargetId == board_to_convert]
+	if x.TargetId == board_to_convert.Id]
 if board_schedule:
 	board_schedule = board_schedule[0]  # type: Autodesk.Revit.DB.Electrical.PanelScheduleView
 
@@ -161,10 +171,17 @@ for i, values in enumerate(user_preset, start=2):
 
 	doc.Regenerate()
 
+# set panel parameters
+for param_info in board_parameters:
+	elem = board_to_convert
+	p_name = param_info[0]
+	p_value = param_info[1]
+	toolsrvt.setup_param_value(elem, p_name, p_value)
+
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
 
-# OUT = user_preset
-OUT = board_schedule
+OUT = board_to_convert
+# OUT = board_schedule
