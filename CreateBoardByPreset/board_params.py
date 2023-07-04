@@ -21,6 +21,7 @@ preset_3A_sub = [
 	["RBS_ELEC_PANEL_MCB_RATING_PARAM", 100],
 	["RBS_ELEC_SHORT_CIRCUIT_RATING", "10kA"],
 	["RBS_ELEC_CIRCUIT_PREFIX", ""],
+	["RBS_ELEC_CIRCUIT_NAMING", Autodesk.Revit.DB.ElementId(-7000011)],
 ]
 
 preset_3B_sub = [

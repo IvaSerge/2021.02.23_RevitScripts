@@ -41,30 +41,36 @@ import itertools
 from itertools import cycle
 
 
-def getSystems(_brd):
-	"""Get all systems of electrical board.
+def create_spares(board_to_convert, user_preset):
+	# get PanelScheduleView if no view found - create Default
+	board_schedule = [x for x in FilteredElementCollector(doc).
+		OfClass(Autodesk.Revit.DB.Electrical.PanelScheduleView).
+		ToElements()
+		if x.TargetId == board_to_convert.Id]
+	if board_schedule:
+		board_schedule = board_schedule[0]  # type: Autodesk.Revit.DB.Electrical.PanelScheduleView
 
-		args:
-		_brd - electrical board FamilyInstance
+	for i, values in enumerate(user_preset, start=2):
+		# in view create Spare
+		try:
+			board_schedule.AddSpare(i, 1)
+		except:
+			continue
 
-		return list(1, 2) where:
-		1 - main electrical circuit
-		2 - list of connectet low circuits
-	"""
-	allsys = _brd.MEPModel.GetElectricalSystems()
-	lowsys = _brd.MEPModel.GetAssignedElectricalSystems()
-	if lowsys:
-		lowsysId = [i.Id for i in lowsys]
-		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
-		if len(mainboardsysLst) == 0:
-			mainboardsys = None
-		else:
-			mainboardsys = mainboardsysLst[0]
-		lowsys = [i for i in allsys if i.Id in lowsysId]
-		lowsys.sort(key=lambda x: x.StartSlot)
-		return mainboardsys, lowsys
-	else:
-		return [i for i in allsys][0], None
+		# Set parameters
+		circuit_spare = board_schedule.GetCircuitByCell(i, 1)
+		params_to_set = zip(
+			cycle([circuit_spare]),
+			presets.parameters_to_set,
+			values)
+
+		for param_info in params_to_set:
+			elem = param_info[0]
+			p_name = param_info[1]
+			p_value = param_info[2]
+			toolsrvt.setup_param_value(elem, p_name, p_value)
+
+		doc.Regenerate()
 
 
 global doc
@@ -135,53 +141,20 @@ elif "2U_main" == IN[2]:  # type: ignore
 elif "2U_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2U_sub
 
-# get PanelScheduleView if no view found - create Default
-board_schedule = [x for x in FilteredElementCollector(doc).
-	OfClass(Autodesk.Revit.DB.Electrical.PanelScheduleView).
-	ToElements()
-	if x.TargetId == board_to_convert.Id]
-if board_schedule:
-	board_schedule = board_schedule[0]  # type: Autodesk.Revit.DB.Electrical.PanelScheduleView
+with Autodesk.Revit.DB.Transaction(doc, "CreateBoardByPreset") as t:
+	# =========Start transaction
+	t.Start()
 
+	create_spares(board_to_convert, user_preset)
 
-# =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
-
-# TODO: CHECK IF THE SCHEDULE IS EMPTY!
-
-for i, values in enumerate(user_preset, start=2):
-	# in view create Spare
-	try:
-		board_schedule.AddSpare(i, 1)
-	except:
-		continue
-
-	# Set parameters
-	circuit_spare = board_schedule.GetCircuitByCell(i, 1)
-	params_to_set = zip(
-		cycle([circuit_spare]),
-		presets.parameters_to_set,
-		values)
-
-	for param_info in params_to_set:
-		elem = param_info[0]
-		p_name = param_info[1]
-		p_value = param_info[2]
+	# set panel parameters
+	for param_info in board_parameters:
+		elem = board_to_convert
+		p_name = param_info[0]
+		p_value = param_info[1]
 		toolsrvt.setup_param_value(elem, p_name, p_value)
 
-	doc.Regenerate()
-
-# set panel parameters
-for param_info in board_parameters:
-	elem = board_to_convert
-	p_name = param_info[0]
-	p_value = param_info[1]
-	toolsrvt.setup_param_value(elem, p_name, p_value)
-
-
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
-
+	t.Commit()
 
 OUT = board_to_convert
 # OUT = board_schedule
