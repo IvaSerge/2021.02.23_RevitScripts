@@ -108,38 +108,55 @@ elif "2E_main" == IN[2]:  # type: ignore
 	board_parameters = board_params.preset_2E_main
 elif "2E_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2E_sub
+	board_parameters = board_params.preset_2E_sub
 elif "2E1_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2E1_main
+	board_parameters = board_params.preset_2E1_main
 elif "2E1_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2E1_sub
+	board_parameters = board_params.preset_2E1_sub
 elif "2H" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2H
+	board_parameters = board_params.preset_2H
 elif "2I" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2I
+	board_parameters = board_params.preset_2I
 elif "2J_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2J_main
+	board_parameters = board_params.preset_2J_main
 elif "2J_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2J_sub
+	board_parameters = board_params.preset_2J_sub
 elif "2R_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2R_main
+	board_parameters = board_params.preset_2R_main
 elif "2R_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2R_sub
+	board_parameters = board_params.preset_2R_sub
 elif "2R2_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2R2_main
+	board_parameters = board_params.preset_2R2_main
 elif "2R2_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2R2_sub
+	board_parameters = board_params.preset_2R2_sub
 elif "2S_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2S_main
+	board_parameters = board_params.preset_2S_main
 elif "2S_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2S_sub
+	board_parameters = board_params.preset_2S_sub
 elif "2T_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2T_main
+	board_parameters = board_params.preset_2T_main
 elif "2T_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2T_sub
+	board_parameters = board_params.preset_2T_sub
 elif "2U_main" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2U_main
+	board_parameters = board_params.preset_2U_main
 elif "2U_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2U_sub
+	board_parameters = board_params.preset_2U_sub
 
 with Autodesk.Revit.DB.Transaction(doc, "CreateBoardByPreset") as t:
 	# =========Start transaction
