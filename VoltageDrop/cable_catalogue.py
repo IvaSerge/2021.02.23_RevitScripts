@@ -65,6 +65,8 @@ cab_lst.append(["6 runs of 3-#150, 1-#150 mm, 1-#70", 0.0247, 0.014])
 cab_lst.append(["7 runs of 3-#150, 1-#150 mm, 1-#70", 0.0211, 0.011])
 cab_lst.append(["8 runs of 3-#150, 1-#150 mm, 1-#70", 0.0185, 0.01])
 
+cab_lst.append(["3-#160, 1-#160, 1-#160", 0.042, 0.013])  # Siemens busbar 1600A
+
 
 def get_cable(section):
 	"""
