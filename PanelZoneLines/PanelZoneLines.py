@@ -69,15 +69,19 @@ for elem in elem_list:
 	lines_list.append(panel_elem_line)
 
 # get linestile by name
+line_styles = FilteredElementCollector(doc).OfClass(GraphicsStyle).ToElements()
+line_style = [x for x in line_styles if x.Name == line_style_str][0]
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-
-# for every line create detail line
+# create detail lines
+for ln in lines_list:
+	rvt_ln = doc.Create.NewDetailCurve(view, ln)
+	rvt_ln.LineStyle = line_style
 
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = lines_list
+OUT = line_style

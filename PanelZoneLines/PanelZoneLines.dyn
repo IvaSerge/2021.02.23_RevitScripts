@@ -90,7 +90,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
@@ -190,7 +190,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "9f949afe-7131-41ca-a5fb-155f032470bd-0013978f"
+        "ebe342ac-0e5f-43fa-9afd-128003b9f33c-001ca1e8"
       ],
       "Id": "a37beb8f0a1c4e5e81fa05a89a0f3162",
       "Inputs": [],
@@ -210,12 +210,12 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
       "NodeType": "CodeBlockNode",
-      "Code": "\"Solid 10 Black\";",
+      "Code": "\"TSLA-1-RED\";",
       "Id": "de76e28805b044809bee25efd725ddd2",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "d267c4ca1422425983e3070f77d1e202",
+          "Id": "e0ef8664c2064b07bf9289cb466afd3a",
           "Name": "",
           "Description": "Value of expression at line 1",
           "UsingDefaultValue": false,
@@ -266,9 +266,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "d267c4ca1422425983e3070f77d1e202",
+      "Start": "e0ef8664c2064b07bf9289cb466afd3a",
       "End": "ed0238bb52dd41fcac700f1b01e0a93c",
-      "Id": "b1bfd05bbf8b4992b0158835d4949b17",
+      "Id": "92559236602d4b53ab610611a371d2ac",
       "IsHidden": "False"
     }
   ],
@@ -415,8 +415,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": -811.13708772503935,
-    "Y": -241.0916379686135,
+    "X": -773.13708772503935,
+    "Y": -327.0916379686135,
     "Zoom": 0.82388103618713637
   }
 }
