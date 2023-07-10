@@ -43,28 +43,41 @@ app = uiapp.Application
 view = doc.ActiveView
 
 reload_IN = IN[1]  # type: ignore
+rvt_panel = UnwrapElement(IN[2])  # type: ignore
+line_style_str = IN[3]  # type: ignore
 
-# check current view. It need to be plan view.
 if view.ViewType != Autodesk.Revit.DB.ViewType.FloorPlan:
 	raise ValueError("Current View is not a Floor Plan")
 
+xyz_panel = rvt_panel.Location.Point
+xyz_panel = XYZ(xyz_panel.X, xyz_panel.Y, 0)
 
-# get panel and it location point
 # get circuits
+panel_low_circuits = toolsrvt.elsys_by_brd(rvt_panel)[1]
+
 # for every circuit get elements
+elem_list = list()
+for circuit in panel_low_circuits:
+	elem_list.extend(circuit.Elements)
 
 # for every element create line
-# Line.CreateBound(panel_XYZ, element_XYZ);
+lines_list = list()
+for elem in elem_list:
+	xyz_elem = elem.Location.Point
+	xyz_elem = XYZ(xyz_elem.X, xyz_elem.Y, 0)
+	panel_elem_line = Autodesk.Revit.DB.Line.CreateBound(xyz_panel, xyz_elem)
+	lines_list.append(panel_elem_line)
 
+# get linestile by name
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-# get linestile by name
+
 # for every line create detail line
 
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = view.ViewType == Autodesk.Revit.DB.ViewType.FloorPlan
+OUT = lines_list

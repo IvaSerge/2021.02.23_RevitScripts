@@ -72,10 +72,10 @@ def flatten_list(data):
 		for i in list_in_progress:
 			if isinstance(i, list):
 				list_found = True
-				map(lambda x: flat_list.append(x), i)
+				flat_list.extend(i)
 			else:
 				flat_list.append(i)
-		list_in_progress = [x for x in flat_list]
+		list_in_progress = flat_list
 
 	return list_in_progress
 

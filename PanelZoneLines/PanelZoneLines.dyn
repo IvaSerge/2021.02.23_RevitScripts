@@ -53,6 +53,24 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
+        },
+        {
+          "Id": "40027e8a698d4a6fa46256e866fedc85",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ed0238bb52dd41fcac700f1b01e0a93c",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -72,7 +90,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "ad531ae1b87d458d89230df621752f91",
       "Inputs": [],
       "Outputs": [
@@ -167,6 +185,47 @@
       ],
       "Replication": "Disabled",
       "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "9f949afe-7131-41ca-a5fb-155f032470bd-0013978f"
+      ],
+      "Id": "a37beb8f0a1c4e5e81fa05a89a0f3162",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "da5a00d9ffd9476c9be181614639352a",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "\"Solid 10 Black\";",
+      "Id": "de76e28805b044809bee25efd725ddd2",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d267c4ca1422425983e3070f77d1e202",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
     }
   ],
   "Connectors": [
@@ -198,6 +257,18 @@
       "Start": "26ebc66651a646cda0966943be75c7d2",
       "End": "b505712d4efc41cd97c3c4dc0c84d9e6",
       "Id": "dc0a98baa73b4ab2b23bb5d741aeb4e5",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "da5a00d9ffd9476c9be181614639352a",
+      "End": "40027e8a698d4a6fa46256e866fedc85",
+      "Id": "bec9922ccfa4489c8456ec63667b2e60",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d267c4ca1422425983e3070f77d1e202",
+      "End": "ed0238bb52dd41fcac700f1b01e0a93c",
+      "Id": "b1bfd05bbf8b4992b0158835d4949b17",
       "IsHidden": "False"
     }
   ],
@@ -299,6 +370,26 @@
         "Excluded": false,
         "X": 577.71552511868106,
         "Y": 90.870456948313631
+      },
+      {
+        "Name": "Select Model Element",
+        "ShowGeometry": true,
+        "Id": "a37beb8f0a1c4e5e81fa05a89a0f3162",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1168.1820477016943,
+        "Y": 565.49133393747979
+      },
+      {
+        "Name": "Code Block",
+        "ShowGeometry": true,
+        "Id": "de76e28805b044809bee25efd725ddd2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1129.0,
+        "Y": 773.0
       }
     ],
     "Annotations": [
@@ -324,8 +415,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": -438.13708772503935,
-    "Y": 156.9083620313865,
+    "X": -811.13708772503935,
+    "Y": -241.0916379686135,
     "Zoom": 0.82388103618713637
   }
 }
