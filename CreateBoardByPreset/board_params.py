@@ -108,6 +108,18 @@ preset_2E1_sub = [
 	["RBS_ELEC_CIRCUIT_NAMING", Autodesk.Revit.DB.ElementId(-7000011)],  # Standard
 ]
 
+preset_2ET = [
+	["RBS_ELEC_MAINS", 63],
+	["RBS_ELEC_MOUNTING", "WALL"],
+	["RBS_ELEC_PANEL_FEED_PARAM", "TOP"],
+	["RBS_ELEC_ENCLOSURE", "IP43"],
+	["Protection Class", "IP43"],
+	["RBS_ELEC_PANEL_MCB_RATING_PARAM", 63],
+	["RBS_ELEC_SHORT_CIRCUIT_RATING", "6kA"],
+	["RBS_ELEC_CIRCUIT_PREFIX", "F"],
+	["RBS_ELEC_CIRCUIT_NAMING", Autodesk.Revit.DB.ElementId(-7000010)],  # Prefixed
+]
+
 preset_2H = [
 	["RBS_ELEC_MAINS", 400],
 	["RBS_ELEC_MOUNTING", "FLOOR"],

@@ -115,6 +115,9 @@ elif "2E1_main" == IN[2]:  # type: ignore
 elif "2E1_sub" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2E1_sub
 	board_parameters = board_params.preset_2E1_sub
+elif "2ET" == IN[2]:  # type: ignore
+	user_preset = presets.preset_2ET
+	board_parameters = board_params.preset_2ET
 elif "2H" == IN[2]:  # type: ignore
 	user_preset = presets.preset_2H
 	board_parameters = board_params.preset_2H
