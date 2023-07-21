@@ -31,6 +31,7 @@ importlib.reload(toolsrvt)
 
 import itertools
 from itertools import groupby
+import math
 
 
 def get_name(i):
@@ -52,6 +53,24 @@ def get_types_by_family(_family):
 	types_sorted = sorted(types_rvt, key=get_name_param)
 	family_lst = [_family] * len(types_sorted)
 	return zip(family_lst, types_sorted)
+
+
+def new_instance(_symbol, _location):
+	doc = _symbol.Document
+	pt_X = toolsrvt.mm_to_ft(doc, _location[0])
+	pt_Y = toolsrvt.mm_to_ft(doc, _location[1])
+	pt_Z = toolsrvt.mm_to_ft(doc, _location[2])
+	xyz_rvt = XYZ(pt_X, pt_Y, pt_Z)
+	if not _symbol.IsActive:
+		_symbol.Activate()
+		doc.Regenerate()
+
+	family_inst = doc.Create.NewFamilyInstance(
+		xyz_rvt,
+		_symbol,
+		Structure.StructuralType.NonStructural)
+
+	return family_inst
 
 
 global doc
@@ -99,14 +118,27 @@ for key, iter_items in groupby(family_type_list, key=group_func):
 	pt_Z += 500
 	pt_X += 2500
 
+inst_list = list()
 # =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
+with Autodesk.Revit.DB.Transaction(doc, "FamilyLocation") as t:
+	t.Start()
+	# Create instance of the type
+	for tl in type_location:
+		with SubTransaction(doc) as sub_tr:
+			sub_tr.Start()
+			inst_list.append(new_instance(tl[0], tl[1]))
+			sub_tr.Commit()
 
-# Create instance of the type
+	# rotate inst
+	with SubTransaction(doc) as sub_tr:
+		sub_tr.Start()
+		for inst in inst_list:
+			inst_transform = inst.GetTotalTransform()
+			inst_axes_Z = Autodesk.Revit.DB.Line.CreateUnbound(inst_transform.Origin, inst_transform.BasisZ)
+			ElementTransformUtils.RotateElement(doc, inst.Id, inst_axes_Z, math.pi / 2)
+		sub_tr.Commit()
 
-
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
+	t.Commit()
 
 
 points_lst = [Point.ByCoordinates(i[1][0], i[1][1], i[1][2]) for i in type_location]
