@@ -6,6 +6,9 @@ pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
 sys.path.append(IN[0].DirectoryName)  # type: ignore
 
+dir_path = IN[0].DirectoryName  # type: ignore
+sys.path.append(dir_path)
+
 import System
 from System import Array
 from System.Collections.Generic import *
@@ -27,15 +30,10 @@ from RevitServices.Transactions import TransactionManager
 import importlib
 from importlib import reload
 
-import presets
-reload(presets)
-from presets import *
+import json
 
 import toolsrvt
 reload(toolsrvt)
-
-import board_params
-reload(board_params)
 
 import itertools
 from itertools import cycle
@@ -61,7 +59,7 @@ def create_spares(board_to_convert, user_preset):
 		circuit_spare = board_schedule.GetCircuitByCell(i, 1)
 		params_to_set = zip(
 			cycle([circuit_spare]),
-			presets.parameters_to_set,
+			data["spare_parameter_names"],
 			values)
 
 		for param_info in params_to_set:
@@ -88,78 +86,20 @@ board_ref = uidoc.Selection.PickObject(
 
 board_to_convert = doc.GetElement(board_ref.ElementId)
 
-# get preset
-if not IN[2]:  # type: ignore
-	raise ValueError("No preset found")
-elif "3A_sub" == IN[2]:  # type: ignore
-	user_preset = presets.preset_3A_sub
-	board_parameters = board_params.preset_3A_sub
-elif "3B_sub" == IN[2]:  # type: ignore
-	user_preset = presets.preset_3B_sub
-	board_parameters = board_params.preset_3B_sub
-elif "2A" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2A
-	board_parameters = board_params.preset_2A
-elif "2C" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2C
-	board_parameters = board_params.preset_2C
-elif "2E_main" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2E_main
-	board_parameters = board_params.preset_2E_main
-elif "2E_sub" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2E_sub
-	board_parameters = board_params.preset_2E_sub
-elif "2E1_main" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2E1_main
-	board_parameters = board_params.preset_2E1_main
-elif "2E1_sub" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2E1_sub
-	board_parameters = board_params.preset_2E1_sub
-elif "2ET" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2ET
-	board_parameters = board_params.preset_2ET
-elif "2H" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2H
-	board_parameters = board_params.preset_2H
-elif "2I" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2I
-	board_parameters = board_params.preset_2I
-elif "2J_main" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2J_main
-	board_parameters = board_params.preset_2J_main
-elif "2J_sub" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2J_sub
-	board_parameters = board_params.preset_2J_sub
-elif "2R_main" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2R_main
-	board_parameters = board_params.preset_2R_main
-elif "2R_sub" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2R_sub
-	board_parameters = board_params.preset_2R_sub
-elif "2R2_main" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2R2_main
-	board_parameters = board_params.preset_2R2_main
-elif "2R2_sub" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2R2_sub
-	board_parameters = board_params.preset_2R2_sub
-elif "2S_main" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2S_main
-	board_parameters = board_params.preset_2S_main
-elif "2S_sub" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2S_sub
-	board_parameters = board_params.preset_2S_sub
-elif "2T_main" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2T_main
-	board_parameters = board_params.preset_2T_main
-elif "2T_sub" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2T_sub
-	board_parameters = board_params.preset_2T_sub
-elif "2U_main" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2U_main
-	board_parameters = board_params.preset_2U_main
-elif "2U_sub" == IN[2]:  # type: ignore
-	user_preset = presets.preset_2U_sub
-	board_parameters = board_params.preset_2U_sub
+# read JSON
+json_file = dir_path + "\\" + "db_panels.json"
+with open(json_file, "r") as f_db:
+		data = json.load(f_db)
+
+try:
+	test_preset = user_preset = data["panel_types"][IN[2]]  # type: ignore
+except:
+	error_text = "Preset " + IN[2] + " not found"  # type: ignore
+	raise ValueError(error_text)
+
+
+user_preset = data["panel_types"][IN[2]]["spare_parameter_values"]  # type: ignore
+board_parameters = data["panel_types"][IN[2]]["panel_parameter_values"]  # type: ignore
 
 with Autodesk.Revit.DB.Transaction(doc, "CreateBoardByPreset") as t:
 	# =========Start transaction
@@ -177,4 +117,3 @@ with Autodesk.Revit.DB.Transaction(doc, "CreateBoardByPreset") as t:
 	t.Commit()
 
 OUT = board_to_convert
-# OUT = board_schedule
