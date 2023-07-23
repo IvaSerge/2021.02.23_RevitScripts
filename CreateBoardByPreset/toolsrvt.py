@@ -141,7 +141,13 @@ def setup_param_value(elem, name, pValue):
 		param = elem.get_Parameter(get_bip(name))
 
 	if param:
-		param.Set(pValue)
+		store_type = param.StorageType
+		# Set ID
+		if isinstance(pValue, int) and store_type == StorageType.ElementId:
+			param.Set(Autodesk.Revit.DB.ElementId(pValue))
+		else:
+			param.Set(pValue)
+
 	else:
 		raise Exception("No parameter found")
 	return elem
