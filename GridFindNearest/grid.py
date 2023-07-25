@@ -28,7 +28,7 @@ class grid:
 		# type: (Autodesk.Revit.DB.Grid) -> float
 		"""
 		get angle rotation fo the grid
-		"""		
+		"""
 		vector = _rvt_grid.Curve.Direction
 		direction = round(math.degrees(math.acos(_rvt_grid.Curve.Direction.X)))
 		# rotating vector in upper direction

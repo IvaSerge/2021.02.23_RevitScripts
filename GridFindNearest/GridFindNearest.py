@@ -89,11 +89,12 @@ for key, value in all_intersection_points.items():
 distance_list.sort(key=itemgetter(1))
 shortest_grid_name = distance_list[0][0]
 
-# # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
+toolsrvt.setup_param_value(rvt_data_device, "TO Grid", shortest_grid_name)
 
-# # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
 OUT = shortest_grid_name
