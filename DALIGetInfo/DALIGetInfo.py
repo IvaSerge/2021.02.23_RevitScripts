@@ -1,8 +1,8 @@
 
 
-"E_Light_number"
-"Switching Unit"
-"Control Unit"
+# "E_Light_number"
+# "Switching Unit"
+# "Control Unit"
 
 # ================ system imports
 import clr
@@ -40,12 +40,12 @@ importlib.reload(dali_sys)
 from dali_sys import DaliSys
 
 
-def write_info(info_list, par_name):
-	# # write parameter to circuit
-	for i in info_list:
-		elem = i[0]
-		value = str(i[1])
-		toolsrvt.setup_param_value(elem, par_name, value)
+# def write_info(info_list, par_name):
+# 	# # write parameter to circuit
+# 	for i in info_list:
+# 		elem = i[0]
+# 		value = str(i[1])
+# 		toolsrvt.setup_param_value(elem, par_name, value)
 
 
 # ================ GLOBAL VARIABLES
@@ -72,6 +72,8 @@ if not circuits_to_calculate:
 
 dali_systems = [DaliSys(i) for i in circuits_to_calculate]
 
+d_sys = dali_systems[0]
+
 # write_info(info_list, "E_Light_number")
 # doc.Regenerate()
 
@@ -86,4 +88,4 @@ dali_systems = [DaliSys(i) for i in circuits_to_calculate]
 # TransactionManager.Instance.TransactionTaskDone()
 
 # OUT = info_list
-OUT = dali_systems
+OUT = d_sys.get_sys_elements()

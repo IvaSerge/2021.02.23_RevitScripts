@@ -1,16 +1,6 @@
 # ================ system imports
 import clr
 
-import sys
-# sys.path.append(r"C:\Program Files\Dynamo 0.8")
-pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
-sys.path.append(pyt_path)
-sys.path.append(IN[0].DirectoryName)  # type: ignore
-
-import System
-from System import Array
-from System.Collections.Generic import *
-
 # ================ Revit imports
 clr.AddReference('RevitAPIUI')
 from Autodesk.Revit.UI import *
@@ -35,8 +25,46 @@ class DaliSys():
 	def __init__(self, el_sys):
 		self.rvt_sys = el_sys
 		self.doc = el_sys.Document
-		self.lights
-		self.switches
+		self.lights = list()
+		self.switches = list()
+
+	def get_low_systems(self):
+		# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list[Autodesk.Revit.DB.Electrical.ElectricalSystem]
+
+		"""Get all low systems of the current system\n
+		args:
+			self - electrical system
+
+		return:
+			list() - dependent systems
+		"""
+		systems_checked = list()
+		systems_found = list()
+		systems_found.append(self.rvt_sys)
+		while systems_found:
+			el_sys = systems_found.pop()
+			systems_checked.append(el_sys)
+			for elem in el_sys.Elements:
+				# check if it is electrical panel
+				if elem.Category.Id == ElementId(-2001040):
+					low_systems = toolsrvt.elsys_by_brd(elem)[1]
+					if not low_systems:
+						continue
+					low_systems = [circuit for circuit in low_systems
+						if circuit.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit]
+					systems_found.extend(low_systems)
+		return systems_checked
+
+	def get_sys_elements(self):
+		"""Get all elements including elements in low systems\n
+		args:
+			self - electrical system
+
+		return:
+			list() - elements list
+		"""
+		low_systems = self.get_low_systems()
+		return low_systems
 
 # def get_sys_elements(_el_sys):
 # 	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list
