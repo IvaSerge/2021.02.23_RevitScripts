@@ -2,7 +2,7 @@
   "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
   "IsCustomNode": false,
   "Description": "",
-  "Name": "FindElementsInElSys",
+  "Name": "DALIGetInfo",
   "ElementResolver": {
     "ResolutionMap": {}
   },
@@ -11,7 +11,8 @@
       "Id": "0eb69237dd0c4dc187884facd965d90a",
       "Name": "String",
       "Type": "string",
-      "Value": "FindElementsInElSys.py",
+      "Type2": "string",
+      "Value": "DALIGetInfo.py",
       "Description": "Creates a string.",
       "SelectedIndex": 0
     },
@@ -19,6 +20,7 @@
       "Id": "14b859b8ea7141b1a6fc65b7a3becf55",
       "Name": "calc_all",
       "Type": "boolean",
+      "Type2": "boolean",
       "Value": "false",
       "Description": "Selection between a true and false.",
       "SelectedIndex": 0
@@ -49,6 +51,7 @@
     {
       "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
       "Engine": "CPython3",
+      "EngineName": "CPython3",
       "VariableInputPorts": true,
       "NodeType": "ExtensionNode",
       "Id": "2d5996559be141609f0239af77174c49",
@@ -175,7 +178,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "FindElementsInElSys.py",
+      "InputValue": "DALIGetInfo.py",
       "Id": "0eb69237dd0c4dc187884facd965d90a",
       "Inputs": [],
       "Outputs": [
@@ -216,7 +219,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "c3e0eee3-7ffd-4132-a017-7984a029383c-00d1fc0b"
+        "9ed815c3-d1dd-4299-bf12-5b913553999b-006ecfb8"
       ],
       "Id": "d282c5da7b3b4c3f9beb52ca507936c1",
       "Inputs": [],
@@ -309,7 +312,7 @@
       "ScaleFactor": 10000.0,
       "HasRunWithoutCrash": true,
       "IsVisibleInDynamoLibrary": true,
-      "Version": "2.13.1.3887",
+      "Version": "2.16.1.2727",
       "RunType": "Manual",
       "RunPeriod": "1000"
     },
@@ -399,8 +402,8 @@
       }
     ],
     "Annotations": [],
-    "X": -526.1127519969757,
-    "Y": -274.08245999753763,
-    "Zoom": 0.97851730244790081
+    "X": -418.75275709031109,
+    "Y": -431.3528816492767,
+    "Zoom": 0.84954758047586953
   }
 }
