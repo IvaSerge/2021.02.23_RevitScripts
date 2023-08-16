@@ -27,6 +27,9 @@ class DaliSys():
 		self.doc = el_sys.Document
 		self.lights = list()
 		self.switches = list()
+		self.DALI_control = str()
+		self.current_sum = str()
+		DaliSys.get_sys_elements(self)
 
 	def get_low_systems(self):
 		# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list[Autodesk.Revit.DB.Electrical.ElectricalSystem]
@@ -64,83 +67,41 @@ class DaliSys():
 			list() - elements list
 		"""
 		low_systems = self.get_low_systems()
-		return low_systems
+		elem_list = list()
+		for el_sys in low_systems:
+			elem_list.extend(el_sys.Elements)
+		# filter by category
+		self.lights = [i for i in elem_list if i.Category.Id == ElementId(-2001120)]
+		self.switches = [i for i in elem_list if i.Category.Id == ElementId(-2008087)]
 
-# def get_sys_elements(_el_sys):
-# 	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list
+	@staticmethod
+	def get_DALI_controls_info(dali_systems):
+		current_switch = 1
+		total_fixtures = 0
+		terminal_occupied = 0
+		for dali_sys in dali_systems:
+			# not possible situation
+			# it is possible to connect max 64 lightings to 1 DALI control unit
+			elems = len(dali_sys.lights)
+			check = all([total_fixtures + elems <= 64, terminal_occupied < 4])
 
-# 	"""Get count of all elements of the system including subsystems\n
-# 		args:
-# 			_el_sys - electrical system
-# 			all_elements - list of elements (used for recursion)
+			if elems > 64:
+				dali_sys.DALI_control = "ERR"
+				dali_sys.current_sum = elems
 
-# 		return:
-# 			list() - system, count of elements
-# 	"""
-# 	doc = _el_sys.Document
-# 	# get main elements
-# 	sys_board_name = str(_el_sys.PanelName)
-# 	sys_nummer = str(_el_sys.CircuitNumber)
-# 	sys_name_string = sys_board_name + ": " + sys_nummer
-# 	sys_elements = [i for i in _el_sys.Elements]
+			# we are Ok with terminals and lightings
+			elif check:
+				total_fixtures += elems
+				terminal_occupied += 1
+				dali_sys.DALI_control = "DALI_" + str(current_switch)
+				dali_sys.current_sum = total_fixtures
 
-# 	# find all systems with the main panel as quasy panel
+			# no free terminals or more than 64 lights
+			# use next switch
+			else:
+				current_switch += 1
+				total_fixtures = elems
+				terminal_occupied = 1
+				dali_sys.DALI_control = "DALI_" + str(current_switch)
+				dali_sys.current_sum = total_fixtures
 
-# 	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM
-# 	pvp = ParameterValueProvider(ElementId(int(testParam)))
-# 	fnrvStr = FilterStringEquals()
-# 	filter = ElementParameterFilter(
-# 		FilterStringRule(pvp, fnrvStr, sys_name_string))
-
-# 	sub_systems = FilteredElementCollector(doc).\
-# 		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
-# 		WherePasses(filter).\
-# 		ToElements()
-
-# 	# for all the systems get elemets list
-# 	if sub_systems:
-# 		for system in sub_systems:
-# 			elems = system.Elements
-# 			if elems:
-# 				for elem in elems:
-# 					sys_elements.append(elem)
-
-# 	# from element list filter out quasy panels
-# 	sys_elements = [i for i in sys_elements if i.Name != sys_name_string]
-# 	return _el_sys, len(sys_elements)
-
-
-# def get_DALI_info(_el_board):
-# 	# type: (Autodesk.Revit.DB.FamilyInstance) -> list
-
-# 	outlist = list()
-
-# 	# filter out electrical circuit only
-# 	circuits = toolsrvt.elsys_by_brd(_el_board)[1]
-# 	elems_in_circuits = [int(i.LookupParameter("E_Light_number").AsString()) for i in circuits]
-
-# 	current_switch = 1
-# 	total_fixtures = 0
-# 	terminal_occupied = 0
-# 	for elems in elems_in_circuits:
-# 		# not possible situation
-# 		# it is possible to connect max 64 lightings to 1 switchgear
-# 		check = all([total_fixtures + elems <= 64, terminal_occupied < 4])
-# 		if elems > 64:
-# 			outlist.append("ERR")
-
-# 		# we are Ok with terminals and lightings
-# 		elif check:
-# 			total_fixtures += elems
-# 			terminal_occupied += 1
-# 			outlist.append("DALI_" + str(current_switch))
-
-# 		# no free terminals or more than 64 lights
-# 		# use next switch
-# 		else:
-# 			current_switch += 1
-# 			total_fixtures = elems
-# 			terminal_occupied = 1
-# 			outlist.append("DALI_" + str(current_switch))
-
-# 	return zip(circuits, outlist)

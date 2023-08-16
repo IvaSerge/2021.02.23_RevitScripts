@@ -15,15 +15,6 @@
       "Value": "DALIGetInfo.py",
       "Description": "Creates a string.",
       "SelectedIndex": 0
-    },
-    {
-      "Id": "14b859b8ea7141b1a6fc65b7a3becf55",
-      "Name": "calc_all",
-      "Type": "boolean",
-      "Type2": "boolean",
-      "Value": "false",
-      "Description": "Selection between a true and false.",
-      "SelectedIndex": 0
     }
   ],
   "Outputs": [],
@@ -87,15 +78,6 @@
           "Id": "2d03435a82aa4dbab0989bdd2277ec20",
           "Name": "IN[2]",
           "Description": "Input #2",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "4961f038e5294105878c39b2abb64c0d",
-          "Name": "IN[3]",
-          "Description": "Input #3",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -196,30 +178,10 @@
       "Description": "Creates a string."
     },
     {
-      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
-      "NodeType": "BooleanInputNode",
-      "InputValue": false,
-      "Id": "14b859b8ea7141b1a6fc65b7a3becf55",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "4f19dd7097cc4eceb0b8019a66d74265",
-          "Name": "",
-          "Description": "Boolean",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Selection between a true and false."
-    },
-    {
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "9ed815c3-d1dd-4299-bf12-5b913553999b-006ecfb8"
+        "ebe342ac-0e5f-43fa-9afd-128003b9f33c-001ca1e2"
       ],
       "Id": "d282c5da7b3b4c3f9beb52ca507936c1",
       "Inputs": [],
@@ -269,15 +231,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "4f19dd7097cc4eceb0b8019a66d74265",
-      "End": "2d03435a82aa4dbab0989bdd2277ec20",
-      "Id": "dbaf7477fc27497aa449d153a9f00205",
-      "IsHidden": "False"
-    },
-    {
       "Start": "0701eff054d141ab9bdeeb23f2f0056a",
-      "End": "4961f038e5294105878c39b2abb64c0d",
-      "Id": "cf78f6868fa4499d9b95ad6a8cffee4c",
+      "End": "2d03435a82aa4dbab0989bdd2277ec20",
+      "Id": "d6b1680ae51e42aaaaab8c7a5801c5cc",
       "IsHidden": "False"
     }
   ],
@@ -318,12 +274,12 @@
     },
     "Camera": {
       "Name": "Background Preview",
-      "EyeX": 49017.01946386401,
-      "EyeY": 24970.721604067941,
-      "EyeZ": -17161.925179968428,
-      "LookX": -7759.6503010098459,
-      "LookY": -21419.225335939827,
-      "LookZ": -7008.7673066459611,
+      "EyeX": 53303.66015625,
+      "EyeY": 36803.28125,
+      "EyeZ": -13290.0927734375,
+      "LookX": -12046.29296875,
+      "LookY": -33251.78515625,
+      "LookZ": -10880.6005859375,
       "UpX": -0.58157908795309854,
       "UpY": 0.62114778027827733,
       "UpZ": -0.52530105607252375
@@ -367,8 +323,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 273.91903276657411,
-        "Y": 624.51198116686533
+        "X": 39.178738891777,
+        "Y": 627.179484506352
       },
       {
         "Name": "String",
@@ -377,18 +333,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 8.7190327665745144,
-        "Y": 624.51198116686533
-      },
-      {
-        "Name": "calc_all",
-        "ShowGeometry": true,
-        "Id": "14b859b8ea7141b1a6fc65b7a3becf55",
-        "IsSetAsInput": true,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 505.57786039674886,
-        "Y": 902.03846483120321
+        "X": -226.021261108223,
+        "Y": 627.179484506352
       },
       {
         "Name": "Select Model Element",
@@ -397,13 +343,13 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 438.17113851442889,
-        "Y": 1089.9898118530191
+        "X": 464.77286663456675,
+        "Y": 921.978897410043
       }
     ],
     "Annotations": [],
-    "X": -418.75275709031109,
-    "Y": -431.3528816492767,
-    "Zoom": 0.84954758047586953
+    "X": -15.914828827021779,
+    "Y": -117.45616978550856,
+    "Zoom": 0.42558038206716914
   }
 }

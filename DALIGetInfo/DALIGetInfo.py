@@ -63,6 +63,7 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 
 # for board in board_list:
 board = UnwrapElement(IN[2])  # type: ignore
+
 circuits_to_calculate = toolsrvt.elsys_by_brd(board)[1]
 circuits_to_calculate = [circuit for circuit in circuits_to_calculate
 	if circuit.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit]
@@ -71,14 +72,8 @@ if not circuits_to_calculate:
 	raise ValueError("No circuits found")
 
 dali_systems = [DaliSys(i) for i in circuits_to_calculate]
+DaliSys.get_DALI_controls_info(dali_systems)
 
-d_sys = dali_systems[0]
-
-# write_info(info_list, "E_Light_number")
-# doc.Regenerate()
-
-
-# info_DALIL = get_DALI_info(board)
 
 # # =========Start transaction
 # TransactionManager.Instance.EnsureInTransaction(doc)
@@ -88,4 +83,4 @@ d_sys = dali_systems[0]
 # TransactionManager.Instance.TransactionTaskDone()
 
 # OUT = info_list
-OUT = d_sys.get_sys_elements()
+OUT = [[i.DALI_control, i.current_sum] for i in dali_systems]
