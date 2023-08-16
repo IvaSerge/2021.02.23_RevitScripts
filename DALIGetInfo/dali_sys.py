@@ -113,3 +113,11 @@ class DaliSys():
 		DaliSys.params_to_set.append([elem, "Switching Unit", str(len(self.switches))])
 		if self.DALI_control:
 			DaliSys.params_to_set.append([elem, "Control Unit", self.DALI_control])
+
+	@classmethod
+	def write_info(cls):
+		for param_info in cls.params_to_set:
+			toolsrvt.setup_param_value(
+				param_info[0],
+				param_info[1],
+				param_info[2])

@@ -69,13 +69,13 @@ if not circuits_to_calculate:
 dali_systems = [DaliSys(i) for i in circuits_to_calculate]
 DaliSys.get_DALI_controls_info(dali_systems)
 
-# map(lambda x: x.create_params_list(), dali_systems)
 for obj_sys in dali_systems:
 	obj_sys.create_params_list()
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
-DaliSys.write_info(info_DALIL, "Switching Unit")
+
+DaliSys.write_info()
 
 # # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
