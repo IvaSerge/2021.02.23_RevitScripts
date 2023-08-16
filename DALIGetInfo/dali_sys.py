@@ -22,6 +22,8 @@ importlib.reload(toolsrvt)
 
 
 class DaliSys():
+	params_to_set = list()
+
 	def __init__(self, el_sys):
 		self.rvt_sys = el_sys
 		self.doc = el_sys.Document
@@ -105,3 +107,9 @@ class DaliSys():
 				dali_sys.DALI_control = "DALI_" + str(current_switch)
 				dali_sys.current_sum = total_fixtures
 
+	def create_params_list(self):
+		elem = self.rvt_sys
+		DaliSys.params_to_set.append([elem, "E_Light_number", str(len(self.lights))])
+		DaliSys.params_to_set.append([elem, "Switching Unit", str(len(self.switches))])
+		if self.DALI_control:
+			DaliSys.params_to_set.append([elem, "Control Unit", self.DALI_control])

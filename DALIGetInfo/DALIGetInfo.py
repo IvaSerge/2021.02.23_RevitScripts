@@ -1,9 +1,4 @@
 
-
-# "E_Light_number"
-# "Switching Unit"
-# "Control Unit"
-
 # ================ system imports
 import clr
 
@@ -74,13 +69,16 @@ if not circuits_to_calculate:
 dali_systems = [DaliSys(i) for i in circuits_to_calculate]
 DaliSys.get_DALI_controls_info(dali_systems)
 
+# map(lambda x: x.create_params_list(), dali_systems)
+for obj_sys in dali_systems:
+	obj_sys.create_params_list()
 
-# # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
-# write_info(info_DALIL, "Switching Unit")
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
+DaliSys.write_info(info_DALIL, "Switching Unit")
 
-# # # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
+# # =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
 # OUT = info_list
-OUT = [[i.DALI_control, i.current_sum] for i in dali_systems]
+OUT = DaliSys.params_to_set
