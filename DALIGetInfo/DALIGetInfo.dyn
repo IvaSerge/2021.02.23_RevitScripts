@@ -15,6 +15,24 @@
       "Value": "DALIGetInfo.py",
       "Description": "Creates a string.",
       "SelectedIndex": 0
+    },
+    {
+      "Id": "d282c5da7b3b4c3f9beb52ca507936c1",
+      "Name": "Select Model Element",
+      "Type": "selection",
+      "Type2": "hostSelection",
+      "Value": "9bbc0991-0db1-4b67-bda3-0e2d748bbd48-00963fd8",
+      "Description": "Select a model element from the document.",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "d972ddca12f54c1e96981e8f7154153f",
+      "Name": "Propose_DALI",
+      "Type": "boolean",
+      "Type2": "boolean",
+      "Value": "false",
+      "Description": "Selection between a true and false.",
+      "SelectedIndex": 0
     }
   ],
   "Outputs": [],
@@ -78,6 +96,15 @@
           "Id": "2d03435a82aa4dbab0989bdd2277ec20",
           "Name": "IN[2]",
           "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "df74e465ea584bc687f7ea43e8e771bc",
+          "Name": "IN[3]",
+          "Description": "Input #3",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -181,7 +208,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "ebe342ac-0e5f-43fa-9afd-128003b9f33c-001ca1e2"
+        "9bbc0991-0db1-4b67-bda3-0e2d748bbd48-00963fd8"
       ],
       "Id": "d282c5da7b3b4c3f9beb52ca507936c1",
       "Inputs": [],
@@ -197,6 +224,26 @@
         }
       ],
       "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "d972ddca12f54c1e96981e8f7154153f",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4b8e3fd6b1c44352a2af57ad1585eb42",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
     }
   ],
   "Connectors": [
@@ -232,8 +279,14 @@
     },
     {
       "Start": "0701eff054d141ab9bdeeb23f2f0056a",
+      "End": "df74e465ea584bc687f7ea43e8e771bc",
+      "Id": "beeb83a9c26a4cd09fbc625a1f41c79d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4b8e3fd6b1c44352a2af57ad1585eb42",
       "End": "2d03435a82aa4dbab0989bdd2277ec20",
-      "Id": "d6b1680ae51e42aaaaab8c7a5801c5cc",
+      "Id": "afe8a1e43fe846bbab9a817ae436b24a",
       "IsHidden": "False"
     }
   ],
@@ -340,16 +393,26 @@
         "Name": "Select Model Element",
         "ShowGeometry": true,
         "Id": "d282c5da7b3b4c3f9beb52ca507936c1",
-        "IsSetAsInput": false,
+        "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 464.77286663456675,
-        "Y": 921.978897410043
+        "X": 474.279009506752,
+        "Y": 1017.0403261319
+      },
+      {
+        "Name": "Propose_DALI",
+        "ShowGeometry": true,
+        "Id": "d972ddca12f54c1e96981e8f7154153f",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 496.77202194024903,
+        "Y": 877.7366218152215
       }
     ],
     "Annotations": [],
-    "X": -15.914828827021779,
-    "Y": -117.45616978550856,
-    "Zoom": 0.42558038206716914
+    "X": -282.78134307874825,
+    "Y": -438.34832709054916,
+    "Zoom": 0.751432442730083
   }
 }

@@ -29,7 +29,7 @@ class DaliSys():
 		self.doc = el_sys.Document
 		self.lights = list()
 		self.switches = list()
-		self.DALI_control = str()
+		self.DALI_control = None
 		self.current_sum = str()
 		DaliSys.get_sys_elements(self)
 

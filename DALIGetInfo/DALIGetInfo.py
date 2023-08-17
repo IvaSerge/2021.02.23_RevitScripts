@@ -29,19 +29,10 @@ from RevitServices.Transactions import TransactionManager
 import re
 import importlib
 import toolsrvt
-importlib.reload(toolsrvt)
+# importlib.reload(toolsrvt)
 import dali_sys
 importlib.reload(dali_sys)
 from dali_sys import DaliSys
-
-
-# def write_info(info_list, par_name):
-# 	# # write parameter to circuit
-# 	for i in info_list:
-# 		elem = i[0]
-# 		value = str(i[1])
-# 		toolsrvt.setup_param_value(elem, par_name, value)
-
 
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -57,7 +48,8 @@ boards_list = list()
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 # for board in board_list:
-board = UnwrapElement(IN[2])  # type: ignore
+board = UnwrapElement(IN[3])  # type: ignore
+propose_DALI = IN[2]  # type: ignore
 
 circuits_to_calculate = toolsrvt.elsys_by_brd(board)[1]
 circuits_to_calculate = [circuit for circuit in circuits_to_calculate
@@ -67,7 +59,10 @@ if not circuits_to_calculate:
 	raise ValueError("No circuits found")
 
 dali_systems = [DaliSys(i) for i in circuits_to_calculate]
-DaliSys.get_DALI_controls_info(dali_systems)
+
+# calculate DALI controls automaticaly
+if propose_DALI:
+	DaliSys.get_DALI_controls_info(dali_systems)
 
 for obj_sys in dali_systems:
 	obj_sys.create_params_list()
@@ -82,3 +77,4 @@ TransactionManager.Instance.TransactionTaskDone()
 
 # OUT = info_list
 OUT = DaliSys.params_to_set
+# OUT = [i.DALI_control for i in dali_systems]
