@@ -22,10 +22,16 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+
+import importlib
+from importlib import reload
+
 import circuit_voltage_drop
+reload(circuit_voltage_drop)
 from circuit_voltage_drop import calc_circuit_vd
 
 import cable_catalogue
+reload(cable_catalogue)
 from cable_catalogue import get_cable
 
 

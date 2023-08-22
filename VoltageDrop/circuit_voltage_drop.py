@@ -24,9 +24,12 @@ from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
 import math
+import importlib
+from importlib import reload
 
 # ================ Local imports
 import cable_catalogue
+reload(cable_catalogue)
 from cable_catalogue import get_cable
 
 

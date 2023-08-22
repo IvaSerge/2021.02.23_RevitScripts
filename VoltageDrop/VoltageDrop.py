@@ -25,13 +25,13 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
-
+import importlib
+from importlib import reload
 
 # ================ Local imports
-import circuit_voltage_drop
-from circuit_voltage_drop import calc_circuit_vd
 import calc_overall_vd
-from calc_overall_vd import get_vd
+reload(calc_overall_vd)
+from calc_overall_vd import *
 
 
 def get_sys_by_selection():
