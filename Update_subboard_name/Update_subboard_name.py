@@ -123,7 +123,7 @@ def update_subboard_name(board_inst):
 		if not current_board:
 			return None
 
-		board_is_quasi = current_board.Symbol.Family.Name == "QUASI_Connector"
+		board_is_quasi = "quasi_connector" in current_board.Symbol.Family.Name.lower()
 
 		if board_is_quasi:
 			# get upper board
@@ -165,8 +165,8 @@ if calc_all:
 	# use EmLight_UpdateTags to tag them correctly
 	elemList = [i for i in electroBoards if
 		any([
-			"NOT" not in i.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString(),
-			"Emergency_Lighting" not in i.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString(),
+			"not" not in i.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString().lower(),
+			"emergency_lighting" not in i.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString().lower(),
 		])
 	]
 
@@ -182,4 +182,3 @@ TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
 OUT = brd_updated
-# OUT = [i.Symbol for i in elemList]
