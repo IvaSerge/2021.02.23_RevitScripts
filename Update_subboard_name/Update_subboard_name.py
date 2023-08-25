@@ -145,9 +145,9 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 
-fnrvStr = FilterStringEquals()
+fnrvStr = FilterStringContains()
 pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
-frule = FilterStringRule(pvp, fnrvStr, "QUASI_Connector")
+frule = FilterStringRule(pvp, fnrvStr, "quasi_connector")
 filter = ElementParameterFilter(frule)
 
 electroBoards = FilteredElementCollector(doc).\
@@ -164,7 +164,11 @@ if calc_all:
 	# filter out emergency lighting Quasys
 	# use EmLight_UpdateTags to tag them correctly
 	elemList = [i for i in electroBoards if
-		"NOT" not in i.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString()]
+		any([
+			"NOT" not in i.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString(),
+			"Emergency_Lighting" not in i.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString(),
+		])
+	]
 
 if not calc_all:
 	elemList = [UnwrapElement(IN[3])]  # type: ignore
@@ -178,3 +182,4 @@ TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
 OUT = brd_updated
+# OUT = [i.Symbol for i in elemList]
