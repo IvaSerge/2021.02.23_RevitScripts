@@ -1001,6 +1001,165 @@
 				["RBS_ELEC_CIRCUIT_NAMING", -7000011],
 				["RBS_ELEC_MAX_POLE_BREAKERS", 42]
 			]
+		},
+
+		"Main panel_FlexiVillage": {
+			"spare_parameter_values": [
+				["400ETU / F1 / 2xd120mm", 3, 400],
+				["250ETU / F2 / 1xd150mm", 3, 250],
+				["250ETU / F3 / 1xd150mm", 3, 250],
+				["250ETU / F4 / 1xd150mm", 3, 250],
+				["250ETU / F5 / 1xd150mm", 3, 250],
+				["250ETU / F6 / 1xd150mm", 3, 250],
+				["250ETU / F7 / 1xd150mm", 3, 250],
+				["250ETU / F8 / 1xd150mm", 3, 250],
+				["250ETU / F9 / 1xd150mm", 3, 250],
+				["250ETU / F10 / 1xd150mm", 3, 250],
+				["250ETU / F11 / 1xd150mm", 3, 250],
+				["250ETU / F12 / 1xd150mm", 3, 250]
+			],
+			"panel_parameter_values": [
+				["RBS_ELEC_MAINS", 1600],
+				["RBS_ELEC_MOUNTING", "FLOOR"],
+				["RBS_ELEC_PANEL_FEED_PARAM", "BOTTOM"],
+				["RBS_ELEC_ENCLOSURE", "IP44"],
+				["Protection Class", "IP44"],
+				["RBS_ELEC_PANEL_MCB_RATING_PARAM", 1600],
+				["RBS_ELEC_SHORT_CIRCUIT_RATING", "65kA"],
+				["RBS_ELEC_CIRCUIT_PREFIX", "F"],
+				["RBS_ELEC_CIRCUIT_NAMING", -7000010],
+				["RBS_ELEC_MAX_POLE_BREAKERS", 12]
+			]
+		},
+
+		"Maintanace_FlexiVillage": {
+			"spare_parameter_values": [
+				["B32 / F123 / 1xd6mm", 3, 32],
+				["B32 / F456 / 1xd6mm", 3, 32],
+				["B32 / F789 / 1xd6mm", 3, 32],
+				["B32 / F101112 / 1xd6mm", 3, 32],
+				["B32 / F131415 / 1xd6mm", 3, 32],
+				["B32 / F161718 / 1xd6mm", 3, 32],
+				["B32 / F192021 / 1xd6mm", 3, 32],
+				["B32 / F222324 / 1xd6mm", 3, 32],
+				["B32 / F252627 / 1xd6mm", 3, 32],
+				["B32 / F282930 / 1xd6mm", 3, 32],
+				["B32 / F313233 / 1xd6mm", 3, 32],
+				["B32 / F343536 / 1xd6mm", 3, 32],
+				["B32 / F373839 / 1xd6mm", 3, 32],
+				["B32 / F404142 / 1xd6mm", 3, 32],
+				["B32 / F434445 / 1xd6mm", 3, 32],
+
+				["B63 / F464748 / 1xd16mm", 3, 63],
+				["B63 / F495051 / 1xd16mm", 3, 63],
+				["B63 / F525354 / 1xd16mm", 3, 63],
+				["B63 / F555657 / 1xd16mm", 3, 63],
+
+				["B16 / F585960 Section Q1", 3, 16],
+				["B16 / F616263 Section Q1", 3, 16],
+				["B16 / F646566 Section Q1", 3, 16],
+				["B16 / F676869 Section Q1", 3, 16],
+				["B16 / F707172 Section Q1", 3, 16],
+				["B16 / F737475 Section Q1", 3, 16],
+
+				["B32 / 0,03 A / F76 / 1xd6mm", 1, 32],
+				["B32 / 0,03 A / F77 / 1xd6mm", 1, 32],
+
+				["B16 / 0,03 A / F78 Section Q2", 1, 16],
+				["B16 / 0,03 A / F79 Section Q2", 1, 16],
+				["B16 / 0,03 A / F80 Section Q2", 1, 16],
+				["B16 / 0,03 A / F81 Section Q2", 1, 16],
+				["B16 / 0,03 A / F82 Section Q2", 1, 16],
+				["B16 / 0,03 A / F83 Section Q2", 1, 16],
+
+				["B16 / 0,03 A / F84 Section Q3", 1, 16],
+				["B16 / 0,03 A / F85 Section Q3", 1, 16],
+				["B16 / 0,03 A / F86 Section Q3", 1, 16],
+				["B16 / 0,03 A / F87 Section Q3", 1, 16],
+				["B16 / 0,03 A / F88 Section Q3", 1, 16],
+				["B16 / 0,03 A / F89 Section Q3", 1, 16],
+
+				["C10 / F90 Section Q4", 1, 10],
+				["C10 / F91 Section Q4", 1, 10],
+				["C10 / F92 Section Q4", 1, 10],
+				["C10 / F93 Section Q4", 1, 10],
+				["C10 / F94 Section Q4", 1, 10],
+				["C10 / F95 Section Q4", 1, 10]
+			],
+			"panel_parameter_values": [
+				["RBS_ELEC_MAINS", 315],
+				["RBS_ELEC_MOUNTING", "FLOOR"],
+				["RBS_ELEC_PANEL_FEED_PARAM", "BOTTOM"],
+				["RBS_ELEC_ENCLOSURE", "IP44"],
+				["Protection Class", "IP44"],
+				["RBS_ELEC_PANEL_MCB_RATING_PARAM", 315],
+				["RBS_ELEC_SHORT_CIRCUIT_RATING", "25kA"],
+				["RBS_ELEC_CIRCUIT_PREFIX", "F"],
+				["RBS_ELEC_CIRCUIT_NAMING", -7000010],
+				["RBS_ELEC_MAX_POLE_BREAKERS", 95]
+			]
+		},
+
+		"Container_FlexiVillage": {
+			"spare_parameter_values": [
+				["B32 / F123 / 1xd6mm", 3, 32],
+				["B32 / F456 / 1xd6mm", 3, 32],
+				["B32 / F789 / 1xd6mm", 3, 32],
+				["B32 / F101112 / 1xd6mm", 3, 32],
+				["B32 / F131415 / 1xd6mm", 3, 32],
+				["B32 / F161718 / 1xd6mm", 3, 32],
+				["B32 / F192021 / 1xd6mm", 3, 32],
+				["B32 / F222324 / 1xd6mm", 3, 32],
+
+				["B63 / F252627 / 1xd16mm", 3, 63],
+				["B63 / F282930 / 1xd16mm", 3, 63],
+				["B63 / F313233 / 1xd16mm", 3, 63],
+				["B63 / F343536 / 1xd16mm", 3, 63],
+				["B63 / F373839 / 1xd16mm", 3, 63],
+
+				["B16 / F404142 Section Q1", 3, 16],
+				["B16 / F434445 Section Q1", 3, 16],
+				["B16 / F464748 Section Q1", 3, 16],
+				["B16 / F495051 Section Q1", 3, 16],
+				["B16 / F525354 Section Q1", 3, 16],
+				["B16 / F555657 Section Q1", 3, 16],
+
+				["B32 / 0,03 A / F58 / 1xd6mm", 1, 32],
+				["B32 / 0,03 A / F59 / 1xd6mm", 1, 32],
+
+				["B16 / 0,03 A / F60 Section Q2", 1, 16],
+				["B16 / 0,03 A / F61 Section Q2", 1, 16],
+				["B16 / 0,03 A / F62 Section Q2", 1, 16],
+				["B16 / 0,03 A / F63 Section Q2", 1, 16],
+				["B16 / 0,03 A / F64 Section Q2", 1, 16],
+				["B16 / 0,03 A / F65 Section Q2", 1, 16],
+
+				["B16 / 0,03 A / F66 Section Q3", 1, 16],
+				["B16 / 0,03 A / F67 Section Q3", 1, 16],
+				["B16 / 0,03 A / F68 Section Q3", 1, 16],
+				["B16 / 0,03 A / F69 Section Q3", 1, 16],
+				["B16 / 0,03 A / F70 Section Q3", 1, 16],
+				["B16 / 0,03 A / F71 Section Q3", 1, 16],
+
+				["C10 / F72 Section Q4", 1, 10],
+				["C10 / F73 Section Q4", 1, 10],
+				["C10 / F74 Section Q4", 1, 10],
+				["C10 / F75 Section Q4", 1, 10],
+				["C10 / F76 Section Q4", 1, 10],
+				["C10 / F77 Section Q4", 1, 10]
+			],
+			"panel_parameter_values": [
+				["RBS_ELEC_MAINS", 250],
+				["RBS_ELEC_MOUNTING", "FLOOR"],
+				["RBS_ELEC_PANEL_FEED_PARAM", "BOTTOM"],
+				["RBS_ELEC_ENCLOSURE", "IP65"],
+				["Protection Class", "IP65"],
+				["RBS_ELEC_PANEL_MCB_RATING_PARAM", 250],
+				["RBS_ELEC_SHORT_CIRCUIT_RATING", "25kA"],
+				["RBS_ELEC_CIRCUIT_PREFIX", "F"],
+				["RBS_ELEC_CIRCUIT_NAMING", -7000010],
+				["RBS_ELEC_MAX_POLE_BREAKERS", 77]
+			]
 		}
 	}
 }
