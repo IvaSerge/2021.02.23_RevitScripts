@@ -8,17 +8,32 @@ from Autodesk.Revit.DB import *
 
 # ================ Python imports
 import math
-
-# ================ local imports
-import toolsrvt
+from operator import itemgetter
 
 
 class grid:
+	# class variables
+	all_intersection_points = list()
+
+	@classmethod
+	def find_grid_intersection_points(cls, doc):
+		# type: (Autodesk.Revit.DB.Document) -> list
+		all_grids = FilteredElementCollector(doc).\
+			OfCategory(BuiltInCategory.OST_Grids).\
+			WhereElementIsNotElementType().\
+			ToElements()
+
+		all_intersection_points = dict()
+		obj_grids = [grid(i) for i in all_grids]
+		for grd in obj_grids:
+			grid_intersections = grd.get_intersection_points(obj_grids)
+			all_intersection_points.update(grid_intersections)
+
+		cls.all_intersection_points = all_intersection_points
+		return cls.all_intersection_points
+
 	def __init__(self, _rvt_grid):
 		# type: (Autodesk.Revit.DB.Grid) -> None
-		"""
-		Extended electrical panel class
-		"""
 		self.rvt_grid = _rvt_grid  # type: Autodesk.Revit.DB.Grid
 		self.angle = grid.get_angle(_rvt_grid)
 		self.intersections = dict()
@@ -27,7 +42,7 @@ class grid:
 	def get_angle(_rvt_grid):
 		# type: (Autodesk.Revit.DB.Grid) -> float
 		"""
-		get angle rotation fo the grid
+		Get angle rotation fo the grid
 		"""
 		vector = _rvt_grid.Curve.Direction
 		direction = round(math.degrees(math.acos(_rvt_grid.Curve.Direction.X)))
@@ -65,3 +80,19 @@ class grid:
 				self.intersections.update({point_name: point})
 
 		return self.intersections
+
+	@classmethod
+	def get_nearest_grid_by_instance(cls, rvt_inst: FamilyInstance) -> str:
+		"""
+			Get nearest grid string for family
+		"""
+		rvt_inst_point = rvt_inst.Location.Point
+		# # get all distances list
+		distance_list = list()
+		all_intersect_points = cls.all_intersection_points.items()
+		for key, value in all_intersect_points:
+			distance = rvt_inst_point.DistanceTo(value)
+			distance_list.append([key, distance])
+		distance_list.sort(key=itemgetter(1))
+		shortest_grid_name = distance_list[0][0]
+		return shortest_grid_name

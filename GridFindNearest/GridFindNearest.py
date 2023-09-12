@@ -11,14 +11,12 @@ sys.path.append(dir_path)
 
 # ================ Revit imports
 clr.AddReference('RevitAPI')
-import Autodesk
 from Autodesk.Revit.DB import *
 
 clr.AddReference('RevitAPIUI')
 from Autodesk.Revit.UI import *
 
 clr.AddReference("RevitServices")
-import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
@@ -33,12 +31,7 @@ clr.ImportExtensions(Revit.Elements)
 clr.ImportExtensions(Revit.GeometryConversion)
 
 # ================ Python imports
-import collections
-from collections import deque
-
-import importlib
 from importlib import reload
-
 from operator import itemgetter
 
 # ================ local imports
@@ -65,34 +58,15 @@ app = uiapp.Application
 view = doc.ActiveView
 
 reload_IN = IN[1]  # type: ignore
-rvt_data_device = UnwrapElement(IN[2])  # type: ignore
+rvt_inst = UnwrapElement(IN[2])  # type: ignore
 
-rvt_data_device_point = rvt_data_device.Location.Point
-
-all_grids = FilteredElementCollector(doc).\
-	OfCategory(BuiltInCategory.OST_Grids).\
-	WhereElementIsNotElementType().\
-	ToElements()
-
-all_intersection_points = dict()
-obj_grids = [grid(i) for i in all_grids]
-for grd in obj_grids:
-	grid_intersections = grd.get_intersection_points(obj_grids)
-	all_intersection_points.update(grid_intersections)
-
-# get all distances list
-distance_list = list()
-for key, value in all_intersection_points.items():
-	distance = rvt_data_device_point.DistanceTo(value)
-	distance_list.append([key, distance])
-
-distance_list.sort(key=itemgetter(1))
-shortest_grid_name = distance_list[0][0]
+grid.find_grid_intersection_points(doc)
+shortest_grid_name = grid.get_nearest_grid_by_instance(rvt_inst)
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-toolsrvt.setup_param_value(rvt_data_device, "TO Grid", shortest_grid_name)
+toolsrvt.setup_param_value(rvt_inst, "TO Grid", shortest_grid_name)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
