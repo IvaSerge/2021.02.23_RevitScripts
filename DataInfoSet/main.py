@@ -37,10 +37,33 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 view = doc.ActiveView
+reload_var = IN[1]  # type: ignore
+rvt_elem = IN[2]  # type: ignore
 
+
+# Element selection
+if rvt_elem:
+	rvt_elem = UnwrapElement(rvt_elem)  # type: ignore
+else:
+	sel_elem = uidoc.Selection.PickObject(
+		Autodesk.Revit.UI.Selection.ObjectType.Element,
+		"Selection of two elements")
+	rvt_elem = doc.GetElement(sel_elem.ElementId)
+
+
+# TODO: Info for panel and all elements in panel
 # check object category
 # if it is panel - find data circuit and first element of the data circuit
 # other - add to list
+
+if rvt_elem.Category.Id != -2001040:
+	elem_list = [rvt_elem]
+else:
+	# TODO: Info for panel and all elements in panel
+	# check object category
+	# if it is panel - find data circuit and first element of the data circuit
+	# other - add to list
+	pass
 
 # find element parameters
 # nearest grid
@@ -50,4 +73,4 @@ view = doc.ActiveView
 # for circuit find panel info
 
 
-OUT = None
+OUT = rvt_elem
