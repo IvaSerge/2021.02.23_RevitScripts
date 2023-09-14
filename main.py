@@ -37,5 +37,16 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 view = doc.ActiveView
+reload_var = IN[1]  # type: ignore
+rvt_elem = IN[2]  # type: ignore
+
+
+# Element selection
+if rvt_elem:
+	rvt_elem = UnwrapElement(rvt_elem)  # type: ignore
+else:
+	sel_elem = uidoc.Selection.PickObject(
+		Autodesk.Revit.UI.Selection.ObjectType.Element,
+		"Selection of two elements")
 
 OUT = None
