@@ -50,6 +50,8 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 	rvt_level_str = check.group(1)
 	return rvt_level_str
 
+# def get_circtuit_parameters():
+
 
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -83,15 +85,61 @@ grid.find_grid_intersection_points(doc)
 
 # find element parameters
 params_to_set = list()
-shortest_grid_name = grid.get_nearest_grid_by_instance(rvt_elem)
-params_to_set.append([rvt_elem, "TO Grid", shortest_grid_name])
+elem_grid = grid.get_nearest_grid_by_instance(rvt_elem)
 elem_level = get_level_name(rvt_elem)
-# floor
+
+params_to_set.append([rvt_elem, "TO Grid", elem_grid])
+params_to_set.append([rvt_elem, "TO Level", elem_level])
+
 
 # find ciruit
-# for circuit find panel info
+elem_circuits = rvt_elem.MEPModel.GetElectricalSystems()
+elem_circuits = [i for i in elem_circuits
+	if i.SystemType == Electrical.ElectricalSystemType.Data]
 
-# combine circuit and elem parameters to multi-text parameter
+# TODO sort circuits by Name
+
+# for each circuit fill in TO parameters
+multi_tag_list = list()
+for circuit in elem_circuits:
+	circuit_nuber = "{:02d}".format(int(circuit.Name))
+	# drop info to circuit
+	params_to_set.append([circuit, "TO Grid", elem_grid])
+	params_to_set.append([circuit, "TO Level", elem_level])
+
+	# panel info to circuit
+	data_panel = circuit.BaseEquipment
+	panel_grid = toolsrvt.get_parval(data_panel, "TO Grid")
+	panel_level = toolsrvt.get_parval(data_panel, "TO Level")
+	panel_patch_panel = toolsrvt.get_parval(data_panel, "TO Panel")
+	panel_rack = toolsrvt.get_parval(data_panel, "TO Rack")
+
+	# parameters to set from panel to circuit
+	params_to_set.append([circuit, "TO Rack Grid", panel_grid])
+	params_to_set.append([circuit, "TO Rack Floor", panel_level])
+	params_to_set.append([circuit, "TO Panel", panel_patch_panel])
+	params_to_set.append([circuit, "TO Rack", panel_rack])
+
+	# multi_tag parameter for elemet
+	circuit_tag = panel_level + panel_grid + "." + panel_rack
+	circuit_tag += "-" + elem_level + elem_grid + "."
+	circuit_tag += panel_patch_panel + circuit_nuber
+	multi_tag_list.append(circuit_tag)
+
+# convert multi_tag to string and set to element
+multi_tag_str = "\n".join(multi_tag_list)
+params_to_set.append([rvt_elem, "Multi_Tag_1", multi_tag_str])
+
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
+for param_info in params_to_set:
+	p_elem = param_info[0]
+	p_name = param_info[1]
+	p_value = param_info[2]
+	toolsrvt.setup_param_value(p_elem, p_name, p_value)
+
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
 
-OUT = elem_level
+OUT = params_to_set
