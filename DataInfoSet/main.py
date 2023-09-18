@@ -99,7 +99,9 @@ else:
 if rvt_elem.Category.Id.IntegerValue != -2001040:
 	elem_list = [rvt_elem]
 else:
-	elem_list = [rvt_elem]
+	elem_list = list()
+	#  elem_list.append(rvt_elem)  # adding panel to the list is dangerous
+	# TODO add bool that allow/not allow set panel parameters
 	panel_elements = get_elements_by_panel(rvt_elem)
 	elem_list.extend(panel_elements)
 
