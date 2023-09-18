@@ -45,7 +45,8 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 	if not rvt_lvl:
 		raise ValueError("No Host Level found")
 	rvt_level_str = rvt_lvl.Name
-	regexp = re.compile(r"^(.*?)_")
+	# regexp = re.compile(r"^(.*?)_")
+	regexp = re.compile(r"^(.{2})")  # or take firs two symbols
 	check = regexp.match(rvt_level_str)
 	rvt_level_str = check.group(1)
 	return rvt_level_str
@@ -123,7 +124,8 @@ for rvt_elem in elem_list:
 	# for each circuit fill in TO parameters
 	multi_tag_list = list()
 	for circuit in elem_circuits:
-		circuit_nuber = "{:02d}".format(int(circuit.Name))
+		# circuit_nuber = "{:02d}".format(int(circuit.Name))  # if heading zeros needed
+		circuit_nuber = circuit.Name  # without heading zeros
 		# drop info to circuit
 		params_to_set.append([circuit, "TO Grid", elem_grid])
 		params_to_set.append([circuit, "TO Level", elem_level])
@@ -143,7 +145,11 @@ for rvt_elem in elem_list:
 		params_to_set.append([circuit, "TO Rack", panel_rack])
 
 		# multi_tag parameter for elemet
-		circuit_tag = panel_level + panel_grid + "." + panel_rack
+		try:
+			circuit_tag = panel_level + panel_grid + "." + panel_rack
+		except:
+			error_text = "Panel parameters empty. Checl Level, Grid, Rack"
+			raise ValueError(error_text)
 		circuit_tag += "-" + elem_level + elem_grid + "."
 		circuit_tag += panel_patch_panel + circuit_nuber
 		multi_tag_list.append(circuit_tag)

@@ -108,7 +108,8 @@ def get_parval(elem, name):
 		elif storeType == StorageType.ElementId:
 			value: ElementId = param.AsElementId()
 	else:
-		raise Exception("No parameter found")
+		error_string = "No parameter found: " + name
+		raise Exception(error_string)
 
 	return value
 
@@ -140,7 +141,8 @@ def setup_param_value(elem, name, pValue):
 	if param:
 		param.Set(pValue)
 	else:
-		raise Exception("No parameter found")
+		error_string = "No parameter found: " + name
+		raise Exception(error_string)
 	return elem
 
 
