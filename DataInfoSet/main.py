@@ -111,6 +111,9 @@ for rvt_elem in elem_list:
 	# find element parameters
 	params_to_set = list()
 	elem_grid = grid.get_nearest_grid_by_instance(rvt_elem)
+	# For TV clean grid name - Project specific change
+	if elem_grid.startswith("TV-"):
+		elem_grid = re.sub("-", "", elem_grid)
 	elem_level = get_level_name(rvt_elem)
 	elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
 
