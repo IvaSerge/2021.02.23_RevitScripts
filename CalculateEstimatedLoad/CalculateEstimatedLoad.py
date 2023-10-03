@@ -246,7 +246,9 @@ values = list()
 
 for circuit in circuits_to_calculate:
 	# get values
-	values.extend(GetEstimatedValues(circuit, TESTBOARD))
+	circuit_values = GetEstimatedValues(circuit, TESTBOARD)
+	if circuit_values:
+		values.extend(circuit_values)
 
 for value in values:
 	SetEstimatedValues(value)
@@ -256,5 +258,4 @@ doc.Delete(TESTBOARD.Id)
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-# OUT = circuits_to_calculate
 OUT = values
