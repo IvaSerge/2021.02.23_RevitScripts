@@ -13,6 +13,9 @@ clr.AddReference("RevitServices")
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+# ================ local imports
+import toolsrvt
+
 
 class PrintView():
 
@@ -47,7 +50,7 @@ class PrintView():
 		print_manager.Apply()
 		print_manager.PrintToFile = True
 		print_manager.Apply()
-		print_manager.PrintToFileName = "C:\\!!!test.pdf"
+		print_manager.PrintToFileName = sheet_name
 		print_manager.Apply()
 
 		# view settings
@@ -81,11 +84,16 @@ class PrintView():
 	@staticmethod
 	def get_sheet_name(sheet):
 		# start path is not importatn as printer driver uses it's default path
-		# start_path = "C:\\"
-		# sheet_name = 
-		# sheet_number = 
+		start_path = "C:\\"
+		sheet_name = toolsrvt.get_parval(sheet, "SHEET_NAME")
+		sheet_number = toolsrvt.get_parval(sheet, "SHEET_NUMBER")
 		revisions_list = ViewSheet.GetAllRevisionIds(sheet)
-		latest_revision = "[%s]" % str(len(revisions_list))
+		if revisions_list:
+			latest_revision = "[%s]" % str(len(revisions_list) - 1).zfill(2)
+		else:
+			latest_revision = ""
 
-		# pdf_name = latest_revision
-		return latest_revision
+		pdf_name = start_path + sheet_number + latest_revision
+		pdf_name += " - " + sheet_name + ".pdf"
+
+		return pdf_name

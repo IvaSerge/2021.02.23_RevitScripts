@@ -39,26 +39,45 @@ app = uiapp.Application
 view = doc.ActiveView
 reload_var = IN[1]  # type: ignore
 printer_name = IN[2]  # type: ignore
-print_file_path = IN[3] + "\\test.pdf"  # type: ignore
-rvt_sheet = IN[4]  # type: ignore
-
-
-# TODO: provide some tools to create filtered list of views
-test_sheet = UnwrapElement(rvt_sheet)  # type: ignore
+print_default_path = IN[3]  # type: ignore
+print_save_path = IN[4]  # type: ignore
+to_print_sheets = IN[5]  # type: ignore
 
 sheets_list = list()
-sheets_list.append(test_sheet)
 
-# TransactionManager.Instance.EnsureInTransaction(doc)
 
-# view_sets = FilteredElementCollector(doc).OfClass(ViewSheetSet)
-# for i in view_sets:
-# 	if i.Name == "tempSetName":
-# 		doc.Delete(i.Id)
+if isinstance(to_print_sheets, list):
+	# remove duplicates
+	to_print_sheets = set(to_print_sheets)
+	for sheet_number in to_print_sheets:
+		rvt_sheet = toolsrvt.inst_by_cat_strparamvalue(
+			doc,
+			BuiltInCategory.OST_Sheets,
+			BuiltInParameter.SHEET_NUMBER,
+			sheet_number,
+			False)
+		if rvt_sheet:
+			sheets_list.append(rvt_sheet[0])
+elif isinstance(to_print_sheets, str):
+	pass
+else:
+	error_text = "Wrong input parameters"
+	raise ValueError(error_text)
 
-# for rvt_sheet in sheets_list:
-# 	PrintView.print_view(rvt_sheet, printer_name)
+if not sheets_list:
+	error_text = "Sheets to print not found"
+	raise ValueError(error_text)
 
-# TransactionManager.Instance.TransactionTaskDone()
+TransactionManager.Instance.EnsureInTransaction(doc)
 
-OUT = PrintView.get_sheet_name(test_sheet)
+view_sets = FilteredElementCollector(doc).OfClass(ViewSheetSet)
+for i in view_sets:
+	if i.Name == "tempSetName":
+		doc.Delete(i.Id)
+
+for rvt_sheet in sheets_list:
+	PrintView.print_view(rvt_sheet, printer_name)
+
+TransactionManager.Instance.TransactionTaskDone()
+
+OUT = sheets_list[0]
