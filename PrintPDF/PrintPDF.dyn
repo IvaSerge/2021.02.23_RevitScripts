@@ -27,7 +27,16 @@
     },
     {
       "Id": "b07cdc8673794a42a198bceaec847361",
-      "Name": "Directory Path",
+      "Name": "PrinterDefaultPath",
+      "Type": "string",
+      "Type2": "string",
+      "Value": "C:\\05 TEMP\\PrintTest",
+      "Description": "Creates a string.",
+      "SelectedIndex": 0
+    },
+    {
+      "Id": "2778b74613d741b1b4463e8f395e564a",
+      "Name": "PrintToPath",
       "Type": "string",
       "Type2": "string",
       "Value": "C:\\05 TEMP\\PrintTest",
@@ -219,7 +228,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "a83f9eb8e5ba4504b10dd0c8dca814ef",
       "Inputs": [],
       "Outputs": [
@@ -293,6 +302,15 @@
           "Id": "50c66c40adce48fe965d057ec0b662fc",
           "Name": "IN[4]",
           "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "259746e98930437ba4eeadbc42c46f02",
+          "Name": "IN[5]",
+          "Description": "Input #5",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -393,26 +411,6 @@
       "Description": "Reads a text file and returns the contents as a string.\n\nFileSystem.ReadText (file: var): string"
     },
     {
-      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
-      "NodeType": "CodeBlockNode",
-      "Code": "\"PDFCreator\";",
-      "Id": "8e768f154efc4c1cb2e50b7986f6a40c",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "54fb8b59c4ea4ed1bd17f982387f911c",
-          "Name": "",
-          "Description": "Value of expression at line 1",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Allows for DesignScript code to be authored directly"
-    },
-    {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
       "InputValue": "C:\\05 TEMP\\PrintTest",
@@ -434,8 +432,8 @@
     },
     {
       "ConcreteType": "DSRevitNodesUI.Sheets, DSRevitNodesUI",
-      "SelectedIndex": 0,
-      "SelectedString": "Legends",
+      "SelectedIndex": 298,
+      "SelectedString": "ELECTRICAL FACILITY POWER LEVEL 1F - OVERALL LAYOUT",
       "NodeType": "ExtensionNode",
       "Id": "c0cb38d2b1024352978f20843f41698c",
       "Inputs": [],
@@ -456,12 +454,41 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
       "NodeType": "CodeBlockNode",
-      "Code": "\"PDF24\";",
-      "Id": "fc7afd8150b44e5cb69f11740b5d175d",
+      "Code": "\"PDFCreator\";\n\"PDF24\";",
+      "Id": "a35bed8752f9450291db49ec1fa078c3",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "290abba58e97468683f35a2bb9f8a5a8",
+          "Id": "02f291e8f23a4847b3e12184b2ccd289",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d1e6d374d2ee4a22ad0d3bb66f4b24ee",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "[\n\"BER-GF-SE-CP-XX-DR-E-JACO-5000-00-000\"\n];",
+      "Id": "dce8a0193f5d40f7b7715b4a245d03b6",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "c53aee0050004913bc2503a5f763f240",
           "Name": "",
           "Description": "Value of expression at line 1",
           "UsingDefaultValue": false,
@@ -472,6 +499,46 @@
       ],
       "Replication": "Disabled",
       "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "",
+      "Id": "21cc5944c5e74152a8c81eb65a7cb78c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "1d07bc68d1764a93b3e4bfb42971af5e",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "C:\\05 TEMP\\PrintTest",
+      "Id": "2778b74613d741b1b4463e8f395e564a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "1a3e0470c91444c69ca5e9afb6ab78d0",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
     }
   ],
   "Connectors": [
@@ -542,21 +609,21 @@
       "IsHidden": "False"
     },
     {
-      "Start": "54fb8b59c4ea4ed1bd17f982387f911c",
-      "End": "9dc2f8238e9c4bc18f7aa5745c1d627e",
-      "Id": "dbf12f7e40554b8e9467ffac0af76b2c",
-      "IsHidden": "False"
-    },
-    {
       "Start": "61c2ca51bdd747b8baaaf992dc00b4f2",
       "End": "7a3b798dc1de4b07a00f8b5d24a853ca",
-      "Id": "ccc63ef3f9954a309dbbca28b737ac15",
+      "Id": "13acb50abc5541ebb45651ce6fdae9ec",
       "IsHidden": "False"
     },
     {
-      "Start": "3b950ddf54fd48f594182b79cc974c8a",
+      "Start": "02f291e8f23a4847b3e12184b2ccd289",
+      "End": "9dc2f8238e9c4bc18f7aa5745c1d627e",
+      "Id": "b38249989e3f4b679eb94a7c4dd35045",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "1a3e0470c91444c69ca5e9afb6ab78d0",
       "End": "50c66c40adce48fe965d057ec0b662fc",
-      "Id": "6285244c63f94d34af6ba8b2b1e20fe4",
+      "Id": "b2406133c15d4555be7a122240103f0b",
       "IsHidden": "False"
     }
   ],
@@ -589,7 +656,7 @@
   "View": {
     "Dynamo": {
       "ScaleFactor": 1.0,
-      "HasRunWithoutCrash": true,
+      "HasRunWithoutCrash": false,
       "IsVisibleInDynamoLibrary": true,
       "Version": "2.16.1.2727",
       "RunType": "Manual",
@@ -720,24 +787,14 @@
         "Y": 645.094197467393
       },
       {
-        "Name": "Code Block",
-        "ShowGeometry": true,
-        "Id": "8e768f154efc4c1cb2e50b7986f6a40c",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 1096.1905303879334,
-        "Y": 1161.0626033079889
-      },
-      {
-        "Name": "Directory Path",
+        "Name": "PrinterDefaultPath",
         "ShowGeometry": true,
         "Id": "b07cdc8673794a42a198bceaec847361",
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1098.1144427774775,
-        "Y": 1308.0598013073868
+        "X": 1074.0946526927919,
+        "Y": 1354.2975476550546
       },
       {
         "Name": "Sheets",
@@ -746,18 +803,48 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1100.006921577814,
-        "Y": 1445.863799194311
+        "X": 527.85818024340767,
+        "Y": 1182.7053735566051
       },
       {
-        "Name": "Code Block",
+        "Name": "PrinterDrivers",
         "ShowGeometry": true,
-        "Id": "fc7afd8150b44e5cb69f11740b5d175d",
+        "Id": "a35bed8752f9450291db49ec1fa078c3",
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 890.37842087701017,
-        "Y": 1125.8224999309184
+        "X": 1120.8812432637965,
+        "Y": 1177.2088359790746
+      },
+      {
+        "Name": "GetSheetsByListOfNumbers",
+        "ShowGeometry": true,
+        "Id": "dce8a0193f5d40f7b7715b4a245d03b6",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1038.8782317447331,
+        "Y": 1861.3134036706738
+      },
+      {
+        "Name": "GetSheetsByRevisionName",
+        "ShowGeometry": true,
+        "Id": "21cc5944c5e74152a8c81eb65a7cb78c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1028.3189918976134,
+        "Y": 1678.1570716718732
+      },
+      {
+        "Name": "PrintToPath",
+        "ShowGeometry": true,
+        "Id": "2778b74613d741b1b4463e8f395e564a",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1075.3375306290834,
+        "Y": 1512.2605540876734
       }
     ],
     "Annotations": [
@@ -804,8 +891,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": -412.00068206257515,
-    "Y": -410.23643293039629,
-    "Zoom": 0.52534573015868624
+    "X": -556.97071572022548,
+    "Y": -677.10437753903636,
+    "Zoom": 0.65395941370498445
   }
 }

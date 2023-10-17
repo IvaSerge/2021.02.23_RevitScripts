@@ -19,7 +19,11 @@ class PrintView():
 	@staticmethod
 	def print_view(rvt_sheet, printer_name):
 		doc = rvt_sheet.Document
+
+		sheet_name = PrintView.get_sheet_name(rvt_sheet)
 		print_range = PrintRange.Select
+
+		# TODO: get correct print settings from the model
 		print_settings = FilteredElementCollector(doc).\
 			OfClass(PrintSetting).ToElements()[1]
 
@@ -74,6 +78,14 @@ class PrintView():
 		# TODO: find title block and get size of it
 		pass
 
+	@staticmethod
 	def get_sheet_name(sheet):
-		# TODO: get sheet name and revision
-		pass
+		# start path is not importatn as printer driver uses it's default path
+		# start_path = "C:\\"
+		# sheet_name = 
+		# sheet_number = 
+		revisions_list = ViewSheet.GetAllRevisionIds(sheet)
+		latest_revision = "[%s]" % str(len(revisions_list))
+
+		# pdf_name = latest_revision
+		return latest_revision

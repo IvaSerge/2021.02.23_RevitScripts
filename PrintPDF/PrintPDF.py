@@ -27,6 +27,7 @@ import toolsrvt
 reload(toolsrvt)
 from toolsrvt import *
 import print_view
+reload(print_view)
 from print_view import PrintView
 
 
@@ -40,18 +41,24 @@ reload_var = IN[1]  # type: ignore
 printer_name = IN[2]  # type: ignore
 print_file_path = IN[3] + "\\test.pdf"  # type: ignore
 rvt_sheet = IN[4]  # type: ignore
-rvt_sheet = UnwrapElement(rvt_sheet)  # type: ignore
 
 
-TransactionManager.Instance.EnsureInTransaction(doc)
+# TODO: provide some tools to create filtered list of views
+test_sheet = UnwrapElement(rvt_sheet)  # type: ignore
 
-view_sets = FilteredElementCollector(doc).OfClass(ViewSheetSet)
-for i in view_sets:
-	if i.Name == "tempSetName":
-		doc.Delete(i.Id)
+sheets_list = list()
+sheets_list.append(test_sheet)
 
-PrintView.print_view(rvt_sheet, printer_name)
+# TransactionManager.Instance.EnsureInTransaction(doc)
 
-TransactionManager.Instance.TransactionTaskDone()
+# view_sets = FilteredElementCollector(doc).OfClass(ViewSheetSet)
+# for i in view_sets:
+# 	if i.Name == "tempSetName":
+# 		doc.Delete(i.Id)
 
-OUT = None
+# for rvt_sheet in sheets_list:
+# 	PrintView.print_view(rvt_sheet, printer_name)
+
+# TransactionManager.Instance.TransactionTaskDone()
+
+OUT = PrintView.get_sheet_name(test_sheet)
