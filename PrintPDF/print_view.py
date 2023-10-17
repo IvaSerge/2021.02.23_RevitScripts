@@ -55,3 +55,11 @@ class PrintView():
 		print_manager.SubmitPrint()
 		view_setting.Delete()
 		TransactionManager.Instance.TransactionTaskDone()
+
+	def move_to_path(path_str):
+		# TODO: move file to path
+		pass
+
+	def size_by_title_block(sheet):
+		# TODO: find title block and get size of it
+		pass
