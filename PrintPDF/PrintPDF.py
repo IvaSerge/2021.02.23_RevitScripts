@@ -90,19 +90,26 @@ print_manager.SelectNewPrintDriver(printer_name)
 print_manager.Apply()
 
 # set combined and print to file
-print_manager.CombinedFile = False
+print_manager.CombinedFile = True
 print_manager.Apply()
 print_manager.PrintToFile = True
 print_manager.Apply()
-
-print_manager.PrintToFileName = print_file_path
+print_manager.PrintToFileName = "C:\\!!!test.pdf"
 print_manager.Apply()
 
-printSetup = print_manager.PrintSetup
-printSetup.CurrentPrintSetting = print_settings
+print_setup = print_manager.PrintSetup
+print_settings = print_setup.CurrentPrintSetting
+print_settings = print_settings
+print_settings.PageOrientation = PageOrientationType.Landscape
 print_manager.Apply()
 
 TransactionManager.Instance.EnsureInTransaction(doc)
+view_sets = FilteredElementCollector(doc).OfClass(ViewSheetSet)
+
+for i in view_sets:
+	if i.Name == "tempSetName":
+		doc.Delete(i.Id)
+
 view_setting.SaveAs("tempSetName")
 print_manager.Apply()
 print_manager.SubmitPrint()
