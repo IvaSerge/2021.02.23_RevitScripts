@@ -1,0 +1,18 @@
+{
+	"TSLA_Sheetframe": {
+		"A0_841x1189": "BatchPrint_A0_1189x841",
+		"A1_841x594": "BatchPrint_A1_841x594",
+		"A2_594x420": "BatchPrint_A2_594x420",
+		"A3_420x297": "BatchPrint_A3_420x297"
+	},
+
+	"JACO_Titleblock Berlin": {
+		"A0_1100": "BatchPrint_XX_CustomSize",
+		"A0": "BatchPrint_A0_1189x841",
+		"A1": "BatchPrint_A1_841x594",
+		"1100 x 3276": "BatchPrint_XX_3276x1100"
+	}
+
+	
+}
+

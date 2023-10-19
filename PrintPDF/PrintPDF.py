@@ -21,6 +21,7 @@ from RevitServices.Transactions import TransactionManager
 from System import Array
 from System.Collections.Generic import *
 from importlib import reload
+import json
 
 # ================ local imports
 import toolsrvt
@@ -48,7 +49,7 @@ sheets_list = list()
 
 if isinstance(to_print_sheets, list):
 	# remove duplicates
-	to_print_sheets = set(to_print_sheets)
+	# to_print_sheets = set(to_print_sheets)
 	for sheet_number in to_print_sheets:
 		rvt_sheet = toolsrvt.inst_by_cat_strparamvalue(
 			doc,
@@ -76,8 +77,8 @@ for i in view_sets:
 		doc.Delete(i.Id)
 
 for rvt_sheet in sheets_list:
-	PrintView.print_view(rvt_sheet, printer_name)
+	PrintView.print_view(rvt_sheet, printer_name, dir_path)
 
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = sheets_list[0]
+OUT = view_sets

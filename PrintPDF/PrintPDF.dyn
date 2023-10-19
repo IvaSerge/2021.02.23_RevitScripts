@@ -467,7 +467,7 @@
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "37966044b1344777b9c801f469da9246",
+          "Id": "bbffce75b76f4054bc00761bff49f2e0",
           "Name": "",
           "Description": "Value of expression at line 1",
           "UsingDefaultValue": false,
@@ -518,6 +518,26 @@
       ],
       "Replication": "Disabled",
       "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "[\n\"BER-GF-SE-CP-2F-DR-EP-TSLA-1039-00-000\",\n\"BER-GF-ZZZ-ZZ-XX-DR-G-TSLA-0XX-002\"\n];",
+      "Id": "6dba9b83c53f4b31a2f4f6e03fc7082a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3062390ebd3147f19ea0a503610e4def",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
     }
   ],
   "Connectors": [
@@ -597,12 +617,6 @@
       "Start": "02f291e8f23a4847b3e12184b2ccd289",
       "End": "5a97e9ad399e412bbdea589ddfa51a73",
       "Id": "b38249989e3f4b679eb94a7c4dd35045",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "37966044b1344777b9c801f469da9246",
-      "End": "933855f183b34218877ae224659e3342",
-      "Id": "8da71c0bf2954a0a8abcac0c982a186b",
       "IsHidden": "False"
     },
     {
@@ -798,8 +812,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1073.9495053985211,
-        "Y": 1981.5290137353484
+        "X": 854.969342989982,
+        "Y": 2297.86416482834
       },
       {
         "Name": "GetSheetsByRevisionName",
@@ -820,6 +834,16 @@
         "Excluded": false,
         "X": 1119.68279027708,
         "Y": 1533.66861046947
+      },
+      {
+        "Name": "Code Block",
+        "ShowGeometry": true,
+        "Id": "6dba9b83c53f4b31a2f4f6e03fc7082a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1636.0,
+        "Y": 2114.0
       }
     ],
     "Annotations": [
@@ -900,19 +924,19 @@
           "21cc5944c5e74152a8c81eb65a7cb78c"
         ],
         "HasNestedGroups": false,
-        "Left": 1063.9495053985211,
+        "Left": 844.969342989982,
         "Top": 1758.95517257559,
-        "Width": 394.0,
-        "Height": 396.57384115975856,
+        "Width": 611.031162273698,
+        "Height": 712.90899225275007,
         "FontSize": 30.0,
         "InitialTop": 1824.95517257559,
-        "InitialHeight": 468.37961529861195,
+        "InitialHeight": 301.573841159759,
         "TextblockHeight": 56.0,
         "Background": "#FFFFB8D8"
       }
     ],
-    "X": -406.73768652746958,
-    "Y": -598.50558261176047,
-    "Zoom": 0.63103697096872413
+    "X": -369.08433354612225,
+    "Y": -507.82013441310062,
+    "Zoom": 0.32665877976232721
   }
 }
