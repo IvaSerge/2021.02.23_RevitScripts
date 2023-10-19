@@ -32,6 +32,30 @@ reload(print_view)
 from print_view import PrintView
 
 
+def get_sheet_by_revision_number(doc, seq_number):
+	revisions = FilteredElementCollector(doc).\
+		OfClass(Autodesk.Revit.DB.Revision).ToElements()
+	revision_id = [i.Id for i in revisions if i.SequenceNumber == seq_number]
+
+	if not revision_id:
+		raise ValueError("Revision not found")
+	else:
+		revision_id = revision_id[0]
+
+	all_sheets = FilteredElementCollector(doc).\
+		OfCategory(BuiltInCategory.OST_Sheets).\
+		WhereElementIsNotElementType().\
+		ToElements()
+
+	rvt_sheets = list()
+	for sheet in all_sheets:
+		revisions_on_sheet = ViewSheet.GetAllRevisionIds(sheet)
+		if revision_id in revisions_on_sheet:
+			rvt_sheets.append(sheet)
+
+	return rvt_sheets
+
+
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -46,10 +70,9 @@ to_print_sheets = IN[5]  # type: ignore
 
 sheets_list = list()
 
-
 if isinstance(to_print_sheets, list):
 	# remove duplicates
-	# to_print_sheets = set(to_print_sheets)
+	to_print_sheets = set(to_print_sheets)
 	for sheet_number in to_print_sheets:
 		rvt_sheet = toolsrvt.inst_by_cat_strparamvalue(
 			doc,
@@ -59,8 +82,8 @@ if isinstance(to_print_sheets, list):
 			False)
 		if rvt_sheet:
 			sheets_list.append(rvt_sheet[0])
-elif isinstance(to_print_sheets, str):
-	pass
+elif isinstance(to_print_sheets, int):
+	sheets_list = get_sheet_by_revision_number(doc, to_print_sheets)
 else:
 	error_text = "Wrong input parameters"
 	raise ValueError(error_text)
@@ -81,4 +104,4 @@ for rvt_sheet in sheets_list:
 
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = view_sets
+OUT = sheets_list
