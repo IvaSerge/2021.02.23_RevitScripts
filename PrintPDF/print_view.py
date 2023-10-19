@@ -81,7 +81,13 @@ class PrintView():
 		print_settings = FilteredElementCollector(doc).\
 			OfClass(PrintSetting).ToElements()
 
-		rvt_print_setting = [i.Name for i in print_settings if i.Name == setting_name]
+		rvt_print_setting = [i for i in print_settings if i.Name == setting_name]
+		if rvt_print_setting:
+			rvt_print_setting = rvt_print_setting[0]
+		else:
+			error_str = "print setting \"%s\" not in Revit not found" % setting_name
+			raise ValueError(error_str)
+
 		return rvt_print_setting
 
 	@staticmethod
@@ -91,11 +97,7 @@ class PrintView():
 		sheet_name = PrintView.get_sheet_name(rvt_sheet)
 		print_range = PrintRange.Select
 
-		# # TODO: get correct print settings from the model
-		# print_settings = FilteredElementCollector(doc).\
-		# 	OfClass(PrintSetting).ToElements()[1]
 		print_settings = PrintView.get_print_setting_by_sheet(rvt_sheet, script_path)
-
 		print_manager = doc.PrintManager
 		print_manager.PrintRange = print_range
 		print_manager.Apply()
