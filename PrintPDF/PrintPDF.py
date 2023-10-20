@@ -70,8 +70,9 @@ printer_name = IN[2]  # type: ignore
 print_default_path = IN[3]  # type: ignore
 print_save_path = IN[4]  # type: ignore
 to_print_sheets = IN[5]  # type: ignore
-
 sheets_list = list()
+
+file_report = dir_path + r"\errorlist.csv"
 
 if isinstance(to_print_sheets, list):
 	# remove duplicates
@@ -95,6 +96,22 @@ if not sheets_list:
 	error_text = "Sheets to print not found"
 	raise ValueError(error_text)
 
+error_list = list()
+# get printer settings and raise problems
+settings_list = list()
+for rvt_sheet in sheets_list:
+	try:
+		rvt_print_setting = PrintView.get_print_setting_by_sheet(rvt_sheet, dir_path)
+		settings_list.append([rvt_sheet, rvt_print_setting])
+	except Exception as e:
+		error_message = repr(e)
+		error_list.append(error_message)
+
+if error_list:
+	with open(file_report, "w") as f_out:
+		f_out.write('\n'.join(error_list))
+	raise ValueError("Errors found. See report")
+
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 view_sets = FilteredElementCollector(doc).OfClass(ViewSheetSet)
@@ -102,8 +119,8 @@ for i in view_sets:
 	if i.Name == "tempSetName":
 		doc.Delete(i.Id)
 
-for rvt_sheet in sheets_list:
-	PrintView.print_view(rvt_sheet, printer_name, dir_path)
+for rvt_sheet, setting in settings_list:
+	PrintView.print_view(rvt_sheet, printer_name, rvt_print_setting)
 	ExportDWG.export_view(rvt_sheet, print_save_path)
 
 TransactionManager.Instance.TransactionTaskDone()
