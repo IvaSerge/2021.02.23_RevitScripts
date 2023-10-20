@@ -58,6 +58,7 @@ class PrintView():
 			raise ValueError(error_str)
 
 		# get setting name from json by title block
+		setting_name = None
 		for t_block in title_blocks:
 			t_block_type = toolsrvt.get_parval(t_block.Symbol, "ALL_MODEL_TYPE_NAME")
 			t_block_family = toolsrvt.get_parval(t_block.Symbol, "ALL_MODEL_FAMILY_NAME")
@@ -71,7 +72,7 @@ class PrintView():
 				continue
 
 		if not setting_name:
-			error_str = "print setting not in data base"
+			error_str = "print setting not in data base. Check sheet: %s" % rvt_sheet.SheetNumber
 			raise ValueError(error_str)
 
 		print_settings = FilteredElementCollector(doc).\
