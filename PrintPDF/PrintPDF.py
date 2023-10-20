@@ -120,9 +120,9 @@ for i in view_sets:
 		doc.Delete(i.Id)
 
 for rvt_sheet, setting in settings_list:
-	PrintView.print_view(rvt_sheet, printer_name, rvt_print_setting)
+	PrintView.print_view(rvt_sheet, printer_name, dir_path)
 	ExportDWG.export_view(rvt_sheet, print_save_path)
 
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = sheets_list
+OUT = settings_list

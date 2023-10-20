@@ -71,31 +71,30 @@ class PrintView():
 			else:
 				continue
 
-		# if not setting_name:
-		# 	error_str = "print setting not in data base. Check sheet: %s" % rvt_sheet.SheetNumber
-		# 	raise ValueError(error_str)
+		if not setting_name:
+			error_str = "print setting not in data base. Check sheet: %s" % rvt_sheet.SheetNumber
+			raise ValueError(error_str)
 
-		# print_settings = FilteredElementCollector(doc).\
-		# 	OfClass(PrintSetting).ToElements()
+		print_settings = FilteredElementCollector(doc).\
+			OfClass(PrintSetting).ToElements()
 
-		# rvt_print_setting = [i for i in print_settings if i.Name == setting_name]
-		# if rvt_print_setting:
-		# 	rvt_print_setting = rvt_print_setting[0]
-		# else:
-		# 	error_str = "print setting \"%s\" not in Revit not found" % setting_name
-		# 	raise ValueError(error_str)
+		rvt_print_setting = [i for i in print_settings if i.Name == setting_name]
+		if rvt_print_setting:
+			rvt_print_setting = rvt_print_setting[0]
+		else:
+			error_str = "print setting \"%s\" not in Revit not found" % setting_name
+			raise ValueError(error_str)
 
-		# return rvt_print_setting
-		return t_block_family
+		return rvt_print_setting
 
 	@staticmethod
-	def print_view(rvt_sheet, printer_name, rvt_print_setting):
+	def print_view(rvt_sheet, printer_name, script_path):
 		doc = rvt_sheet.Document
 
 		sheet_name = PrintView.get_sheet_name(rvt_sheet)
 		print_range = PrintRange.Select
 
-		print_settings = rvt_print_setting
+		print_settings = PrintView.get_print_setting_by_sheet(rvt_sheet, script_path)
 		print_manager = doc.PrintManager
 		print_manager.PrintRange = print_range
 		print_manager.Apply()
@@ -119,16 +118,9 @@ class PrintView():
 		print_manager.PrintToFileName = sheet_name
 		print_manager.Apply()
 
-		# # view settings
+		# view settings
 		print_setup = print_manager.PrintSetup
 		print_setup.CurrentPrintSetting = print_settings
-		# print_current_settings = print_setup.CurrentPrintSetting
-		# print_current_settings = print_settings
-		# print_current_settings = print_manager.PrintSetup.InSession
-		# print_current_settings.PrintParameters.ZoomType = ZoomType.Zoom
-		# print_current_settings.PrintParameters.Zoom = 100
-		# print_current_settings.PageOrientation = PageOrientationType.Landscape
-		# papeer_size = print_settings.PrintParameters.PaperSize
 		print_manager.Apply()
 
 		view_sets = FilteredElementCollector(doc).OfClass(ViewSheetSet)
