@@ -228,7 +228,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "a83f9eb8e5ba4504b10dd0c8dca814ef",
       "Inputs": [],
       "Outputs": [
@@ -523,7 +523,7 @@
       "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Integer",
-      "InputValue": 713,
+      "InputValue": 723,
       "MaximumValue": 5000,
       "MinimumValue": 0,
       "StepValue": 1,
@@ -542,6 +542,26 @@
       ],
       "Replication": "Disabled",
       "Description": "A slider that produces integer values."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "[\n\"BER-GF-SE-CP-1F-DR-EL-TSLA-1100-00-000\"\n];",
+      "Id": "86ed92ffca9749b3a5760e3a3e96542c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b54b766fcd4945fb9dff6c4da0c9a94f",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
     }
   ],
   "Connectors": [
@@ -630,9 +650,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "1bab18981ff44b5b8f732af1c27747fa",
+      "Start": "c813f0416db8417abadaba2b307ba8ed",
       "End": "933855f183b34218877ae224659e3342",
-      "Id": "47840b99a4314fbebb48fa2933cee453",
+      "Id": "1555939f1eac4b749049be459b374a4f",
       "IsHidden": "False"
     }
   ],
@@ -752,8 +772,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1127.9769658318066,
-        "Y": 978.455494799562
+        "X": 1131.7942553089847,
+        "Y": 993.7246527082749
       },
       {
         "Name": "File From Path",
@@ -802,8 +822,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1152.9933278364842,
-        "Y": 1252.1370333153468
+        "X": 1142.8138892306756,
+        "Y": 1233.0505859294558
       },
       {
         "Name": "Python Script From String",
@@ -822,8 +842,8 @@
         "IsSetAsInput": true,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1119.68279027708,
-        "Y": 1533.66861046947
+        "X": 1119.6827902770797,
+        "Y": 1527.3064613408394
       },
       {
         "Name": "cp_test_print",
@@ -832,8 +852,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1333.8092899573417,
-        "Y": 1668.5313500597761
+        "X": 1592.1125445797347,
+        "Y": 1869.5752625244957
       },
       {
         "Name": "GetSheetsByListOfNumbers",
@@ -842,8 +862,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1069.8681448891866,
-        "Y": 1972.0982727243172
+        "X": 1080.0475834949953,
+        "Y": 2016.6333166247296
       },
       {
         "Name": "Seq. Number",
@@ -852,8 +872,18 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 1166.8739858682816,
-        "Y": 1805.1575220465381
+        "X": 1157.9669770881992,
+        "Y": 1820.4266799552508
+      },
+      {
+        "Name": "cp_test_print",
+        "ShowGeometry": true,
+        "Id": "86ed92ffca9749b3a5760e3a3e96542c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1439.4294037000968,
+        "Y": 1664.3551833709807
       }
     ],
     "Annotations": [
@@ -889,12 +919,12 @@
           "a83f9eb8e5ba4504b10dd0c8dca814ef"
         ],
         "HasNestedGroups": false,
-        "Left": 1117.9769658318066,
-        "Top": 912.455494799562,
+        "Left": 1121.7942553089847,
+        "Top": 927.7246527082749,
         "Width": 214.0,
-        "Height": 198.00000000000011,
+        "Height": 197.99999999999989,
         "FontSize": 30.0,
-        "InitialTop": 978.455494799562,
+        "InitialTop": 993.7246527082749,
         "InitialHeight": 145.00000000000011,
         "TextblockHeight": 56.0,
         "Background": "#FFC1D676"
@@ -912,12 +942,12 @@
           "2778b74613d741b1b4463e8f395e564a"
         ],
         "HasNestedGroups": false,
-        "Left": 1109.68279027708,
-        "Top": 1186.1370333153468,
-        "Width": 242.2862689481201,
-        "Height": 479.53157715412317,
+        "Left": 1109.6827902770797,
+        "Top": 1167.0505859294558,
+        "Width": 242.28626894812032,
+        "Height": 492.25587541138361,
         "FontSize": 30.0,
-        "InitialTop": 1252.1370333153468,
+        "InitialTop": 1233.0505859294558,
         "InitialHeight": 426.53157715412317,
         "TextblockHeight": 56.0,
         "Background": "#FFB9F9E1"
@@ -934,19 +964,19 @@
           "00e0c08f6f844c50940abccadd4fb173"
         ],
         "HasNestedGroups": false,
-        "Left": 1059.8681448891866,
-        "Top": 1739.1575220465381,
-        "Width": 465.00584097909496,
-        "Height": 406.94075067777908,
+        "Left": 1070.0475834949953,
+        "Top": 1754.4266799552508,
+        "Width": 445.91939359320395,
+        "Height": 436.20663666947871,
         "FontSize": 30.0,
-        "InitialTop": 1805.1575220465381,
+        "InitialTop": 1820.4266799552508,
         "InitialHeight": 311.94075067777908,
         "TextblockHeight": 56.0,
         "Background": "#FFFFB8D8"
       }
     ],
-    "X": -886.86478641980011,
-    "Y": -291.43187719472871,
+    "X": -782.86478641980011,
+    "Y": -805.43187719472871,
     "Zoom": 0.78589795663535311
   }
 }

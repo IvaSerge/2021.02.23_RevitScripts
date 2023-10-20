@@ -7,11 +7,22 @@
 		"A3_420x297": "BatchPrint_A3_420x297"
 	},
 
-	"JACO_Titleblock Berlin": {
-		"A0_1100": "BatchPrint_XX_CustomSize",
+	"TSLA_Titelblock Berlin": {
 		"A0": "BatchPrint_A0_1189x841",
 		"A1": "BatchPrint_A1_841x594",
-		"1100 x 3276": "BatchPrint_XX_3276x1100"
+		"A2": "BatchPrint_A2_594x420",
+		"1100 x 3276": "BatchPrint_XX_3276x1100",
+		"841 x 2000": "BatchPrint_XX_2000x841",
+		"841 x 2500": "BatchPrint_XX_2500x841",
+		"841 x 3000": "BatchPrint_XX_3000x841"
+	},
+
+	"JACO_Titleblock Berlin": {
+		"A0_1100": "BatchPrint_XX_3500x1100",
+		"A0": "BatchPrint_A0_1189x841",
+		"A1": "BatchPrint_A1_841x594",
+		"1100 x 3276": "BatchPrint_XX_3276x1100",
+		"841 x 2000": "BatchPrint_XX_2000x841"		
 	},
 
 	"TSLA_Sheetframe": {
