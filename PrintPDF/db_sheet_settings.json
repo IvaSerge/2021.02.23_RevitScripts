@@ -31,6 +31,14 @@
 		"A1_841x594": "BatchPrint_A1_841x594",
 		"A2_594x420": "BatchPrint_A2_594x420",
 		"A3_420x297": "BatchPrint_A3_420x297"
+	},
+
+	"TSLA_AN_Titleblock_DrawingInfo_Tillburg": {
+		"TSLA_A0_841x1189": "BatchPrint_A0_1189x841",
+		"TSLA_A1_594x841": "BatchPrint_A1_841x594",
+		"TSLA_A1_841x594": "BatchPrint_A1_594x841",
+		"TSLA_A1_1000x594": "BatchPrint_XX_594x1000",
+		"TSLA_A2_594x420": "BatchPrint_A2_594x420"
 	}
 }
 
