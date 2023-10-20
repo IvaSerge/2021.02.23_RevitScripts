@@ -30,6 +30,9 @@ from toolsrvt import *
 import print_view
 reload(print_view)
 from print_view import PrintView
+import dwg_export
+reload(dwg_export)
+from dwg_export import ExportDWG
 
 
 def get_sheet_by_revision_number(doc, seq_number):
@@ -101,6 +104,7 @@ for i in view_sets:
 
 for rvt_sheet in sheets_list:
 	PrintView.print_view(rvt_sheet, printer_name, dir_path)
+	ExportDWG.export_view(rvt_sheet, print_save_path)
 
 TransactionManager.Instance.TransactionTaskDone()
 

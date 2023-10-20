@@ -228,7 +228,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "a83f9eb8e5ba4504b10dd0c8dca814ef",
       "Inputs": [],
       "Outputs": [
@@ -502,12 +502,12 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
       "NodeType": "CodeBlockNode",
-      "Code": "[\n\"BER-GF-ZZZ-ZZ-XX-DR-G-TSLA-0XX-003\",\n\"BER-GF-ZZZ-ZZ-XX-DR-G-TSLA-0XX-002\"\n];",
+      "Code": "[\n\"BER-GF-ZZZ-ZZ-XX-DR-G-TSLA-0XX-001\",\n\"BER-GF-ZZZ-ZZ-XX-DR-G-TSLA-0XX-002\"\n];",
       "Id": "dce8a0193f5d40f7b7715b4a245d03b6",
       "Inputs": [],
       "Outputs": [
         {
-          "Id": "94142b75c6fd4ee3a9c220719422d961",
+          "Id": "1bab18981ff44b5b8f732af1c27747fa",
           "Name": "",
           "Description": "Value of expression at line 1",
           "UsingDefaultValue": false,
@@ -630,9 +630,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "eb5cde9c606241eda4fdb664f45d9644",
+      "Start": "1bab18981ff44b5b8f732af1c27747fa",
       "End": "933855f183b34218877ae224659e3342",
-      "Id": "0a064afa9ec0478891aed9bb346993ff",
+      "Id": "47840b99a4314fbebb48fa2933cee453",
       "IsHidden": "False"
     }
   ],
@@ -940,13 +940,13 @@
         "Height": 406.94075067777908,
         "FontSize": 30.0,
         "InitialTop": 1805.1575220465381,
-        "InitialHeight": 301.573841159759,
+        "InitialHeight": 311.94075067777908,
         "TextblockHeight": 56.0,
         "Background": "#FFFFB8D8"
       }
     ],
-    "X": -89.388457246843245,
-    "Y": -538.19911952716575,
-    "Zoom": 0.62205967083120861
+    "X": -886.86478641980011,
+    "Y": -291.43187719472871,
+    "Zoom": 0.78589795663535311
   }
 }

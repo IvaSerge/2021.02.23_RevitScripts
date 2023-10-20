@@ -24,10 +24,6 @@ class PrintView():
 		# TODO: move file to path
 		pass
 
-	def size_by_title_block(sheet):
-		# TODO: find title block and get size of it
-		pass
-
 	@staticmethod
 	def get_sheet_name(sheet):
 		# start path is not importatn as printer driver uses it's default path
