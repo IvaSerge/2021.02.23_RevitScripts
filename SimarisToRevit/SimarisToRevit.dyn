@@ -11,6 +11,7 @@
       "Id": "247389cd36b8437db0c2971fb3851598",
       "Name": "String",
       "Type": "string",
+      "Type2": "string",
       "Value": "SimarisToRevit.py",
       "Description": "Creates a string.",
       "SelectedIndex": 0
@@ -19,6 +20,7 @@
       "Id": "15d805eb8b764fd4845400f3600b40e5",
       "Name": "Switch settings",
       "Type": "string",
+      "Type2": "string",
       "Value": "CP1-SUBN3WL4.csv",
       "Description": "Creates a string.",
       "SelectedIndex": 0
@@ -29,6 +31,7 @@
     {
       "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
       "Engine": "CPython3",
+      "EngineName": "CPython3",
       "VariableInputPorts": true,
       "NodeType": "ExtensionNode",
       "Id": "1b79df6695194458b3633e0bed15cd64",
@@ -319,9 +322,9 @@
       "IsHidden": "False"
     },
     {
-      "Start": "3e3e4da6d7164bfbaccf45c99ad46bac",
+      "Start": "e0f814d4dffe41d5899a2b81ac85c535",
       "End": "dea01028c0d14c778e215769761eb86e",
-      "Id": "467b7b74664e451d9f8044a2edc60c6a",
+      "Id": "cdeff873aff54524bec10c77d19f6439",
       "IsHidden": "False"
     }
   ],
@@ -356,7 +359,7 @@
       "ScaleFactor": 1.0,
       "HasRunWithoutCrash": true,
       "IsVisibleInDynamoLibrary": true,
-      "Version": "2.13.1.3887",
+      "Version": "2.16.1.2727",
       "RunType": "Manual",
       "RunPeriod": "1000"
     },
@@ -459,7 +462,7 @@
         "HasNestedGroups": false,
         "Left": 1180.5988275848556,
         "Top": 257.78713511347252,
-        "Width": 209.0,
+        "Width": 214.0,
         "Height": 205.0,
         "FontSize": 36.0,
         "InitialTop": 330.78713511347252,
@@ -480,7 +483,7 @@
         "HasNestedGroups": false,
         "Left": 1174.765366827997,
         "Top": 491.59829018637379,
-        "Width": 224.0,
+        "Width": 229.0,
         "Height": 205.0,
         "FontSize": 36.0,
         "InitialTop": 564.59829018637379,
@@ -489,8 +492,8 @@
         "Background": "#FFFFC999"
       }
     ],
-    "X": -876.13708772503935,
-    "Y": -243.0916379686135,
+    "X": -769.13708772503935,
+    "Y": -138.0916379686135,
     "Zoom": 0.82388103618713637
   }
 }
