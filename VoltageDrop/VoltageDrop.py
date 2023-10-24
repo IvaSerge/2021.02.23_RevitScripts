@@ -50,7 +50,9 @@ def get_sys_by_selection():
 		if brd_systems[0]:
 			el_sys_list.append(brd_systems[0])
 		if brd_systems[1]:
-			el_sys_list.extend(brd_systems[1])
+			circuits_to_calculate = [circuit for circuit in brd_systems[1]
+				if circuit.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit]
+			el_sys_list.extend(circuits_to_calculate)
 
 		el_sys_list = [
 			x for x in el_sys_list
