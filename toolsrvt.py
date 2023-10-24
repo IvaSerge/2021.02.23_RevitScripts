@@ -51,7 +51,7 @@ def process_list(_func, _list):
 	# type: (FunctionType, list) -> any
 	return map(
 		lambda x: process_list(_func, x)
-		if type(x) == list else _func(x), _list)
+		if x is list else _func(x), _list)
 
 
 def unwrap(_item):
