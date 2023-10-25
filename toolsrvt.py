@@ -224,6 +224,50 @@ def type_by_bic_fam_type(_doc, _bic, _fnam, _tnam):
 	return elem
 
 
+def inst_by_multicategory_param_val(_doc, _bic_list, _param_name, _param_value):
+	"""Get Family Instances by category filters, and string parameter values
+
+	args:
+		_doc: active document
+		_bic_list[str]: list of Build In Categories names
+		_param_name(str): parameter name to filter
+		_param_value: parameter
+
+	return:
+		Autodesk.Revit.DB.FamilySymbol
+	"""
+
+	# =============  parameter filter
+	parameter_id = [
+		i for i in
+		FilteredElementCollector(_doc).OfClass(ParameterElement)
+		if i.Name == _param_name]
+	if parameter_id:
+		parameter_id = parameter_id[0].Id
+	else:
+		error_str = "Parameter not found"
+		raise ValueError(error_str)
+
+	parameter_value_provider = ParameterValueProvider(parameter_id)
+	parameter_str_rule = FilterStringRule(
+		parameter_value_provider,
+		FilterStringEquals(),
+		_param_value)
+
+	parameter_filter = ElementParameterFilter(parameter_str_rule)
+
+	# =============  category filter
+	bic_ids = List[ElementId]([
+		category_by_bic_name(_doc, i).Id
+		for i in _bic_list])
+
+	bic_filter = ElementMulticategoryFilter(bic_ids)
+
+	main_filter = LogicalAndFilter(bic_filter, parameter_filter)
+	elems = FilteredElementCollector(_doc).WherePasses(main_filter).ToElements()
+	return elems
+
+
 def mm_to_ft(doc, mm):
 	display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Length).GetUnitTypeId()
 	ft = Autodesk.Revit.DB.UnitUtils.ConvertToInternalUnits(mm, display_units)
