@@ -40,5 +40,47 @@ app = uiapp.Application
 view = doc.ActiveView
 reload_var = IN[1]  # type: ignore
 
+filter_param_name = "BOQ Phase"
+# filter_param_value = "TESLA-DCNOT-001270"
+filter_param_value = "TSLA_Standard"
 
-OUT = None
+# Get all instances by DCN number of different categories
+bic_str_lst = (
+	"OST_ConduitFitting",
+	"OST_DataDevices",
+	"OST_ElectricalEquipment",
+	"OST_ElectricalFixtures",
+	"OST_GenericModel",
+	"OST_LightingDevices",
+	"OST_LightingFixtures",
+	"OST_NurseCallDevices")
+
+
+rvt_elems = inst_by_multicategory_param_val(
+	doc, bic_str_lst,
+	filter_param_name,
+	filter_param_value)
+
+rvt_circuits = inst_by_multicategory_param_val(
+	doc, ["OST_ElectricalCircuit"],
+	filter_param_name,
+	filter_param_value)
+
+rvt_tray = inst_by_multicategory_param_val(
+	doc, ["OST_CableTray"],
+	filter_param_name,
+	filter_param_value)
+
+rvt_tray_fixting = inst_by_multicategory_param_val(
+	doc, ["OST_CableTrayFitting"],
+	filter_param_name,
+	filter_param_value)
+
+
+# TODO: Read parameters and organise data structure to analyze.
+
+# TODO: Data analyze. Groupping and sorting and
+
+# TODO: Excel export
+
+OUT = rvt_elems
