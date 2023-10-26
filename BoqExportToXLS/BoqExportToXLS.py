@@ -25,11 +25,15 @@ from RevitServices.Transactions import TransactionManager
 from System import Array
 from System.Collections.Generic import *
 from importlib import reload
+import pandas as pd
 
 # ================ local imports
 import toolsrvt
 reload(toolsrvt)
 from toolsrvt import *
+import boq_analyze
+reload(boq_analyze)
+from boq_analyze import *
 
 
 # ================ GLOBAL VARIABLES
@@ -83,4 +87,4 @@ rvt_tray_fixting = inst_by_multicategory_param_val(
 
 # TODO: Excel export
 
-OUT = rvt_elems
+OUT = print(get_boq_by_elements(rvt_elems))

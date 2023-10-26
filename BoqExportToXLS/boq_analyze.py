@@ -1,8 +1,11 @@
 import clr
+import os
 import sys
 
-dir_path = IN[0].DirectoryName  # type: ignore
-sys.path.append(dir_path)
+local_data = os.getenv("LOCALAPPDATA")
+dyn_path = r"\python-3.9.12-embed-amd64\Lib"
+py_path = local_data + dyn_path
+sys.path.append(py_path)
 
 
 # ================ Revit imports
@@ -29,14 +32,23 @@ reload(toolsrvt)
 from toolsrvt import *
 
 
-class BOQAnalyze():
+def get_boq_by_elements(elems_list):
 
-	@staticmethod
-	def get_boq_by_elements(elems_list):
+	# BOQ schedule
+	# | Category | Description |
+	elem_id = [i.Id.IntegerValue for i in elems_list]
+	elem_categories = [i.Category.Name for i in elems_list]
+	elem_description = [
+		toolsrvt.get_parval(i.Symbol, "ALL_MODEL_DESCRIPTION")
+		for i in elems_list]
 
-		# BOQ schedule
-		# | Category | Description |
+	pd_elem_ids = pd.Series(elem_id)
+	pd_cats = pd.Series(elem_categories)
+	pd_des = pd.Series(elem_description)
 
-		cat_list = [i.Category.Name for i in elems_list]
+	pd_elems_frame = pd.DataFrame({
+		"Element Id": pd_elem_ids,
+		"Category": pd_cats,
+		"Description": pd_des})
 
-		return cat_list
+	return pd_elems_frame.groupby(["Category", "Description"]).count()
