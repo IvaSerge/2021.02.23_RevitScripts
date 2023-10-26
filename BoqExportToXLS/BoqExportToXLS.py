@@ -45,8 +45,10 @@ view = doc.ActiveView
 reload_var = IN[1]  # type: ignore
 
 filter_param_name = "BOQ Phase"
+
 # filter_param_value = "TESLA-DCNOT-001270"
-filter_param_value = "TSLA_Standard"
+filter_param_value = "TESLA-DCNOT-001645"
+# filter_param_value = "TSLA_Standard"
 
 # Get all instances by DCN number of different categories
 bic_str_lst = (
@@ -83,11 +85,10 @@ rvt_tray_fixting = inst_by_multicategory_param_val(
 
 # Read parameters and organise data structure
 boq_elems = get_boq_by_elements(rvt_elems)
-# boq_cables
-# boq_trays
+boq_cables = get_boq_by_circuits(rvt_circuits)
 # boq_fittings
 
 
 # TODO: Excel export
 
-OUT = boq_elems
+OUT = boq_cables
