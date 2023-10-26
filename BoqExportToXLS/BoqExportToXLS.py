@@ -81,10 +81,13 @@ rvt_tray_fixting = inst_by_multicategory_param_val(
 	filter_param_value)
 
 
-# TODO: Read parameters and organise data structure to analyze.
+# Read parameters and organise data structure
+boq_elems = get_boq_by_elements(rvt_elems)
+# boq_cables
+# boq_trays
+# boq_fittings
 
-# TODO: Data analyze. Groupping and sorting and
 
 # TODO: Excel export
 
-OUT = print(get_boq_by_elements(rvt_elems))
+OUT = boq_elems

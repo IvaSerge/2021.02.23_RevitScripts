@@ -51,4 +51,11 @@ def get_boq_by_elements(elems_list):
 		"Category": pd_cats,
 		"Description": pd_des})
 
-	return pd_elems_frame.groupby(["Category", "Description"]).count()
+	# return pd_elems_frame.groupby(["Category", "Description"]).size().tolist()
+	df_groupped_by = pd_elems_frame.groupby(["Category", "Description"])["Description"].indices.keys()
+
+	out_categories = [i[0] for i in df_groupped_by]
+	out_description = [i[1] for i in df_groupped_by]
+	out_count = pd_elems_frame.groupby(["Category", "Description"]).size().tolist()
+
+	return zip(out_categories, out_description, out_count)
