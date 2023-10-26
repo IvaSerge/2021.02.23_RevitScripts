@@ -77,7 +77,7 @@ rvt_tray = inst_by_multicategory_param_val(
 	filter_param_name,
 	filter_param_value)
 
-rvt_tray_fixting = inst_by_multicategory_param_val(
+rvt_tray_fitting = inst_by_multicategory_param_val(
 	doc, ["OST_CableTrayFitting"],
 	filter_param_name,
 	filter_param_value)

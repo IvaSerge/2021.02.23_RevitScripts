@@ -101,19 +101,21 @@ def get_wire_length(el_circuit):
 def get_boq_by_circuits(el_circuits):
 
 	elem_id = [i.Id.IntegerValue for i in el_circuits]
-	sys_categories = [i.Category.Name for i in el_circuits]
 	sys_wire_types = [get_wire_type(i) for i in el_circuits]
 	sys_length = [get_wire_length(i) for i in el_circuits]
 
 	pd_elem_ids = pd.Series(elem_id)
-	pd_cats = pd.Series(sys_categories)
 	pd_wire = pd.Series(sys_wire_types)
 	pd_length = pd.Series(sys_length)
 
-	pd_elems_frame = pd.DataFrame({
+	pd_wires_frame = pd.DataFrame({
 		"Element Id": pd_elem_ids,
-		"Category": pd_cats,
 		"Wire Type": pd_wire,
 		"Length": pd_length})
 
-	return sys_length
+	df_groupped_by = pd_wires_frame.groupby("Wire Type")["Wire Type"].indices.keys()
+	out_cables = [i for i in df_groupped_by]
+	out_length = pd_wires_frame.groupby("Wire Type")["Length"].sum().tolist()
+	out_category = ["ElectricalSystem"] * len(out_cables)
+
+	return zip(out_category, out_cables, out_length)
