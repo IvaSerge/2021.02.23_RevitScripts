@@ -81,3 +81,36 @@ def write_first_page(path, doc, boq_name, seq_number):
 	wb.save(xl_path)
 
 	return rev_description_height
+
+
+def sorted_by_category(list_of_lists):
+	"""Groups list by category where:\\
+		key is list[0], values are list[1:]
+	"""
+	result_dict = dict()
+
+	for lst in list_of_lists:
+		if not result_dict.get(lst[0]):
+			# new value
+			result_dict.update({lst[0]: [lst[1:]]})
+
+		else:
+			# value exists
+			current_val = [i for i in result_dict.get(lst[0])] + ([lst[1:]])
+			result_dict.update({lst[0]: current_val})
+
+	return sorted(list(result_dict.items()), key=lambda x: x[0])
+
+
+def write_totals(boq_totals):
+	# sort totals by category
+	boq_sorted = sorted_by_category(boq_totals)
+
+	# for every category create empty row, row with category Name
+	# change font and colour
+
+	# add all data
+
+	# set cell borders
+
+	return boq_sorted

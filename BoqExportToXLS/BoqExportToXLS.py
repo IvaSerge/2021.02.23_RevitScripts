@@ -57,10 +57,12 @@ bic_str_lst = (
 	"OST_DataDevices",
 	"OST_ElectricalEquipment",
 	"OST_ElectricalFixtures",
+	"OST_FireAlarmDevices",
 	"OST_GenericModel",
 	"OST_LightingDevices",
 	"OST_LightingFixtures",
-	"OST_NurseCallDevices")
+	"OST_NurseCallDevices",
+	"OST_SecurityDevices")
 
 
 rvt_elems = inst_by_multicategory_param_val(
@@ -85,12 +87,15 @@ rvt_tray_fitting = inst_by_multicategory_param_val(
 
 
 # Read parameters and organise data structure
-# boq_elems = get_boq_by_elements(rvt_elems)
+boq_elems = get_boq_by_elements(rvt_elems)
 # boq_cables = get_boq_by_circuits(rvt_circuits)
 
-
-# Excel export
-xl_first_page = write_first_page(dir_path, doc, boq_name, rev_number)
+# TODO: boq for cable trays and fittings
 
 
-OUT = xl_first_page
+# # Excel export
+# xl_first_page = write_first_page(dir_path, doc, boq_name, rev_number)
+
+
+OUT = write_totals(boq_elems)
+# OUT = boq_elems

@@ -12,7 +12,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "d4faef3825fc49ce8fedebdcd48067ca",
       "Inputs": [],
       "Outputs": [
@@ -262,7 +262,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "TESLA-DCNOT-001645",
+      "InputValue": "Phase 1b (50GWh)",
       "Id": "f8c72d3558b74c88a9bacd1aa3c5c665",
       "Inputs": [],
       "Outputs": [
@@ -492,17 +492,17 @@
         "HasNestedGroups": false,
         "Left": 367.07278218766419,
         "Top": 1141.7342045990019,
-        "Width": 369.52765671164127,
+        "Width": 368.0,
         "Height": 495.5076804465682,
         "FontSize": 36.0,
         "InitialTop": 1214.7342045990019,
-        "InitialHeight": 331.37192604537381,
+        "InitialHeight": 435.5076804465682,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": -174.48970694341835,
-    "Y": -663.44093002264287,
+    "X": -318.48970694341835,
+    "Y": -712.44093002264287,
     "Zoom": 0.820679100990815
   }
 }
