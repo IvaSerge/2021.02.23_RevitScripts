@@ -63,6 +63,33 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
+        },
+        {
+          "Id": "61364b935f4a4ae8a7e093a8b4aa6ccb",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a5b1f77c7b2d4a2aad5e810939744a1d",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "62c09d3b58fc43abaea058de32b4ab41",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -157,6 +184,100 @@
       ],
       "Replication": "Disabled",
       "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "BER-GF-SE-CP-00-SH-E-TSLA-8002-09",
+      "Id": "8fb287bfac4d47e2ab7fdc4866f256c4",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "055128a3a1324bf88f382c068c0047db",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Integer",
+      "InputValue": 725,
+      "MaximumValue": 5000,
+      "MinimumValue": 0,
+      "StepValue": 1,
+      "Id": "d429d80fc3d643e0a4634efa75f8de2b",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "99a6005245b24b40bc059b881688675a",
+          "Name": "",
+          "Description": "Int64",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A slider that produces integer values."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "path;",
+      "Id": "f6b030b0ddde496b9194011fd7b29689",
+      "Inputs": [
+        {
+          "Id": "e168ff438ae34da89b0432f9adb0119b",
+          "Name": "path",
+          "Description": "path",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7edf7916bd3547ae9d6dec6712c57774",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "TESLA-DCNOT-001645",
+      "Id": "f8c72d3558b74c88a9bacd1aa3c5c665",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "0af92f3241494c058097c19f84fae969",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
     }
   ],
   "Connectors": [
@@ -180,14 +301,38 @@
     },
     {
       "Start": "13b796f7084240e0a84bf3333898e5e1",
-      "End": "166aa7d726124a9fa4cb95664a069252",
-      "Id": "0b2c89439aa949fc85924afc091b6d8d",
+      "End": "e168ff438ae34da89b0432f9adb0119b",
+      "Id": "395e8c2be8df49a1bfba6b6d7b1e5cf1",
       "IsHidden": "False"
     },
     {
       "Start": "24e320b0a8844744b7c6b6bf89539764",
       "End": "c1793981a2564442b958a5e8fbf8a6a3",
       "Id": "6c6625a2c4904cb2abd6e4db423d8c32",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "055128a3a1324bf88f382c068c0047db",
+      "End": "61364b935f4a4ae8a7e093a8b4aa6ccb",
+      "Id": "ee54b765b33842218ec62c2ddad51ebc",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "99a6005245b24b40bc059b881688675a",
+      "End": "a5b1f77c7b2d4a2aad5e810939744a1d",
+      "Id": "1934cb28ea264889ae852be48aaebd61",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "7edf7916bd3547ae9d6dec6712c57774",
+      "End": "166aa7d726124a9fa4cb95664a069252",
+      "Id": "579ad503321b4e6296e53d8f9decb8da",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "0af92f3241494c058097c19f84fae969",
+      "End": "62c09d3b58fc43abaea058de32b4ab41",
+      "Id": "e5699fc4431f4e62a4d4ad7c8b45a596",
       "IsHidden": "False"
     }
   ],
@@ -247,8 +392,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 523.36350320414954,
-        "Y": 851.21639826173612
+        "X": 529.45601852952268,
+        "Y": 969.41119557397531
       },
       {
         "Name": "Python Script From String",
@@ -257,8 +402,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 962.82965681677786,
-        "Y": 787.91657360908016
+        "X": 1117.579546081256,
+        "Y": 848.84172686281158
       },
       {
         "Name": "FileSystem.ReadText",
@@ -267,8 +412,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 484.94195996334417,
-        "Y": 626.912922655301
+        "X": 504.43800900453823,
+        "Y": 612.29088587440549
       },
       {
         "Name": "File From Path",
@@ -277,8 +422,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 107.79078026092884,
-        "Y": 628.467415750333
+        "X": 148.00138140839169,
+        "Y": 607.75286364406418
       },
       {
         "Name": "String",
@@ -289,11 +434,75 @@
         "Excluded": false,
         "X": -157.40921973907075,
         "Y": 628.467415750333
+      },
+      {
+        "Name": "BOQ_Name",
+        "ShowGeometry": true,
+        "Id": "8fb287bfac4d47e2ab7fdc4866f256c4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 485.51955497930624,
+        "Y": 1214.7342045990019
+      },
+      {
+        "Name": "rev. seq. N",
+        "ShowGeometry": true,
+        "Id": "d429d80fc3d643e0a4634efa75f8de2b",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 377.07278218766419,
+        "Y": 1367.0470877333314
+      },
+      {
+        "Name": "path",
+        "ShowGeometry": true,
+        "Id": "f6b030b0ddde496b9194011fd7b29689",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 548.59229385432923,
+        "Y": 821.26777931462652
+      },
+      {
+        "Name": "elem_filter_name",
+        "ShowGeometry": true,
+        "Id": "f8c72d3558b74c88a9bacd1aa3c5c665",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 495.60043889930546,
+        "Y": 1505.2418850455701
       }
     ],
-    "Annotations": [],
-    "X": -498.51759744311721,
-    "Y": -495.68689779658905,
-    "Zoom": 0.98332088714069521
+    "Annotations": [
+      {
+        "Id": "a0a76cfe4478479ba13b3142a5b6b419",
+        "Title": "BOQ Info",
+        "DescriptionText": "BOQ Info",
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "8fb287bfac4d47e2ab7fdc4866f256c4",
+          "d429d80fc3d643e0a4634efa75f8de2b",
+          "f8c72d3558b74c88a9bacd1aa3c5c665"
+        ],
+        "HasNestedGroups": false,
+        "Left": 367.07278218766419,
+        "Top": 1141.7342045990019,
+        "Width": 369.52765671164127,
+        "Height": 495.5076804465682,
+        "FontSize": 36.0,
+        "InitialTop": 1214.7342045990019,
+        "InitialHeight": 331.37192604537381,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": -174.48970694341835,
+    "Y": -663.44093002264287,
+    "Zoom": 0.820679100990815
   }
 }

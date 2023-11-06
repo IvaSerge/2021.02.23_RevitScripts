@@ -34,6 +34,9 @@ from toolsrvt import *
 import boq_analyze
 reload(boq_analyze)
 from boq_analyze import *
+import xl_writer
+reload(xl_writer)
+from xl_writer import *
 
 
 # ================ GLOBAL VARIABLES
@@ -43,12 +46,10 @@ uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 view = doc.ActiveView
 reload_var = IN[1]  # type: ignore
-
-filter_param_name = "BOQ Phase"
-
-# filter_param_value = "TESLA-DCNOT-001270"
-filter_param_value = "TESLA-DCNOT-001645"
-# filter_param_value = "TSLA_Standard"
+boq_name = IN[2]  # type: ignore
+rev_number = IN[3]  # type: ignore
+filter_param_value = IN[4]  # type: ignore
+filter_param_name = "BOQ Phase"  # filter parameter is hard coded
 
 # Get all instances by DCN number of different categories
 bic_str_lst = (
@@ -84,11 +85,12 @@ rvt_tray_fitting = inst_by_multicategory_param_val(
 
 
 # Read parameters and organise data structure
-boq_elems = get_boq_by_elements(rvt_elems)
-boq_cables = get_boq_by_circuits(rvt_circuits)
-# boq_fittings
+# boq_elems = get_boq_by_elements(rvt_elems)
+# boq_cables = get_boq_by_circuits(rvt_circuits)
 
 
-# TODO: Excel export
+# Excel export
+xl_first_page = write_first_page(dir_path, doc, boq_name, rev_number)
 
-OUT = boq_cables
+
+OUT = xl_first_page
