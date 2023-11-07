@@ -32,7 +32,7 @@ reload(toolsrvt)
 from toolsrvt import *
 
 
-def get_boq_by_elements(elems_list):
+def get_boq_by_elements(elems_list: list) -> list:
 
 	# BOQ schedule
 	# | Category | Description |
@@ -57,7 +57,7 @@ def get_boq_by_elements(elems_list):
 	out_description = [i[1] for i in df_groupped_by]
 	out_count = pd_elems_frame.groupby(["Category", "Description"]).size().tolist()
 
-	return zip(out_categories, out_description, out_count)
+	return list(zip(out_categories, out_description, out_count))
 
 
 def get_wire_type(el_circuit):
@@ -116,6 +116,60 @@ def get_boq_by_circuits(el_circuits):
 	df_groupped_by = pd_wires_frame.groupby("Wire Type")["Wire Type"].indices.keys()
 	out_cables = [i for i in df_groupped_by]
 	out_length = pd_wires_frame.groupby("Wire Type")["Length"].sum().tolist()
-	out_category = ["ElectricalSystem"] * len(out_cables)
+	out_category = ["Cables"] * len(out_cables)
 
 	return zip(out_category, out_cables, out_length)
+
+
+def sorted_by_category(list_of_lists):
+	"""Groups list by category where:\\
+		key is list[0], values are list[1:]
+	"""
+	result_dict = dict()
+
+	for lst in list_of_lists:
+		if not result_dict.get(lst[0]):
+			# new value
+			result_dict.update({lst[0]: [lst[1:]]})
+
+		else:
+			# value exists
+			current_val = [i for i in result_dict.get(lst[0])] + ([lst[1:]])
+			result_dict.update({lst[0]: current_val})
+
+	return sorted(list(result_dict.items()), key=lambda x: x[0])
+
+
+def add_headers(boq_list: list) -> list:
+	"""Add headers and empty cells to follow general standard"""
+
+	boq_updated = list()
+	for boq in boq_list:
+		category = boq[0]
+		elements = boq[1]
+
+		# boq in excel consists of 3 columns.
+		# frist line
+		boq_first = [category, [], []]
+
+		# second line is different for differend categories:
+		if category == "Cables":
+			boq_second = ["Wire Type", "Length [m]", "Length with Spare 20% [m]"]
+
+		elif category == "Cable trays":
+			boq_second = ["Description, Size WxH", "Length [m]", "Comments"]
+
+		elif category == "Cable tray fittings":
+			boq_second = ["Description, Size WxH", "Count", "Comments"]
+
+		else:
+			boq_second = ["Description", "Count", "Comments"]
+
+		boq_cat_list = list()
+		boq_cat_list.append(boq_first)
+		boq_cat_list.append(boq_second)
+		boq_cat_list.extend(elements)
+
+		boq_updated.append(boq_cat_list)
+
+	return boq_updated
