@@ -278,6 +278,26 @@
       ],
       "Replication": "Disabled",
       "Description": "Creates a string."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "NodeType": "StringInputNode",
+      "InputValue": "TESLA-DCNOT-001722",
+      "Id": "37a7e34628374c8d8edb2777ded8a4db",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "4631111b222349109bc4d3b2824a8026",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string."
     }
   ],
   "Connectors": [
@@ -332,7 +352,7 @@
     {
       "Start": "0af92f3241494c058097c19f84fae969",
       "End": "62c09d3b58fc43abaea058de32b4ab41",
-      "Id": "e5699fc4431f4e62a4d4ad7c8b45a596",
+      "Id": "9092261e75d6412987b7391f0a3e1b1f",
       "IsHidden": "False"
     }
   ],
@@ -474,6 +494,16 @@
         "Excluded": false,
         "X": 495.60043889930546,
         "Y": 1505.2418850455701
+      },
+      {
+        "Name": "elem_filter_name",
+        "ShowGeometry": true,
+        "Id": "37a7e34628374c8d8edb2777ded8a4db",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 715.77683162053825,
+        "Y": 1587.7951697797673
       }
     ],
     "Annotations": [
@@ -501,8 +531,8 @@
         "Background": "#FFC1D676"
       }
     ],
-    "X": -283.90867127598074,
-    "Y": -764.48854722172916,
-    "Zoom": 0.96322703370954288
+    "X": -28.312496722966671,
+    "Y": -250.54010132937321,
+    "Zoom": 0.52072596205369426
   }
 }

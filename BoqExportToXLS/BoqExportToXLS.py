@@ -90,17 +90,14 @@ rvt_tray_fitting = inst_by_multicategory_param_val(
 boq_elems: list = get_boq_by_elements(rvt_elems)
 boq_cables = get_boq_by_circuits(rvt_circuits)
 
-
 # TODO: boq for cable trays and fittings
-
 boq_elems.extend(boq_cables)
 boq_elems_sorted = sorted_by_category(boq_elems)
-
 boq_with_header = add_headers(boq_elems_sorted)
 
 # # Excel export
-# xl_first_page = write_first_page(dir_path, doc, boq_name, rev_number)
+xl_first_page = write_first_page(dir_path, doc, boq_name, rev_number)
+xl_second_page = write_totals(dir_path, boq_with_header)
 
 
 OUT = boq_with_header
-# OUT = boq_elems

@@ -24,6 +24,7 @@ from System import Array
 from System.Collections.Generic import *
 from importlib import reload
 import openpyxl
+from openpyxl.styles import NamedStyle
 from math import ceil
 
 # ================ local imports
@@ -83,15 +84,43 @@ def write_first_page(path, doc, boq_name, seq_number):
 	return rev_description_height
 
 
-# def write_totals(boq_totals):
-# 	# sort totals by category
-# 	boq_sorted = sorted_by_category(boq_totals)
+def write_totals(path, totals_lst):
 
-# 	# for every category create empty row, row with category Name
-# 	# change font and colour
+	# Second page - write info
+	xl_path = path + "\\boq_template.xlsx"
+	wb = openpyxl.load_workbook(xl_path)
+	wb.active = wb["BOQ Totals"]
+	ws = wb.active
 
-# 	# add all data
+	rw = 1
+	for category in totals_lst:
+		rw += 1
+		for r_count, row in enumerate(category, 1):
+			for clmn, val in enumerate(row, 1):
+				current_cell = ws.cell(row=rw, column=clmn)
 
-# 	# set cell borders
+				# get and set cell style by row
+				if r_count == 1:
+					# first line
+					style_cell = "DiRootsFullNameTitleStyle"
 
-# 	return boq_sorted
+				elif r_count == 2:
+					# second line
+					style_cell = "DiRootsHeaderStyle"
+
+				else:
+					# other lines
+					style_cell = "Normal"
+
+				current_cell.style = style_cell
+				if val:
+					current_cell.value = val
+			rw += 1
+
+	# set print area
+	first_cell = "A1"
+	last_cell = ws.cell(row=rw, column=3).coordinate
+	ws.print_area = first_cell + ":" + last_cell
+
+	wb.save(xl_path)
+	return True
