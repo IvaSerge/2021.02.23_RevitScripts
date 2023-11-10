@@ -39,6 +39,17 @@ reload(xl_writer)
 from xl_writer import *
 
 
+def check_path_name(file_path):
+	for char in file_path:
+		if char in "<:\"/\\|?*":
+			raise ValueError("Wrong file name")
+
+	if len(name_xlsx) > 80:
+		raise ValueError("File name is too long")
+
+	return True
+
+
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -86,18 +97,45 @@ rvt_tray_fitting = inst_by_multicategory_param_val(
 	filter_param_value)
 
 
+# TODO read databaase for check revision and name
+name_number = IN[2]
+name_prefix = "_XLSX"
+name_rev = "[00]"
+name_description = IN[4]  # type: ignore
+
+name_xlsx = name_number
+name_xlsx += name_prefix + name_rev
+name_xlsx += " - BOQ - " + name_description
+name_xlsx += ".xlsx"
+
+check_path_name(name_xlsx)
+
+
 # Read parameters and organise data structure
 boq_elems: list = get_boq_by_elements(rvt_elems)
 boq_cables = get_boq_by_circuits(rvt_circuits)
-
 # TODO: boq for cable trays and fittings
+
 boq_elems.extend(boq_cables)
 boq_elems_sorted = sorted_by_category(boq_elems)
 boq_with_header = add_headers(boq_elems_sorted)
 
-# # Excel export
-xl_first_page = write_first_page(dir_path, doc, boq_name, rev_number)
-xl_second_page = write_totals(dir_path, boq_with_header)
+# Excel export
+xl_first_page = write_first_page(dir_path, name_xlsx, doc, boq_name, rev_number)
+xl_second_page = write_totals(xl_first_page, boq_with_header)
 
+# PDF export
+# TODO PDF export using com.32
+# from win32com import client
 
-OUT = boq_with_header
+# # Open Microsoft Excel
+# excel = client.Dispatch("Excel.Application")
+
+# # Read Excel File
+# sheets = excel.Workbooks.Open('Excel File Path')
+# work_sheets = sheets.Worksheets[0]
+
+# # Convert into PDF File
+# work_sheets.ExportAsFixedFormat(0, 'PDF File Path')
+
+OUT = xl_first_page

@@ -12,7 +12,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "d4faef3825fc49ce8fedebdcd48067ca",
       "Inputs": [],
       "Outputs": [
@@ -462,8 +462,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 485.51955497930624,
-        "Y": 1214.7342045990019
+        "X": 473.9971796087051,
+        "Y": 1216.6546004941019
       },
       {
         "Name": "rev. seq. N",
@@ -521,18 +521,18 @@
         ],
         "HasNestedGroups": false,
         "Left": 367.07278218766419,
-        "Top": 1141.7342045990019,
+        "Top": 1143.6546004941019,
         "Width": 368.0,
-        "Height": 495.5076804465682,
+        "Height": 493.5872845514682,
         "FontSize": 36.0,
-        "InitialTop": 1214.7342045990019,
+        "InitialTop": 1216.6546004941019,
         "InitialHeight": 435.5076804465682,
         "TextblockHeight": 63.0,
         "Background": "#FFC1D676"
       }
     ],
-    "X": -28.312496722966671,
-    "Y": -250.54010132937321,
-    "Zoom": 0.52072596205369426
+    "X": -409.79080613394069,
+    "Y": -502.53643162206777,
+    "Zoom": 0.90336409581563126
   }
 }

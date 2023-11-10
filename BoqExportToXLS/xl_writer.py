@@ -27,13 +27,15 @@ import openpyxl
 from openpyxl.styles import NamedStyle
 from math import ceil
 
+from PIL import Image
+
 # ================ local imports
 import toolsrvt
 reload(toolsrvt)
 from toolsrvt import *
 
 
-def write_first_page(path, doc, boq_name, seq_number):
+def write_first_page(path, xl_name, doc, boq_name, seq_number):
 
 	# get project info
 	proj_status = doc.ProjectInformation.Status
@@ -68,26 +70,27 @@ def write_first_page(path, doc, boq_name, seq_number):
 	ws["A32"] = proj_str
 	ws["A34"] = boq_name
 
-	ws["A47"] = rev_date
-	ws["B47"] = rev_number
-	ws["C47"] = rev_description
-	ws["H47"] = rev_issued_by
+	ws["A44"] = rev_date
+	ws["B44"] = rev_number
+	ws["C44"] = rev_description
+	ws["H44"] = rev_issued_by
 
 	# check cell height based on revision description
-	# max str length is 42
+	# max str length is 47
 	rev_description_height = math.ceil(
-		len(rev_description) / 42)
-	ws.row_dimensions[47].height = 15.75 * rev_description_height
+		len(rev_description) / 47)
+	ws.row_dimensions[44].height = 15.75 * rev_description_height
 
-	wb.save(xl_path)
+	# write to new path
+	xl_path_new = path + "\\" + xl_name
+	wb.save(xl_path_new)
 
-	return rev_description_height
+	return xl_path_new
 
 
-def write_totals(path, totals_lst):
+def write_totals(xl_path, totals_lst):
 
 	# Second page - write info
-	xl_path = path + "\\boq_template.xlsx"
 	wb = openpyxl.load_workbook(xl_path)
 	wb.active = wb["BOQ Totals"]
 	ws = wb.active
