@@ -24,8 +24,6 @@ from System import Array
 from System.Collections.Generic import *
 from importlib import reload
 import openpyxl
-from openpyxl.styles import NamedStyle
-from math import ceil
 
 from PIL import Image
 

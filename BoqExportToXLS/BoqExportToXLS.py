@@ -1,3 +1,6 @@
+# imports rquired to install from pip
+# pandas, Pillow, pip install -U pypiwin32
+
 import clr
 import os
 import sys
@@ -6,8 +9,14 @@ dir_path = IN[0].DirectoryName  # type: ignore
 sys.path.append(dir_path)
 
 local_data = os.getenv("LOCALAPPDATA")
-dyn_path = r"\python-3.9.12-embed-amd64\Lib"
+dyn_path = r"\python-3.9.12-embed-amd64\Lib\site-packages"
 py_path = local_data + dyn_path
+sys.path.append(py_path)
+
+py_path = local_data + r"\python-3.9.12-embed-amd64\Lib\site-packages\win32"
+sys.path.append(py_path)
+
+py_path = local_data + r"\python-3.9.12-embed-amd64\Lib\site-packages\win32\lib"
 sys.path.append(py_path)
 
 # ================ Revit imports
@@ -27,6 +36,8 @@ from System.Collections.Generic import *
 from importlib import reload
 import pandas as pd
 
+from win32com import client
+
 # ================ local imports
 import toolsrvt
 reload(toolsrvt)
@@ -39,12 +50,12 @@ reload(xl_writer)
 from xl_writer import *
 
 
-def check_path_name(file_path):
-	for char in file_path:
+def check_file_name(file_name):
+	for char in file_name:
 		if char in "<:\"/\\|?*":
 			raise ValueError("Wrong file name")
 
-	if len(name_xlsx) > 80:
+	if len(file_name) > 80:
 		raise ValueError("File name is too long")
 
 	return True
@@ -100,6 +111,7 @@ rvt_tray_fitting = inst_by_multicategory_param_val(
 # TODO read databaase for check revision and name
 name_number = IN[2]  # type: ignore
 name_prefix = "_XLSX"
+# TODO get revision number in database
 name_rev = "[00]"
 name_description = IN[4]  # type: ignore
 
@@ -108,8 +120,13 @@ name_xlsx += name_prefix + name_rev
 name_xlsx += " - BOQ - " + name_description
 name_xlsx += ".xlsx"
 
-check_path_name(name_xlsx)
+name_pdf = name_number
+name_pdf += name_rev
+name_pdf += " - BOQ - " + name_description
+name_pdf += ".pdf"
 
+check_file_name(name_xlsx)
+check_file_name(name_pdf)
 
 # Read parameters and organise data structure
 boq_elems: list = get_boq_by_elements(rvt_elems)
@@ -125,17 +142,26 @@ xl_first_page = write_first_page(dir_path, name_xlsx, doc, boq_name, rev_number)
 xl_second_page = write_totals(xl_first_page, boq_with_header)
 
 # PDF export
-# TODO PDF export using com.32
-# from win32com import client
+try:
+	pdf_path = dir_path + "\\" + name_pdf
+	xl_path = dir_path + "\\" + name_xlsx
+	excel = client.Dispatch("Excel.Application")
+	excel.Visible = False
 
-# # Open Microsoft Excel
-# excel = client.Dispatch("Excel.Application")
+	# Read Excel File
+	wb = excel.Workbooks.Open(xl_path)
+	wb.WorkSheets(["Cover", "BOQ Totals"]).Select()
 
-# # Read Excel File
-# sheets = excel.Workbooks.Open('Excel File Path')
-# work_sheets = sheets.Worksheets[0]
+	# Convert into PDF File
+	wb.ActiveSheet.ExportAsFixedFormat(0, pdf_path)
 
-# # Convert into PDF File
-# work_sheets.ExportAsFixedFormat(0, 'PDF File Path')
+except Exception as e:
+	raise ValueError(e)
 
-OUT = xl_first_page
+finally:
+	wb.Close(False)
+	excel.Quit()
+	excel = None
+	wb = None
+
+OUT = pdf_path
