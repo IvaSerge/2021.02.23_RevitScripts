@@ -93,7 +93,12 @@ def write_totals(xl_path, totals_lst):
 	# Second page - write info
 	wb = openpyxl.load_workbook(xl_path)
 	wb.active = wb["BOQ Totals"]
-	ws = wb.active
+	ws: openpyxl.Workbook.worksheets = wb.active
+
+	# set columns width
+	ws.column_dimensions["A"].width = 62
+	ws.column_dimensions["B"].width = 10
+	ws.column_dimensions["C"].width = 24
 
 	rw = 1
 	for category in totals_lst:
