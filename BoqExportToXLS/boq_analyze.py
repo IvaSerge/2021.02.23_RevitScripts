@@ -117,8 +117,9 @@ def get_boq_by_circuits(el_circuits):
 	out_cables = [i for i in df_groupped_by]
 	out_length = pd_wires_frame.groupby("Wire Type")["Length"].sum().tolist()
 	out_category = ["Cables"] * len(out_cables)
+	out_length_spare = [round(i * 1.2) for i in out_length]
 
-	return zip(out_category, out_cables, out_length)
+	return zip(out_category, out_cables, out_length, out_length_spare)
 
 
 def sorted_by_category(list_of_lists):

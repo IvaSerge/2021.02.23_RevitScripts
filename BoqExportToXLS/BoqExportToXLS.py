@@ -98,7 +98,7 @@ rvt_tray_fitting = inst_by_multicategory_param_val(
 
 
 # TODO read databaase for check revision and name
-name_number = IN[2]
+name_number = IN[2]  # type: ignore
 name_prefix = "_XLSX"
 name_rev = "[00]"
 name_description = IN[4]  # type: ignore

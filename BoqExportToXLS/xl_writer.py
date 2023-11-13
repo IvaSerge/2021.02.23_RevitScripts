@@ -40,7 +40,15 @@ def write_first_page(path, xl_name, doc, boq_name, seq_number):
 	# get project info
 	proj_status = doc.ProjectInformation.Status
 	proj_address = doc.ProjectInformation.Address
-	proj_discipline = doc.ProjectInformation.LookupParameter("Discipline").AsString()
+
+	# project Discipline is project specific
+	proj_discipline = doc.ProjectInformation.LookupParameter("Discipline")
+	if proj_discipline:
+		proj_discipline = doc.ProjectInformation.LookupParameter("Discipline").AsString()
+	elif doc.ProjectInformation.LookupParameter("TSLA_ProjectDiscipline"):
+		proj_discipline = doc.ProjectInformation.LookupParameter("TSLA_ProjectDiscipline").AsString()
+	else:
+		raise ValueError("Project Dyscipline not found")
 
 	proj_str = proj_status + ". "
 	proj_str += proj_address + ". "
