@@ -33,7 +33,7 @@ reload(toolsrvt)
 from toolsrvt import *
 
 
-def write_first_page(path, xl_name, doc, boq_name, seq_number):
+def write_first_page(dyn_path, xl_save_to, doc, boq_name, seq_number):
 
 	# get project info
 	proj_status = doc.ProjectInformation.Status
@@ -68,7 +68,7 @@ def write_first_page(path, xl_name, doc, boq_name, seq_number):
 	rev_issued_by = revision.IssuedBy
 
 	# Cover page - write info
-	xl_path = path + "\\boq_template.xlsx"
+	xl_path = dyn_path + "\\boq_template.xlsx"
 	wb = openpyxl.load_workbook(xl_path)
 	wb.active = wb["Cover"]
 	ws = wb.active
@@ -87,11 +87,10 @@ def write_first_page(path, xl_name, doc, boq_name, seq_number):
 		len(rev_description) / 47)
 	ws.row_dimensions[44].height = 15.75 * rev_description_height
 
-	# write to new path
-	xl_path_new = path + "\\" + xl_name
-	wb.save(xl_path_new)
+	# save to new path
+	wb.save(xl_save_to)
 
-	return xl_path_new
+	return xl_save_to
 
 
 def write_totals(xl_path, totals_lst):
