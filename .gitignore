@@ -1,4 +1,6 @@
 *.csv
 *.odt
 *.xlsx
+*.pdf
+*.env
 __pycache__/
