@@ -1,6 +1,7 @@
 # imports rquired to install from pip
 # pandas, Pillow, pip install -U pypiwin32
 # pip install -U python-dotenv
+# pip install mysql-connector-python
 
 import clr
 import os
