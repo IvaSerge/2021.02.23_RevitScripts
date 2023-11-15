@@ -33,7 +33,7 @@ reload(toolsrvt)
 from toolsrvt import *
 
 
-def write_first_page(dyn_path, xl_save_to, doc, boq_name, seq_number):
+def write_first_page(dyn_path, xl_save_to, doc, boq_name, seq_number, rev_number):
 
 	# get project info
 	proj_status = doc.ProjectInformation.Status
@@ -63,7 +63,6 @@ def write_first_page(dyn_path, xl_save_to, doc, boq_name, seq_number):
 		revision = revision[0]
 
 	rev_date = revision.RevisionDate
-	rev_number = "0"
 	rev_description = revision.Description
 	rev_issued_by = revision.IssuedBy
 

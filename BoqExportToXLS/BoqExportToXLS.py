@@ -144,7 +144,9 @@ boq_elems_sorted = sorted_by_category(boq_elems)
 boq_with_header = add_headers(boq_elems_sorted)
 
 # Excel export
-xl_first_page = write_first_page(dir_path, path_xlsx, doc, boq_name, rev_seq_number)
+xl_first_page = write_first_page(
+	dir_path, path_xlsx, doc, boq_name, rev_seq_number,
+	f'{rev_doc_number:02d}')
 xl_second_page = write_totals(path_xlsx, boq_with_header)
 
 # PDF export
