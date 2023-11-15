@@ -1,5 +1,6 @@
 # imports rquired to install from pip
 # pandas, Pillow, pip install -U pypiwin32
+# pip install -U python-dotenv
 
 import clr
 import os
@@ -9,8 +10,8 @@ dir_path = IN[0].DirectoryName  # type: ignore
 sys.path.append(dir_path)
 
 local_data = os.getenv("LOCALAPPDATA")
-dyn_path = r"\python-3.9.12-embed-amd64\Lib\site-packages"
-py_path = local_data + dyn_path
+
+py_path = local_data + r"\python-3.9.12-embed-amd64\Lib\site-packages"
 sys.path.append(py_path)
 
 py_path = local_data + r"\python-3.9.12-embed-amd64\Lib\site-packages\win32"
@@ -48,6 +49,9 @@ from boq_analyze import *
 import xl_writer
 reload(xl_writer)
 from xl_writer import *
+import db_reader
+reload(db_reader)
+from db_reader import *
 
 
 def check_file_name(file_name):
@@ -110,64 +114,68 @@ rvt_tray_fitting = inst_by_multicategory_param_val(
 	filter_param_value)
 
 # TODO Add revision check in database
-
 # TODO read databaase for check revision and name
-name_number = boq_name
-name_prefix = "_XLSX"
-# TODO get revision number in database
-name_rev = f'[{rev_doc_number:02d}]'
-name_description = filter_param_value
 
-name_xlsx = name_number
-name_xlsx += name_prefix + name_rev
-name_xlsx += " - BOQ - " + name_description
-name_xlsx += ".xlsx"
+db_info = get_info_by_name(boq_name, dir_path)
 
-name_pdf = name_number
-name_pdf += name_rev
-name_pdf += " - BOQ - " + name_description
-name_pdf += ".pdf"
 
-path_xlsx = path_to_save + "\\" + name_xlsx
-path_pdf = path_to_save + "\\" + name_pdf
+# name_number = boq_name
+# name_prefix = "_XLSX"
+# name_rev = f'[{rev_doc_number:02d}]'
+# name_description = filter_param_value
 
-check_file_name(name_xlsx)
-check_file_name(name_pdf)
+# name_xlsx = name_number
+# name_xlsx += name_prefix + name_rev
+# name_xlsx += " - BOQ - " + name_description
+# name_xlsx += ".xlsx"
 
-# Read parameters and organise data structure
-boq_elems: list = get_boq_by_elements(rvt_elems)
-boq_cables = get_boq_by_circuits(rvt_circuits)
-# TODO: boq for cable trays and fittings
+# name_pdf = name_number
+# name_pdf += name_rev
+# name_pdf += " - BOQ - " + name_description
+# name_pdf += ".pdf"
 
-boq_elems.extend(boq_cables)
-boq_elems_sorted = sorted_by_category(boq_elems)
-boq_with_header = add_headers(boq_elems_sorted)
+# path_xlsx = path_to_save + "\\" + name_xlsx
+# path_pdf = path_to_save + "\\" + name_pdf
 
-# Excel export
-xl_first_page = write_first_page(
-	dir_path, path_xlsx, doc, boq_name, rev_seq_number,
-	f'{rev_doc_number:02d}')
-xl_second_page = write_totals(path_xlsx, boq_with_header)
+# check_file_name(name_xlsx)
+# check_file_name(name_pdf)
 
-# PDF export
-try:
-	excel = client.Dispatch("Excel.Application")
-	excel.Visible = False
+# # Read parameters and organise data structure
+# boq_elems: list = get_boq_by_elements(rvt_elems)
+# boq_cables = get_boq_by_circuits(rvt_circuits)
+# # TODO: boq for cable trays and fittings
 
-	# Read Excel File
-	wb = excel.Workbooks.Open(path_xlsx)
-	wb.WorkSheets(["Cover", "BOQ Totals"]).Select()
+# boq_elems.extend(boq_cables)
+# boq_elems_sorted = sorted_by_category(boq_elems)
+# boq_with_header = add_headers(boq_elems_sorted)
 
-	# Convert into PDF File
-	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
+# # Excel export
+# xl_first_page = write_first_page(
+# 	dir_path, path_xlsx, doc, boq_name, rev_seq_number,
+# 	f'{rev_doc_number:02d}')
+# xl_second_page = write_totals(path_xlsx, boq_with_header)
 
-except Exception as e:
-	raise ValueError(e)
+# # PDF export
+# try:
+# 	excel = client.Dispatch("Excel.Application")
+# 	excel.Visible = False
 
-finally:
-	wb.Close(False)
-	excel.Quit()
-	excel = None
-	wb = None
+# 	# Read Excel File
+# 	wb = excel.Workbooks.Open(path_xlsx)
+# 	wb.WorkSheets(["Cover", "BOQ Totals"]).Select()
 
-OUT = path_pdf
+# 	# Convert into PDF File
+# 	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
+
+# except Exception as e:
+# 	raise ValueError(e)
+
+# finally:
+# 	wb.Close(False)
+# 	excel.Quit()
+# 	excel = None
+# 	wb = None
+
+# OUT = path_pdf
+# OUT = db_info
+OUT = db_info
