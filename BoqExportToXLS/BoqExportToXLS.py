@@ -117,66 +117,51 @@ rvt_tray_fitting = inst_by_multicategory_param_val(
 # TODO Add revision check in database
 # TODO read databaase for check revision and name
 
-db_info = get_info_by_name(boq_name, dir_path)
+name_list = get_info_by_name(dir_path, boq_name, rev_doc_number, filter_param_value)
 
+name_xlsx = name_list[0]
+name_pdf = name_list[1]
 
-# name_number = boq_name
-# name_prefix = "_XLSX"
-# name_rev = f'[{rev_doc_number:02d}]'
-# name_description = filter_param_value
+path_xlsx = path_to_save + "\\" + name_xlsx
+path_pdf = path_to_save + "\\" + name_pdf
 
-# name_xlsx = name_number
-# name_xlsx += name_prefix + name_rev
-# name_xlsx += " - BOQ - " + name_description
-# name_xlsx += ".xlsx"
+check_file_name(name_xlsx)
+check_file_name(name_pdf)
 
-# name_pdf = name_number
-# name_pdf += name_rev
-# name_pdf += " - BOQ - " + name_description
-# name_pdf += ".pdf"
+# Read parameters and organise data structure
+boq_elems: list = get_boq_by_elements(rvt_elems)
+boq_cables = get_boq_by_circuits(rvt_circuits)
+# TODO: boq for cable trays and fittings
 
-# path_xlsx = path_to_save + "\\" + name_xlsx
-# path_pdf = path_to_save + "\\" + name_pdf
+boq_elems.extend(boq_cables)
+boq_elems_sorted = sorted_by_category(boq_elems)
+boq_with_header = add_headers(boq_elems_sorted)
 
-# check_file_name(name_xlsx)
-# check_file_name(name_pdf)
+# Excel export
+xl_first_page = write_first_page(
+	dir_path, path_xlsx, doc, boq_name, rev_seq_number,
+	f'{rev_doc_number:02d}')
+xl_second_page = write_totals(path_xlsx, boq_with_header)
 
-# # Read parameters and organise data structure
-# boq_elems: list = get_boq_by_elements(rvt_elems)
-# boq_cables = get_boq_by_circuits(rvt_circuits)
-# # TODO: boq for cable trays and fittings
+# PDF export
+try:
+	excel = client.Dispatch("Excel.Application")
+	excel.Visible = False
 
-# boq_elems.extend(boq_cables)
-# boq_elems_sorted = sorted_by_category(boq_elems)
-# boq_with_header = add_headers(boq_elems_sorted)
+	# Read Excel File
+	wb = excel.Workbooks.Open(path_xlsx)
+	wb.WorkSheets(["Cover", "BOQ Totals"]).Select()
 
-# # Excel export
-# xl_first_page = write_first_page(
-# 	dir_path, path_xlsx, doc, boq_name, rev_seq_number,
-# 	f'{rev_doc_number:02d}')
-# xl_second_page = write_totals(path_xlsx, boq_with_header)
+	# Convert into PDF File
+	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
 
-# # PDF export
-# try:
-# 	excel = client.Dispatch("Excel.Application")
-# 	excel.Visible = False
+except Exception as e:
+	raise ValueError(e)
 
-# 	# Read Excel File
-# 	wb = excel.Workbooks.Open(path_xlsx)
-# 	wb.WorkSheets(["Cover", "BOQ Totals"]).Select()
+finally:
+	wb.Close(False)
+	excel.Quit()
+	excel = None
+	wb = None
 
-# 	# Convert into PDF File
-# 	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
-
-# except Exception as e:
-# 	raise ValueError(e)
-
-# finally:
-# 	wb.Close(False)
-# 	excel.Quit()
-# 	excel = None
-# 	wb = None
-
-# OUT = path_pdf
-# OUT = db_info
-OUT = db_info
+OUT = name_list

@@ -301,7 +301,7 @@
       "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Integer",
-      "InputValue": 0,
+      "InputValue": 1,
       "MaximumValue": 5000,
       "MinimumValue": 0,
       "StepValue": 1,
@@ -555,15 +555,7 @@
     }
   ],
   "Dependencies": [],
-  "NodeLibraryDependencies": [
-    {
-      "Name": "BER-GF-SE-CP-00-SH-E-TSLA-8002-09[00] - BOQ - Phase 1b (50GWh).pdf",
-      "ReferenceType": "External",
-      "Nodes": [
-        "2d5996559be141609f0239af77174c49"
-      ]
-    }
-  ],
+  "NodeLibraryDependencies": [],
   "Thumbnail": "",
   "GraphDocumentationURL": null,
   "ExtensionWorkspaceData": [
@@ -718,7 +710,7 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 545.80225708687317,
+        "X": 544.50503802671051,
         "Y": 1125.5958898294609
       },
       {
@@ -763,7 +755,7 @@
         "Height": 646.2856136235589,
         "FontSize": 36.0,
         "InitialTop": 1135.9194131038007,
-        "InitialHeight": 433.5872845514682,
+        "InitialHeight": 586.2856136235589,
         "TextblockHeight": 63.0,
         "Background": "#FFE8F7AD"
       },
@@ -784,13 +776,13 @@
         "Height": 205.0,
         "FontSize": 36.0,
         "InitialTop": 1846.4897278099079,
-        "InitialHeight": 162.0,
+        "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFFFB8D8"
       }
     ],
-    "X": -528.97243822460382,
-    "Y": -929.4216183788933,
-    "Zoom": 1.0598839104006663
+    "X": 89.170943570808959,
+    "Y": -783.62054807922777,
+    "Zoom": 0.770879823392827
   }
 }

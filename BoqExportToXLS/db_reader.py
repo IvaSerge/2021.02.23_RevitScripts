@@ -12,9 +12,9 @@ import mysql.connector as connection
 import pandas as pd
 
 
-def get_info_by_name(boq_name, path_dir):
+def get_db_table(env_path, doc_name):
 	env_name = "db_info.env"
-	env_path = path_dir + "\\" + env_name
+	env_path = env_path + "\\" + env_name
 
 	# get database environement
 	load_dotenv(env_path)
@@ -25,6 +25,7 @@ def get_info_by_name(boq_name, path_dir):
 	DB_USER = os.getenv("DB_USER")
 
 	# open db and read info to dataframe
+	mydb = None
 	try:
 		mydb = connection.connect(
 			host=DB_HOST,
@@ -35,15 +36,57 @@ def get_info_by_name(boq_name, path_dir):
 			use_pure=True)
 
 		# query = "Select * from studentdetails;"
-		query = "SELECT * FROM level_name"
+		query = "SELECT id, document_number, revision, title "
+		query += "FROM  aconex.document_history "
+		query += f"WHERE document_number = '{doc_name}'"
 
-		result_dataFrame = pd.read_sql(query, mydb)
-		print(result_dataFrame)
+		df = pd.read_sql(query, mydb)
+		idx = df.groupby("document_number")['id'].idxmax()
+		values_by_max_id = df.loc[idx].values.tolist()
+
 		mydb.close()
+		return values_by_max_id[0][1:]
 
 	except Exception as e:
-		mydb.close()
 		print(str(e))
-		raise ValueError(str(e))
+		# raise ValueError(str(e))
+		return None
 
-	return DB_PASS
+	finally:
+		try:
+			mydb.close()
+		except:
+			pass
+
+
+def get_info_by_name(dir_path, boq_name, rev_doc_number, boq_descr):
+
+	# read database and get table by boq name
+	db_table = get_db_table(dir_path, boq_name)
+
+	if db_table:
+		# if info from the database was found
+		# check revision
+		db_rev = int(db_table[1])
+		if int(rev_doc_number) <= db_rev:
+			err_string = f"Revision number [{rev_doc_number}] is too small\n"
+			err_string += f"Use revision bigger then [{db_rev}]"
+			raise ValueError(err_string)
+		boq_descr = db_table[2]
+
+	name_number = boq_name
+	name_prefix = "_XLSX"
+	name_rev = f'[{rev_doc_number:02d}]'
+	name_description = boq_descr
+
+	name_xlsx = boq_name
+	name_xlsx += name_prefix + name_rev
+	name_xlsx += " - BOQ - " + name_description
+	name_xlsx += ".xlsx"
+
+	name_pdf = name_number
+	name_pdf += name_rev
+	name_pdf += " - BOQ - " + name_description
+	name_pdf += ".pdf"
+
+	return name_xlsx, name_pdf
