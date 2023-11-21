@@ -104,10 +104,13 @@ for pair in pairs_list:
 	shedules_list.append(notes_obj)
 
 	# ================ Elevation of the panel
-	elevation_obj = Shedule(sheet_rvt)
-	elevation_obj.get_elevation_symbol(panel_inst)
-	elevation_obj.insert_point = elevation_obj.elevation_origin
-	shedules_list.append(elevation_obj)
+	try:
+		elevation_obj = Shedule(sheet_rvt)
+		elevation_obj.get_elevation_symbol(panel_inst)
+		elevation_obj.insert_point = elevation_obj.elevation_origin
+		shedules_list.append(elevation_obj)
+	except:
+		print("No elevation found")
 
 	# ================ Remove items on sheet
 	items_on_sheet_to_remove.extend(Diagramm.get_ID_to_remove(sheet_rvt))
