@@ -8,15 +8,6 @@
   },
   "Inputs": [
     {
-      "Id": "247389cd36b8437db0c2971fb3851598",
-      "Name": "String",
-      "Type": "string",
-      "Type2": "string",
-      "Value": "get_local_printers.py",
-      "Description": "Creates a string.",
-      "SelectedIndex": 0
-    },
-    {
       "Id": "012dd0bc00b54db3b448bd1966d25a8a",
       "Name": "String",
       "Type": "string",
@@ -47,188 +38,9 @@
   "Outputs": [],
   "Nodes": [
     {
-      "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
-      "Engine": "CPython3",
-      "EngineName": "CPython3",
-      "VariableInputPorts": true,
-      "NodeType": "ExtensionNode",
-      "Id": "1b79df6695194458b3633e0bed15cd64",
-      "Inputs": [
-        {
-          "Id": "f77fa4bc7b15462e94816c963a486648",
-          "Name": "script",
-          "Description": "Python script to run.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "47f4a056f13f43868341f1b01a274f7e",
-          "Name": "IN[0]",
-          "Description": "Input #0",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        },
-        {
-          "Id": "0ce557ba57ea4f53840d30d83a6db2f5",
-          "Name": "IN[1]",
-          "Description": "Input #1",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "0ffe33e7c7f34f6a8d151e5ab16336dc",
-          "Name": "OUT",
-          "Description": "Result of the python script",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Runs a Python script from a string."
-    },
-    {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
       "InputValue": true,
-      "Id": "ad531ae1b87d458d89230df621752f91",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "0c50f0a5e8394f019a078e6850124104",
-          "Name": "",
-          "Description": "Boolean",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Selection between a true and false."
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
-      "NodeType": "FunctionNode",
-      "FunctionSignature": "DSCore.IO.FileSystem.ReadText@var",
-      "Id": "508e1ae226144bda9f28c842aeae9af8",
-      "Inputs": [
-        {
-          "Id": "e3c70fc4d4f14aff8aa26e1f060f57f2",
-          "Name": "file",
-          "Description": "File object to read text from\n\nvar",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "e7849bae2b704038b9a1ce4cee46d4fc",
-          "Name": "string",
-          "Description": "Contents of the text file.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Auto",
-      "Description": "Reads a text file and returns the contents as a string.\n\nFileSystem.ReadText (file: var): string"
-    },
-    {
-      "ConcreteType": "CoreNodeModels.Input.FileObject, CoreNodeModels",
-      "NodeType": "ExtensionNode",
-      "Id": "f5f2e95993264fd5b7943ab8bac7453c",
-      "Inputs": [
-        {
-          "Id": "b505712d4efc41cd97c3c4dc0c84d9e6",
-          "Name": "path",
-          "Description": "Path to the file.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "2ce9610afe59481aa813a31da14f8501",
-          "Name": "file",
-          "Description": "File object",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Creates a file object from a path."
-    },
-    {
-      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
-      "NodeType": "StringInputNode",
-      "InputValue": "get_local_printers.py",
-      "Id": "247389cd36b8437db0c2971fb3851598",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "26ebc66651a646cda0966943be75c7d2",
-          "Name": "",
-          "Description": "String",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Creates a string."
-    },
-    {
-      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
-      "NodeType": "CodeBlockNode",
-      "Code": "Printer[5];",
-      "Id": "c953ea72a71c4d3c8e9d2e0faf4a5b7e",
-      "Inputs": [
-        {
-          "Id": "3909d83db73f475d973456e3307d5286",
-          "Name": "Printer",
-          "Description": "Printer",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Outputs": [
-        {
-          "Id": "14112973398845c09385c49ce28c0da3",
-          "Name": "",
-          "Description": "Value of expression at line 1",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Allows for DesignScript code to be authored directly"
-    },
-    {
-      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
-      "NodeType": "BooleanInputNode",
-      "InputValue": false,
       "Id": "a83f9eb8e5ba4504b10dd0c8dca814ef",
       "Inputs": [],
       "Outputs": [
@@ -503,7 +315,7 @@
       "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Integer",
-      "InputValue": 728,
+      "InputValue": 748,
       "MaximumValue": 5000,
       "MinimumValue": 0,
       "StepValue": 1,
@@ -525,42 +337,6 @@
     }
   ],
   "Connectors": [
-    {
-      "Start": "0ffe33e7c7f34f6a8d151e5ab16336dc",
-      "End": "3909d83db73f475d973456e3307d5286",
-      "Id": "cbc834e0aaa649e9bd6ace62da782a01",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "0c50f0a5e8394f019a078e6850124104",
-      "End": "0ce557ba57ea4f53840d30d83a6db2f5",
-      "Id": "286bdfa29d5140b19e2916ebbea98943",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "e7849bae2b704038b9a1ce4cee46d4fc",
-      "End": "f77fa4bc7b15462e94816c963a486648",
-      "Id": "1ef977db6c684532b2d699b962f43f23",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "2ce9610afe59481aa813a31da14f8501",
-      "End": "47f4a056f13f43868341f1b01a274f7e",
-      "Id": "16769b54c70a4521a738946c5dea4d33",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "2ce9610afe59481aa813a31da14f8501",
-      "End": "e3c70fc4d4f14aff8aa26e1f060f57f2",
-      "Id": "5ddf6818722f4612a56012ce87453e49",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "26ebc66651a646cda0966943be75c7d2",
-      "End": "b505712d4efc41cd97c3c4dc0c84d9e6",
-      "Id": "dc0a98baa73b4ab2b23bb5d741aeb4e5",
-      "IsHidden": "False"
-    },
     {
       "Start": "05d25ec75f2b4bb8a06542e92f50c3a0",
       "End": "c42ea5129e8c467fae2b3765f925dfef",
@@ -666,66 +442,6 @@
     "ConnectorPins": [],
     "NodeViews": [
       {
-        "Name": "Python Script From String",
-        "ShowGeometry": true,
-        "Id": "1b79df6695194458b3633e0bed15cd64",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 1642.1176721694048,
-        "Y": 46.634715656262244
-      },
-      {
-        "Name": "Reload",
-        "ShowGeometry": true,
-        "Id": "ad531ae1b87d458d89230df621752f91",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": true,
-        "X": 1182.1137522681752,
-        "Y": 350.541700471655
-      },
-      {
-        "Name": "FileSystem.ReadText",
-        "ShowGeometry": true,
-        "Id": "508e1ae226144bda9f28c842aeae9af8",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 1150.53221616996,
-        "Y": 17.180403139486202
-      },
-      {
-        "Name": "File From Path",
-        "ShowGeometry": true,
-        "Id": "f5f2e95993264fd5b7943ab8bac7453c",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 871.407843685993,
-        "Y": 108.69233061822104
-      },
-      {
-        "Name": "String",
-        "ShowGeometry": true,
-        "Id": "247389cd36b8437db0c2971fb3851598",
-        "IsSetAsInput": true,
-        "IsSetAsOutput": false,
-        "Excluded": true,
-        "X": 539.761612413825,
-        "Y": 122.498717535693
-      },
-      {
-        "Name": "Code Block",
-        "ShowGeometry": true,
-        "Id": "c953ea72a71c4d3c8e9d2e0faf4a5b7e",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 2007.3975736203402,
-        "Y": 67.1584056723865
-      },
-      {
         "Name": "Reload",
         "ShowGeometry": true,
         "Id": "a83f9eb8e5ba4504b10dd0c8dca814ef",
@@ -828,27 +544,6 @@
     ],
     "Annotations": [
       {
-        "Id": "204ef6459f3b48a5b2e56f2549662668",
-        "Title": "Reload",
-        "DescriptionText": "Reload",
-        "IsExpanded": true,
-        "WidthAdjustment": 0.0,
-        "HeightAdjustment": 0.0,
-        "Nodes": [
-          "ad531ae1b87d458d89230df621752f91"
-        ],
-        "HasNestedGroups": false,
-        "Left": 1172.1137522681752,
-        "Top": 277.541700471655,
-        "Width": 214.0,
-        "Height": 205.0,
-        "FontSize": 36.0,
-        "InitialTop": 350.541700471655,
-        "InitialHeight": 145.0,
-        "TextblockHeight": 63.0,
-        "Background": "#FFC1D676"
-      },
-      {
         "Id": "fac8011969d149388fd33a23421b7a3a",
         "Title": "Reload",
         "DescriptionText": "Reload",
@@ -910,13 +605,13 @@
         "Height": 389.12673311761364,
         "FontSize": 30.0,
         "InitialTop": 1800.0678027436338,
-        "InitialHeight": 294.12673311761387,
+        "InitialHeight": 294.12673311761364,
         "TextblockHeight": 56.0,
         "Background": "#FFFFB8D8"
       }
     ],
-    "X": -600.86478641980011,
-    "Y": -1186.4318771947287,
-    "Zoom": 0.78589795663535311
+    "X": -183.49477059215951,
+    "Y": -507.71252961868367,
+    "Zoom": 0.606488279009303
   }
 }
