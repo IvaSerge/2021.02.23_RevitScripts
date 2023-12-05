@@ -31,6 +31,35 @@ from PIL import Image
 import toolsrvt
 reload(toolsrvt)
 from toolsrvt import *
+import db_reader
+reload(db_reader)
+from db_reader import *
+
+
+def check_file_name(file_name):
+
+	for char in file_name:
+		if char in "<:\"/\\|?*":
+			raise ValueError("Wrong file name")
+	if len(file_name) > 80:
+		raise ValueError("File name is too long")
+
+	return True
+
+
+def get_file_manualy(path_to_save, dir_path, boq_name, rev_doc_number, filter_param_value):
+
+	# Check revision in database
+	name_list = get_info_by_name(dir_path, boq_name, rev_doc_number, filter_param_value)
+
+	name_xlsx = name_list[0]
+	name_pdf = name_list[1]
+	path_xlsx = path_to_save + "\\" + name_xlsx
+	path_pdf = path_to_save + "\\" + name_pdf
+	check_file_name(name_xlsx)
+	check_file_name(name_pdf)
+
+	return path_xlsx, path_pdf
 
 
 def write_first_page(dyn_path, xl_save_to, doc, boq_name, seq_number, rev_number):
@@ -74,7 +103,6 @@ def write_first_page(dyn_path, xl_save_to, doc, boq_name, seq_number, rev_number
 
 	ws["A32"] = proj_str
 	ws["A34"] = boq_name
-
 	ws["A44"] = rev_date
 	ws["B44"] = rev_number
 	ws["C44"] = rev_description

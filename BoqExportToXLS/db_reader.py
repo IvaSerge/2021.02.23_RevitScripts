@@ -35,7 +35,6 @@ def get_db_table(env_path, doc_name):
 			passwd=DB_PASS,
 			use_pure=True)
 
-		# query = "Select * from studentdetails;"
 		query = "SELECT id, document_number, revision, title "
 		query += "FROM  aconex.document_history "
 		query += f"WHERE document_number = '{doc_name}'"

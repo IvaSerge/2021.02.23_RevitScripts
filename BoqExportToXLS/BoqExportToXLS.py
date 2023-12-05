@@ -55,17 +55,6 @@ reload(db_reader)
 from db_reader import *
 
 
-def check_file_name(file_name):
-	for char in file_name:
-		if char in "<:\"/\\|?*":
-			raise ValueError("Wrong file name")
-
-	if len(file_name) > 80:
-		raise ValueError("File name is too long")
-
-	return True
-
-
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -73,95 +62,103 @@ uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 view = doc.ActiveView
 reload_var = IN[1]  # type: ignore
-boq_name = IN[2]  # type: ignore
-rev_doc_number = IN[3]  # type: ignore
-rev_seq_number = IN[4]  # type: ignore
-filter_param_value = IN[5]  # type: ignore
-path_to_save = os.path.normpath(IN[6])  # type: ignore
+path_to_save = os.path.normpath(IN[2])  # type: ignore
+manual_naming = IN[3]  # type: ignore
+info_list = IN[4]  # type: ignore
 filter_param_name = "BOQ Phase"  # filter parameter is hard coded
 
-# Get all instances by DCN number of different categories
-bic_str_lst = (
-	"OST_ConduitFitting",
-	"OST_DataDevices",
-	"OST_ElectricalEquipment",
-	"OST_ElectricalFixtures",
-	"OST_FireAlarmDevices",
-	"OST_GenericModel",
-	"OST_LightingDevices",
-	"OST_LightingFixtures",
-	"OST_NurseCallDevices",
-	"OST_SecurityDevices")
+# get main BOQ parameters
+if manual_naming:
+	boq_name = info_list[0]  # type: ignore
+	rev_doc_number = info_list[1]  # type: ignore
+	rev_seq_number = info_list[2]  # type: ignore
+	filter_param_value = info_list[3]  # type: ignore
+else:
+	boq_name = None  # TODO: get name from DB
+	rev_doc_number = None  # TODO: get name from DB
+	rev_seq_number = info_list[2]  # type: ignore
+	filter_param_value = info_list[3]  # type: ignore
+
+# get BOQ files to save
+if manual_naming:
+	names_list = xl_writer.get_file_manualy(
+		path_to_save,
+		dir_path,
+		boq_name,
+		rev_doc_number,
+		filter_param_value)
+else:
+	# TODO read databaase for check revision and name
+	pass
+
+# # Get all instances by DCN number of different categories
+# bic_str_lst = (
+# 	"OST_ConduitFitting",
+# 	"OST_DataDevices",
+# 	"OST_ElectricalEquipment",
+# 	"OST_ElectricalFixtures",
+# 	"OST_FireAlarmDevices",
+# 	"OST_GenericModel",
+# 	"OST_LightingDevices",
+# 	"OST_LightingFixtures",
+# 	"OST_NurseCallDevices",
+# 	"OST_SecurityDevices")
 
 
-rvt_elems = inst_by_multicategory_param_val(
-	doc, bic_str_lst,
-	filter_param_name,
-	filter_param_value)
+# rvt_elems = inst_by_multicategory_param_val(
+# 	doc, bic_str_lst,
+# 	filter_param_name,
+# 	filter_param_value)
 
-rvt_circuits = inst_by_multicategory_param_val(
-	doc, ["OST_ElectricalCircuit"],
-	filter_param_name,
-	filter_param_value)
+# rvt_circuits = inst_by_multicategory_param_val(
+# 	doc, ["OST_ElectricalCircuit"],
+# 	filter_param_name,
+# 	filter_param_value)
 
-rvt_tray = inst_by_multicategory_param_val(
-	doc, ["OST_CableTray"],
-	filter_param_name,
-	filter_param_value)
+# rvt_tray = inst_by_multicategory_param_val(
+# 	doc, ["OST_CableTray"],
+# 	filter_param_name,
+# 	filter_param_value)
 
-rvt_tray_fitting = inst_by_multicategory_param_val(
-	doc, ["OST_CableTrayFitting"],
-	filter_param_name,
-	filter_param_value)
+# rvt_tray_fitting = inst_by_multicategory_param_val(
+# 	doc, ["OST_CableTrayFitting"],
+# 	filter_param_name,
+# 	filter_param_value)
 
-# TODO Add revision check in database
-# TODO read databaase for check revision and name
+# # Read parameters and organise data structure
+# boq_elems: list = get_boq_by_elements(rvt_elems)
+# boq_cables = get_boq_by_circuits(rvt_circuits)
+# # TODO: boq for cable trays and fittings
 
-name_list = get_info_by_name(dir_path, boq_name, rev_doc_number, filter_param_value)
+# boq_elems.extend(boq_cables)
+# boq_elems_sorted = sorted_by_category(boq_elems)
+# boq_with_header = add_headers(boq_elems_sorted)
 
-name_xlsx = name_list[0]
-name_pdf = name_list[1]
+# # Excel export
+# xl_first_page = write_first_page(
+# 	dir_path, path_xlsx, doc, boq_name, rev_seq_number,
+# 	f'{rev_doc_number:02d}')
+# xl_second_page = write_totals(path_xlsx, boq_with_header)
 
-path_xlsx = path_to_save + "\\" + name_xlsx
-path_pdf = path_to_save + "\\" + name_pdf
+# # PDF export
+# try:
+# 	excel = client.Dispatch("Excel.Application")
+# 	excel.Visible = False
 
-check_file_name(name_xlsx)
-check_file_name(name_pdf)
+# 	# Read Excel File
+# 	wb = excel.Workbooks.Open(path_xlsx)
+# 	wb.WorkSheets(["Cover", "BOQ Totals"]).Select()
 
-# Read parameters and organise data structure
-boq_elems: list = get_boq_by_elements(rvt_elems)
-boq_cables = get_boq_by_circuits(rvt_circuits)
-# TODO: boq for cable trays and fittings
+# 	# Convert into PDF File
+# 	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
 
-boq_elems.extend(boq_cables)
-boq_elems_sorted = sorted_by_category(boq_elems)
-boq_with_header = add_headers(boq_elems_sorted)
+# except Exception as e:
+# 	raise ValueError(e)
 
-# Excel export
-xl_first_page = write_first_page(
-	dir_path, path_xlsx, doc, boq_name, rev_seq_number,
-	f'{rev_doc_number:02d}')
-xl_second_page = write_totals(path_xlsx, boq_with_header)
+# finally:
+# 	wb.Close(False)
+# 	excel.Quit()
+# 	excel = None
+# 	wb = None
 
-# PDF export
-try:
-	excel = client.Dispatch("Excel.Application")
-	excel.Visible = False
-
-	# Read Excel File
-	wb = excel.Workbooks.Open(path_xlsx)
-	wb.WorkSheets(["Cover", "BOQ Totals"]).Select()
-
-	# Convert into PDF File
-	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
-
-except Exception as e:
-	raise ValueError(e)
-
-finally:
-	wb.Close(False)
-	excel.Quit()
-	excel = None
-	wb = None
-
-OUT = name_list
+OUT = names_list
