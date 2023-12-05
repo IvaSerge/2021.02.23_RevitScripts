@@ -47,11 +47,10 @@ def check_file_name(file_name):
 	return True
 
 
-def get_file_manualy(path_to_save, dir_path, boq_name, rev_doc_number, filter_param_value):
+def get_files_path(path_to_save, dir_path, boq_name, rev_doc_number, filter_param_value):
 
 	# Check revision in database
 	name_list = get_info_by_name(dir_path, boq_name, rev_doc_number, filter_param_value)
-
 	name_xlsx = name_list[0]
 	name_pdf = name_list[1]
 	path_xlsx = path_to_save + "\\" + name_xlsx

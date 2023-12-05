@@ -71,25 +71,27 @@ filter_param_name = "BOQ Phase"  # filter parameter is hard coded
 if manual_naming:
 	boq_name = info_list[0]  # type: ignore
 	rev_doc_number = info_list[1]  # type: ignore
-	rev_seq_number = info_list[2]  # type: ignore
-	filter_param_value = info_list[3]  # type: ignore
 else:
-	boq_name = None  # TODO: get name from DB
-	rev_doc_number = None  # TODO: get name from DB
-	rev_seq_number = info_list[2]  # type: ignore
-	filter_param_value = info_list[3]  # type: ignore
+	shop_code = info_list[0]
+	discipline_code = info_list[1]
+	# read DB adn get BOQ name and number automatically
+	names_list = db_reader.get_boq_filename(
+		dir_path,
+		shop_code,
+		discipline_code)
+	boq_name = names_list[0]
+	rev_doc_number = names_list[1]
+
+rev_seq_number = info_list[2]  # type: ignore
+filter_param_value = info_list[3]  # type: ignore
 
 # get BOQ files to save
-if manual_naming:
-	names_list = xl_writer.get_file_manualy(
-		path_to_save,
-		dir_path,
-		boq_name,
-		rev_doc_number,
-		filter_param_value)
-else:
-	# TODO read databaase for check revision and name
-	pass
+names_list = xl_writer.get_files_path(
+	path_to_save,
+	dir_path,
+	boq_name,
+	rev_doc_number,
+	filter_param_value)
 
 # # Get all instances by DCN number of different categories
 # bic_str_lst = (
@@ -160,5 +162,4 @@ else:
 # 	excel.Quit()
 # 	excel = None
 # 	wb = None
-
 OUT = names_list
