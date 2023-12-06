@@ -93,46 +93,53 @@ names_list = xl_writer.get_files_path(
 	rev_doc_number,
 	filter_param_value)
 
-# # Get all instances by DCN number of different categories
-# bic_str_lst = (
-# 	"OST_ConduitFitting",
-# 	"OST_DataDevices",
-# 	"OST_ElectricalEquipment",
-# 	"OST_ElectricalFixtures",
-# 	"OST_FireAlarmDevices",
-# 	"OST_GenericModel",
-# 	"OST_LightingDevices",
-# 	"OST_LightingFixtures",
-# 	"OST_NurseCallDevices",
-# 	"OST_SecurityDevices")
+path_xlsx = names_list[0]
+path_pdf = names_list[1]
+
+# Get all instances by DCN number of different categories
+bic_str_lst = (
+	"OST_ConduitFitting",
+	"OST_DataDevices",
+	"OST_ElectricalEquipment",
+	"OST_ElectricalFixtures",
+	"OST_FireAlarmDevices",
+	"OST_GenericModel",
+	"OST_LightingDevices",
+	"OST_LightingFixtures",
+	"OST_NurseCallDevices",
+	"OST_SecurityDevices")
 
 
-# rvt_elems = inst_by_multicategory_param_val(
-# 	doc, bic_str_lst,
-# 	filter_param_name,
-# 	filter_param_value)
+rvt_elems = inst_by_multicategory_param_val(
+	doc, bic_str_lst,
+	filter_param_name,
+	filter_param_value)
 
-# rvt_circuits = inst_by_multicategory_param_val(
-# 	doc, ["OST_ElectricalCircuit"],
-# 	filter_param_name,
-# 	filter_param_value)
+rvt_circuits = inst_by_multicategory_param_val(
+	doc, ["OST_ElectricalCircuit"],
+	filter_param_name,
+	filter_param_value)
 
-# rvt_tray = inst_by_multicategory_param_val(
-# 	doc, ["OST_CableTray"],
-# 	filter_param_name,
-# 	filter_param_value)
+rvt_tray = inst_by_multicategory_param_val(
+	doc, ["OST_CableTray"],
+	filter_param_name,
+	filter_param_value)
 
-# rvt_tray_fitting = inst_by_multicategory_param_val(
-# 	doc, ["OST_CableTrayFitting"],
-# 	filter_param_name,
-# 	filter_param_value)
+rvt_tray_fitting = inst_by_multicategory_param_val(
+	doc, ["OST_CableTrayFitting"],
+	filter_param_name,
+	filter_param_value)
 
-# # Read parameters and organise data structure
-# boq_elems: list = get_boq_by_elements(rvt_elems)
+# Read parameters and organise data structure
+boq_elems: list = get_boq_by_elements(rvt_elems)
 # boq_cables = get_boq_by_circuits(rvt_circuits)
-# # TODO: boq for cable trays and fittings
+# boq_trays = get_boq_by_tray(rvt_tray)
 
-# boq_elems.extend(boq_cables)
+# if boq_cables:
+# 	boq_elems.extend(boq_cables)
+# if boq_trays:
+# 	boq_elems.extend(boq_trays)
+
 # boq_elems_sorted = sorted_by_category(boq_elems)
 # boq_with_header = add_headers(boq_elems_sorted)
 
@@ -162,4 +169,4 @@ names_list = xl_writer.get_files_path(
 # 	excel.Quit()
 # 	excel = None
 # 	wb = None
-OUT = names_list
+OUT = boq_elems

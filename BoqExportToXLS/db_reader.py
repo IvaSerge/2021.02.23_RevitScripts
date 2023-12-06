@@ -68,8 +68,8 @@ def get_info_by_name(dir_path, boq_name, rev_doc_number, boq_descr):
 		# check revision
 		db_rev = int(db_table[1])
 		if int(rev_doc_number) <= db_rev:
-			err_string = f"Revision number [{rev_doc_number}] is too small\n"
-			err_string += f"Use revision bigger then [{db_rev}]"
+			err_string = f"Revision number [{rev_doc_number:02d}] is too small\n"
+			err_string += f"Use revision bigger then [{db_rev:02d}]"
 			raise ValueError(err_string)
 		boq_descr = db_table[2]
 
@@ -80,12 +80,17 @@ def get_info_by_name(dir_path, boq_name, rev_doc_number, boq_descr):
 
 	name_xlsx = boq_name
 	name_xlsx += name_prefix + name_rev
-	name_xlsx += " - BOQ - " + name_description
+	if "BOQ" in name_description:
+		name_xlsx += " - " + name_description
+	else:
+		name_xlsx += " - BOQ-" + name_description
 	name_xlsx += ".xlsx"
-
 	name_pdf = name_number
 	name_pdf += name_rev
-	name_pdf += " - BOQ - " + name_description
+	if "BOQ-" in name_description:
+		name_pdf += " - " + name_description
+	else:
+		name_pdf += " - BOQ-" + name_description
 	name_pdf += ".pdf"
 
 	return name_xlsx, name_pdf

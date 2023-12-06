@@ -36,6 +36,9 @@ def get_boq_by_elements(elems_list: list) -> list:
 
 	# BOQ schedule
 	# | Category | Description |
+	if not elems_list:
+		return None
+
 	elem_id = [i.Id.IntegerValue for i in elems_list]
 	elem_categories = [i.Category.Name for i in elems_list]
 	elem_description = [
@@ -100,6 +103,9 @@ def get_wire_length(el_circuit):
 
 def get_boq_by_circuits(el_circuits):
 
+	if not el_circuits:
+		return None
+
 	elem_id = [i.Id.IntegerValue for i in el_circuits]
 	sys_wire_types = [get_wire_type(i) for i in el_circuits]
 	sys_length = [get_wire_length(i) for i in el_circuits]
@@ -139,6 +145,14 @@ def sorted_by_category(list_of_lists):
 			result_dict.update({lst[0]: current_val})
 
 	return sorted(list(result_dict.items()), key=lambda x: x[0])
+
+
+def get_boq_by_tray(rvt_tray):
+
+	if not rvt_tray:
+		return None
+
+	return None
 
 
 def add_headers(boq_list: list) -> list:
