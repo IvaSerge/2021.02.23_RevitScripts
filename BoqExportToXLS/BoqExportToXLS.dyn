@@ -12,7 +12,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "d4faef3825fc49ce8fedebdcd48067ca",
       "Inputs": [],
       "Outputs": [
@@ -188,7 +188,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "BER-GF-SE-CP-00-SH-EG-TSLA-8003-01",
+      "InputValue": "Test_BOQ",
       "Id": "8fb287bfac4d47e2ab7fdc4866f256c4",
       "Inputs": [],
       "Outputs": [
@@ -209,7 +209,7 @@
       "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Integer",
-      "InputValue": 746,
+      "InputValue": 1,
       "MaximumValue": 5000,
       "MinimumValue": 0,
       "StepValue": 1,
@@ -262,7 +262,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "TESLA-RFI-000533",
+      "InputValue": "Test_BOQ",
       "Id": "f8c72d3558b74c88a9bacd1aa3c5c665",
       "Inputs": [],
       "Outputs": [
@@ -413,7 +413,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": false,
+      "InputValue": true,
       "Id": "05d84df7b3444789903172355e2dd05e",
       "Inputs": [],
       "Outputs": [
@@ -737,7 +737,7 @@
     {
       "Start": "20dbb4229190489cb32866ff7124beb3",
       "End": "62c09d3b58fc43abaea058de32b4ab41",
-      "Id": "6cb66e663a264121bd9ba7d7acdd10e7",
+      "Id": "4e3f85d8591a4df5973d8fd3cbfafe0d",
       "IsHidden": "False"
     },
     {
@@ -853,8 +853,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -325.29158909521516,
-        "Y": 1880.0127199946196
+        "X": -326.923572462588,
+        "Y": 1904.4924705052144
       },
       {
         "Name": "rev. seq. N",
@@ -863,8 +863,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -418.556990200031,
-        "Y": 2196.4001517846027
+        "X": -420.18897356740388,
+        "Y": 2220.8799022951976
       },
       {
         "Name": "path",
@@ -883,8 +883,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -277.50317155274183,
-        "Y": 2340.7173420918143
+        "X": -279.1351549201147,
+        "Y": 2365.1970926024092
       },
       {
         "Name": "rev. Number",
@@ -893,8 +893,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -416.87974444873566,
-        "Y": 2044.4751750368737
+        "X": -418.51172781610853,
+        "Y": 2068.9549255474685
       },
       {
         "Name": "Code Block",
@@ -903,8 +903,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 120.82332326209223,
-        "Y": 2028.541329836019
+        "X": 119.19133989471936,
+        "Y": 2053.0210803466139
       },
       {
         "Name": "save to",
@@ -1013,12 +1013,12 @@
           "4d48c04a914e433ea6c5cd5729edd9ff"
         ],
         "HasNestedGroups": false,
-        "Left": -428.556990200031,
-        "Top": 1807.0127199946196,
+        "Left": -430.18897356740388,
+        "Top": 1831.4924705052144,
         "Width": 831.38031346212324,
         "Height": 665.70462209719472,
         "FontSize": 36.0,
-        "InitialTop": 1880.0127199946196,
+        "InitialTop": 1904.4924705052144,
         "InitialHeight": 605.70462209719472,
         "TextblockHeight": 63.0,
         "Background": "#FFFFB8D8"
@@ -1113,8 +1113,8 @@
         "Background": "#FFBB87C6"
       }
     ],
-    "X": 572.62296931782248,
-    "Y": 116.58450825734241,
-    "Zoom": 0.20342235931895625
+    "X": 509.88964149862784,
+    "Y": -2339.2570250076624,
+    "Zoom": 1.118962269235638
   }
 }

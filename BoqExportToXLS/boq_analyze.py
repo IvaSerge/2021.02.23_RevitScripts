@@ -37,7 +37,7 @@ def get_boq_by_elements(elems_list: list) -> list:
 	# BOQ schedule
 	# | Category | Description |
 	if not elems_list:
-		return None
+		return list()
 
 	elem_id = [i.Id.IntegerValue for i in elems_list]
 	elem_categories = [i.Category.Name for i in elems_list]
@@ -104,7 +104,7 @@ def get_wire_length(el_circuit):
 def get_boq_by_circuits(el_circuits):
 
 	if not el_circuits:
-		return None
+		return list()
 
 	elem_id = [i.Id.IntegerValue for i in el_circuits]
 	sys_wire_types = [get_wire_type(i) for i in el_circuits]
@@ -122,7 +122,7 @@ def get_boq_by_circuits(el_circuits):
 	df_groupped_by = pd_wires_frame.groupby("Wire Type")["Wire Type"].indices.keys()
 	out_cables = [i for i in df_groupped_by]
 	out_length = pd_wires_frame.groupby("Wire Type")["Length"].sum().tolist()
-	out_category = ["Cables"] * len(out_cables)
+	out_category = ["Cables"] * (len(out_cables) - 1)
 	out_length_spare = [round(i * 1.2) for i in out_length]
 
 	return zip(out_category, out_cables, out_length, out_length_spare)
@@ -147,12 +147,32 @@ def sorted_by_category(list_of_lists):
 	return sorted(list(result_dict.items()), key=lambda x: x[0])
 
 
-def get_boq_by_tray(rvt_tray):
+def get_boq_by_tray(tray_list):
 
-	if not rvt_tray:
-		return None
+	if not tray_list:
+		return list()
 
-	return None
+	doc = tray_list[0].Document
+	tray_description = [
+		get_tray_description(i)
+		for i in tray_list]
+
+	tray_length = [
+		math.ceil((ft_to_mm(doc, get_parval(i, "CURVE_ELEM_LENGTH")) / 1000))
+		for i in tray_list]
+
+	# pd_elem_ids = pd.Series(tray_id)
+	pd_tray = pd.Series(tray_description)
+	pd_length = pd.Series(tray_length)
+	pd_tray_frame = pd.DataFrame({
+		"Description": pd_tray,
+		"Length": pd_length})
+
+	df_groupped_by = pd_tray_frame.groupby("Description")["Description"].indices.keys()
+	out_trays = [i for i in df_groupped_by]
+	out_length = pd_tray_frame.groupby("Description")["Length"].sum().tolist()
+	out_category = ["Cable trays"] * (len(tray_list) - 1)
+	return zip(out_category, out_trays, out_length)
 
 
 def add_headers(boq_list: list) -> list:
@@ -188,3 +208,15 @@ def add_headers(boq_list: list) -> list:
 		boq_updated.append(boq_cat_list)
 
 	return boq_updated
+
+
+def get_tray_description(rvt_tray: Autodesk.Revit.DB.Electrical.CableTray):
+	# get tray model, width, height and combine in string
+	doc = rvt_tray.Document
+	tray_type = doc.GetElement(
+		Autodesk.Revit.DB.Electrical.CableTray.GetTypeId(rvt_tray))
+	tray_w = round(toolsrvt.ft_to_mm(doc, rvt_tray.Width))
+	tray_h = round(toolsrvt.ft_to_mm(doc, rvt_tray.Height))
+	tray_model = toolsrvt.get_parval(tray_type, "ALL_MODEL_MODEL")
+	tray_descr = f"Cable tray {tray_model} W{tray_w} H{tray_h}"
+	return tray_descr
