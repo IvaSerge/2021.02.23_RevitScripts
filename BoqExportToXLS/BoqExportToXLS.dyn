@@ -283,7 +283,7 @@
       "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Integer",
-      "InputValue": 1,
+      "InputValue": 0,
       "MaximumValue": 5000,
       "MinimumValue": 0,
       "StepValue": 1,
@@ -1113,8 +1113,8 @@
         "Background": "#FFBB87C6"
       }
     ],
-    "X": 509.88964149862784,
-    "Y": -2339.2570250076624,
-    "Zoom": 1.118962269235638
+    "X": -115.17592745904562,
+    "Y": -861.53974824498709,
+    "Zoom": 0.88263037958885848
   }
 }

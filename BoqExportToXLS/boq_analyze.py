@@ -23,7 +23,7 @@ from RevitServices.Transactions import TransactionManager
 from System import Array
 from System.Collections.Generic import *
 from importlib import reload
-
+import re
 import pandas as pd
 
 # ================ local imports
@@ -175,6 +175,32 @@ def get_boq_by_tray(tray_list):
 	return zip(out_category, out_trays, out_length)
 
 
+def get_boq_by_tray_fitting(fitting_list):
+	if not fitting_list:
+		return list()
+
+	# tray_description = [
+	# 	get_fitting_description(i)
+	# 	for i in fitting_list]
+
+	# tray_length = [
+	# 	math.ceil((ft_to_mm(doc, get_parval(i, "CURVE_ELEM_LENGTH")) / 1000))
+	# 	for i in fitting_list]
+
+	# # pd_elem_ids = pd.Series(tray_id)
+	# pd_tray = pd.Series(tray_description)
+	# pd_length = pd.Series(tray_length)
+	# pd_tray_frame = pd.DataFrame({
+	# 	"Description": pd_tray,
+	# 	"Length": pd_length})
+
+	# df_groupped_by = pd_tray_frame.groupby("Description")["Description"].indices.keys()
+	# out_trays = [i for i in df_groupped_by]
+	# out_length = pd_tray_frame.groupby("Description")["Length"].sum().tolist()
+	# out_category = ["Cable trays"] * (len(fitting_list) - 1)
+	return get_fitting_description(fitting_list[1])
+
+
 def add_headers(boq_list: list) -> list:
 	"""Add headers and empty cells to follow general standard"""
 
@@ -220,3 +246,22 @@ def get_tray_description(rvt_tray: Autodesk.Revit.DB.Electrical.CableTray):
 	tray_model = toolsrvt.get_parval(tray_type, "ALL_MODEL_MODEL")
 	tray_descr = f"Cable tray {tray_model} W{tray_w} H{tray_h}"
 	return tray_descr
+
+
+def get_fitting_description(rvt_fitting):
+
+	fitting_symbol = rvt_fitting.Symbol
+	fitting_model = get_parval(fitting_symbol, "ALL_MODEL_MODEL")
+	# analyzing model string to get decription and H
+	regexp = re.compile(r"^(.*)\s(H\d*)")  # or take firs two symbols
+	check = regexp.match(fitting_model)
+	fitting_descr = check.group(1)
+	fitting_h = check.group(2)
+
+	# analyzing instance size to get width
+	fitting_size = get_parval(rvt_fitting, "RBS_CALCULATED_SIZE")
+	regexp = re.compile(r"^\d*")  # or take firs two symbols
+	fitting_w = regexp.search(fitting_size).group(0)
+
+	fitting_out = f"{fitting_descr} W{fitting_w} {fitting_h}"
+	return fitting_out
