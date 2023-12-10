@@ -803,8 +803,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 194.98350912707724,
-        "Y": 1114.1894388300545
+        "X": 193.85053203595805,
+        "Y": 1113.0564617389355
       },
       {
         "Name": "Python Script From String",
@@ -823,8 +823,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 269.94205772535986,
-        "Y": 641.20134562115356
+        "X": 162.3092340690381,
+        "Y": 651.39813944122614
       },
       {
         "Name": "File From Path",
@@ -833,8 +833,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -86.494569870786677,
-        "Y": 636.66332339081225
+        "X": -194.12739352710844,
+        "Y": 646.86011721088482
       },
       {
         "Name": "String",
@@ -843,8 +843,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -390.42266296900561,
-        "Y": 635.14025475842755
+        "X": -498.05548662532738,
+        "Y": 645.33704857850012
       },
       {
         "Name": "BOQ_Name",
@@ -873,8 +873,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 314.09634257515063,
-        "Y": 850.178239061375
+        "X": 206.46351891882887,
+        "Y": 860.37503288144762
       },
       {
         "Name": "elem_filter_name",
@@ -1081,12 +1081,12 @@
           "d4faef3825fc49ce8fedebdcd48067ca"
         ],
         "HasNestedGroups": false,
-        "Left": 184.98350912707724,
-        "Top": 1041.1894388300545,
+        "Left": 183.85053203595805,
+        "Top": 1040.0564617389355,
         "Width": 214.0,
         "Height": 205.0,
         "FontSize": 36.0,
-        "InitialTop": 1114.1894388300545,
+        "InitialTop": 1113.0564617389355,
         "InitialHeight": 145.0,
         "TextblockHeight": 63.0,
         "Background": "#FFB9F9E1"
@@ -1113,8 +1113,8 @@
         "Background": "#FFBB87C6"
       }
     ],
-    "X": -115.17592745904562,
-    "Y": -861.53974824498709,
+    "X": -438.17592745904562,
+    "Y": -1050.5397482449871,
     "Zoom": 0.88263037958885848
   }
 }
