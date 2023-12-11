@@ -83,6 +83,9 @@ def get_wire_type(el_circuit):
 		circuit_wire_size = el_circuit.WireSizeString
 		if not circuit_wire_size:
 			circuit_wire_size = ""
+			# TODO: Check cable description
+			# for specific cable sizing, for example, single core, or control cable
+			# see "Cable Description" parameter.
 
 		return circuit_wire + " " + circuit_wire_size
 
@@ -184,6 +187,7 @@ def get_boq_by_tray_fitting(fitting_list):
 		for i in fitting_list
 		if "union" not in str.lower(get_fitting_description(i))]
 
+	# TODO: Replace Reuced T and X with Add-ons
 	pd_tray = pd.Series(tray_description)
 	pd_tray_frame = pd.DataFrame({
 		"Description": pd_tray})
@@ -246,6 +250,7 @@ def get_fitting_description(rvt_fitting):
 	fitting_symbol = rvt_fitting.Symbol
 	fitting_model = get_parval(fitting_symbol, "ALL_MODEL_MODEL")
 
+	# TODO: analyze Reudcer, T and X with reduced parts
 	# analyzing model string to get decription and H
 	regexp = re.compile(r"^(.*)\s(H\d*)")  # or take firs two symbols
 	check = regexp.match(fitting_model)
