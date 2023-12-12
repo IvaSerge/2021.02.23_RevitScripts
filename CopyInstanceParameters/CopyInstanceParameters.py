@@ -37,16 +37,26 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 view = doc.ActiveView
+
+# =============== IN Block
 reload_var = IN[1]  # type: ignore
-rvt_elem = IN[2]  # type: ignore
+copy_from = IN[2]  # type: ignore
+copy_to = IN[3]  # type: ignore
+settings_worksets = IN[4]  # type: ignore
+settings_parameters = IN[5]  # type: ignore
 
+# Check selection in Dynamo
+if copy_to:
+	elems_list = copy_to
 
-# Element selection
-if rvt_elem:
-	rvt_elem = UnwrapElement(rvt_elem)  # type: ignore
+# Propose selection via Revit API
 else:
-	sel_elem = uidoc.Selection.PickObject(
-		Autodesk.Revit.UI.Selection.ObjectType.Element,
-		"Selection of two elements")
+	rvt_ref = uidoc.Selection.PickObject(
+		Autodesk.Revit.UI.Selection.ObjectType.Element, "")
+	elems_list = [doc.GetElement(rvt_ref.ElementId)]
 
-OUT = None
+# TODO: apply wokrset
+# TODO: apply phase
+# TODO: apply parameters
+
+OUT = elems_list

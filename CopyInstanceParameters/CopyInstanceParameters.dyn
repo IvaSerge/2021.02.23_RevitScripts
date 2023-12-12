@@ -177,7 +177,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "BoqExportToXLS.py",
+      "InputValue": "CopyInstanceParameters.py",
       "Id": "0eb69237dd0c4dc187884facd965d90a",
       "Inputs": [],
       "Outputs": [
@@ -227,7 +227,9 @@
     {
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
-      "InstanceId": [],
+      "InstanceId": [
+        "ab81b97d-28e6-4dc8-8dcb-cf9e4c40d0e9-016c9736"
+      ],
       "Id": "338fd35c14c647468c2d6ba4e0e07e8a",
       "Inputs": [],
       "Outputs": [
@@ -246,7 +248,9 @@
     {
       "ConcreteType": "Dynamo.Nodes.DSModelElementsSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
-      "InstanceId": [],
+      "InstanceId": [
+        "cd8d4dff-e8c4-4a68-9a4e-d62ccf5bd774-01ca5c67"
+      ],
       "Id": "0acc89d535e44121ae170e28eaff34f6",
       "Inputs": [],
       "Outputs": [
@@ -645,12 +649,6 @@
       "IsHidden": "False"
     },
     {
-      "Start": "cd49cafebbae4837b6459f7c94feeea1",
-      "End": "92fdbd0ada5f4eb2a01f5c5085e900d6",
-      "Id": "85fa0b17a0914d05b1df516a2b3335dc",
-      "IsHidden": "False"
-    },
-    {
       "Start": "c7fc09ff5f1d4650ae4125ca5f6a8f43",
       "End": "1e653c7849a044fab111edbdabd49457",
       "Id": "f6428140fdb44b6f8ed0af3603e64456",
@@ -737,7 +735,7 @@
     {
       "Start": "d5b6f39002b942599b65562861d6002b",
       "End": "61f426ed7ca54546998b8587f72255ac",
-      "Id": "07f574274e3b4073908750ffa666d43d",
+      "Id": "e8d4b59a437d4a68a0a25fee463c90d2",
       "IsHidden": "False"
     },
     {
@@ -883,8 +881,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -252.50649070979443,
-        "Y": 1779.8972130787988
+        "X": -233.53001852689181,
+        "Y": 1785.4785284267114
       },
       {
         "Name": "Copy Phase Created",
@@ -893,8 +891,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -276.09676325017745,
-        "Y": 1915.113306529197
+        "X": -257.12029106727482,
+        "Y": 1920.6946218771095
       },
       {
         "Name": "List Create",
@@ -903,8 +901,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 222.28793630926384,
-        "Y": 2310.49566006376
+        "X": 234.93542168042495,
+        "Y": 2312.0765957351555
       },
       {
         "Name": "Parameters",
@@ -913,8 +911,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -305.21109014482977,
-        "Y": 2381.4982051310285
+        "X": -292.56360477366866,
+        "Y": 2383.0791408024238
       },
       {
         "Name": "Copy circuit parameters",
@@ -923,8 +921,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": -301.1930233371113,
-        "Y": 2056.3884199636591
+        "X": -282.21655115420867,
+        "Y": 2061.9697353115716
       },
       {
         "Name": "List Create",
@@ -933,8 +931,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 216.83501497295742,
-        "Y": 1774.2331484973367
+        "X": 235.81148715586005,
+        "Y": 1779.8144638452493
       }
     ],
     "Annotations": [
@@ -973,11 +971,11 @@
         "HasNestedGroups": false,
         "Left": 165.89234214627254,
         "Top": 1302.4106174759972,
-        "Width": 224.51836754970964,
+        "Width": 242.51836754970964,
         "Height": 372.97399586752567,
         "FontSize": 36.0,
         "InitialTop": 1375.4106174759972,
-        "InitialHeight": 347.18271814506556,
+        "InitialHeight": 293.97399586752567,
         "TextblockHeight": 63.0,
         "Background": "#FFFFB8D8"
       },
@@ -995,13 +993,13 @@
           "7033e24980db4fc994fa1070a15b28af"
         ],
         "HasNestedGroups": false,
-        "Left": -311.1930233371113,
-        "Top": 1701.2331484973367,
+        "Left": -292.21655115420867,
+        "Top": 1706.8144638452493,
         "Width": 698.02803831006872,
         "Height": 487.15527146632235,
         "FontSize": 36.0,
-        "InitialTop": 1774.2331484973367,
-        "InitialHeight": 440.8700217483979,
+        "InitialTop": 1779.8144638452493,
+        "InitialHeight": 427.15527146632235,
         "TextblockHeight": 63.0,
         "Background": "#FFA4E1FF"
       },
@@ -1017,19 +1015,19 @@
           "0278876a2b024f0e98463d8aaae2b863"
         ],
         "HasNestedGroups": false,
-        "Left": -315.21109014482977,
-        "Top": 2237.49566006376,
+        "Left": -302.56360477366866,
+        "Top": 2239.0765957351555,
         "Width": 712.49902645409361,
         "Height": 550.0,
         "FontSize": 36.0,
-        "InitialTop": 2310.49566006376,
-        "InitialHeight": 507.0,
+        "InitialTop": 2312.0765957351555,
+        "InitialHeight": 216.00254506726833,
         "TextblockHeight": 63.0,
         "Background": "#FFA4E1FF"
       }
     ],
-    "X": 129.34028217201035,
-    "Y": -322.2430893381387,
-    "Zoom": 0.5287214395980826
+    "X": -170.2848548282596,
+    "Y": -556.854894849586,
+    "Zoom": 0.55421262033217644
   }
 }
