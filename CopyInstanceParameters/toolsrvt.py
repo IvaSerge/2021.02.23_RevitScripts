@@ -108,7 +108,7 @@ def get_parval(elem, name):
 		if storeType == StorageType.String:
 			value = param.AsString()
 		elif storeType == StorageType.Integer:
-			value = param.AsDouble()
+			value = param.AsInteger()
 		elif storeType == StorageType.Double:
 			value = param.AsDouble()
 		elif storeType == StorageType.ElementId:

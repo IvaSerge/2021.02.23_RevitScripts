@@ -43,6 +43,19 @@ def get_par_val_by_list(elem, param_list):
 	return values
 
 
+def get_electrical_circuits(elems_list):
+	out_circuits = list()
+	for elem in elems_list:
+		if elem.Category.Id.IntegerValue == -2001040:
+			main_circuit = toolsrvt.elsys_by_brd(elem)[0]
+			out_circuits.append(main_circuit)
+		else:
+			elem_circuits = [
+				i for i in elem.MEPModel.GetElectricalSystems()]
+			out_circuits.extend(elem_circuits)
+	return out_circuits
+
+
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -75,7 +88,12 @@ if settings_worksets[0]:
 	params_to_set.append("ELEM_PARTITION_PARAM")
 # apply phase
 if settings_worksets[1]:
-	params_to_set.append("Phase Created")
+	params_to_set.append("PHASE_CREATED")
+
+# Copy parameters to circuit
+if settings_worksets[2]:
+	el_circuits = get_electrical_circuits(elems_list)
+	elems_list.extend(el_circuits)
 
 params_to_set.extend(settings_parameters)
 param_values = get_par_val_by_list(copy_from, params_to_set)
@@ -88,9 +106,13 @@ for elem in elems_list:
 	for param in param_values:
 		p_name = param[0]
 		p_value = param[1]
-		toolsrvt.setup_param_value(elem, p_name, p_value)
+		try:
+			toolsrvt.setup_param_value(elem, p_name, p_value)
+		except:
+			pass
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = param_values
+# OUT = param_values
+OUT = elems_list
