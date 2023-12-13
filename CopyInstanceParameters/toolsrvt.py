@@ -99,6 +99,9 @@ def get_parval(elem, name):
 		param = elem.get_Parameter(get_bip(name))
 
 	if param:
+		# check if parameter has value
+		if not param.HasValue:
+			return None
 		# get paremeter Value if found
 		storeType = param.StorageType
 		# value = storeType

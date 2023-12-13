@@ -31,6 +31,18 @@ reload(toolsrvt)
 from toolsrvt import *
 
 
+def get_par_val_by_list(elem, param_list):
+	values = list()
+	for param in param_list:
+		try:
+			param_value = toolsrvt.get_parval(elem, param)
+			if param_value is not None:
+				values.append([param, param_value])
+		except:
+			pass
+	return values
+
+
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -40,14 +52,17 @@ view = doc.ActiveView
 
 # =============== IN Block
 reload_var = IN[1]  # type: ignore
-copy_from = IN[2]  # type: ignore
+copy_from = UnwrapElement(IN[2])  # type: ignore
 copy_to = IN[3]  # type: ignore
 settings_worksets = IN[4]  # type: ignore
 settings_parameters = IN[5]  # type: ignore
+params_to_set = list()
 
 # Check selection in Dynamo
 if copy_to:
-	elems_list = copy_to
+	if not isinstance(copy_to, list):
+		copy_to = [copy_to]
+	elems_list = [UnwrapElement(i) for i in copy_to]  # type: ignore
 
 # Propose selection via Revit API
 else:
@@ -55,8 +70,27 @@ else:
 		Autodesk.Revit.UI.Selection.ObjectType.Element, "")
 	elems_list = [doc.GetElement(rvt_ref.ElementId)]
 
-# TODO: apply wokrset
-# TODO: apply phase
-# TODO: apply parameters
+# apply wokrset
+if settings_worksets[0]:
+	params_to_set.append("ELEM_PARTITION_PARAM")
+# apply phase
+if settings_worksets[1]:
+	params_to_set.append("Phase Created")
 
-OUT = elems_list
+params_to_set.extend(settings_parameters)
+param_values = get_par_val_by_list(copy_from, params_to_set)
+
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
+
+# set parameter values
+for elem in elems_list:
+	for param in param_values:
+		p_name = param[0]
+		p_value = param[1]
+		toolsrvt.setup_param_value(elem, p_name, p_value)
+
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
+
+OUT = param_values
