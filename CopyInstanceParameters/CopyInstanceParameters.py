@@ -50,8 +50,13 @@ def get_electrical_circuits(elems_list):
 			main_circuit = toolsrvt.elsys_by_brd(elem)[0]
 			out_circuits.append(main_circuit)
 		else:
+			try:
+				mep_model = elem.MEPModel
+			except:
+				continue
 			elem_circuits = [
-				i for i in elem.MEPModel.GetElectricalSystems()]
+				i for i in mep_model.GetElectricalSystems()
+				if elem.MEPModel]
 			out_circuits.extend(elem_circuits)
 	return out_circuits
 
