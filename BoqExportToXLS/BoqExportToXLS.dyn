@@ -209,7 +209,7 @@
       "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Integer",
-      "InputValue": 1,
+      "InputValue": 763,
       "MaximumValue": 5000,
       "MinimumValue": 0,
       "StepValue": 1,
@@ -262,7 +262,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "Test_BOQ",
+      "InputValue": "TESLA-DCNOT-001850",
       "Id": "f8c72d3558b74c88a9bacd1aa3c5c665",
       "Inputs": [],
       "Outputs": [
@@ -1113,8 +1113,8 @@
         "Background": "#FFBB87C6"
       }
     ],
-    "X": -438.17592745904562,
-    "Y": -1050.5397482449871,
-    "Zoom": 0.88263037958885848
+    "X": -121.64247659941338,
+    "Y": -821.13509351894129,
+    "Zoom": 0.80898931257801876
   }
 }

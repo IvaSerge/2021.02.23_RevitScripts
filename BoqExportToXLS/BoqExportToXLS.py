@@ -2,6 +2,7 @@
 # pandas, Pillow, pip install -U pypiwin32
 # pip install -U python-dotenv
 # pip install mysql-connector-python
+# pip install openpyxl
 
 import clr
 import os
@@ -172,4 +173,4 @@ finally:
 	excel = None
 	wb = None
 
-OUT = boq_fittings
+OUT = boq_cables
