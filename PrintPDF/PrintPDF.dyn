@@ -40,7 +40,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "a83f9eb8e5ba4504b10dd0c8dca814ef",
       "Inputs": [],
       "Outputs": [
@@ -315,7 +315,7 @@
       "ConcreteType": "CoreNodeModels.Input.IntegerSlider, CoreNodeModels",
       "NodeType": "NumberInputNode",
       "NumberType": "Integer",
-      "InputValue": 748,
+      "InputValue": 763,
       "MaximumValue": 5000,
       "MinimumValue": 0,
       "StepValue": 1,
@@ -610,8 +610,8 @@
         "Background": "#FFFFB8D8"
       }
     ],
-    "X": -183.49477059215951,
-    "Y": -507.71252961868367,
-    "Zoom": 0.606488279009303
+    "X": -100.93722710925118,
+    "Y": -132.18627963626579,
+    "Zoom": 0.31067418308892525
   }
 }

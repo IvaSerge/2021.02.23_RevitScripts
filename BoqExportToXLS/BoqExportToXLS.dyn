@@ -12,7 +12,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
       "NodeType": "BooleanInputNode",
-      "InputValue": true,
+      "InputValue": false,
       "Id": "d4faef3825fc49ce8fedebdcd48067ca",
       "Inputs": [],
       "Outputs": [
@@ -188,7 +188,7 @@
     {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "Test_BOQ",
+      "InputValue": "BER-GF-SE-CP-00-SH-E-TSLA-8000-03",
       "Id": "8fb287bfac4d47e2ab7fdc4866f256c4",
       "Inputs": [],
       "Outputs": [
@@ -1113,8 +1113,8 @@
         "Background": "#FFBB87C6"
       }
     ],
-    "X": -121.64247659941338,
-    "Y": -821.13509351894129,
-    "Zoom": 0.80898931257801876
+    "X": 352.64300075251344,
+    "Y": -677.99288077144718,
+    "Zoom": 0.68841989254652181
   }
 }
