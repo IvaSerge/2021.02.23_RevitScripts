@@ -1,0 +1,37 @@
+{
+    "python.languageServer": "Pylance",
+    "python.analysis.stubPath": "C:\\stubs.min",
+    "python.analysis.completeFunctionParens": true,
+    "python.autoComplete.addBrackets": true,
+
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+
+    "git.confirmSync": false,
+    "githubIssues.ignoreCompletionTrigger": [
+        "makefile"
+    ],
+    "githubPullRequests.createOnPublishBranch": "never",
+
+    "vim.useSystemClipboard": true,
+
+    "editor.suggestSelection": "first",
+    "editor.insertSpaces": false,
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "editor.tabSize": 4,
+    "editor.renderWhitespace": "all",
+    "editor.mouseWheelZoom": true,
+
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
+    },
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
+    
+}
