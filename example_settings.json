@@ -32,6 +32,5 @@
     "notebook.cellToolbarLocation": {
         "default": "right",
         "jupyter-notebook": "left"
-    },
-    
+    }    
 }
