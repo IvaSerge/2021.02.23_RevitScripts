@@ -55,7 +55,6 @@ import db_reader
 reload(db_reader)
 from db_reader import *
 
-
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -67,32 +66,32 @@ path_to_save = os.path.normpath(IN[2])  # type: ignore
 manual_naming = IN[3]  # type: ignore
 info_list = IN[4]  # type: ignore
 filter_param_name = "BOQ Phase"  # filter parameter is hard coded
+shop_code = info_list[0]
+discipline_code = info_list[1]
+rev_seq_number = info_list[2]
+rev_description = info_list[3]
+filter_param_value = info_list[3]
 
 # get main BOQ parameters
 if manual_naming:
 	boq_name = info_list[0]  # type: ignore
 	rev_doc_number = info_list[1]  # type: ignore
+
 else:
-	shop_code = info_list[0]
-	discipline_code = info_list[1]
 	# read DB adn get BOQ name and number automatically
-	names_list = db_reader.get_boq_filename(
+	db_names = db_reader.get_db_boq_name_and_rev(
 		dir_path,
 		shop_code,
 		discipline_code)
-	boq_name = names_list[0]
-	rev_doc_number = names_list[1]
+	boq_name = db_names[0]
+	rev_doc_number = db_names[1]
 
-rev_seq_number = info_list[2]  # type: ignore
-filter_param_value = info_list[3]  # type: ignore
-
-# get BOQ files to save
-names_list = xl_writer.get_files_path(
-	path_to_save,
-	dir_path,
+# create path by name, revision and description
+names_list = xl_writer.create_files_names(
 	boq_name,
 	rev_doc_number,
-	filter_param_value)
+	rev_description,
+	path_to_save)
 
 path_xlsx = names_list[0]
 path_pdf = names_list[1]
@@ -173,4 +172,4 @@ finally:
 	excel = None
 	wb = None
 
-OUT = boq_cables
+OUT = names_list

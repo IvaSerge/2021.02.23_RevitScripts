@@ -11,6 +11,18 @@ from dotenv import load_dotenv
 import mysql.connector as connection
 import pandas as pd
 
+def check_file_name(file_name):
+
+	# check for forbiden symbols
+	for char in file_name:
+		if char in "<:\"/\\|?*":
+			raise ValueError("Wrong file name")
+
+	# check file length	
+	if len(file_name) > 80:
+		raise ValueError("File name is too long")
+
+	return True
 
 def get_db_table(env_path, doc_name):
 	env_name = "db_info.env"
@@ -58,45 +70,23 @@ def get_db_table(env_path, doc_name):
 			pass
 
 
-def get_info_by_name(dir_path, boq_name, rev_doc_number, boq_descr):
+# def get_info_by_name(dir_path, boq_name, rev_doc_number, boq_descr):
 
-	# read database and get table by boq name
-	db_table = get_db_table(dir_path, boq_name)
+# 	# read database and get table by boq name
+# 	db_table = get_db_table(dir_path, boq_name)
 
-	if db_table:
-		# if info from the database was found
-		# check revision
-		db_rev = int(db_table[1])
-		if int(rev_doc_number) <= db_rev:
-			err_string = f"Revision number [{rev_doc_number:02d}] is too small\n"
-			err_string += f"Use revision bigger then [{db_rev:02d}]"
-			raise ValueError(err_string)
-		boq_descr = db_table[2]
-
-	name_number = boq_name
-	name_prefix = "_XLSX"
-	name_rev = f'[{rev_doc_number:02d}]'
-	name_description = boq_descr
-
-	name_xlsx = boq_name
-	name_xlsx += name_prefix + name_rev
-	if "BOQ" in name_description:
-		name_xlsx += " - " + name_description
-	else:
-		name_xlsx += " - BOQ-" + name_description
-	name_xlsx += ".xlsx"
-	name_pdf = name_number
-	name_pdf += name_rev
-	if "BOQ-" in name_description:
-		name_pdf += " - " + name_description
-	else:
-		name_pdf += " - BOQ-" + name_description
-	name_pdf += ".pdf"
-
-	return name_xlsx, name_pdf
+# 	if db_table:
+# 		# if info from the database was found
+# 		# check revision
+# 		db_rev = int(db_table[1])
+# 		if int(rev_doc_number) <= db_rev:
+# 			err_string = f"Revision number [{rev_doc_number:02d}] is too small\n"
+# 			err_string += f"Use revision bigger then [{db_rev:02d}]"
+# 			raise ValueError(err_string)
+# 		boq_descr = db_table[2]
 
 
-def get_boq_filename(env_path, shop_code, discipline_code):
+def get_db_boq_name_and_rev(env_path, shop_code, discipline_code):
 
 	env_name = "db_info.env"
 	env_path = env_path + "\\" + env_name
@@ -131,16 +121,20 @@ def get_boq_filename(env_path, shop_code, discipline_code):
 
 		# nothing in DB
 		if not df_values:
-			boq_name = f"{shop_code}-00-SH-{discipline_code}-TSLA_8000-00"
+			boq_name = f"{shop_code}-00-SH-{discipline_code}-TSLA-8000-00"
 			boq_revision_number = int(0)
 			return boq_name, boq_revision_number
 
-		current_max_name = df_values[-1][1]
+		# find max number
 		regexp = re.compile(r"^.*-8000-(\d*)_")  # or take firs two symbols
-		check = regexp.match(current_max_name)
-		current_max_num = int(check.group(1))
+		xls_names = [i[1] for i in df_values]
+		get_number = lambda x: int(regexp.match(x).group(1))
+		xls_numbers = [get_number(i) for i in xls_names]
+		current_max_num = max(xls_numbers)
+
+		# update number for next document
 		next_num = current_max_num + 1
-		boq_name = f"{shop_code}-00-SH-{discipline_code}-TSLA_8000-{next_num:02d}"
+		boq_name = f"{shop_code}-00-SH-{discipline_code}-TSLA-8000-{next_num:02d}"
 		boq_revision_number = int(0)
 		return boq_name, boq_revision_number
 
