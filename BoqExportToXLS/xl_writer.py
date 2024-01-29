@@ -36,29 +36,39 @@ reload(db_reader)
 from db_reader import *
 
 
-def check_file_name(file_name):
+def create_files_names(boq_name, rev_doc_number, boq_descr, path_to_save):
+	name_number = boq_name
+	name_prefix = "_XLSX"
+	name_rev = f'[{rev_doc_number:00d}]'
+	name_description = boq_descr
 
-	for char in file_name:
-		if char in "<:\"/\\|?*":
-			raise ValueError("Wrong file name")
-	if len(file_name) > 80:
-		raise ValueError("File name is too long")
+	# xlsx file name
+	name_xlsx = boq_name
+	name_xlsx += name_prefix + name_rev
+	if "BOQ" in name_description:
+		name_xlsx += " - " + name_description
+	else:
+		name_xlsx += " - BOQ_" + name_description
+	name_xlsx += ".xlsx"
 
-	return True
-
-
-def get_files_path(path_to_save, dir_path, boq_name, rev_doc_number, filter_param_value):
-
-	# Check revision in database
-	name_list = get_info_by_name(dir_path, boq_name, rev_doc_number, filter_param_value)
-	name_xlsx = name_list[0]
-	name_pdf = name_list[1]
-	path_xlsx = path_to_save + "\\" + name_xlsx
-	path_pdf = path_to_save + "\\" + name_pdf
+	# pdf file name
+	name_pdf = name_number
+	name_pdf += name_rev
+	if "BOQ" in name_description:
+		name_pdf += " - " + name_description
+	else:
+		name_pdf += " - BOQ_" + name_description
+	name_pdf += ".pdf"
+	
+	# check file names
 	check_file_name(name_xlsx)
 	check_file_name(name_pdf)
 
-	return path_xlsx, path_pdf
+	# add path to beginning
+	name_xlsx = path_to_save + "\\" + name_xlsx
+	name_pdf = path_to_save + "\\" + name_pdf
+
+	return name_xlsx, name_pdf
 
 
 def write_first_page(dyn_path, xl_save_to, doc, boq_name, seq_number, rev_number):
