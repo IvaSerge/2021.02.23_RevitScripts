@@ -150,32 +150,37 @@ def sorted_by_category(list_of_lists):
 	return sorted(list(result_dict.items()), key=lambda x: x[0])
 
 
-def get_boq_by_tray(tray_list):
+def get_boq_by_l_based_fam(l_based_families):
 
-	if not tray_list:
+	if not l_based_families:
 		return list()
 
-	doc = tray_list[0].Document
-	tray_description = [
-		get_tray_description(i)
-		for i in tray_list]
+	doc = l_based_families[0].Document
 
-	tray_length = [
+	lbf_description = [
+		get_lbf_description(i)
+		for i in l_based_families]
+
+	lbf_length = [
 		math.ceil((ft_to_mm(doc, get_parval(i, "CURVE_ELEM_LENGTH")) / 1000))
-		for i in tray_list]
+		for i in l_based_families]
 
-	# pd_elem_ids = pd.Series(tray_id)
-	pd_tray = pd.Series(tray_description)
-	pd_length = pd.Series(tray_length)
-	pd_tray_frame = pd.DataFrame({
-		"Description": pd_tray,
+	lbf_cat = [i.Category.Name for i in l_based_families]
+
+	pd_cat = pd.Series(lbf_cat)
+	pd_descr = pd.Series(lbf_description)
+	pd_length = pd.Series(lbf_length)
+	pd_frame = pd.DataFrame({
+		"Category": pd_cat,
+		"Description": pd_descr,
 		"Length": pd_length})
 
-	df_groupped_by = pd_tray_frame.groupby("Description")["Description"].indices.keys()
-	out_trays = [i for i in df_groupped_by]
-	out_length = pd_tray_frame.groupby("Description")["Length"].sum().tolist()
-	out_category = ["Cable trays"] * (len(tray_list) - 1)
-	return zip(out_category, out_trays, out_length)
+	df_groupped_by = pd_frame.groupby(["Category", "Description"])["Description"].indices.keys()
+	out_category = [i[0] for i in df_groupped_by]
+	out_description = [i[1] for i in df_groupped_by]
+	out_length = pd_frame.groupby(["Category", "Description"])["Length"].sum().tolist()
+
+	return zip(out_category, out_description, out_length)
 
 
 def get_boq_by_tray_fitting(fitting_list):
@@ -234,16 +239,27 @@ def add_headers(boq_list: list) -> list:
 	return boq_updated
 
 
-def get_tray_description(rvt_tray: Autodesk.Revit.DB.Electrical.CableTray):
+def get_lbf_description(line_based_family):
 	# get tray model, width, height and combine in string
-	doc = rvt_tray.Document
-	tray_type = doc.GetElement(
-		Autodesk.Revit.DB.Electrical.CableTray.GetTypeId(rvt_tray))
-	tray_w = round(toolsrvt.ft_to_mm(doc, rvt_tray.Width))
-	tray_h = round(toolsrvt.ft_to_mm(doc, rvt_tray.Height))
-	tray_model = toolsrvt.get_parval(tray_type, "ALL_MODEL_MODEL")
-	tray_descr = f"Cable tray {tray_model} W{tray_w} H{tray_h}"
-	return tray_descr
+	doc = line_based_family.Document
+	lbf_type = doc.GetElement(line_based_family.GetTypeId())
+	lbf_model = toolsrvt.get_parval(lbf_type, "ALL_MODEL_MODEL")
+
+	# for rectangular element
+	try:
+		lbf_w = round(toolsrvt.ft_to_mm(doc, line_based_family.Width))
+		lbf_h = round(toolsrvt.ft_to_mm(doc, line_based_family.Height))
+		lbf_descr = f"{lbf_model} W{lbf_w} H{lbf_h}"
+	except:
+		# for round element
+		try:
+			lbf_d =  round(toolsrvt.ft_to_mm(doc, line_based_family.Diameter))
+			# diameter need to be written in Model parameter
+			lbf_descr = f"{lbf_model}"
+		except:
+			raise ValueError("Wrong element dimention")
+
+	return lbf_descr
 
 
 def get_fitting_description(rvt_fitting):

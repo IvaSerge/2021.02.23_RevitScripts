@@ -109,67 +109,71 @@ bic_str_lst = (
 	"OST_NurseCallDevices",
 	"OST_SecurityDevices")
 
+bic_lenth_based_families = [
+	"OST_CableTray",
+	"OST_DuctCurves",
+	"OST_Conduit"]
 
-rvt_elems = inst_by_multicategory_param_val(
-	doc, bic_str_lst,
+# rvt_elems = inst_by_multicategory_param_val(
+# 	doc, bic_str_lst,
+# 	filter_param_name,
+# 	filter_param_value)
+
+# rvt_circuits = inst_by_multicategory_param_val(
+# 	doc, ["OST_ElectricalCircuit"],
+# 	filter_param_name,
+# 	filter_param_value)
+
+rvt_length_based_families = inst_by_multicategory_param_val(
+	doc, bic_lenth_based_families,
 	filter_param_name,
 	filter_param_value)
 
-rvt_circuits = inst_by_multicategory_param_val(
-	doc, ["OST_ElectricalCircuit"],
-	filter_param_name,
-	filter_param_value)
-
-rvt_tray = inst_by_multicategory_param_val(
-	doc, ["OST_CableTray"],
-	filter_param_name,
-	filter_param_value)
-
-rvt_tray_fitting = inst_by_multicategory_param_val(
-	doc, ["OST_CableTrayFitting"],
-	filter_param_name,
-	filter_param_value)
+# rvt_fitting = inst_by_multicategory_param_val(
+# 	doc, ["OST_CableTrayFitting"],
+# 	filter_param_name,
+# 	filter_param_value)
 
 # Read parameters and organise data structure
 boq_elems = list()
-boq_inst = get_boq_by_elements(rvt_elems)
-boq_cables = get_boq_by_circuits(rvt_circuits)
-boq_trays = get_boq_by_tray(rvt_tray)
-boq_fittings = get_boq_by_tray_fitting(rvt_tray_fitting)
+# boq_inst = get_boq_by_elements(rvt_elems)
+# boq_cables = get_boq_by_circuits(rvt_circuits)
+boq_l_based_families = get_boq_by_l_based_fam(rvt_length_based_families)
+# boq_fittings = get_boq_by_tray_fitting(rvt_fitting)
 
-boq_elems.extend(boq_inst)
-boq_elems.extend(boq_cables)
-boq_elems.extend(boq_trays)
-boq_elems.extend(boq_fittings)
+# boq_elems.extend(boq_inst)
+# boq_elems.extend(boq_cables)
+# boq_elems.extend(boq_l_based_families)
+# boq_elems.extend(boq_fittings)
 
-boq_elems_sorted = sorted_by_category(boq_elems)
-boq_with_header = add_headers(boq_elems_sorted)
+# boq_elems_sorted = sorted_by_category(boq_elems)
+# boq_with_header = add_headers(boq_elems_sorted)
 
-# Excel export
-xl_first_page = write_first_page(
-	dir_path, path_xlsx, doc, boq_name, rev_seq_number,
-	f'{rev_doc_number:02d}')
-xl_second_page = write_totals(path_xlsx, boq_with_header)
+# # Excel export
+# xl_first_page = write_first_page(
+# 	dir_path, path_xlsx, doc, boq_name, rev_seq_number,
+# 	f'{rev_doc_number:02d}')
+# xl_second_page = write_totals(path_xlsx, boq_with_header)
 
-# PDF export
-try:
-	excel = client.Dispatch("Excel.Application")
-	excel.Visible = False
+# # PDF export
+# try:
+# 	excel = client.Dispatch("Excel.Application")
+# 	excel.Visible = False
 
-	# Read Excel File
-	wb = excel.Workbooks.Open(path_xlsx)
-	wb.WorkSheets(["Cover", "BOQ Totals"]).Select()
+# 	# Read Excel File
+# 	wb = excel.Workbooks.Open(path_xlsx)
+# 	wb.WorkSheets(["Cover", "BOQ Totals"]).Select()
 
-	# Convert into PDF File
-	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
+# 	# Convert into PDF File
+# 	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
 
-except Exception as e:
-	raise ValueError(e)
+# except Exception as e:
+# 	raise ValueError(e)
 
-finally:
-	wb.Close(False)
-	excel.Quit()
-	excel = None
-	wb = None
+# finally:
+# 	wb.Close(False)
+# 	excel.Quit()
+# 	excel = None
+# 	wb = None
 
-OUT = names_list
+OUT = boq_l_based_families
