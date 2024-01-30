@@ -43,6 +43,6 @@ if rvt_elem:
 else:
 	sel_elem = uidoc.Selection.PickObject(
 		Autodesk.Revit.UI.Selection.ObjectType.Element,
-		"Selection of two elements")
+		"Element selection")
 
 OUT = None
