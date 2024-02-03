@@ -137,9 +137,10 @@ def write_totals(xl_path, totals_lst):
 	ws: openpyxl.Workbook.worksheets = wb.active
 
 	# set columns width
-	ws.column_dimensions["A"].width = 62
+	ws.column_dimensions["A"].width = 50
 	ws.column_dimensions["B"].width = 10
-	ws.column_dimensions["C"].width = 24
+	ws.column_dimensions["C"].width = 45
+	ws.column_dimensions["D"].width = 30
 
 	rw = 1
 	for category in totals_lst:
@@ -168,7 +169,7 @@ def write_totals(xl_path, totals_lst):
 
 	# set print area
 	first_cell = "A1"
-	last_cell = ws.cell(row=rw, column=3).coordinate
+	last_cell = ws.cell(row=rw, column=4).coordinate
 	ws.print_area = first_cell + ":" + last_cell
 
 	wb.save(xl_path)

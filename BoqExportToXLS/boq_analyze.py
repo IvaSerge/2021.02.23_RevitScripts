@@ -183,25 +183,20 @@ def get_boq_by_l_based_fam(l_based_families):
 	return zip(out_category, out_description, out_length)
 
 
-def get_boq_by_tray_fitting(fitting_list):
+def get_boq_by_fitting(fitting_list):
 	if not fitting_list:
 		return list()
 
-	tray_description = [
+	# filter out unions
+	fittings_filtered = [i for i in fitting_list if 
+		"union" not in str.lower(i.Symbol.Family.Name)]
+
+	fitting_description = [
 		get_fitting_description(i)
-		for i in fitting_list
-		if "union" not in str.lower(get_fitting_description(i))]
+		for i in fittings_filtered]
 
-	# TODO: Replace Reuced T and X with Add-ons
-	pd_tray = pd.Series(tray_description)
-	pd_tray_frame = pd.DataFrame({
-		"Description": pd_tray})
-
-	df_groupped_by = pd_tray_frame.groupby("Description")["Description"].indices.keys()
-	out_trays = [i for i in df_groupped_by]
-	out_size = pd_tray_frame.groupby("Description")["Description"].size().tolist()
-	out_category = ["Cable tray fittings"] * (len(fitting_list) - 1)
-	return zip(out_category, out_trays, out_size)
+	return fitting_description
+	# # TODO: Replace Reuced T and X with Add-ons
 
 
 def add_headers(boq_list: list) -> list:
@@ -212,22 +207,22 @@ def add_headers(boq_list: list) -> list:
 		category = boq[0]
 		elements = boq[1]
 
-		# boq in excel consists of 3 columns.
+		# boq in excel consists of 4 columns.
 		# frist line
-		boq_first = [category, [], []]
+		boq_first = [category, [], [], []]
 
 		# second line is different for differend categories:
 		if category == "Cables":
-			boq_second = ["Wire Type", "Length [m]", "Length with Spare 20% [m]"]
+			boq_second = ["Wire Type", "Length [m]", "Length with Spare 20% [m]", "Comments"]
 
 		elif category == "Cable trays":
-			boq_second = ["Description, Size WxH", "Length [m]", "Comments"]
+			boq_second = ["Description, Size WxH", "Length [m]", "Product reference", "Comments"]
 
 		elif category == "Cable tray fittings":
-			boq_second = ["Description, Size WxH", "Count", "Comments"]
+			boq_second = ["Description, Size WxH", "Count", "Product reference", "Comments"]
 
 		else:
-			boq_second = ["Description", "Count", "Comments"]
+			boq_second = ["Description", "Count", "Product reference", "Comments"]
 
 		boq_cat_list = list()
 		boq_cat_list.append(boq_first)
