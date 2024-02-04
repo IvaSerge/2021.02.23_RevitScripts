@@ -33,35 +33,36 @@ class RvtObjGroup(ABC):
 	
 	@classmethod
 	@abstractclassmethod
-	def get_rev_objects(cls):
+	def _get_rev_objects(cls):
 		...
 
 	@abstractclassmethod
-	def get_objects_parameters(self):
+	def _get_objects_parameters(self):
 		...
 
 	@abstractclassmethod
-	def get_objects_description(self):
+	def _get_objects_parameters(self):
 		...
 
 	@abstractclassmethod
 	def get_boq(self):
 		...
+	
+	# class properties
+	doc = None
+	boq_parameter = None
+	boq_param_value = None
 
 class electrical_objects(RvtObjGroup):
 	"""
 		Class creates and works with sorted by Category elements.
 	"""
 
-	doc: Document = None
-	boq_parameter: str = None
-	boq_param_value: str = None
-
-	def _init_(self, bic_string):
+	def __init__(self, bic_string):
 		self.boq = self.get_boq(bic_string)
-		self.sort_str = bic_string
+		# self.sort_str = bic_string
 
-	def get_rev_objects(cls, bic_string):
+	def _get_rev_objects(cls, bic_string):
 		"""
 			get all elements by BuiltInCategory string
 			and BOQ name
@@ -95,24 +96,26 @@ class electrical_objects(RvtObjGroup):
 		elems = FilteredElementCollector(cls.doc).WherePasses(main_filter).ToElements()
 		return elems
 
-	def get_objects_parameters(self, elems_list):
+	def _get_objects_parameters(self, elems_list):
 		elem_categories = [i.Category.Name for i in elems_list]
 		elem_description = [
 			toolsrvt.get_parval(i.Symbol, "ALL_MODEL_DESCRIPTION")
 			for i in elems_list]
 		elem_reference = [
 			toolsrvt.get_parval(i.Symbol, "ALL_MODEL_MANUFACTURER")
+			if toolsrvt.get_parval(i.Symbol, "ALL_MODEL_MANUFACTURER")
+			else " "
 			for i in elems_list]
 
-		return zip(elem_categories, elem_description)
+		return list(zip(elem_categories, elem_description, elem_reference))
 
 	def get_boq(self, bic_string):
-		rvt_elems = self.get_rev_objects(bic_string)
-		rvt_params_list = self.get_objects_parameters(rvt_elems)
+		rvt_elems = self._get_rev_objects(bic_string)
+		rvt_params_list = self._get_objects_parameters(rvt_elems)
 
-		pd_row_1 = pd.Series(rvt_params_list[0])
-		pd_row_2 = pd.Series(rvt_params_list[1])
-		pd_row_3 = pd.Series(rvt_params_list[2])
+		pd_row_1 = pd.Series([i[0] for i in rvt_params_list])
+		pd_row_2 = pd.Series([i[1] for i in rvt_params_list])
+		pd_row_3 = pd.Series([i[2] for i in rvt_params_list])
 
 		pd_elems_frame = pd.DataFrame({
 			"Category": pd_row_1,
@@ -126,7 +129,7 @@ class electrical_objects(RvtObjGroup):
 
 		# first two rows are hard-coded for the method
 		# empty stirngs needed for correct zip and insert in Excel
-		row_1 = [bic_string, " ", " "]
+		row_1 = [bic_string, " ", " ", " "]
 		row_2 = ["Description", "Count", "Product reference", "Comments"]
 
 		out_list = []
@@ -134,6 +137,5 @@ class electrical_objects(RvtObjGroup):
 		out_list.append(row_2)
 		out_list.extend(
 			list(zip(out_description, out_manufacturer, out_count)))
-		
 
-
+		return out_list
