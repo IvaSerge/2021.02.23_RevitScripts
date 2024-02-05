@@ -54,6 +54,9 @@ from xl_writer import *
 import db_reader
 reload(db_reader)
 from db_reader import *
+import rvt_obj_group
+reload(rvt_obj_group)
+from rvt_obj_group import *
 
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -75,7 +78,7 @@ filter_param_value = info_list[3]
 # get main BOQ parameters
 if manual_naming:
 	boq_name = info_list[0]  # type: ignore
-	rev_doc_number = info_list[1]  # type: ignore
+	rev_doc_number = f"{int(info_list[1]):02d}"
 
 else:
 	# read DB adn get BOQ name and number automatically
@@ -86,7 +89,8 @@ else:
 	boq_name = db_names[0]
 	rev_doc_number = db_names[1]
 
-# create path by name, revision and description
+
+# # create path by name, revision and description
 names_list = xl_writer.create_files_names(
 	boq_name,
 	rev_doc_number,
@@ -96,8 +100,11 @@ names_list = xl_writer.create_files_names(
 path_xlsx = names_list[0]
 path_pdf = names_list[1]
 
-# Get all instances by DCN number of different categories
-bic_str_lst = (
+RvtObjGroup.doc = doc
+RvtObjGroup.boq_parameter = filter_param_name
+RvtObjGroup.boq_param_value = filter_param_value
+
+elec_bic_list = (
 	"OST_ConduitFitting",
 	"OST_DataDevices",
 	"OST_ElectricalEquipment",
@@ -106,56 +113,41 @@ bic_str_lst = (
 	"OST_GenericModel",
 	"OST_LightingDevices",
 	"OST_LightingFixtures",
-	"OST_NurseCallDevices",
-	"OST_SecurityDevices")
+	"OST_NurseCallDevices")
+
+boq_list = sorted([electrical_objects(i) for i in elec_bic_list])
+boq_list = [i for i in boq_list if i.boq]
 
 # That is bad idea to add conduits, ducts, quasi-busbars and so on..
 # Only standard cable trays to be calculated
-bic_lenth_based_families = ["OST_CableTray"]
-bic_fittings = ["OST_CableTrayFitting"]
+# bic_lenth_based_families = ["OST_CableTray"]
+# bic_fittings = ["OST_CableTrayFitting"]
 
-rvt_elems = inst_by_multicategory_param_val(
-	doc, bic_str_lst,
-	filter_param_name,
-	filter_param_value)
+# rvt_circuits = inst_by_multicategory_param_val(
+# 	doc, ["OST_ElectricalCircuit"],
+# 	filter_param_name,
+# 	filter_param_value)
 
-rvt_circuits = inst_by_multicategory_param_val(
-	doc, ["OST_ElectricalCircuit"],
-	filter_param_name,
-	filter_param_value)
+# rvt_length_based_families = inst_by_multicategory_param_val(
+# 	doc, bic_lenth_based_families,
+# 	filter_param_name,
+# 	filter_param_value)
 
-rvt_length_based_families = inst_by_multicategory_param_val(
-	doc, bic_lenth_based_families,
-	filter_param_name,
-	filter_param_value)
+# rvt_fitting = inst_by_multicategory_param_val(
+# 	doc, bic_fittings,
+# 	filter_param_name,
+# 	filter_param_value)
 
-rvt_fitting = inst_by_multicategory_param_val(
-	doc, bic_fittings,
-	filter_param_name,
-	filter_param_value)
-
-# Read parameters and organise data structure
-boq_elems = list()
-boq_inst = get_boq_by_elements(rvt_elems)
-boq_cables = get_boq_by_circuits(rvt_circuits)
-boq_l_based_families = get_boq_by_l_based_fam(rvt_length_based_families)
-# boq_fittings = get_boq_by_fitting(rvt_fitting)
-
-boq_elems.extend(boq_inst)
-boq_elems.extend(boq_cables)
-boq_elems.extend(boq_l_based_families)
-# boq_elems.extend(boq_fittings)
-
-boq_elems_sorted = sorted_by_category(boq_elems)
-boq_with_header = add_headers(boq_elems_sorted)
-
-# TODO: add effected drawings list
+# # TODO: add effected drawings list
 
 # Excel export
-xl_first_page = write_first_page(
-	dir_path, path_xlsx, doc, boq_name, rev_seq_number,
-	f'{rev_doc_number:02d}')
-xl_second_page = write_totals(path_xlsx, boq_with_header)
+move_template_xls_file(dir_path, path_xlsx)
+write_first_page(
+	path_xlsx,
+	boq_name, rev_doc_number,
+	rev_seq_number,
+	doc)
+write_totals(path_xlsx, boq_list)
 
 # # PDF export
 # try:
@@ -178,4 +170,4 @@ xl_second_page = write_totals(path_xlsx, boq_with_header)
 # 	excel = None
 # 	# wb = None
 
-OUT = boq_elems
+OUT = boq_list

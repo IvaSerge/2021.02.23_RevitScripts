@@ -1,6 +1,7 @@
 import clr
 import os
 import sys
+import shutil
 
 local_data = os.getenv("LOCALAPPDATA")
 dyn_path = r"\python-3.9.12-embed-amd64\Lib"
@@ -39,7 +40,7 @@ from db_reader import *
 def create_files_names(boq_name, rev_doc_number, boq_descr, path_to_save):
 	name_number = boq_name
 	name_prefix = "_XLSX"
-	name_rev = f'[{rev_doc_number:00d}]'
+	name_rev = f'[{int(rev_doc_number):02d}]'
 	name_description = boq_descr
 
 	# xlsx file name
@@ -70,8 +71,11 @@ def create_files_names(boq_name, rev_doc_number, boq_descr, path_to_save):
 
 	return name_xlsx, name_pdf
 
+def move_template_xls_file(dyn_path, xl_save_to):
+	template_path = dyn_path + "\\boq_template.xlsx"
+	shutil.copy(template_path, xl_save_to)
 
-def write_first_page(dyn_path, xl_save_to, doc, boq_name, seq_number, rev_number):
+def write_first_page(path_xlsx, boq_name, rev_doc_number, seq_number, doc):
 
 	# get project info
 	proj_status = doc.ProjectInformation.Status
@@ -105,15 +109,14 @@ def write_first_page(dyn_path, xl_save_to, doc, boq_name, seq_number, rev_number
 	rev_issued_by = revision.IssuedBy
 
 	# Cover page - write info
-	xl_path = dyn_path + "\\boq_template.xlsx"
-	wb = openpyxl.load_workbook(xl_path)
+	wb = openpyxl.load_workbook(path_xlsx)
 	wb.active = wb["Cover"]
 	ws = wb.active
 
 	ws["A32"] = proj_str
 	ws["A34"] = boq_name
 	ws["A44"] = rev_date
-	ws["B44"] = rev_number
+	ws["B44"] = rev_doc_number
 	ws["C44"] = rev_description
 	ws["H44"] = rev_issued_by
 
@@ -124,12 +127,10 @@ def write_first_page(dyn_path, xl_save_to, doc, boq_name, seq_number, rev_number
 	ws.row_dimensions[44].height = 15.75 * rev_description_height
 
 	# save to new path
-	wb.save(xl_save_to)
-
-	return xl_save_to
+	wb.save(path_xlsx)
 
 
-def write_totals(xl_path, totals_lst):
+def write_totals(xl_path, boq_list):
 
 	# Second page - write info
 	wb = openpyxl.load_workbook(xl_path)
@@ -143,9 +144,10 @@ def write_totals(xl_path, totals_lst):
 	ws.column_dimensions["D"].width = 30
 
 	rw = 1
-	for category in totals_lst:
+	for boq_object in boq_list:
 		rw += 1
-		for r_count, row in enumerate(category, 1):
+		boq_text_shedule = boq_object.boq
+		for r_count, row in enumerate(boq_text_shedule, 1):
 			for clmn, val in enumerate(row, 1):
 				current_cell = ws.cell(row=rw, column=clmn)
 
@@ -173,4 +175,3 @@ def write_totals(xl_path, totals_lst):
 	ws.print_area = first_cell + ":" + last_cell
 
 	wb.save(xl_path)
-	return True

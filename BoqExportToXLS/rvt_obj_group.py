@@ -60,7 +60,13 @@ class electrical_objects(RvtObjGroup):
 
 	def __init__(self, bic_string):
 		self.boq = self.get_boq(bic_string)
-		# self.sort_str = bic_string
+		self.sort_str = bic_string
+	
+	def __lt__(self, other):
+		return self.sort_str < other.sort_str
+
+	def __repr__(self) -> str:
+		return self.sort_str
 
 	def _get_rev_objects(cls, bic_string):
 		"""
@@ -111,6 +117,8 @@ class electrical_objects(RvtObjGroup):
 
 	def get_boq(self, bic_string):
 		rvt_elems = self._get_rev_objects(bic_string)
+		if not rvt_elems:
+			return None
 		rvt_params_list = self._get_objects_parameters(rvt_elems)
 
 		pd_row_1 = pd.Series([i[0] for i in rvt_params_list])
@@ -136,6 +144,6 @@ class electrical_objects(RvtObjGroup):
 		out_list.append(row_1)
 		out_list.append(row_2)
 		out_list.extend(
-			list(zip(out_description, out_manufacturer, out_count)))
+			list(zip(out_description, out_count, out_manufacturer)))
 
 		return out_list

@@ -121,7 +121,7 @@ def get_db_boq_name_and_rev(env_path, shop_code, discipline_code):
 
 		# nothing in DB
 		if not df_values:
-			boq_name = f"{shop_code}-00-SH-{discipline_code}-TSLA-8000-00"
+			boq_name = f"{shop_code}-00-LI-{discipline_code}-TSLA-8000-00"
 			boq_revision_number = int(0)
 			return boq_name, boq_revision_number
 
@@ -134,7 +134,7 @@ def get_db_boq_name_and_rev(env_path, shop_code, discipline_code):
 
 		# update number for next document
 		next_num = current_max_num + 1
-		boq_name = f"{shop_code}-00-SH-{discipline_code}-TSLA-8000-{next_num:02d}"
+		boq_name = f"{shop_code}-00-LI-{discipline_code}-TSLA-8000-{next_num:02d}"
 		boq_revision_number = int(0)
 		return boq_name, boq_revision_number
 
