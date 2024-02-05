@@ -128,7 +128,7 @@ def get_boq_by_l_based_fam(l_based_families):
 	out_description = [i[1] for i in df_groupped_by]
 	out_length = pd_frame.groupby(["Category", "Description"])["Length"].sum().tolist()
 
-	return zip(out_category, out_description, out_length)
+	return zip(out_description, out_length)
 
 
 def get_boq_by_fitting(fitting_list):
