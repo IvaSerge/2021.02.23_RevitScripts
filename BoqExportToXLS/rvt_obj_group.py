@@ -22,7 +22,7 @@ import pandas as pd
 
 # ================ local imports
 import toolsrvt
-reload(toolsrvt)
+import boq_analyze
 
 
 class RvtObjGroup(ABC):
@@ -139,11 +139,30 @@ class electrical_objects(RvtObjGroup):
 		# empty stirngs needed for correct zip and insert in Excel
 		row_1 = [bic_string, " ", " ", " "]
 		row_2 = ["Description", "Count", "Product reference", "Comments"]
-
 		out_list = []
 		out_list.append(row_1)
 		out_list.append(row_2)
 		out_list.extend(
 			list(zip(out_description, out_count, out_manufacturer)))
+
+		return out_list
+
+class electrical_circuits(electrical_objects):
+
+	def __init__(self):
+		self.sort_str = "Cable"
+		self.boq = self.get_boq()
+
+	def get_boq(self):
+		rvt_elems = self._get_rev_objects("OST_ElectricalCircuit")
+		if not rvt_elems:
+			return None
+
+		out_list = []
+		row_1 = ["Cable", " ", " ", " "]
+		row_2 = ["Description", "Length", "Length +20% spare, m", "Comments"]
+		out_list.append(row_1)
+		out_list.append(row_2)
+		out_list.extend(boq_analyze.get_boq_by_circuits(rvt_elems))
 
 		return out_list

@@ -104,6 +104,8 @@ RvtObjGroup.doc = doc
 RvtObjGroup.boq_parameter = filter_param_name
 RvtObjGroup.boq_param_value = filter_param_value
 
+boq_list = []
+
 elec_bic_list = (
 	"OST_ConduitFitting",
 	"OST_DataDevices",
@@ -114,31 +116,21 @@ elec_bic_list = (
 	"OST_LightingDevices",
 	"OST_LightingFixtures",
 	"OST_NurseCallDevices")
+boq_electrical = sorted([electrical_objects(i) for i in elec_bic_list])
+boq_list.extend(boq_electrical)
 
-boq_list = sorted([electrical_objects(i) for i in elec_bic_list])
-boq_list = [i for i in boq_list if i.boq]
-
-# That is bad idea to add conduits, ducts, quasi-busbars and so on..
-# Only standard cable trays to be calculated
-# bic_lenth_based_families = ["OST_CableTray"]
-# bic_fittings = ["OST_CableTrayFitting"]
-
-# rvt_circuits = inst_by_multicategory_param_val(
-# 	doc, ["OST_ElectricalCircuit"],
-# 	filter_param_name,
-# 	filter_param_value)
+boq_cables = electrical_circuits()
+boq_list.append(boq_cables)
 
 # rvt_length_based_families = inst_by_multicategory_param_val(
 # 	doc, bic_lenth_based_families,
 # 	filter_param_name,
 # 	filter_param_value)
 
-# rvt_fitting = inst_by_multicategory_param_val(
-# 	doc, bic_fittings,
-# 	filter_param_name,
-# 	filter_param_value)
+boq_list = [i for i in boq_list if i.boq]
 
-# # TODO: add effected drawings list
+# TODO: add fittings boq. Standard fittign to be filtered correctly
+# TODO: add effected drawings list
 
 # Excel export
 move_template_xls_file(dir_path, path_xlsx)
