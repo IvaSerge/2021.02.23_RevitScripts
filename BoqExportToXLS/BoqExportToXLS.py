@@ -117,10 +117,13 @@ elec_bic_list = (
 	"OST_LightingFixtures",
 	"OST_NurseCallDevices")
 boq_electrical = sorted([electrical_objects(i) for i in elec_bic_list])
+boq_electrical = [electrical_objects(i) for i in elec_bic_list]
 boq_list.extend(boq_electrical)
 
 boq_cables = electrical_circuits()
 boq_list.append(boq_cables)
+
+# boq_trays = tsla_trays()
 
 # rvt_length_based_families = inst_by_multicategory_param_val(
 # 	doc, bic_lenth_based_families,

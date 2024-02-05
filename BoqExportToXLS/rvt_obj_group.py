@@ -60,7 +60,8 @@ class electrical_objects(RvtObjGroup):
 
 	def __init__(self, bic_string):
 		self.boq = self.get_boq(bic_string)
-		self.sort_str = bic_string
+		self.sort_str = toolsrvt.category_by_bic_name(
+			self.doc, bic_string).Name
 	
 	def __lt__(self, other):
 		return self.sort_str < other.sort_str
@@ -74,32 +75,12 @@ class electrical_objects(RvtObjGroup):
 			and BOQ name
 		"""
 
-		# =============  parameter filter
-		parameter_id = [
-			i for i in
-			FilteredElementCollector(cls.doc).OfClass(ParameterElement)
-			if i.Name == cls.boq_parameter]
-		if parameter_id:
-			parameter_id = parameter_id[0].Id
-		else:
-			error_str = "Parameter not found"
-			raise ValueError(error_str)
-
-		parameter_value_provider = ParameterValueProvider(parameter_id)
-		parameter_str_rule = FilterStringRule(
-			parameter_value_provider,
-			FilterStringEquals(),
+		elems = toolsrvt.inst_by_multicategory_param_val(
+			cls.doc,
+			[bic_string],
+			cls.boq_parameter,
 			cls.boq_param_value)
 
-		parameter_filter = ElementParameterFilter(parameter_str_rule)
-
-		# =============  category filter
-		bic_id = toolsrvt.category_by_bic_name(cls.doc, bic_string).Id
-
-		bic_filter = ElementCategoryFilter(bic_id)
-
-		main_filter = LogicalAndFilter(bic_filter, parameter_filter)
-		elems = FilteredElementCollector(cls.doc).WherePasses(main_filter).ToElements()
 		return elems
 
 	def _get_objects_parameters(self, elems_list):
@@ -120,6 +101,7 @@ class electrical_objects(RvtObjGroup):
 		if not rvt_elems:
 			return None
 		rvt_params_list = self._get_objects_parameters(rvt_elems)
+		category_name = rvt_elems[0].Category.Name 
 
 		pd_row_1 = pd.Series([i[0] for i in rvt_params_list])
 		pd_row_2 = pd.Series([i[1] for i in rvt_params_list])
@@ -137,7 +119,7 @@ class electrical_objects(RvtObjGroup):
 
 		# first two rows are hard-coded for the method
 		# empty stirngs needed for correct zip and insert in Excel
-		row_1 = [bic_string, " ", " ", " "]
+		row_1 = [category_name, " ", " ", " "]
 		row_2 = ["Description", "Count", "Product reference", "Comments"]
 		out_list = []
 		out_list.append(row_1)
@@ -150,7 +132,7 @@ class electrical_objects(RvtObjGroup):
 class electrical_circuits(electrical_objects):
 
 	def __init__(self):
-		self.sort_str = "Cable"
+		self.sort_str = "Cables"
 		self.boq = self.get_boq()
 
 	def get_boq(self):
