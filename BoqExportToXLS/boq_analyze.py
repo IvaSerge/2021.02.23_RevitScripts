@@ -34,8 +34,13 @@ from toolsrvt import *
 
 def get_wire_type(el_circuit):
 	circuit_system_type = el_circuit.SystemType
-	# for electrical circuit
-	if circuit_system_type == Electrical.ElectricalSystemType.PowerCircuit:
+	is_electrical = circuit_system_type == Electrical.ElectricalSystemType.PowerCircuit
+	is_data = circuit_system_type == Electrical.ElectricalSystemType.Data
+	have_description = toolsrvt.get_parval(el_circuit, "Cable Description") is not None
+	elec_non_standard_cable = is_electrical and have_description
+	elec_standard_cable = is_electrical and not have_description
+
+	if elec_standard_cable:
 		circuit_wire = el_circuit.WireType
 		if circuit_wire:
 			circuit_wire = toolsrvt.get_parval(
@@ -57,8 +62,10 @@ def get_wire_type(el_circuit):
 
 		return circuit_wire + " " + circuit_wire_size
 
-	elif circuit_system_type == Electrical.ElectricalSystemType.Data:
-		# for DATA circuit
+	elif elec_non_standard_cable:
+		return toolsrvt.get_parval(el_circuit, "Cable Description")
+
+	elif is_data:
 		return "LAN 250 (S/FTP) CAT.6A"
 
 	else:
