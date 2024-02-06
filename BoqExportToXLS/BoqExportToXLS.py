@@ -118,13 +118,16 @@ elec_bic_list = (
 	"OST_NurseCallDevices")
 boq_electrical = sorted([electrical_objects(i) for i in elec_bic_list])
 boq_electrical = [electrical_objects(i) for i in elec_bic_list]
-boq_list.extend(boq_electrical)
-
 boq_cables = electrical_circuits()
-boq_list.append(boq_cables)
-
 boq_trays = tsla_trays()
-boq_list.append(boq_trays)
+boq_grounding = conduit_as_grounding()
+
+boq_list.extend(boq_electrical)
+boq_list.extend([
+	boq_cables,
+	boq_trays,
+	boq_grounding,])
+
 
 
 boq_list = [i for i in boq_list if i.boq]

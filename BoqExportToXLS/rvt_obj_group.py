@@ -162,7 +162,33 @@ class tsla_trays(electrical_objects):
 
 		out_list = []
 		row_1 = ["Cable trays", " ", " ", " "]
-		row_2 = ["Description", "Length,m", "Product reference", "Comments"]
+		row_2 = ["Description", "Lngth,m", "Product reference", "Comments"]
+		out_list.append(row_1)
+		out_list.append(row_2)
+		out_list.extend(boq_analyze.get_boq_by_l_based_fam(rvt_elems))
+
+		return out_list
+
+class conduit_as_grounding(electrical_objects):
+
+	def __init__(self):
+		self.sort_str = "Grounding"
+		self.boq = self.get_boq()
+
+	def get_boq(self):
+		rvt_elems = self._get_rev_objects("OST_Conduit")	
+		if not rvt_elems:
+			return None
+
+		# additional filtering of the elements to get grounding only
+		rvt_elems = [i for i in rvt_elems if 
+			toolsrvt.get_parval(
+			i.Document.GetElement(i.GetTypeId()),
+			"ALL_MODEL_TYPE_COMMENTS") == "Electrical grounding"]
+
+		out_list = []
+		row_1 = ["Grounding system", " ", " ", " "]
+		row_2 = ["Description", "Lngth,m", "Product reference", "Comments"]
 		out_list.append(row_1)
 		out_list.append(row_2)
 		out_list.extend(boq_analyze.get_boq_by_l_based_fam(rvt_elems))
