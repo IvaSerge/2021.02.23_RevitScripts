@@ -122,20 +122,28 @@ def get_boq_by_l_based_fam(l_based_families):
 
 	lbf_cat = [i.Category.Name for i in l_based_families]
 
+	lbf_manufacturer = [
+		toolsrvt.get_parval(
+			doc.GetElement(i.GetTypeId()),
+			"ALL_MODEL_MANUFACTURER")
+		for i in l_based_families]
+
 	pd_cat = pd.Series(lbf_cat)
 	pd_descr = pd.Series(lbf_description)
 	pd_length = pd.Series(lbf_length)
+	pd_manufacturer = pd.Series(lbf_manufacturer)
 	pd_frame = pd.DataFrame({
 		"Category": pd_cat,
 		"Description": pd_descr,
+		"Manufacturer": pd_manufacturer,
 		"Length": pd_length})
 
-	df_groupped_by = pd_frame.groupby(["Category", "Description"])["Description"].indices.keys()
-	out_category = [i[0] for i in df_groupped_by]
+	df_groupped_by = pd_frame.groupby(["Category", "Description", "Manufacturer"])["Description"].indices.keys()
 	out_description = [i[1] for i in df_groupped_by]
+	out_manufacturer = [i[2] for i in df_groupped_by]
 	out_length = pd_frame.groupby(["Category", "Description"])["Length"].sum().tolist()
 
-	return zip(out_description, out_length)
+	return zip(out_description, out_length, out_manufacturer)
 
 
 def get_boq_by_fitting(fitting_list):

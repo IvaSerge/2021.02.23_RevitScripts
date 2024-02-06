@@ -123,14 +123,9 @@ boq_list.extend(boq_electrical)
 boq_cables = electrical_circuits()
 boq_list.append(boq_cables)
 
-# TODO: maybe it is worth to filter cable trays inside script
 boq_trays = tsla_trays()
 boq_list.append(boq_trays)
 
-# rvt_length_based_families = inst_by_multicategory_param_val(
-# 	doc, bic_lenth_based_families,
-# 	filter_param_name,
-# 	filter_param_value)
 
 boq_list = [i for i in boq_list if i.boq]
 # TODO: add fittings boq. Standard fittign to be filtered correctly
