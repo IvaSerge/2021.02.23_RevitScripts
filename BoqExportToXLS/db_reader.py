@@ -112,7 +112,7 @@ def get_db_boq_name_and_rev(env_path, shop_code, discipline_code):
 
 		query = "SELECT document_id, document_number, filename, revision, discipline "
 		query += "FROM aconex.document_history "
-		query += f"WHERE filename like '{shop_code}%TSLA-8000%' "
+		query += f"WHERE filename like 'LI-{shop_code}%TSLA-8000%' "
 		query += f"AND discipline like '{discipline_code} -%' "
 		query += "AND filetype = 'xls'"
 

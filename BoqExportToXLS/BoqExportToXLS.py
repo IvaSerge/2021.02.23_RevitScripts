@@ -143,25 +143,25 @@ write_first_page(
 	doc)
 write_totals(path_xlsx, boq_list)
 
-# # PDF export
-# try:
-# 	excel = client.Dispatch("Excel.Application")
-# 	excel.Visible = False
+# PDF export
+try:
+	excel = client.Dispatch("Excel.Application")
+	excel.Visible = False
 
-# 	# Read Excel File
-# 	wb = excel.Workbooks.Open(path_xlsx)
-# 	wb.WorkSheets(["Cover", "General Notes", "BOQ Totals"]).Select()
+	# Read Excel File
+	wb = excel.Workbooks.Open(path_xlsx)
+	wb.WorkSheets(["Cover", "General Notes", "BOQ Totals"]).Select()
 
-# 	# Convert into PDF File
-# 	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
+	# Convert into PDF File
+	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
 
-# except Exception as e:
-# 	raise ValueError(e)
+except Exception as e:
+	raise ValueError(e)
 
-# finally:
-# 	wb.Close(False)
-# 	excel.Quit()
-# 	excel = None
-# 	# wb = None
+finally:
+	wb.Close(False)
+	excel.Quit()
+	excel = None
+	# wb = None
 
 OUT = boq_list
