@@ -79,6 +79,16 @@ def get_wire_length(el_circuit):
 	return length_m
 
 
+def sort_cables_by_wire_size(cable_string: str):
+	regexp = re.compile(r"^(.*?)\s\d-#(\d+.?\d?),")
+	check = regexp.match(cable_string)
+	if check:
+		cable_name = check.group(1)
+		cable_size = check.group(2)
+		return (cable_name, float(cable_size))
+	return (cable_string, 1000)
+
+
 def get_boq_by_circuits(el_circuits):
 
 	if not el_circuits:
@@ -101,9 +111,9 @@ def get_boq_by_circuits(el_circuits):
 	out_cables = [i for i in df_groupped_by]
 	out_length = pd_wires_frame.groupby("Wire Type")["Length"].sum().tolist()
 	out_length_spare = [round(i * 1.2) for i in out_length]
+	cables_list = list(zip(out_cables, out_length, out_length_spare))
 
-	return zip(out_cables, out_length, out_length_spare)
-
+	return sorted(cables_list, key=lambda x: sort_cables_by_wire_size(x[0]))
 
 def get_boq_by_l_based_fam(l_based_families):
 
