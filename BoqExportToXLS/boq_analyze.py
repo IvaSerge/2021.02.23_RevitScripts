@@ -25,6 +25,7 @@ from System.Collections.Generic import *
 from importlib import reload
 import re
 import pandas as pd
+import operator
 
 # ================ local imports
 import toolsrvt
@@ -56,9 +57,6 @@ def get_wire_type(el_circuit):
 		circuit_wire_size = el_circuit.WireSizeString
 		if not circuit_wire_size:
 			circuit_wire_size = ""
-			# TODO: Check cable description
-			# for specific cable sizing, for example, single core, or control cable
-			# see "Cable Description" parameter.
 
 		return circuit_wire + " " + circuit_wire_size
 
@@ -213,3 +211,30 @@ def get_fitting_description(rvt_fitting):
 
 	fitting_out = f"{fitting_descr} W{fitting_w} {fitting_h}"
 	return fitting_out
+
+def get_sheets_by_seq_number(doc, rev_seq_number):
+
+	revisions = FilteredElementCollector(doc).\
+		OfClass(Autodesk.Revit.DB.Revision).\
+		ToElements()
+	revision = [i for i in revisions if i.SequenceNumber == rev_seq_number][0]
+
+	rvt_sheets = FilteredElementCollector(doc).\
+		OfCategory(BuiltInCategory.OST_Sheets).\
+		WhereElementIsNotElementType().\
+		ToElements()
+
+	out_list = [] # for sheet in rvt_sheets:
+	for sheet in rvt_sheets:
+		rev_on_sheet = [doc.GetElement(i).SequenceNumber for i in sheet.GetAllRevisionIds() if i]
+
+		if rev_seq_number in rev_on_sheet:
+			out_list.append([
+				sheet.SheetNumber,
+				sheet.Name,
+				sheet.GetRevisionNumberOnSheet(revision.Id)])
+
+	if not out_list:
+		return None
+	else:
+		return sorted(out_list, key=operator.itemgetter(0))
