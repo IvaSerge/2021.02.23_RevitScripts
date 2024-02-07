@@ -175,3 +175,51 @@ def write_totals(xl_path, boq_list):
 	ws.print_area = first_cell + ":" + last_cell
 
 	wb.save(xl_path)
+
+
+def write_sheets_info(xl_path, sheets_info):
+	# Second page - write info
+	wb = openpyxl.load_workbook(xl_path)
+	wb.active = wb["BOQ Sheets"]
+	ws: openpyxl.Workbook.worksheets = wb.active
+
+	# set columns width
+	ws.column_dimensions["A"].width = 55
+	ws.column_dimensions["B"].width = 55
+	ws.column_dimensions["C"].width = 20
+
+	list_to_save = []
+	#first line and second line
+	list_to_save.append(["Sheets list", " ", " "])
+	list_to_save.append(["Sheet number", "Sheet name", "Sheet revision"])
+	list_to_save.extend(sheets_info)
+
+	for r_count, row in enumerate(list_to_save, 1):
+		for clmn, val in enumerate(row, 1):
+			current_cell = ws.cell(row=r_count, column=clmn)
+
+			# get and set cell style by row
+			if r_count == 1:
+				# first line
+				style_cell = "DiRootsFullNameTitleStyle"
+
+			elif r_count == 2:
+				# second line
+				style_cell = "DiRootsHeaderStyle"
+
+			else:
+				# other lines
+				style_cell = "Normal"
+
+			current_cell.style = style_cell
+			if val:
+				current_cell.value = val
+
+	# set print area
+	first_cell = "A1"
+	last_cell = ws.cell(row=r_count, column=3).coordinate
+	ws.print_area = first_cell + ":" + last_cell
+
+	wb.save(xl_path)
+
+	return list_to_save

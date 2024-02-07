@@ -128,11 +128,10 @@ boq_list.extend([
 	boq_trays,
 	boq_grounding,])
 
-
-
 boq_list = [i for i in boq_list if i.boq]
 # TODO: add fittings boq. Standard fittign to be filtered correctly
-# TODO: add effected drawings list
+
+sheets_in_rev = boq_analyze.get_sheets_by_seq_number(doc, rev_seq_number)
 
 # Excel export
 move_template_xls_file(dir_path, path_xlsx)
@@ -142,6 +141,7 @@ write_first_page(
 	rev_seq_number,
 	doc)
 write_totals(path_xlsx, boq_list)
+sheets_temp = write_sheets_info(path_xlsx, sheets_in_rev)
 
 # PDF export
 try:
@@ -150,7 +150,7 @@ try:
 
 	# Read Excel File
 	wb = excel.Workbooks.Open(path_xlsx)
-	wb.WorkSheets(["Cover", "General Notes", "BOQ Totals"]).Select()
+	wb.WorkSheets(["Cover", "General Notes","BOQ Sheets", "BOQ Totals"]).Select()
 
 	# Convert into PDF File
 	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
@@ -162,6 +162,5 @@ finally:
 	wb.Close(False)
 	excel.Quit()
 	excel = None
-	# wb = None
 
 OUT = boq_list
