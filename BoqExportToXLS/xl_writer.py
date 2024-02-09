@@ -118,7 +118,7 @@ def write_first_page(path_xlsx, boq_name, rev_doc_number, seq_number, doc):
 	ws["A44"] = rev_date
 	ws["B44"] = rev_doc_number
 	ws["C44"] = rev_description
-	ws["H44"] = rev_issued_by
+	ws["K44"] = rev_issued_by
 
 	# check cell height based on revision description
 	# max str length is 47

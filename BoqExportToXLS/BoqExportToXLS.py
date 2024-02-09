@@ -115,7 +115,8 @@ elec_bic_list = (
 	"OST_GenericModel",
 	"OST_LightingDevices",
 	"OST_LightingFixtures",
-	"OST_NurseCallDevices")
+	"OST_NurseCallDevices",
+	"OST_DuctFitting")
 boq_electrical = sorted([electrical_objects(i) for i in elec_bic_list])
 boq_electrical = [electrical_objects(i) for i in elec_bic_list]
 boq_cables = electrical_circuits()
