@@ -46,16 +46,16 @@ import toolsrvt
 reload(toolsrvt)
 from toolsrvt import *
 import boq_analyze
-reload(boq_analyze)
+# reload(boq_analyze)
 from boq_analyze import *
 import xl_writer
-reload(xl_writer)
+# reload(xl_writer)
 from xl_writer import *
 import db_reader
-reload(db_reader)
+# reload(db_reader)
 from db_reader import *
 import rvt_obj_group
-reload(rvt_obj_group)
+# reload(rvt_obj_group)
 from rvt_obj_group import *
 
 # ================ GLOBAL VARIABLES
@@ -131,6 +131,7 @@ boq_list.extend([
 
 boq_list = [i for i in boq_list if i.boq]
 # TODO: add fittings boq. Standard fittign to be filtered correctly
+# TODO: add additional devices like RJ45 connector to DATA BBOQ
 
 sheets_in_rev = boq_analyze.get_sheets_by_seq_number(doc, rev_seq_number)
 

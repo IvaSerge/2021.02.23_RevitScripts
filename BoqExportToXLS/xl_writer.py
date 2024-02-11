@@ -30,10 +30,10 @@ from PIL import Image
 
 # ================ local imports
 import toolsrvt
-reload(toolsrvt)
+# reload(toolsrvt)
 from toolsrvt import *
 import db_reader
-reload(db_reader)
+# reload(db_reader)
 from db_reader import *
 
 
