@@ -16,6 +16,7 @@
     </li>
     <li><a href="#settings-in-revit">Settings in Revit</a></li>
     <li><a href="#excel-template">Excel template</a></li>
+    <li><a href ="#data-base-access">Data base access</a></li>
     <li>
       <a href="#run-script-in-dynamo">Run script in Dynamo</a>
       <ul>
@@ -27,19 +28,21 @@
 </details>
 
 # About the script
-Script creates Bill of Quantities (BOQ) as Excel and PDF.
-File names are created automatically using Naming convention of the company.
-No additional works with manual export of Revit schedules needed.
+The script generates a Bill of Quantities (BOQ) in both Excel and PDF formats.
+File names are automatically generated using the company's naming convention.
+There is no need for additional manual export of Revit schedules.
 
-Script fills first page according to current Revit revision.  
-Second page is the list of pages, effected by the change.  
-Third page is the list of materials, including specific materials, that can't be calculated inside the Revit. As example - IT RJ45 Jacks and Patch cords.
+The script populates the first page based on the current Revit revision.  
+The second page contains a list of pages affected by the change.  
+The third page contains a list of materials, including specific items such as
+IT RJ45 Jacks and Patch cords, that cannot be calculated within Revit.
 
 **WARNING**
-Still very specific families, like "busbars" of families, that are not from company standard BIM catalogue, may not be calculated correctly
+Still very specific families, like "busbars" of families,
+that are not from company standard BIM catalogue, may not be calculated correctly.
 
 # Installation of Python modules
-Before script run be sure that all necessary Python modules were installed.
+Before script run, be sure that all necessary Python modules were installed.
 
 ## **pip** installation
 To install modules in Dynamo Python please check this link:
@@ -47,22 +50,44 @@ To install modules in Dynamo Python please check this link:
 
 **NOTE**
 Revit 2023 use Python v.3.9.12  
-While installation next Python path must be used:  
-**%LocalAppData%\python-3.9.12-embed-amd64**
+During installation, the following Python path must be utilized:  
+`%LocalAppData%\python-3.9.12-embed-amd64`
 
 ## Installation of python modules
-  - pandas
-  - Pillow
-  - pypiwin32
-  - python-dotenv
-  - mysql-connector-python
-  - openpyxl
+  - pip install pandas
+  - pip instal Plillow
+  - pip instal -U pypiwin32
+  - pip instal -U python-dotenv
+  - pip instal mysql-connector-python
+  - pip instal openpyxl
 
 # Settings in Revit
+For filtering elements parameter "BOQ Phase" is used.
+All elements, that will be in BOQ have to have "BOQ Phase" parameter
+to be filled usually with Design Change Number or Revision number.
+
+The Revision info must be accurately filled in, as the
+"name," "number", and "issued by" parameters are utilized as information
+to be set up in the first list of Excel.
+
+Ensure that the built-in parameters in the Refit family type are filled in correctly:
+"Description" should contain a human-readable catalogue name for the element.
+"Manufacturer" should provide a link to the product standard or information about
+the manufacturer, along with the order number.
 
 # Excel template
+BOQ Excel file is created based on `boq_template.xlsx` that located in script folder.
+
+**WARNING**
+User not allowed to modify the template file. The code rigidly specifies the cell numbers for recording information in the table.The text formatting and font styles are pre-set in the Excel table template, impacting the visual appearance. Altering them may result in unpredictable consequences.
+
+# Data base access
+Access to database is provided by `db_info.env`.
+Please contact local admins to get the file.
 
 # Run script in Dynamo
+
+## Set Excel Path
 
 ## Set BOQ name and parameters manually
 
