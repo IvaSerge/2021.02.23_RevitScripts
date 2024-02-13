@@ -191,7 +191,7 @@ def write_sheets_info(xl_path, sheets_info):
 	list_to_save = []
 	if not sheets_info:
 		# no sheets found
-		list_to_save.append(["No sheets in the revision"])
+		list_to_save.append(["No sheets in the revision", " ", " "])
 	else:
 		# first line and second line
 		list_to_save.append(["Sheets list", " ", " "])
