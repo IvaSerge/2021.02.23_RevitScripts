@@ -212,16 +212,16 @@ class data_objects(electrical_objects):
 		additional_elems = []
 
 		for elem in elems_list:
-			if "socket" in elem[0]:
+			if "socket" in elem[0].lower():
 				to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1"]
 				couter = int(elem[1])
 				additional_elems.extend([to_add] * couter)
-			elif "Access point" in elem[0]:
+			elif "access point" in elem[0].lower():
 				to_add = ["Data devices", "Patch cable category 6A schielded", "Not product specific"]
 				couter = int(elem[1])
 				additional_elems.extend([to_add] * couter)
 
-			elif "Hard wired" in elem[0]:
+			elif "hard wired" in elem[0].lower():
 				to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1"]
 				couter = int(elem[1])
 				additional_elems.extend([to_add] * couter * 2)
