@@ -82,7 +82,7 @@ BOQ Excel file is created based on `boq_template.xlsx` that located in script fo
 User not allowed to modify the template file. The code rigidly specifies the cell numbers for recording information in the table.The text formatting and font styles are pre-set in the Excel table template, impacting the visual appearance. Altering them may result in unpredictable consequences.
 
 # Data base access
-Access to database is provided by `db_info.env`.
+Access to database is provided with `db_info.env` file.
 Please contact local admins to get the file.
 
 # Run script in Dynamo

@@ -189,10 +189,14 @@ def write_sheets_info(xl_path, sheets_info):
 	ws.column_dimensions["C"].width = 20
 
 	list_to_save = []
-	#first line and second line
-	list_to_save.append(["Sheets list", " ", " "])
-	list_to_save.append(["Sheet number", "Sheet name", "Sheet revision"])
-	list_to_save.extend(sheets_info)
+	if not sheets_info:
+		# no sheets found
+		list_to_save.append(["No sheets in the revision"])
+	else:
+		# first line and second line
+		list_to_save.append(["Sheets list", " ", " "])
+		list_to_save.append(["Sheet number", "Sheet name", "Sheet revision"])
+		list_to_save.extend(sheets_info)
 
 	for r_count, row in enumerate(list_to_save, 1):
 		for clmn, val in enumerate(row, 1):
