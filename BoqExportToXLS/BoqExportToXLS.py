@@ -55,7 +55,7 @@ import db_reader
 # reload(db_reader)
 from db_reader import *
 import rvt_obj_group
-# reload(rvt_obj_group)
+reload(rvt_obj_group)
 from rvt_obj_group import *
 
 # ================ GLOBAL VARIABLES
@@ -104,11 +104,9 @@ RvtObjGroup.doc = doc
 RvtObjGroup.boq_parameter = filter_param_name
 RvtObjGroup.boq_param_value = filter_param_value
 
-boq_list = []
 
 elec_bic_list = (
 	"OST_ConduitFitting",
-	"OST_DataDevices",
 	"OST_ElectricalEquipment",
 	"OST_ElectricalFixtures",
 	"OST_FireAlarmDevices",
@@ -117,21 +115,26 @@ elec_bic_list = (
 	"OST_LightingFixtures",
 	"OST_NurseCallDevices",
 	"OST_DuctFitting")
-boq_electrical = sorted([electrical_objects(i) for i in elec_bic_list])
+
+boq_data= data_objects()
 boq_electrical = [electrical_objects(i) for i in elec_bic_list]
-boq_cables = electrical_circuits()
+
+boq_general = []
+boq_general.extend(boq_electrical)
+boq_general.append(boq_data)
+boq_general = sorted(boq_general)
+
 boq_trays = tsla_trays()
+boq_cables = electrical_circuits()
+# # TODO: add fittings boq. Standard fittign to be filtered correctly
 boq_grounding = conduit_as_grounding()
 
-boq_list.extend(boq_electrical)
-boq_list.extend([
-	boq_cables,
-	boq_trays,
-	boq_grounding,])
-
+boq_list = []
+boq_list.extend(boq_general)
+boq_list.append(boq_cables)
+boq_list.append(boq_trays)
+boq_list.append(boq_grounding)
 boq_list = [i for i in boq_list if i.boq]
-# TODO: add fittings boq. Standard fittign to be filtered correctly
-# TODO: add additional devices like RJ45 connector to DATA BBOQ
 
 sheets_in_rev = boq_analyze.get_sheets_by_seq_number(doc, rev_seq_number)
 
@@ -165,4 +168,4 @@ finally:
 	excel.Quit()
 	excel = None
 
-OUT = boq_list
+OUT = boq_data.boq

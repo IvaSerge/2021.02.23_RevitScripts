@@ -194,3 +194,56 @@ class conduit_as_grounding(electrical_objects):
 		out_list.extend(boq_analyze.get_boq_by_l_based_fam(rvt_elems))
 
 		return out_list
+
+class data_objects(electrical_objects):
+
+	def __init__(self):
+		additional_devices = None
+		self.sort_str = "Data devices"
+		self.boq = self.get_boq("OST_DataDevices")
+
+		if self.boq:
+			additional_devices = self.get_additional_elems()
+		if additional_devices:
+			self.boq.extend(additional_devices)
+
+	def get_additional_elems(self):
+		elems_list = self.boq
+		additional_elems = []
+
+		for elem in elems_list:
+			if "socket" in elem[0]:
+				to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1"]
+				couter = int(elem[1])
+				additional_elems.extend([to_add] * couter)
+			elif "Access point" in elem[0]:
+				to_add = ["Data devices", "Patch cable category 6A schielded", "Not product specific"]
+				couter = int(elem[1])
+				additional_elems.extend([to_add] * couter)
+
+			elif "Hard wired" in elem[0]:
+				to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1"]
+				couter = int(elem[1])
+				additional_elems.extend([to_add] * couter * 2)
+			else:
+				pass
+
+		pd_row_1 = pd.Series([i[0] for i in additional_elems])
+		pd_row_2 = pd.Series([i[1] for i in additional_elems])
+		pd_row_3 = pd.Series([i[2] for i in additional_elems])
+
+		pd_elems_frame = pd.DataFrame({
+			"Category": pd_row_1,
+			"Description": pd_row_2,
+			"Manufacturer": pd_row_3})
+
+		df_groupped_by = pd_elems_frame.groupby(["Category", "Description", "Manufacturer"])["Description"].indices.keys()
+		out_description = [i[1] for i in df_groupped_by]
+		out_manufacturer = [i[2] for i in df_groupped_by]
+		out_count = pd_elems_frame.groupby(["Category", "Description"]).size().tolist()
+
+		# first two rows are hard-coded for the method
+		# empty stirngs needed for correct zip and insert in Excel
+		out_list = list(zip(out_description, out_count, out_manufacturer))
+
+		return out_list
