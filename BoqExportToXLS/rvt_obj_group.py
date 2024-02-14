@@ -103,19 +103,7 @@ class electrical_objects(RvtObjGroup):
 		rvt_params_list = self._get_objects_parameters(rvt_elems)
 		category_name = rvt_elems[0].Category.Name 
 
-		pd_row_1 = pd.Series([i[0] for i in rvt_params_list])
-		pd_row_2 = pd.Series([i[1] for i in rvt_params_list])
-		pd_row_3 = pd.Series([i[2] for i in rvt_params_list])
-
-		pd_elems_frame = pd.DataFrame({
-			"Category": pd_row_1,
-			"Description": pd_row_2,
-			"Manufacturer": pd_row_3})
-
-		df_groupped_by = pd_elems_frame.groupby(["Category", "Description", "Manufacturer"])["Description"].indices.keys()
-		out_description = [i[1] for i in df_groupped_by]
-		out_manufacturer = [i[2] for i in df_groupped_by]
-		out_count = pd_elems_frame.groupby(["Category", "Description"]).size().tolist()
+		groupped_list = self.get_groupped_list(rvt_params_list)
 
 		# first two rows are hard-coded for the method
 		# empty stirngs needed for correct zip and insert in Excel
@@ -124,10 +112,30 @@ class electrical_objects(RvtObjGroup):
 		out_list = []
 		out_list.append(row_1)
 		out_list.append(row_2)
-		out_list.extend(
-			list(zip(out_description, out_count, out_manufacturer)))
+		out_list.extend(groupped_list)
 
 		return out_list
+
+	@staticmethod
+	def get_groupped_list(_not_sorted_list):
+
+		pd_col_1 = pd.Series([i[0] for i in _not_sorted_list])
+		pd_col_2 = pd.Series([i[1] for i in _not_sorted_list])
+		pd_col_3 = pd.Series([i[2] for i in _not_sorted_list])
+
+		pd_elems_frame = pd.DataFrame({
+			"Column_1": pd_col_1,
+			"Column_2": pd_col_2,
+			"Column_3": pd_col_3})
+
+		df_groupped_by = pd_elems_frame.groupby(["Column_1", "Column_2", "Column_3"])["Column_2"].indices.keys()
+		out_column_2 = [i[1] for i in df_groupped_by]
+		out_column_3 = [i[2] for i in df_groupped_by]
+		out_count = pd_elems_frame.groupby(["Column_1", "Column_2"]).size().tolist()
+
+		out_list = list(zip(out_column_2, out_count, out_column_3))
+		return out_list
+
 
 class electrical_circuits(electrical_objects):
 
@@ -228,22 +236,5 @@ class data_objects(electrical_objects):
 			else:
 				pass
 
-		pd_row_1 = pd.Series([i[0] for i in additional_elems])
-		pd_row_2 = pd.Series([i[1] for i in additional_elems])
-		pd_row_3 = pd.Series([i[2] for i in additional_elems])
-
-		pd_elems_frame = pd.DataFrame({
-			"Category": pd_row_1,
-			"Description": pd_row_2,
-			"Manufacturer": pd_row_3})
-
-		df_groupped_by = pd_elems_frame.groupby(["Category", "Description", "Manufacturer"])["Description"].indices.keys()
-		out_description = [i[1] for i in df_groupped_by]
-		out_manufacturer = [i[2] for i in df_groupped_by]
-		out_count = pd_elems_frame.groupby(["Category", "Description"]).size().tolist()
-
-		# first two rows are hard-coded for the method
-		# empty stirngs needed for correct zip and insert in Excel
-		out_list = list(zip(out_description, out_count, out_manufacturer))
-
-		return out_list
+		groupped_list = self.get_groupped_list(additional_elems)
+		return groupped_list

@@ -46,7 +46,7 @@ import toolsrvt
 # reload(toolsrvt)
 from toolsrvt import *
 import boq_analyze
-# reload(boq_analyze)
+reload(boq_analyze)
 from boq_analyze import *
 import xl_writer
 # reload(xl_writer)
@@ -126,7 +126,6 @@ boq_general = sorted(boq_general)
 
 boq_trays = tsla_trays()
 boq_cables = electrical_circuits()
-# # TODO: add fittings boq. Standard fittign to be filtered correctly
 boq_grounding = conduit_as_grounding()
 
 boq_list = []
@@ -169,3 +168,9 @@ finally:
 	excel = None
 
 OUT = boq_data.boq
+
+# ROADMAP
+# TODO: add fittings boq. Standard fittign to be filtered correctly
+# TODO check if it possible to add page breaks automaticaly
+# TODO add comments for WiFi and other elements, that need to be commented
+# TODO check what happened if existing BOQ found in Database

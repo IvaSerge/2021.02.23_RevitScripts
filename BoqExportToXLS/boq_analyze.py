@@ -197,7 +197,6 @@ def get_fitting_description(rvt_fitting):
 	fitting_symbol = rvt_fitting.Symbol
 	fitting_model = get_parval(fitting_symbol, "ALL_MODEL_MODEL")
 
-	# TODO: analyze Reudcer, T and X with reduced parts
 	# analyzing model string to get decription and H
 	regexp = re.compile(r"^(.*)\s(H\d*)")  # or take firs two symbols
 	check = regexp.match(fitting_model)
@@ -209,7 +208,7 @@ def get_fitting_description(rvt_fitting):
 	regexp = re.compile(r"^\d*")  # or take firs two symbols
 	fitting_w = regexp.search(fitting_size).group(0)
 
-	fitting_out = f"{fitting_descr} W{fitting_w} {fitting_h}"
+	fitting_out = f"{fitting_descr} W{fitting_w} H{fitting_h}"
 	return fitting_out
 
 def get_sheets_by_seq_number(doc, rev_seq_number):
