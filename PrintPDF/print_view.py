@@ -32,7 +32,7 @@ class PrintView():
 		sheet_number = toolsrvt.get_parval(sheet, "SHEET_NUMBER")
 		revisions_list = [i for i in ViewSheet.GetAllRevisionIds(sheet)]
 		rev_number = sheet.GetRevisionNumberOnSheet(revisions_list[-1])
-		latest_revision = f"[{rev_number}]"
+		latest_revision = "["+ "{num:0>2}".format(num = rev_number) + "]"
 		pdf_name = start_path + sheet_number + latest_revision
 		pdf_name += " - " + sheet_name + ".pdf"
 

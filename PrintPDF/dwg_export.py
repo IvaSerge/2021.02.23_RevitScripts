@@ -30,10 +30,8 @@ class ExportDWG():
 		sheet_name = toolsrvt.get_parval(sheet, "SHEET_NAME")
 		sheet_number = toolsrvt.get_parval(sheet, "SHEET_NUMBER")
 		revisions_list = ViewSheet.GetAllRevisionIds(sheet)
-		if revisions_list:
-			latest_revision = "[%s]" % str(len(revisions_list) - 1).zfill(2)
-		else:
-			latest_revision = ""
+		rev_number = sheet.GetRevisionNumberOnSheet(revisions_list[-1])
+		latest_revision = "["+ "{num:0>2}".format(num = rev_number) + "]"
 
 		pdf_name = sheet_number + "_DWG" + latest_revision
 		pdf_name += " - " + sheet_name + ".dwg"
