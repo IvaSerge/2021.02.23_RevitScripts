@@ -3,4 +3,5 @@
 *.xlsx
 *.pdf
 *.env
+*.dyn
 __pycache__/

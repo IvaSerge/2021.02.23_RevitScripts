@@ -153,8 +153,7 @@ def get_boq_by_l_based_fam(l_based_families):
 
 	return zip(out_description, out_length, out_manufacturer)
 
-
-def get_boq_by_fitting(fitting_list):
+def get_boq_by_tray_fitting(fitting_list):
 	if not fitting_list:
 		return list()
 
@@ -166,9 +165,15 @@ def get_boq_by_fitting(fitting_list):
 		get_fitting_description(i)
 		for i in fittings_filtered]
 
-	return fitting_description
-	# # TODO: Replace Reuced T and X with Add-ons
+	fitting_len = len(fitting_description)
+	fitting_category = ["Cable tray fittings"] * fitting_len
 
+	fitting_manufacurer = [
+		toolsrvt.get_parval(i.Symbol, "ALL_MODEL_MANUFACTURER")
+		for i in fitting_list]
+	
+	out_list = list(zip(fitting_category, fitting_description, fitting_manufacurer))
+	return out_list
 
 def get_lbf_description(line_based_family):
 	# get tray model, width, height and combine in string
@@ -208,7 +213,7 @@ def get_fitting_description(rvt_fitting):
 	regexp = re.compile(r"^\d*")  # or take firs two symbols
 	fitting_w = regexp.search(fitting_size).group(0)
 
-	fitting_out = f"{fitting_descr} W{fitting_w} H{fitting_h}"
+	fitting_out = f"{fitting_descr} W{fitting_w} {fitting_h}"
 	return fitting_out
 
 def get_sheets_by_seq_number(doc, rev_seq_number):

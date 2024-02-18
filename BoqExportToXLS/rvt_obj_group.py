@@ -177,6 +177,30 @@ class tsla_trays(electrical_objects):
 
 		return out_list
 
+class tsla_fittings(electrical_objects):
+
+	def __init__(self):
+		self.sort_str = "Cable trays fittings"
+		self.boq = self.get_boq()
+
+	def get_boq(self):
+		rvt_elems = self._get_rev_objects("OST_CableTrayFitting")
+		if not rvt_elems:
+			return None
+
+		elems_boq = boq_analyze.get_boq_by_tray_fitting(rvt_elems)
+		elems_groupped = self.get_groupped_list(elems_boq)
+
+		out_list = []
+		row_1 = [self.sort_str, " ", " ", " "]
+		row_2 = ["Description", "Count", "Product reference", "Comments"]
+		out_list.append(row_1)
+		out_list.append(row_2)
+		out_list.extend(elems_groupped)
+
+		# return out_list
+		return out_list
+
 class conduit_as_grounding(electrical_objects):
 
 	def __init__(self):

@@ -36,7 +36,7 @@ from RevitServices.Transactions import TransactionManager
 # ================ Python imports
 from System import Array
 from System.Collections.Generic import *
-# from importlib import reload
+from importlib import reload
 import pandas as pd
 
 from win32com import client
@@ -125,6 +125,7 @@ boq_general.append(boq_data)
 boq_general = sorted(boq_general)
 
 boq_trays = tsla_trays()
+boq_fittings = tsla_fittings()
 boq_cables = electrical_circuits()
 boq_grounding = conduit_as_grounding()
 
@@ -135,39 +136,40 @@ boq_list.append(boq_trays)
 boq_list.append(boq_grounding)
 boq_list = [i for i in boq_list if i.boq]
 
-sheets_in_rev = boq_analyze.get_sheets_by_seq_number(doc, rev_seq_number)
+# sheets_in_rev = boq_analyze.get_sheets_by_seq_number(doc, rev_seq_number)
 
-# Excel export
-move_template_xls_file(dir_path, path_xlsx)
-write_first_page(
-	path_xlsx,
-	boq_name, rev_doc_number,
-	rev_seq_number,
-	doc)
-write_totals(path_xlsx, boq_list)
-sheets_temp = write_sheets_info(path_xlsx, sheets_in_rev)
+# # Excel export
+# move_template_xls_file(dir_path, path_xlsx)
+# write_first_page(
+# 	path_xlsx,
+# 	boq_name, rev_doc_number,
+# 	rev_seq_number,
+# 	doc)
+# write_totals(path_xlsx, boq_list)
+# sheets_temp = write_sheets_info(path_xlsx, sheets_in_rev)
 
-# PDF export
-try:
-	excel = client.Dispatch("Excel.Application")
-	excel.Visible = False
+# # PDF export
+# try:
+# 	excel = client.Dispatch("Excel.Application")
+# 	excel.Visible = False
 
-	# Read Excel File
-	wb = excel.Workbooks.Open(path_xlsx)
-	wb.WorkSheets(["Cover", "General Notes","BOQ Sheets", "BOQ Totals"]).Select()
+# 	# Read Excel File
+# 	wb = excel.Workbooks.Open(path_xlsx)
+# 	wb.WorkSheets(["Cover", "General Notes","BOQ Sheets", "BOQ Totals"]).Select()
 
-	# Convert into PDF File
-	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
+# 	# Convert into PDF File
+# 	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
 
-except Exception as e:
-	raise ValueError(e)
+# except Exception as e:
+# 	raise ValueError(e)
 
-finally:
-	wb.Close(False)
-	excel.Quit()
-	excel = None
+# finally:
+# 	wb.Close(False)
+# 	excel.Quit()
+# 	excel = None
 
-OUT = boq_data.boq
+# OUT = boq_data.boq
+OUT = boq_fittings.boq
 
 # ROADMAP
 # TODO: add fittings boq. Standard fittign to be filtered correctly
