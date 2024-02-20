@@ -88,7 +88,7 @@ def write_first_page(path_xlsx, boq_name, rev_doc_number, seq_number, doc):
 	elif doc.ProjectInformation.LookupParameter("TSLA_ProjectDiscipline"):
 		proj_discipline = doc.ProjectInformation.LookupParameter("TSLA_ProjectDiscipline").AsString()
 	else:
-		raise ValueError("Project Dyscipline not found")
+		raise ValueError("Project Discipline not found")
 
 	proj_str = proj_status + ". "
 	proj_str += proj_address + ". "
