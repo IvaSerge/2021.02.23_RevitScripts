@@ -27,6 +27,8 @@ from RevitServices.Transactions import TransactionManager
 # ================ Python imports
 import math
 from math import sqrt
+import time
+import datetime
 
 import el_exceptions
 from el_exceptions import test_exceptions
@@ -168,6 +170,7 @@ def SetEstimatedValues(values):
 
 
 # ================ GLOBAL VARIABLES
+start_time = time.time()
 global doc  # type: ignore
 doc = DocumentManager.Instance.CurrentDBDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
@@ -258,4 +261,8 @@ doc.Delete(TESTBOARD.Id)
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = values
+end_time = time.time()
+total_time_seconds = end_time - start_time
+total_time = datetime.datetime.utcfromtimestamp(total_time_seconds).strftime("%H:%M:%S.%f")
+time_str = (f"Total execution time: {total_time[:-3]}")
+OUT = values, time_str
