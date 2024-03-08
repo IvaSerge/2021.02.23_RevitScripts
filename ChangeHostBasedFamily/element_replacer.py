@@ -35,6 +35,7 @@ class ElementReplacer:
 		self.old_instance: FamilyInstance = _old_instance
 		self.new_inst: FamilyInstance = None
 		self.tags_list: list[IndependentTag]
+		self.param_list = []
 
 	def get_element_tags(self):
 		doc: Document = self.doc
@@ -106,3 +107,38 @@ class ElementReplacer:
 				tag.SetLeaderElbow(new_ref, tag_elbow)
 			if tag_end:
 				tag.SetLeaderEnd(new_ref, tag_end)
+
+	def get_parameters(self):
+		# chec if readonly and value exists
+		param_list = []
+		old_inst = self.old_instance
+		for param in old_inst.GetOrderedParameters():
+			p_has_value = param.HasValue
+			p_read_only = param.IsReadOnly
+			p_modifiable = param.UserModifiable
+			is_valid = all([p_has_value, not(p_read_only), p_modifiable])
+			if is_valid:
+				p_name = param.Definition.Name
+				p_value = toolsrvt.get_parval(old_inst, p_name)
+				if p_value:
+					param_list.append([p_name, p_value])
+		self.param_list = param_list
+
+	def set_parameters(self):
+		new_inst = self.new_inst
+		param_list = self.param_list
+		for param in param_list:
+			p_name = param[0]
+			p_value = param[1]
+			try:
+				toolsrvt.setup_param_value(new_inst, p_name, p_value)
+			except:
+				continue
+		# set phase
+		new_inst.CreatedPhaseId = self.old_instance.CreatedPhaseId
+
+		# there is no Workset in standalone model.
+		try:
+			new_inst.WorksetId = self.old_instance.WorksetId
+		except:
+			pass
