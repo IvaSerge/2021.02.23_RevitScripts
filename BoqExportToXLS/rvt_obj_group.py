@@ -168,6 +168,13 @@ class tsla_trays(electrical_objects):
 		if not rvt_elems:
 			return None
 
+		doc = rvt_elems[0].Document
+		# filter trays, that not have type mark
+		rvt_elems = [i for i in rvt_elems if
+			toolsrvt.get_parval(
+				doc.GetElement(i.GetTypeId()), 
+				"WINDOW_TYPE_ID")]
+
 		out_list = []
 		row_1 = ["Cable trays", " ", " ", " "]
 		row_2 = ["Description", "Lngth,m", "Product reference", "Comments"]
