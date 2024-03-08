@@ -15,7 +15,6 @@ from RevitServices.Transactions import TransactionManager
 
 # ================ local imports
 import toolsrvt
-import boq_analyze
 
 import math
 
@@ -31,6 +30,22 @@ class ElementReplacer:
 	def __init__(self, _old_instance):
 		self.old_instance: FamilyInstance = _old_instance
 		self.new_inst: FamilyInstance = None
+		self.tags_list: list[IndependentTag]
+
+	def get_element_tags(self):
+		doc: Document = self.doc
+		elem_bic = self.old_instance.Category.BuiltInCategory
+		tag_collector = FilteredElementCollector(doc).OfClass(IndependentTag).WhereElementIsNotElementType().ToElements()
+		target_element_id = self.old_instance.Id
+
+		tags_associated_with_element = []
+		for tag in tag_collector:
+			tag_hosts_ids = [i.HostElementId for i in tag.GetTaggedElementIds()]
+			if target_element_id in tag_hosts_ids:
+				tags_associated_with_element.append(tag)
+		self.tags_list = tags_associated_with_element
+		# self.tags_list = tag_collector[0].GetTaggedElementIds()
+
 
 	def create_new_instance(self):
 		doc: Document = self.doc
