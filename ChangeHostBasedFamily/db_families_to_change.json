@@ -1,0 +1,25 @@
+{
+	"example_family":{
+		"type1": ["new_family", "new_type"],
+		"type2": ["new_family", "new_type"]
+	},
+
+	"Trunking system Siteco_Licross":{
+		"Licross Tragschiene L=4500 mm weiß 51TR1JE  Durchverdrahtung 14 x 2,5 mm²":
+			["TSLA_LF_Trunking_System_Rail", "T3_Trunking system L=4500 mm"]
+	},
+
+	"L01h_Siteco Licros IP50":{
+		"--- (1 x LED, 9080 lm, 56.2000007629395 W, 4000K)": ["TSLA_LF_L01h1", "L01h1 3p"]
+	},
+
+	"Trunking system Siteco_Licross out-feed module weiß":{
+		"Licross® Ausspeisemodul L=450 mm leuchtenweiß  Buchse 14polig   59TP1FTE":
+			["TSLA_LF_Trunking_System_Module", "Feed-out_Module L=450 mm"]
+	},
+
+	"Trunking system Siteco_Licross in-feed module weißk":{
+		"Licross® Einspeismodul L=450 mm leuchtenweiß  Buchse 14polig   59TP1FNE":
+			["TSLA_LF_Trunking_System_Module", "Feed-in_Module L=450 mm"]
+	}
+}

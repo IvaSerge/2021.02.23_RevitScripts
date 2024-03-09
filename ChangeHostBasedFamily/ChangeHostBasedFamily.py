@@ -34,6 +34,8 @@ from toolsrvt import *
 import element_replacer
 reload(element_replacer)
 from element_replacer import ElementReplacer
+import elem_getter
+reload(elem_getter)
 
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -46,47 +48,27 @@ elem_to_chnage = UnwrapElement(IN[2])  # type: ignore
 elem_change_all = IN[3]  # type: ignore
 
 
-# TODO: To make script user friendly - add info by element selection
-elem_new_family_name = IN[4]  # type: ignore
-elem_new_type_name = IN[5]  # type: ignore
-
-fnrvStr = FilterStringEquals()
-
-pvpType = ParameterValueProvider(ElementId(int(BuiltInParameter.SYMBOL_NAME_PARAM)))
-pvpFam = ParameterValueProvider(ElementId(int(BuiltInParameter.ALL_MODEL_FAMILY_NAME)))
-
-fruleF = FilterStringRule(pvpFam, fnrvStr, elem_new_family_name)
-filterF = ElementParameterFilter(fruleF)
-
-fruleT = FilterStringRule(pvpType, fnrvStr, elem_new_type_name)
-filterT = ElementParameterFilter(fruleT)
-
-filter = LogicalAndFilter(filterT, filterF)
-
-elem_new_rvt_type = FilteredElementCollector(doc).\
-	WhereElementIsElementType().\
-	WherePasses(filter).\
-	FirstElement()
+json_name = IN[4]  # type: ignore
+json_file = dir_path + "\\" + json_name
 
 # elems_to_change = list()
+elem_new_rvt_type = elem_getter.get_new_type(elem_to_chnage, json_file)
 ElementReplacer.doc = doc
 ElementReplacer.new_type = elem_new_rvt_type
 replacer = ElementReplacer(elem_to_chnage)
-
-# TODO: Get instance parameters to be set
-# TODO: Get workset and phase to be set
-# TODO: Find electrical circuit, that element to be connected
-# TODO: get existing tags
+replacer.get_element_tags()
+replacer.get_parameters()
+replacer.get_el_sys()
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 replacer.create_new_instance()
-# TODO: Set parameters
-# TODO: Assign electrical circuit
-# TODO: Set workset and phase
-# TODO: Change reference of existing tags
-# TODO: Remove existing family
+replacer.switch_tags()
+replacer.set_parameters()
+replacer.assign_el_sys()
+
+# TODO: Remove existing family??? Seems better to remove manualy after checks in model
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
