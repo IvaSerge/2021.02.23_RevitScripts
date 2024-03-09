@@ -36,6 +36,7 @@ class ElementReplacer:
 		self.new_inst: FamilyInstance = None
 		self.tags_list: list[IndependentTag]
 		self.param_list = []
+		self.el_sys: Electrical.ElectricalSystem
 
 	def get_element_tags(self):
 		doc: Document = self.doc
@@ -88,9 +89,9 @@ class ElementReplacer:
 			old_ref = old_ref_list[0]
 			tag_visible = tag.IsLeaderVisible(old_ref)
 			tag_end_condition = tag.LeaderEndCondition
-			if tag_visible:
+			try:
 				tag_elbow = tag.GetLeaderElbow(old_ref)
-			else:
+			except:
 				tag_elbow = None
 
 			if tag_end_condition == LeaderEndCondition.Free and tag_visible:
@@ -138,7 +139,29 @@ class ElementReplacer:
 		new_inst.CreatedPhaseId = self.old_instance.CreatedPhaseId
 
 		# there is no Workset in standalone model.
-		try:
-			new_inst.WorksetId = self.old_instance.WorksetId
-		except:
-			pass
+		workset_id = toolsrvt.get_parval(self.old_instance, "ELEM_PARTITION_PARAM")
+		# if workset_id:
+		toolsrvt.setup_param_value(new_inst, "ELEM_PARTITION_PARAM", int(workset_id))
+
+	def get_el_sys(self):
+		old_inst = self.old_instance
+		old_elsystems = old_inst.MEPModel.GetElectricalSystems()
+		if old_elsystems:
+			first_sys = [i for i in old_elsystems][0]
+		else:
+			return None
+		self.el_sys = first_sys
+
+
+	def assign_el_sys(self):
+		new_inst = self.new_inst
+		el_sys = self.el_sys
+		if not el_sys:
+			return None
+
+		connectors = new_inst.MEPModel.ConnectorManager.UnusedConnectors
+		con = next(iter(connectors))
+		con_set = List[Connector]([con])
+		el_sys.Add(connectors)
+
+		return con_set
