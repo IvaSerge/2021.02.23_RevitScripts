@@ -44,7 +44,7 @@ def get_new_type(old_family_instance, json_file):
 def get_json_data(family_name, family_type, json_file):
 
 	# read JSON
-	with open(json_file, "r") as f_db:
+	with open(json_file, "r", encoding='utf-8') as f_db:
 			data = json.load(f_db)
 
 	try:

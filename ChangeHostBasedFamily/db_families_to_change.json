@@ -6,7 +6,9 @@
 
 	"Trunking system Siteco_Licross":{
 		"Licross Tragschiene L=4500 mm weiß 51TR1JE  Durchverdrahtung 14 x 2,5 mm²":
-			["TSLA_LF_Trunking_System_Rail", "T3_Trunking system L=4500 mm"]
+			["TSLA_LF_Trunking_System_Rail", "T3_Trunking system L=4500 mm"],
+		"Licross Tragschiene L=3000 mm weiß 51TR1FE  Durchverdrahtung 14 x 2,5 mm²":
+			["TSLA_LF_Trunking_System_Rail", "T2_Trunking system L=3000 mm"]
 	},
 
 	"L01h_Siteco Licros IP50":{
@@ -18,8 +20,13 @@
 			["TSLA_LF_Trunking_System_Module", "Feed-out_Module L=450 mm"]
 	},
 
-	"Trunking system Siteco_Licross in-feed module weißk":{
+	"Trunking system Siteco_Licross in-feed module weiß":{
 		"Licross® Einspeismodul L=450 mm leuchtenweiß  Buchse 14polig   59TP1FNE":
 			["TSLA_LF_Trunking_System_Module", "Feed-in_Module L=450 mm"]
+	},
+
+	"Emergency Light_E02b":{
+		"E02b_Gessler_Siteco_Licross_S1":
+			["TSLA_LF_E02b_Trunking_System", "E02b (304 lm, 3.5 W, M023+S1 lens, IP20)"]
 	}
 }

@@ -23,6 +23,7 @@ from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
+from typing import Iterable
 from System import Array
 from System.Collections.Generic import *
 from importlib import reload
@@ -37,6 +38,13 @@ from element_replacer import ElementReplacer
 import elem_getter
 reload(elem_getter)
 
+
+def unwrap(_item):
+	if isinstance(_item, list):
+		return process_list(unwrap, _item)
+	else:
+		return UnwrapElement(_item)  # type: ignore
+
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -44,33 +52,39 @@ uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 view = doc.ActiveView
 reload_var = IN[1]  # type: ignore
-elem_to_chnage = UnwrapElement(IN[2])  # type: ignore
 elem_change_all = IN[3]  # type: ignore
+replacers_list: Iterable[ElementReplacer] = []
 
+if isinstance(IN[2], list):
+	elem_list = unwrap(IN[2])  # type: ignore
+else:
+	elem_list = [UnwrapElement(IN[2])]  # type: ignore
 
 json_name = IN[4]  # type: ignore
 json_file = dir_path + "\\" + json_name
 
-# elems_to_change = list()
-elem_new_rvt_type = elem_getter.get_new_type(elem_to_chnage, json_file)
 ElementReplacer.doc = doc
-ElementReplacer.new_type = elem_new_rvt_type
-replacer = ElementReplacer(elem_to_chnage)
-replacer.get_element_tags()
-replacer.get_parameters()
-replacer.get_el_sys()
+for elem_to_change in elem_list:
+	elem_new_rvt_type = elem_getter.get_new_type(elem_to_change, json_file)
+	replacer = ElementReplacer(elem_to_change)
+	replacer.new_type = elem_new_rvt_type
+	replacer.get_element_tags()
+	replacer.get_parameters()
+	replacer.get_el_sys()
+	replacers_list.append(replacer)
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-replacer.create_new_instance()
-replacer.switch_tags()
-replacer.set_parameters()
-replacer.assign_el_sys()
+for replacer in replacers_list:
+	replacer.create_new_instance()
+	replacer.switch_tags()
+	replacer.set_parameters()
+	replacer.assign_el_sys()
 
-# TODO: Remove existing family??? Seems better to remove manualy after checks in model
+# # # TODO: Remove existing family??? Seems better to remove manualy after checks in model
 
-# =========End transaction
+# # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = replacer.new_inst
+OUT = [i.new_type for i in replacers_list]

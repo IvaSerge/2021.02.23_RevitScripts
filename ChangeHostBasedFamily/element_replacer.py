@@ -29,14 +29,14 @@ class ElementReplacer:
 
 	# class properties
 	doc = None
-	new_type = None
 
 	def __init__(self, _old_instance):
 		self.old_instance: FamilyInstance = _old_instance
+		self.new_type: FamilyType = None
 		self.new_inst: FamilyInstance = None
 		self.tags_list: list[IndependentTag]
 		self.param_list = []
-		self.el_sys: Electrical.ElectricalSystem
+		self.el_sys: Electrical.ElectricalSystem = None
 
 	def get_element_tags(self):
 		doc: Document = self.doc
@@ -71,12 +71,13 @@ class ElementReplacer:
 			new_type,
 			rvt_host_lvl,
 			Structure.StructuralType.NonStructural)
+		doc.Regenerate()
 
 		# set rotation
 		old_rotation = self.old_instance.Location.Rotation
-		inst_transform = family_inst.GetTotalTransform()
+		# inst_transform = family_inst.GetTotalTransform()
 		inst_axes_Z = Line.CreateUnbound(XYZ.Zero, XYZ.BasisZ)
-		ElementTransformUtils.RotateElement(doc, family_inst.Id, inst_axes_Z, math.pi / 2)
+		ElementTransformUtils.RotateElement(doc, family_inst.Id, inst_axes_Z, float(old_rotation))
 		family_inst.Location.Point = ins_pnt
 
 		self.new_inst = family_inst
