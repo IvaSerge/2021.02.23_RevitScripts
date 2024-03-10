@@ -82,8 +82,6 @@ for replacer in replacers_list:
 	replacer.set_parameters()
 	replacer.assign_el_sys()
 
-# TODO: Remove existing family??? Seems better to remove manualy after checks in model
-
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
