@@ -28,5 +28,15 @@
 	"Emergency Light_E02b":{
 		"E02b_Gessler_Siteco_Licross_S1":
 			["TSLA_LF_E02b_Trunking_System", "E02b (304 lm, 3.5 W, M023+S1 lens, IP20)"]
+	},
+
+	"Standard Emergency Light":{
+		"Pendant - Forward Two Sided_IP65":
+			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Forward OneSide (5.5 W, Display 2000/G7, IP41)"]
+	},
+
+	"Door Emergency Light Wall Mounted":{
+		"Pendant - Emergency Exit":
+			["TSLA_LF_E03a_EXITSIGN_Surface_Mounting", "Forward OneSide (5.5 W, Display 2000/G7, IP41)"]
 	}
 }

@@ -78,6 +78,7 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 
 for replacer in replacers_list:
 	replacer.create_new_instance()
+	replacer.rotate_inst()
 	replacer.switch_tags()
 	replacer.set_parameters()
 	replacer.assign_el_sys()
@@ -85,4 +86,4 @@ for replacer in replacers_list:
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = [i.new_type for i in replacers_list]
+OUT = [i.new_inst for i in replacers_list], [i.rotation for i in replacers_list]

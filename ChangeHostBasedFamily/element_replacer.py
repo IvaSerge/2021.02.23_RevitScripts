@@ -5,6 +5,7 @@ import sys
 # ================ Revit imports
 clr.AddReference('RevitAPI')
 from Autodesk.Revit.DB import *
+from Autodesk.Revit.Exceptions import InvalidOperationException
 
 clr.AddReference('RevitAPIUI')
 from Autodesk.Revit.UI import *
@@ -37,6 +38,7 @@ class ElementReplacer:
 		self.tags_list: list[IndependentTag]
 		self.param_list = []
 		self.el_sys: Electrical.ElectricalSystem = None
+		self.rotation = float()
 
 	def get_element_tags(self):
 		doc: Document = self.doc
@@ -55,6 +57,7 @@ class ElementReplacer:
 	def create_new_instance(self):
 		doc: Document = self.doc
 		new_type: FamilyType = self.new_type
+		family_inst = None
 		
 		# create family instance based on lication point
 		ins_pnt = self.old_instance.Location.Point
@@ -72,16 +75,15 @@ class ElementReplacer:
 			rvt_host_lvl,
 			Structure.StructuralType.NonStructural)
 		doc.Regenerate()
-
-		# set rotation
-		old_rotation = self.old_instance.Location.Rotation
-		# inst_transform = family_inst.GetTotalTransform()
-		inst_axes_Z = Line.CreateUnbound(XYZ.Zero, XYZ.BasisZ)
-		ElementTransformUtils.RotateElement(doc, family_inst.Id, inst_axes_Z, float(old_rotation))
-		family_inst.Location.Point = ins_pnt
-
 		self.new_inst = family_inst
-		return family_inst
+
+	def rotate_inst(self):
+		doc = self.doc
+		old_transform = self.old_instance.GetTotalTransform()
+		catet_x = old_transform.BasisX.X
+		catet_y = old_transform.BasisX.Y
+		rotation_angle = math.atan2(catet_y, catet_x)
+		self.rotation = rotation_angle
 
 	def switch_tags(self):
 		for tag in self.tags_list:  # Assuming self.tags_list is List[IndependentTag]
@@ -117,8 +119,8 @@ class ElementReplacer:
 		for param in old_inst.GetOrderedParameters():
 			p_has_value = param.HasValue
 			p_read_only = param.IsReadOnly
-			p_modifiable = param.UserModifiable
-			is_valid = all([p_has_value, not(p_read_only), p_modifiable])
+			# p_modifiable = param.UserModifiable
+			is_valid = all([p_has_value, not(p_read_only)])
 			if is_valid:
 				p_name = param.Definition.Name
 				p_value = toolsrvt.get_parval(old_inst, p_name)
@@ -141,8 +143,11 @@ class ElementReplacer:
 
 		# there is no Workset in standalone model.
 		workset_id = toolsrvt.get_parval(self.old_instance, "ELEM_PARTITION_PARAM")
-		# if workset_id:
-		toolsrvt.setup_param_value(new_inst, "ELEM_PARTITION_PARAM", int(workset_id))
+		if workset_id:
+			try:
+				toolsrvt.setup_param_value(new_inst, "ELEM_PARTITION_PARAM", int(workset_id))
+			except InvalidOperationException:
+				pass
 
 	def get_el_sys(self):
 		old_inst = self.old_instance

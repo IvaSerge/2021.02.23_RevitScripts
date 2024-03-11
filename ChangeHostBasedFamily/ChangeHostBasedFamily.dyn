@@ -15,15 +15,6 @@
       "Value": "ChangeHostBasedFamily.py",
       "Description": "Creates a string.",
       "SelectedIndex": 0
-    },
-    {
-      "Id": "72902a9b61f84a09850125cd158bf369",
-      "Name": "InstanceToChange",
-      "Type": "selection",
-      "Type2": "hostSelection",
-      "Value": "4a09220c-d6cd-4b82-91eb-c918dee0251b-00771b1b",
-      "Description": "Select a model element from the document.",
-      "SelectedIndex": 0
     }
   ],
   "Outputs": [],
@@ -225,30 +216,9 @@
       "Description": "Selection between a true and false."
     },
     {
-      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
-      "NodeType": "ExtensionNode",
-      "InstanceId": [
-        "4a09220c-d6cd-4b82-91eb-c918dee0251b-00771b1b"
-      ],
-      "Id": "72902a9b61f84a09850125cd158bf369",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "5ce584219f564252bcdce9be3e480755",
-          "Name": "Element",
-          "Description": "The selected elements.",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled"
-    },
-    {
       "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
       "NodeType": "StringInputNode",
-      "InputValue": "db_families_to_change.json",
+      "InputValue": "db_CP_Families.json",
       "Id": "dbda7588274a44a7b4ac87b7b78b5697",
       "Inputs": [],
       "Outputs": [
@@ -335,7 +305,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementsSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "4a09220c-d6cd-4b82-91eb-c918dee0251b-00771b1f"
+        "cf1f6ec5-f818-4f54-9791-b473371a4d9b-00aa5558"
       ],
       "Id": "cd65ad20dfb145eaac95669329335ebf",
       "Inputs": [],
@@ -351,9 +321,123 @@
         }
       ],
       "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.FamilyInstance.SetRotation@double",
+      "Id": "2878d877c1c6467a81b971aaad2a7111",
+      "Inputs": [
+        {
+          "Id": "b91e10621c8447e098746db4f79b0625",
+          "Name": "familyInstance",
+          "Description": "Revit.Elements.FamilyInstance",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "26b96e8270244ad08c855199e58dbbc3",
+          "Name": "degree",
+          "Description": "The Euler angle around Z-axis.\n\ndouble",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b7c1567b27b44535aa1205671ba4d42c",
+          "Name": "FamilyInstance",
+          "Description": "The result family instance.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Set the Euler angle of the family instance around its local Z-axis.\n\nFamilyInstance.SetRotation (degree: double): FamilyInstance"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "IN[0];\nIN[1];",
+      "Id": "ac94bd29bd8d45de97ee6b40d630416a",
+      "Inputs": [
+        {
+          "Id": "15d5f65221ce488bb15372fa26977a3c",
+          "Name": "IN",
+          "Description": "IN",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "cac968ed9062432ca3f8c971fb1fbdc3",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bec96e2d90684128a4f6e284c64124ee",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.Math.RadiansToDegrees@double",
+      "Id": "32abf336ceea424bbdb9a865cfda628e",
+      "Inputs": [
+        {
+          "Id": "34357b4688d14cd8be6b12af2ef52640",
+          "Name": "radians",
+          "Description": "Angle in radians.\n\ndouble",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "89457500b12147fca73cb5ae5beef647",
+          "Name": "degrees",
+          "Description": "Angle in degrees.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Converts an angle in radians to an angle in degrees.\n\nMath.RadiansToDegrees (radians: double): double"
     }
   ],
   "Connectors": [
+    {
+      "Start": "0ffe33e7c7f34f6a8d151e5ab16336dc",
+      "End": "15d5f65221ce488bb15372fa26977a3c",
+      "Id": "309dd0d62f9745e6b824b5a57116ef2b",
+      "IsHidden": "False"
+    },
     {
       "Start": "0c50f0a5e8394f019a078e6850124104",
       "End": "0ce557ba57ea4f53840d30d83a6db2f5",
@@ -418,6 +502,24 @@
       "Start": "90e74ffcd68a4a99b1e9f9c384474cb7",
       "End": "4fd2c8f91a2b4ee39dfa31fa162e5ede",
       "Id": "826da9d617fb4f1c936658382cb036ad",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "cac968ed9062432ca3f8c971fb1fbdc3",
+      "End": "b91e10621c8447e098746db4f79b0625",
+      "Id": "67cd18cdd60c4e319b2fdfa34cac3b6b",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "bec96e2d90684128a4f6e284c64124ee",
+      "End": "34357b4688d14cd8be6b12af2ef52640",
+      "Id": "381a935dc9874cf585d2ceec35bbcbbf",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "89457500b12147fca73cb5ae5beef647",
+      "End": "26b96e8270244ad08c855199e58dbbc3",
+      "Id": "612cd34cdc72446781606c121466ae68",
       "IsHidden": "False"
     }
   ],
@@ -531,16 +633,6 @@
         "Y": 673.63384016167049
       },
       {
-        "Name": "InstanceToChange",
-        "ShowGeometry": true,
-        "Id": "72902a9b61f84a09850125cd158bf369",
-        "IsSetAsInput": true,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 1164.209138231013,
-        "Y": 473.17795098242681
-      },
-      {
         "Name": "NewFamilyName",
         "ShowGeometry": true,
         "Id": "dbda7588274a44a7b4ac87b7b78b5697",
@@ -569,6 +661,36 @@
         "Excluded": false,
         "X": 810.47377310627621,
         "Y": 473.12139618014214
+      },
+      {
+        "Name": "FamilyInstance.SetRotation",
+        "ShowGeometry": true,
+        "Id": "2878d877c1c6467a81b971aaad2a7111",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 3108.3200245287348,
+        "Y": 90.390513805582685
+      },
+      {
+        "Name": "Code Block",
+        "ShowGeometry": true,
+        "Id": "ac94bd29bd8d45de97ee6b40d630416a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2474.6099070862679,
+        "Y": 76.588642643856531
+      },
+      {
+        "Name": "Math.RadiansToDegrees",
+        "ShowGeometry": true,
+        "Id": "32abf336ceea424bbdb9a865cfda628e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2734.365934285383,
+        "Y": 206.8586579424433
       }
     ],
     "Annotations": [
@@ -580,17 +702,16 @@
         "WidthAdjustment": 0.0,
         "HeightAdjustment": 0.0,
         "Nodes": [
-          "72902a9b61f84a09850125cd158bf369",
           "b315b7a581134755bc3aeb2f5c7068c5"
         ],
         "HasNestedGroups": false,
         "Left": 1146.6602641412212,
-        "Top": 357.17795098242681,
+        "Top": 557.63384016167049,
         "Width": 247.0,
-        "Height": 448.45588917924368,
+        "Height": 248.0,
         "FontSize": 36.0,
-        "InitialTop": 473.17795098242681,
-        "InitialHeight": 345.45588917924368,
+        "InitialTop": 673.63384016167049,
+        "InitialHeight": 145.0,
         "TextblockHeight": 106.0,
         "Background": "#FFC1D676"
       },
@@ -607,8 +728,8 @@
         "HasNestedGroups": false,
         "Left": 1136.7649918188627,
         "Top": 845.44689475370353,
-        "Width": 267.0,
-        "Height": 266.99999999999989,
+        "Width": 235.0,
+        "Height": 247.99999999999989,
         "FontSize": 36.0,
         "InitialTop": 961.44689475370353,
         "InitialHeight": 144.99999999999989,
@@ -616,8 +737,8 @@
         "Background": "#FFFFB8D8"
       }
     ],
-    "X": -557.138107885316,
-    "Y": -314.40110677402106,
+    "X": -2550.4807313781603,
+    "Y": 46.549363890075256,
     "Zoom": 0.87577595363879657
   }
 }

@@ -1,0 +1,15 @@
+{
+	"example_family":{
+		"type1": ["new_family", "new_type"],
+		"type2": ["new_family", "new_type"]
+	},
+
+	"RCPT_Double Receptacle 230V_16A_IP44": {
+		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx2"]
+	},
+
+	"L01h_Siteco Licros IP50":{
+		"--- (1 x LED, 9080 lm, 56.2000007629395 W, 4000K)":
+			["TSLA_LF_L01b_d_f_Surface_Mounting_Single", "L01b (13360 lm, 86 W, 4000K, L=1500mm)"]
+	}
+}
