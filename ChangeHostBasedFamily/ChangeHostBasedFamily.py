@@ -55,7 +55,7 @@ reload_var = IN[1]  # type: ignore
 elem_change_all = IN[3]  # type: ignore
 replacers_list: Iterable[ElementReplacer] = []
 
-if isinstance(IN[2], list):
+if isinstance(IN[2], list)  # type: ignore
 	elem_list = unwrap(IN[2])  # type: ignore
 else:
 	elem_list = [UnwrapElement(IN[2])]  # type: ignore
