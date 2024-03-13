@@ -80,9 +80,18 @@ class ElementReplacer:
 	def rotate_inst(self):
 		doc = self.doc
 		old_transform = self.old_instance.GetTotalTransform()
-		catet_x = old_transform.BasisX.X
-		catet_y = old_transform.BasisX.Y
-		rotation_angle = math.atan2(catet_y, catet_x)
+		x_axis = old_transform.BasisX
+		y_axis = old_transform.BasisY
+		z_axis = old_transform.BasisZ
+
+		rotation_matrix = [
+			[x_axis.X, x_axis.Y, x_axis.Z],
+			[y_axis.X, y_axis.Y, y_axis.Z],
+			[z_axis.X, z_axis.Y, z_axis.Z],
+		]
+
+		angles = ElementReplacer.euler_angles_from_rotation_matrix(rotation_matrix)
+		rotation_angle = angles[1]
 		self.rotation = rotation_angle
 
 	def switch_tags(self):
@@ -122,9 +131,16 @@ class ElementReplacer:
 			# p_modifiable = param.UserModifiable
 			is_valid = all([p_has_value, not(p_read_only)])
 			
+			if not is_valid:
+				continue
+			
 			# additional parameter filters
 			# Elevation from level
 			if param.Id == ElementId(-1001360):
+				param_list.append([p_name, p_value])
+				p_name = ""
+				p_value = toolsrvt.get_parval(old_inst, "INSTANCE_ELEVATION_PARAM")
+				param_list.append(["INSTANCE_ELEVATION_PARAM", p_value])
 				continue
 			# offset fromhost
 			elif param.Id == ElementId(-1001364):
@@ -132,11 +148,11 @@ class ElementReplacer:
 			else:
 				pass
 
-			if is_valid:
-				p_name = param.Definition.Name
-				p_value = toolsrvt.get_parval(old_inst, p_name)
-				if p_value:
-					param_list.append([p_name, p_value])
+			p_name = param.Definition.Name
+			p_value = toolsrvt.get_parval(old_inst, p_name)
+			if p_value is not None and p_value != "":
+				param_list.append([p_name, p_value])
+
 		self.param_list = param_list
 
 	def set_parameters(self):
@@ -179,3 +195,10 @@ class ElementReplacer:
 		el_sys.Add(connectors)
 
 		return con_set
+
+	@staticmethod
+	def euler_angles_from_rotation_matrix(rotation_matrix):
+		yaw = math.atan2(rotation_matrix[1][0], rotation_matrix[0][0])
+		pitch = math.atan2(-rotation_matrix[2][0], math.sqrt(rotation_matrix[2][1]**2 + rotation_matrix[2][2]**2))
+		roll = math.atan2(rotation_matrix[2][1], rotation_matrix[2][2])
+		return yaw, pitch, roll
