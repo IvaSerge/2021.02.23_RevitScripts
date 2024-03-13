@@ -5,11 +5,39 @@
 	},
 
 	"RCPT_Double Receptacle 230V_16A_IP44": {
-		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx2"]
+		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx2"],
+		"Regular-Single": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx1"],
+		"V - Vending machine": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx1"]
 	},
 
 	"L01h_Siteco Licros IP50":{
 		"--- (1 x LED, 9080 lm, 56.2000007629395 W, 4000K)":
 			["TSLA_LF_L01b_d_f_Surface_Mounting_Single", "L01b (13360 lm, 86 W, 4000K, L=1500mm)"]
+	},
+
+	"CEE_Socket":{
+		"16A 3P+N+E":
+			["TSLA_EF_Socket_CEE_Wall", "IP44_16A_400V"]
+	},
+
+	"Wallbox_WB01":{
+		"2x230V/16A + 1x400V/16A": ["TSLA_EF_WB01", "WB01"]
+	},
+
+	"Wallbox_WB02":{
+		"2x230V/16A + 1x400V/16A + 1x400V/32A": ["TSLA_EF_WB02", "WB02"]
+	},
+
+	"Wallbox_WB03": {
+		"3x230V/16A + 1x400V/16A": ["TSLA_EF_WB03", "WB03"]
+	},
+
+	"RCPT_Double Receptacle 230V_16A_IP20": {
+		"Regular-single": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx1"],
+		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx2"]
+	},
+
+	"RCPT_Double Receptacle 230V_16A_IP44_surface mounted":{
+		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx2"]
 	}
 }

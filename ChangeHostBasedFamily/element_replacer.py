@@ -121,6 +121,17 @@ class ElementReplacer:
 			p_read_only = param.IsReadOnly
 			# p_modifiable = param.UserModifiable
 			is_valid = all([p_has_value, not(p_read_only)])
+			
+			# additional parameter filters
+			# Elevation from level
+			if param.Id == ElementId(-1001360):
+				continue
+			# offset fromhost
+			elif param.Id == ElementId(-1001364):
+				continue
+			else:
+				pass
+
 			if is_valid:
 				p_name = param.Definition.Name
 				p_value = toolsrvt.get_parval(old_inst, p_name)
@@ -142,12 +153,9 @@ class ElementReplacer:
 		new_inst.CreatedPhaseId = self.old_instance.CreatedPhaseId
 
 		# there is no Workset in standalone model.
-		workset_id = toolsrvt.get_parval(self.old_instance, "ELEM_PARTITION_PARAM")
-		if workset_id:
-			try:
-				toolsrvt.setup_param_value(new_inst, "ELEM_PARTITION_PARAM", int(workset_id))
-			except InvalidOperationException:
-				pass
+		if hasattr(self.old_instance, "WorksetId"):
+			workset_id = self.old_instance.WorksetId.IntegerValue
+			toolsrvt.setup_param_value(new_inst, "ELEM_PARTITION_PARAM", int(workset_id))
 
 	def get_el_sys(self):
 		old_inst = self.old_instance
