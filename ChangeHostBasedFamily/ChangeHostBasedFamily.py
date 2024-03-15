@@ -72,13 +72,13 @@ for elem_to_change in elem_list:
 	replacer.get_parameters()
 	replacer.get_el_sys()
 	replacers_list.append(replacer)
+	replacer.rotate_inst()
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 for replacer in replacers_list:
 	replacer.create_new_instance()
-	replacer.rotate_inst()
 	replacer.switch_tags()
 	replacer.set_parameters()
 	replacer.assign_el_sys()

@@ -22,6 +22,8 @@ from System.Collections.Generic import *
 import toolsrvt
 
 import math
+import scipy
+from scipy.spatial.transform import Rotation
 
 class ElementReplacer:
 	"""
@@ -85,14 +87,14 @@ class ElementReplacer:
 		z_axis = old_transform.BasisZ
 
 		rotation_matrix = [
-			[x_axis.X, x_axis.Y, x_axis.Z],
-			[y_axis.X, y_axis.Y, y_axis.Z],
-			[z_axis.X, z_axis.Y, z_axis.Z],
+			[round(x_axis.X), round(x_axis.Y), round(x_axis.Z)],
+			[round(y_axis.X), round(y_axis.Y), round(y_axis.Z)],
+			[round(z_axis.X), round(z_axis.Y), round(z_axis.Z)],
 		]
 
 		angles = ElementReplacer.euler_angles_from_rotation_matrix(rotation_matrix)
-		rotation_angle = angles[1]
-		self.rotation = rotation_angle
+		self.rotation = angles[0]
+
 
 	def switch_tags(self):
 		for tag in self.tags_list:  # Assuming self.tags_list is List[IndependentTag]
@@ -137,10 +139,10 @@ class ElementReplacer:
 			# additional parameter filters
 			# Elevation from level
 			if param.Id == ElementId(-1001360):
-				param_list.append([p_name, p_value])
-				p_name = ""
-				p_value = toolsrvt.get_parval(old_inst, "INSTANCE_ELEVATION_PARAM")
-				param_list.append(["INSTANCE_ELEVATION_PARAM", p_value])
+				p_value_ft = toolsrvt.get_parval(old_inst, "INSTANCE_ELEVATION_PARAM")
+				p_value_round = round(toolsrvt.ft_to_mm(self.doc, p_value_ft), -2)
+				p_value_to_set = toolsrvt.mm_to_ft(self.doc, p_value_round)
+				param_list.append(["INSTANCE_ELEVATION_PARAM", p_value_to_set])
 				continue
 			# offset fromhost
 			elif param.Id == ElementId(-1001364):
@@ -198,7 +200,6 @@ class ElementReplacer:
 
 	@staticmethod
 	def euler_angles_from_rotation_matrix(rotation_matrix):
-		yaw = math.atan2(rotation_matrix[1][0], rotation_matrix[0][0])
-		pitch = math.atan2(-rotation_matrix[2][0], math.sqrt(rotation_matrix[2][1]**2 + rotation_matrix[2][2]**2))
-		roll = math.atan2(rotation_matrix[2][1], rotation_matrix[2][2])
-		return yaw, pitch, roll
+		r =  Rotation.from_matrix(rotation_matrix)
+		angles = r.as_euler("zyx",degrees=True)
+		return angles
