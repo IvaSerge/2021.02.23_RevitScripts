@@ -87,13 +87,13 @@ class ElementReplacer:
 		z_axis = old_transform.BasisZ
 
 		rotation_matrix = [
-			[round(x_axis.X), round(x_axis.Y), round(x_axis.Z)],
-			[round(y_axis.X), round(y_axis.Y), round(y_axis.Z)],
-			[round(z_axis.X), round(z_axis.Y), round(z_axis.Z)],
+			[round(x_axis.X, 5), round(x_axis.Y, 5), round(x_axis.Z, 5)],
+			[round(y_axis.X, 5), round(y_axis.Y, 5), round(y_axis.Z, 5)],
+			[round(z_axis.X, 5), round(z_axis.Y, 5), round(z_axis.Z, 5)],
 		]
 
 		angles = ElementReplacer.euler_angles_from_rotation_matrix(rotation_matrix)
-		self.rotation = angles[0]
+		self.rotation = float(angles[0])
 
 
 	def switch_tags(self):
