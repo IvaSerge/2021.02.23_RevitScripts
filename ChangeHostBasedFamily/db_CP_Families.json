@@ -44,6 +44,10 @@
 		"4x230V/16A + 1x400V/16A + 1x400V/32A": ["TSLA_EF_WB07", "WB07"]
 	},
 
+	"Wallbox_WB08":{
+		"6x230V/16A + 1x400V/16A + 1x400V/32A":["TSLA_EF_WB08", "WB08"]
+	},
+
 	"RCPT_Double Receptacle 230V_16A_IP20": {
 		"Regular-single": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx1"],
 		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx2"]
