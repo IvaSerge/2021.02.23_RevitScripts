@@ -90,7 +90,7 @@ else:
 	rev_doc_number = db_names[1]
 
 
-# # create path by name, revision and description
+# create path by name, revision and description
 names_list = xl_writer.create_files_names(
 	boq_name,
 	rev_doc_number,
@@ -133,6 +133,7 @@ boq_list = []
 boq_list.extend(boq_general)
 boq_list.append(boq_cables)
 boq_list.append(boq_trays)
+boq_list.append(boq_fittings)
 boq_list.append(boq_grounding)
 boq_list = [i for i in boq_list if i.boq]
 
@@ -172,6 +173,7 @@ OUT = boq_data.boq
 # OUT = boq_fittings.boq
 
 # ROADMAP
+# TODO: add new naming convention for BOQ
 # TODO: add fittings boq. Standard fittign to be filtered correctly
 # TODO check if it possible to add page breaks automaticaly
 # TODO add comments for WiFi and other elements, that need to be commented

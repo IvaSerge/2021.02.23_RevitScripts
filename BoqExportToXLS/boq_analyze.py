@@ -38,7 +38,8 @@ def get_wire_type(el_circuit):
 	is_electrical = circuit_system_type == Electrical.ElectricalSystemType.PowerCircuit
 	is_data = circuit_system_type == Electrical.ElectricalSystemType.Data
 	have_description = toolsrvt.get_parval(el_circuit, "Cable Description") is not None
-	elec_non_standard_cable = is_electrical and have_description
+	# elec_non_standard_cable = is_electrical and have_description
+	elec_non_standard_cable = have_description
 	elec_standard_cable = is_electrical and not have_description
 
 	if elec_standard_cable:
@@ -63,8 +64,8 @@ def get_wire_type(el_circuit):
 	elif elec_non_standard_cable:
 		return toolsrvt.get_parval(el_circuit, "Cable Description")
 
-	elif is_data:
-		return "LAN 250 (S/FTP) CAT.6A"
+	# elif is_data:
+	# 	return "LAN 250 (S/FTP) CAT.6A"
 
 	else:
 		return None
