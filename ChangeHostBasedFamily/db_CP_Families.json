@@ -37,6 +37,10 @@
 		"2x230V/16A + 1x400V/16A":["TSLA_EF_HB02", "HB02"]
 	},
 
+	"Hangingbox_HB03":{
+		"3x230V/16A":["TSLA_EF_HB03", "HB03"]
+	},
+
 	"Wallbox_WB01":{
 		"2x230V/16A + 1x400V/16A": ["TSLA_EF_WB01", "WB01"]
 	},
