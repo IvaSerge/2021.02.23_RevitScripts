@@ -305,8 +305,7 @@
       "ConcreteType": "Dynamo.Nodes.DSModelElementsSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [
-        "93499b62-19d1-4847-a6db-0cbf6b7dd8db-0043074d",
-        "a41e4b53-49f5-4966-b0a5-a3b7df3b6768-01d780b9"
+        "82be490d-682f-444d-b648-547756084545-01985c2e"
       ],
       "Id": "cd65ad20dfb145eaac95669329335ebf",
       "Inputs": [],
@@ -365,11 +364,11 @@
     {
       "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
       "NodeType": "CodeBlockNode",
-      "Code": "IN[0];\nIN[1];",
+      "Code": "IN[0];\nIN[1];\nIN[2];",
       "Id": "ac94bd29bd8d45de97ee6b40d630416a",
       "Inputs": [
         {
-          "Id": "15d5f65221ce488bb15372fa26977a3c",
+          "Id": "99a22f43735b4d348824defc7cfb6014",
           "Name": "IN",
           "Description": "IN",
           "UsingDefaultValue": false,
@@ -380,7 +379,7 @@
       ],
       "Outputs": [
         {
-          "Id": "cac968ed9062432ca3f8c971fb1fbdc3",
+          "Id": "752c4504103b4fc481f1af365867d621",
           "Name": "",
           "Description": "Value of expression at line 1",
           "UsingDefaultValue": false,
@@ -389,9 +388,18 @@
           "KeepListStructure": false
         },
         {
-          "Id": "bec96e2d90684128a4f6e284c64124ee",
+          "Id": "cc5c96e5db494f2d8d0e8a844639d5e2",
           "Name": "",
           "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "09f7f7fea6d5465cbf3ec24332b47ff5",
+          "Name": "",
+          "Description": "Value of expression at line 3",
           "UsingDefaultValue": false,
           "Level": 2,
           "UseLevels": false,
@@ -400,13 +408,73 @@
       ],
       "Replication": "Disabled",
       "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "IN - 180;",
+      "Id": "22abb73e631242b0924ef9b60a6080a3",
+      "Inputs": [
+        {
+          "Id": "cd7002ec20d3409b888b241bfc3ea5a1",
+          "Name": "IN",
+          "Description": "IN",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8cbb6efb97a4458cbef1bb0301302a57",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.Element.Delete@Revit.Elements.Element",
+      "Id": "d663d8cf1d804155b2c2457eb788411d",
+      "Inputs": [
+        {
+          "Id": "1bad87e8cdd64def8f01b5b0c9f15b60",
+          "Name": "element",
+          "Description": "The element to delete.\n\nElement",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ffa5afb93de8475d927b9dfdcf3782a2",
+          "Name": "int[]",
+          "Description": "The list of element id's deleted, including any dependent elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Delete the element and any elements that are totally dependent upon the element.\n\nElement.Delete (element: Element): int[]"
     }
   ],
   "Connectors": [
     {
       "Start": "0ffe33e7c7f34f6a8d151e5ab16336dc",
-      "End": "15d5f65221ce488bb15372fa26977a3c",
-      "Id": "074de3d89e2b4540846e63d3c65cfb25",
+      "End": "99a22f43735b4d348824defc7cfb6014",
+      "Id": "50b26f2510d74244b5189a56032db2f8",
       "IsHidden": "False"
     },
     {
@@ -476,15 +544,27 @@
       "IsHidden": "False"
     },
     {
-      "Start": "cac968ed9062432ca3f8c971fb1fbdc3",
+      "Start": "752c4504103b4fc481f1af365867d621",
       "End": "b91e10621c8447e098746db4f79b0625",
-      "Id": "67cd18cdd60c4e319b2fdfa34cac3b6b",
+      "Id": "f395ead6c26d4afe99e90b75d3ebd877",
       "IsHidden": "False"
     },
     {
-      "Start": "bec96e2d90684128a4f6e284c64124ee",
+      "Start": "cc5c96e5db494f2d8d0e8a844639d5e2",
+      "End": "cd7002ec20d3409b888b241bfc3ea5a1",
+      "Id": "ba3a987f73114a1eb586696861d12834",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "09f7f7fea6d5465cbf3ec24332b47ff5",
+      "End": "1bad87e8cdd64def8f01b5b0c9f15b60",
+      "Id": "5ccf38f6d3f04848afd5cc7e8650e193",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8cbb6efb97a4458cbef1bb0301302a57",
       "End": "26b96e8270244ad08c855199e58dbbc3",
-      "Id": "69f87eede32e4677ac610e85b72988d8",
+      "Id": "5f56bba48f174ee1b602a06e78d1698d",
       "IsHidden": "False"
     }
   ],
@@ -634,8 +714,8 @@
         "IsSetAsInput": false,
         "IsSetAsOutput": false,
         "Excluded": false,
-        "X": 3155.7087829030934,
-        "Y": 76.687352005478488
+        "X": 3281.8240723666704,
+        "Y": 65.908267435942008
       },
       {
         "Name": "Code Block",
@@ -646,6 +726,26 @@
         "Excluded": false,
         "X": 2474.6099070862679,
         "Y": 76.588642643856531
+      },
+      {
+        "Name": "Code Block",
+        "ShowGeometry": true,
+        "Id": "22abb73e631242b0924ef9b60a6080a3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2908.8026068211934,
+        "Y": 159.84523190066184
+      },
+      {
+        "Name": "Element.Delete",
+        "ShowGeometry": true,
+        "Id": "d663d8cf1d804155b2c2457eb788411d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2904.4897400849795,
+        "Y": 340.72774114626208
       }
     ],
     "Annotations": [
@@ -692,8 +792,8 @@
         "Background": "#FFFFB8D8"
       }
     ],
-    "X": -671.88964572874784,
-    "Y": -400.62374012380758,
-    "Zoom": 1.112116335387979
+    "X": -1885.3993114259877,
+    "Y": -9.53373576162727,
+    "Zoom": 0.92772256637281558
   }
 }

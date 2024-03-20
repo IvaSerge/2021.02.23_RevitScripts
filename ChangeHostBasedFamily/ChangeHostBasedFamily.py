@@ -86,4 +86,7 @@ for replacer in replacers_list:
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = [i.new_inst for i in replacers_list], [i.rotation for i in replacers_list]
+OUT = [
+	[i.new_inst for i in replacers_list],
+	[i.rotation for i in replacers_list],
+	[i.old_instance for i in replacers_list]]
