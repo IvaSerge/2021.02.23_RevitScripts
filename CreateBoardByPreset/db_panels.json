@@ -986,7 +986,7 @@
 				["B32 / F313233 Section 0F5", 3, 32],
 				["B63 / F343536 Section 0F5", 3, 63],
 		
-				["B32 / 0,03 A / F373839 Section 0F4 / 1xd6mm", 3, 32],
+				["B32 / 0,03 A / F373839 Section 0F6 / 1xd6mm", 3, 32],
 				["B32 / 0,03 A / F404142 Section 0F6 / 1xd6mm", 3, 32]
 			],
 			"panel_parameter_values": [
