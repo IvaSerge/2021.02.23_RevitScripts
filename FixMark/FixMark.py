@@ -30,7 +30,6 @@ import re
 import toolsrvt
 from toolsrvt import *
 
-
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
 uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
@@ -45,12 +44,22 @@ rvt_elems = FilteredElementCollector(doc).\
 	OfCategory(rvt_cat.BuiltInCategory).\
 	WhereElementIsNotElementType().\
 	ToElements()
+rvt_elems.sort(key=lambda x: x.Id.IntegerValue)
+set_list = []
+for i, elem in enumerate(rvt_elems):
+	set_list.append([elem, i])
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
+for elems in set_list:
+	toolsrvt.setup_param_value(
+		elems[0],
+		"DOOR_NUMBER",
+		str(elems[1])
+	)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = rvt_elems
+OUT = set_list
