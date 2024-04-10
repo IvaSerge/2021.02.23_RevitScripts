@@ -150,10 +150,10 @@ write_totals(path_xlsx, boq_list)
 sheets_temp = write_sheets_info(path_xlsx, sheets_in_rev)
 
 # PDF export
-try:
-	excel = client.Dispatch("Excel.Application")
-	excel.Visible = False
+excel = client.Dispatch("Excel.Application")
+excel.Visible = False
 
+try:
 	# Read Excel File
 	wb = excel.Workbooks.Open(path_xlsx)
 	wb.WorkSheets(["Cover", "General Notes","BOQ Sheets", "BOQ Totals"]).Select()
