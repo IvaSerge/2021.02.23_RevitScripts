@@ -256,19 +256,20 @@ class data_objects(electrical_objects):
 	def get_additional_elems(self):
 		elems_list = self.boq
 		additional_elems = []
+		change_num = self.boq_param_value
 
 		for elem in elems_list:
 			if "socket" in elem[0].lower():
-				to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1"]
+				to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1", change_num]
 				couter = int(elem[1])
 				additional_elems.extend([to_add] * couter)
 			elif "access point" in elem[0].lower():
-				to_add = ["Data devices", "Patch cable category 6A schielded", "Not product specific"]
+				to_add = ["Data devices", "Patch cable category 6A schielded", "Not product specific", change_num]
 				couter = int(elem[1])
 				additional_elems.extend([to_add] * couter)
 
 			elif "hard wired" in elem[0].lower():
-				to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1"]
+				to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1", change_num]
 				couter = int(elem[1])
 				additional_elems.extend([to_add] * couter * 2)
 			else:

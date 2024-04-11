@@ -3,6 +3,10 @@ import os
 import sys
 import shutil
 
+import openpyxl.worksheet
+import openpyxl.worksheet.header_footer
+import openpyxl.worksheet.page
+
 local_data = os.getenv("LOCALAPPDATA")
 dyn_path = r"\python-3.9.12-embed-amd64\Lib"
 py_path = local_data + dyn_path
@@ -118,7 +122,7 @@ def write_first_page(path_xlsx, boq_name, rev_doc_number, seq_number, doc):
 	ws["A44"] = rev_date
 	ws["B44"] = rev_doc_number
 	ws["C44"] = rev_description
-	ws["K44"] = rev_issued_by
+	ws["N44"] = rev_issued_by
 
 	# check cell height based on revision description
 	# max str length is 47
@@ -129,20 +133,39 @@ def write_first_page(path_xlsx, boq_name, rev_doc_number, seq_number, doc):
 	# save to new path
 	wb.save(path_xlsx)
 
-
-def write_totals(xl_path, boq_list):
-
-	# Second page - write info
+def write_totals(xl_path, info_to_set):
 	wb = openpyxl.load_workbook(xl_path)
-	wb.active = wb["BOQ Totals"]
-	ws: openpyxl.Workbook.worksheets = wb.active
+
+	for info in info_to_set:
+		# create new tab
+		new_tab = wb.create_sheet(title=info[0])
+		wb.active = wb[info[0]]
+		new_tab.title = info[0]
+
+		# page setup
+		new_tab.page_setup.orientation = new_tab.ORIENTATION_LANDSCAPE
+		new_tab.page_setup.paperSize = new_tab.PAPERSIZE_A5
+
+		# page margins
+		page_margins = openpyxl.worksheet.page.PageMargins(
+			left=0.393, right=0.393,
+			top=0.787, bottom=0.393,
+			header=0, footer=0,)
+		new_tab.page_margins = page_margins
+
+		# save info
+		write_tab_info(new_tab, info[1])
+
+	wb.save(xl_path)
+
+def write_tab_info(ws, boq_list):
 
 	# set columns width
 	ws.column_dimensions["A"].width = 70
 	ws.column_dimensions["B"].width = 10
 	ws.column_dimensions["C"].width = 55
 	ws.column_dimensions["D"].width = 30
-	ws.column_dimensions["E"].width = 30
+	ws.column_dimensions["E"].width = 23
 
 	rw = 1
 	for boq_object in boq_list:
@@ -175,7 +198,7 @@ def write_totals(xl_path, boq_list):
 	last_cell = ws.cell(row=rw, column=5).coordinate
 	ws.print_area = first_cell + ":" + last_cell
 
-	wb.save(xl_path)
+	# wb.save(xl_path)
 
 
 def write_sheets_info(xl_path, sheets_info):

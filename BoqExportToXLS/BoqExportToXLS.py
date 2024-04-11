@@ -72,8 +72,9 @@ filter_param_name = "BOQ Phase"  # filter parameter is hard coded
 shop_code = info_list[0]
 discipline_code = info_list[1]
 rev_seq_number = info_list[2]
-rev_description = info_list[3]
-filter_param_value = info_list[3]
+rev_description = ", ".join(info_list[3])
+filter_param_list = info_list[3]
+info_to_excel = []
 
 # get main BOQ parameters
 if manual_naming:
@@ -103,7 +104,10 @@ path_pdf = names_list[1]
 RvtObjGroup.doc = doc
 RvtObjGroup.boq_parameter = filter_param_name
 
-boq_list = boq_analyze.get_boq_list_by_dcn(filter_param_value)
+for filter_param_value in filter_param_list:
+	boq_list = boq_analyze.get_boq_list_by_dcn(filter_param_value)
+	info_to_excel.append([filter_param_value, boq_list])
+
 sheets_in_rev = boq_analyze.get_sheets_by_seq_number(doc, rev_seq_number)
 
 # Excel export
@@ -113,8 +117,8 @@ write_first_page(
 	boq_name, rev_doc_number,
 	rev_seq_number,
 	doc)
-write_totals(path_xlsx, boq_list)
-sheets_temp = write_sheets_info(path_xlsx, sheets_in_rev)
+write_sheets_info(path_xlsx, sheets_in_rev)
+write_totals(path_xlsx, info_to_excel)
 
 # PDF export
 excel = client.Dispatch("Excel.Application")
@@ -123,7 +127,14 @@ excel.Visible = False
 try:
 	# Read Excel File
 	wb = excel.Workbooks.Open(path_xlsx)
-	wb.WorkSheets(["Cover", "General Notes","BOQ Sheets", "BOQ Totals"]).Select()
+	
+	# Select all sheets
+	for sheet in wb.Sheets:
+		sheet.Select()
+	
+	sheet_mames = ["Cover", "General Notes","BOQ Sheets"]
+	sheet_mames.extend(filter_param_list)
+	wb.WorkSheets(sheet_mames).Select()
 
 	# Convert into PDF File
 	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
@@ -136,11 +147,10 @@ finally:
 	excel.Quit()
 	excel = None
 
-OUT = [i.boq for i in boq_list]
+# OUT = [i.boq for i in info_to_excel[0][1]]
+OUT = info_to_excel
 
 # ROADMAP
 # TODO: add new naming convention for BOQ
-# TODO: add fittings boq. Standard fittign to be filtered correctly
-# TODO check if it possible to add page breaks automaticaly
-# TODO add comments for WiFi and other elements, that need to be commented
 # TODO check what happened if existing BOQ found in Database
+# TODO check if it possible to add page breaks automaticaly
