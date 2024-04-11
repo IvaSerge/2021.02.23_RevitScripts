@@ -55,11 +55,11 @@ During installation, the following Python path must be utilized:
 
 ## Installation of python modules
   - pip install pandas
-  - pip instal Plillow
-  - pip instal -U pypiwin32
-  - pip instal -U python-dotenv
-  - pip instal mysql-connector-python
-  - pip instal openpyxl
+  - pip install Pillow
+  - pip inatall -U pypiwin32
+  - pip inatall -U python-dotenv
+  - pip inatall mysql-connector-python
+  - pip inatall openpyxl
 
 # Settings in Revit
 For filtering elements parameter "BOQ Phase" is used.
@@ -70,7 +70,7 @@ The Revision info must be accurately filled in, as the
 "name," "number", and "issued by" parameters are utilized as information
 to be set up in the first list of Excel.
 
-Ensure that the built-in parameters in the Refit family type are filled in correctly:
+Ensure that the built-in parameters in the Revit family type are filled in correctly:
 "Description" should contain a human-readable catalogue name for the element.
 "Manufacturer" should provide a link to the product standard or information about
 the manufacturer, along with the order number.

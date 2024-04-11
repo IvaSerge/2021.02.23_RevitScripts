@@ -31,6 +31,8 @@ import operator
 import toolsrvt
 reload(toolsrvt)
 from toolsrvt import *
+from rvt_obj_group import *
+
 
 
 def get_wire_type(el_circuit):
@@ -96,21 +98,25 @@ def get_boq_by_circuits(el_circuits):
 	elem_id = [i.Id.IntegerValue for i in el_circuits]
 	sys_wire_types = [get_wire_type(i) for i in el_circuits]
 	sys_length = [get_wire_length(i) for i in el_circuits]
+	sys_change_num = [toolsrvt.get_parval(i, "BOQ Phase") for i in el_circuits]
 
 	pd_elem_ids = pd.Series(elem_id)
 	pd_wire = pd.Series(sys_wire_types)
 	pd_length = pd.Series(sys_length)
+	pd_change_num = pd.Series(sys_change_num)
 
 	pd_wires_frame = pd.DataFrame({
 		"Element Id": pd_elem_ids,
 		"Wire Type": pd_wire,
-		"Length": pd_length})
+		"Length": pd_length,
+		"Change_num": pd_change_num})
 
-	df_groupped_by = pd_wires_frame.groupby("Wire Type")["Wire Type"].indices.keys()
-	out_cables = [i for i in df_groupped_by]
+	df_groupped_by = pd_wires_frame.groupby(["Wire Type", "Change_num"])["Wire Type"].indices.keys()
+	out_cables = [i[0] for i in df_groupped_by]
+	out_change_num = [i[1] for i in df_groupped_by]
 	out_length = pd_wires_frame.groupby("Wire Type")["Length"].sum().tolist()
 	out_length_spare = [round(i * 1.2) for i in out_length]
-	cables_list = list(zip(out_cables, out_length, out_length_spare))
+	cables_list = list(zip(out_cables, out_length, out_length_spare, out_change_num))
 
 	return sorted(cables_list, key=lambda x: sort_cables_by_wire_size(x[0]))
 
@@ -136,23 +142,32 @@ def get_boq_by_l_based_fam(l_based_families):
 			doc.GetElement(i.GetTypeId()),
 			"ALL_MODEL_MANUFACTURER")
 		for i in l_based_families]
+	
+	lbf_change_num = [
+		toolsrvt.get_parval(
+			i,
+			"BOQ Phase")
+		for i in l_based_families]
 
 	pd_cat = pd.Series(lbf_cat)
 	pd_descr = pd.Series(lbf_description)
 	pd_length = pd.Series(lbf_length)
 	pd_manufacturer = pd.Series(lbf_manufacturer)
+	pd_change_num = pd.Series(lbf_change_num)
 	pd_frame = pd.DataFrame({
 		"Category": pd_cat,
 		"Description": pd_descr,
 		"Manufacturer": pd_manufacturer,
-		"Length": pd_length})
+		"Length": pd_length,
+		"Change_num": pd_change_num})
 
-	df_groupped_by = pd_frame.groupby(["Category", "Description", "Manufacturer"])["Description"].indices.keys()
+	df_groupped_by = pd_frame.groupby(["Category", "Description", "Manufacturer", "Change_num"])["Description"].indices.keys()
 	out_description = [i[1] for i in df_groupped_by]
 	out_manufacturer = [i[2] for i in df_groupped_by]
 	out_length = pd_frame.groupby(["Category", "Description"])["Length"].sum().tolist()
+	out_change_num = [i[3] for i in df_groupped_by]
 
-	return zip(out_description, out_length, out_manufacturer)
+	return zip(out_description, out_length, out_manufacturer, out_change_num)
 
 def get_boq_by_tray_fitting(fitting_list):
 	if not fitting_list:
@@ -243,3 +258,44 @@ def get_sheets_by_seq_number(doc, rev_seq_number):
 		return None
 	else:
 		return sorted(out_list, key=operator.itemgetter(0))
+
+def get_boq_list_by_dcn(dcn_string: str):
+	"""
+		Creates a list to be write to excel file
+	"""
+
+	RvtObjGroup.boq_param_value = dcn_string
+
+	elec_bic_list = (
+		"OST_ConduitFitting",
+		"OST_ElectricalEquipment",
+		"OST_ElectricalFixtures",
+		"OST_FireAlarmDevices",
+		"OST_GenericModel",
+		"OST_LightingDevices",
+		"OST_LightingFixtures",
+		"OST_NurseCallDevices",
+		"OST_DuctFitting")
+
+	boq_data= data_objects()
+	boq_electrical = [electrical_objects(i) for i in elec_bic_list]
+
+	boq_general = []
+	boq_general.extend(boq_electrical)
+	boq_general.append(boq_data)
+	boq_general = sorted(boq_general)
+
+	boq_trays = tsla_trays()
+	boq_fittings = tsla_fittings()
+	boq_cables = electrical_circuits()
+	boq_grounding = conduit_as_grounding()
+
+	boq_list = []
+	boq_list.extend(boq_general)
+	boq_list.append(boq_cables)
+	boq_list.append(boq_trays)
+	boq_list.append(boq_fittings)
+	boq_list.append(boq_grounding)
+	boq_list = [i for i in boq_list if i.boq]
+
+	return boq_list

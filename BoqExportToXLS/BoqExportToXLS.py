@@ -49,10 +49,10 @@ import boq_analyze
 reload(boq_analyze)
 from boq_analyze import *
 import xl_writer
-# reload(xl_writer)
+reload(xl_writer)
 from xl_writer import *
 import db_reader
-# reload(db_reader)
+reload(db_reader)
 from db_reader import *
 import rvt_obj_group
 reload(rvt_obj_group)
@@ -102,41 +102,8 @@ path_pdf = names_list[1]
 
 RvtObjGroup.doc = doc
 RvtObjGroup.boq_parameter = filter_param_name
-RvtObjGroup.boq_param_value = filter_param_value
 
-
-elec_bic_list = (
-	"OST_ConduitFitting",
-	"OST_ElectricalEquipment",
-	"OST_ElectricalFixtures",
-	"OST_FireAlarmDevices",
-	"OST_GenericModel",
-	"OST_LightingDevices",
-	"OST_LightingFixtures",
-	"OST_NurseCallDevices",
-	"OST_DuctFitting")
-
-boq_data= data_objects()
-boq_electrical = [electrical_objects(i) for i in elec_bic_list]
-
-boq_general = []
-boq_general.extend(boq_electrical)
-boq_general.append(boq_data)
-boq_general = sorted(boq_general)
-
-boq_trays = tsla_trays()
-boq_fittings = tsla_fittings()
-boq_cables = electrical_circuits()
-boq_grounding = conduit_as_grounding()
-
-boq_list = []
-boq_list.extend(boq_general)
-boq_list.append(boq_cables)
-boq_list.append(boq_trays)
-boq_list.append(boq_fittings)
-boq_list.append(boq_grounding)
-boq_list = [i for i in boq_list if i.boq]
-
+boq_list = boq_analyze.get_boq_list_by_dcn(filter_param_value)
 sheets_in_rev = boq_analyze.get_sheets_by_seq_number(doc, rev_seq_number)
 
 # Excel export
@@ -169,8 +136,7 @@ finally:
 	excel.Quit()
 	excel = None
 
-OUT = boq_data.boq
-# OUT = boq_fittings.boq
+OUT = [i.boq for i in boq_list]
 
 # ROADMAP
 # TODO: add new naming convention for BOQ

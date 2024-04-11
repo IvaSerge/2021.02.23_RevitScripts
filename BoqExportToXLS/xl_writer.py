@@ -138,10 +138,11 @@ def write_totals(xl_path, boq_list):
 	ws: openpyxl.Workbook.worksheets = wb.active
 
 	# set columns width
-	ws.column_dimensions["A"].width = 50
+	ws.column_dimensions["A"].width = 70
 	ws.column_dimensions["B"].width = 10
-	ws.column_dimensions["C"].width = 45
+	ws.column_dimensions["C"].width = 55
 	ws.column_dimensions["D"].width = 30
+	ws.column_dimensions["E"].width = 30
 
 	rw = 1
 	for boq_object in boq_list:
@@ -171,7 +172,7 @@ def write_totals(xl_path, boq_list):
 
 	# set print area
 	first_cell = "A1"
-	last_cell = ws.cell(row=rw, column=4).coordinate
+	last_cell = ws.cell(row=rw, column=5).coordinate
 	ws.print_area = first_cell + ":" + last_cell
 
 	wb.save(xl_path)
@@ -184,9 +185,9 @@ def write_sheets_info(xl_path, sheets_info):
 	ws: openpyxl.Workbook.worksheets = wb.active
 
 	# set columns width
-	ws.column_dimensions["A"].width = 55
-	ws.column_dimensions["B"].width = 55
-	ws.column_dimensions["C"].width = 20
+	ws.column_dimensions["A"].width = 65
+	ws.column_dimensions["B"].width = 120
+	ws.column_dimensions["C"].width = 7
 
 	list_to_save = []
 	if not sheets_info:
@@ -195,7 +196,7 @@ def write_sheets_info(xl_path, sheets_info):
 	else:
 		# first line and second line
 		list_to_save.append(["Sheets list", " ", " "])
-		list_to_save.append(["Sheet number", "Sheet name", "Sheet revision"])
+		list_to_save.append(["Sheet number", "Sheet name", "Rev."])
 		list_to_save.extend(sheets_info)
 
 	for r_count, row in enumerate(list_to_save, 1):
