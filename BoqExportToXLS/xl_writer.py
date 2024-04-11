@@ -42,6 +42,8 @@ from db_reader import *
 
 
 def create_files_names(boq_name, rev_doc_number, boq_descr, path_to_save):
+	if len(boq_descr) > 180:
+		boq_descr = "BOQ"
 	name_number = boq_name
 	name_prefix = "_XLSX"
 	name_rev = f'[{int(rev_doc_number):02d}]'
@@ -65,7 +67,7 @@ def create_files_names(boq_name, rev_doc_number, boq_descr, path_to_save):
 		name_pdf += " - BOQ_" + name_description
 	name_pdf += ".pdf"
 	
-	# # check file names
+	# check file names
 	check_file_name(name_xlsx)
 	check_file_name(name_pdf)
 
