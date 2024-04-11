@@ -286,7 +286,7 @@ def get_boq_list_by_dcn(dcn_string: str):
 	boq_general = sorted(boq_general)
 
 	boq_trays = tsla_trays()
-	boq_fittings = tsla_fittings()
+	# boq_fittings = tsla_fittings()
 	boq_cables = electrical_circuits()
 	boq_grounding = conduit_as_grounding()
 
@@ -294,7 +294,7 @@ def get_boq_list_by_dcn(dcn_string: str):
 	boq_list.extend(boq_general)
 	boq_list.append(boq_cables)
 	boq_list.append(boq_trays)
-	boq_list.append(boq_fittings)
+	# boq_list.append(boq_fittings)
 	boq_list.append(boq_grounding)
 	boq_list = [i for i in boq_list if i.boq]
 

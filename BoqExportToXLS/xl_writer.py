@@ -65,7 +65,7 @@ def create_files_names(boq_name, rev_doc_number, boq_descr, path_to_save):
 		name_pdf += " - BOQ_" + name_description
 	name_pdf += ".pdf"
 	
-	# check file names
+	# # check file names
 	check_file_name(name_xlsx)
 	check_file_name(name_pdf)
 

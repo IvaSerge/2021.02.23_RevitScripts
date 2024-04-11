@@ -19,7 +19,7 @@ def check_file_name(file_name):
 			raise ValueError("Wrong file name")
 
 	# check file length	
-	if len(file_name) > 80:
+	if len(file_name) > 230:
 		raise ValueError("File name is too long")
 
 	return True
