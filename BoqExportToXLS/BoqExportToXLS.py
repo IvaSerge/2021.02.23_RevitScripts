@@ -131,24 +131,23 @@ try:
 	# Select all sheets
 	for sheet in wb.Sheets:
 		sheet.Select()
-	
-	sheet_mames = ["Cover", "General Notes","BOQ Sheets"]
-	sheet_mames.extend(filter_param_list)
-	wb.WorkSheets(sheet_mames).Select()
+
+	sheet_names = ["Cover", "General Notes","BOQ Sheets"]
+	sheet_names.extend(filter_param_list)
+	wb.WorkSheets(sheet_names).Select()
 
 	# Convert into PDF File
 	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
+	wb.Close(False)
 
 except Exception as e:
 	raise ValueError(e)
 
 finally:
-	wb.Close(False)
 	excel.Quit()
 	excel = None
 
-# OUT = [i.boq for i in info_to_excel[0][1]]
-OUT = info_to_excel
+OUT = path_xlsx, path_pdf
 
 # ROADMAP
 # TODO: add new naming convention for BOQ
