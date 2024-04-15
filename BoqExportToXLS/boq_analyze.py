@@ -132,7 +132,7 @@ def get_boq_by_l_based_fam(l_based_families):
 		for i in l_based_families]
 
 	lbf_length = [
-		math.ceil((ft_to_mm(doc, get_parval(i, "CURVE_ELEM_LENGTH")) / 1000))
+		ft_to_mm(doc, get_parval(i, "CURVE_ELEM_LENGTH"))
 		for i in l_based_families]
 
 	lbf_cat = [i.Category.Name for i in l_based_families]
@@ -164,7 +164,8 @@ def get_boq_by_l_based_fam(l_based_families):
 	df_groupped_by = pd_frame.groupby(["Category", "Description", "Manufacturer", "Change_num"])["Description"].indices.keys()
 	out_description = [i[1] for i in df_groupped_by]
 	out_manufacturer = [i[2] for i in df_groupped_by]
-	out_length = pd_frame.groupby(["Category", "Description"])["Length"].sum().tolist()
+	length_mm = pd_frame.groupby(["Category", "Description"])["Length"].sum().tolist()
+	out_length = [math.ceil(i/1000) for i in length_mm]
 	out_change_num = [i[3] for i in df_groupped_by]
 
 	return zip(out_description, out_length, out_manufacturer, out_change_num)
