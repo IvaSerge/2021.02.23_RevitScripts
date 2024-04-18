@@ -116,7 +116,7 @@ def sort_list_by_point(start_point, point_list, elems):
 
 
 def getElemInSys(el_sys):
-	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list()
+	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem) -> list
 	"""Get elements is circuit and all Quasi boards
 	"""
 	elems = [i for i in el_sys.Elements]
@@ -131,7 +131,7 @@ def getElemInSys(el_sys):
 
 
 def searchInDeep(el_sys, elem_list=list()):
-	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem, list()) -> list()
+	# type: (Autodesk.Revit.DB.Electrical.ElectricalSystem, list) -> list
 	"""Check if Quasi elements are in circuit. Return list of elements.
 	"""
 
