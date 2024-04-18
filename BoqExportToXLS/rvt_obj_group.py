@@ -15,7 +15,7 @@ from RevitServices.Transactions import TransactionManager
 
 # ================ Python imports
 from importlib import reload
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractmethod
 from System import Array
 from System.Collections.Generic import *
 import pandas as pd
@@ -32,19 +32,22 @@ class RvtObjGroup(ABC):
 	"""
 	
 	@classmethod
-	@abstractclassmethod
+	@abstractmethod
 	def _get_rev_objects(cls):
 		...
 
-	@abstractclassmethod
+	@classmethod
+	@abstractmethod
 	def _get_objects_parameters(self):
 		...
 
-	@abstractclassmethod
+	@classmethod
+	@abstractmethod
 	def _get_objects_parameters(self):
 		...
 
-	@abstractclassmethod
+	@classmethod
+	@abstractmethod
 	def get_boq(self):
 		...
 	
