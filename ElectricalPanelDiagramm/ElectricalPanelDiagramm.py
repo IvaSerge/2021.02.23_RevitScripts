@@ -121,8 +121,8 @@ diagramms_list.extend(shedules_list)
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 # clean items on sheet(s)
-for item in items_on_sheet_to_remove:
-	doc.Delete(item)
+# for item in items_on_sheet_to_remove:
+# 	doc.Delete(item)
 
 # create diagramm on sheet only for
 for diagramm in diagramms_list:
