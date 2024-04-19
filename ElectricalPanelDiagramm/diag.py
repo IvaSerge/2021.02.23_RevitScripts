@@ -118,6 +118,8 @@ class Diagramm():
 		if circuit.CircuitType != Autodesk.Revit.DB.Electrical.CircuitType.Circuit:
 			self.params.append(["Panel", 0])
 			self.params.append(["POC", 0])
+			self.params.append(["Socket", 0])
+			self.params.append(["Wallbox", 0])
 			self.params.append(["Reference", ""])
 			return None
 
@@ -126,22 +128,28 @@ class Diagramm():
 		# 2. This element is electrical panel by category
 		# 3. Element not Quasy
 		circuit_first_element = list(circuit.Elements)[0]
+		circ_name = str(circuit.LoadName).lower()
 		elem_is_alone = len(list(circuit.Elements)) == 1  # 1
 		elem_category = circuit_first_element.Category.Id == ElementId(-2001040)
 		elem_not_quasy = "QUASI" not in circuit_first_element.Symbol.Family.Name
 		elem_is_panel = all([elem_is_alone, elem_category, elem_not_quasy])
+		elem_is_socket = True if "socket" in circ_name else False
+		elem_is_wallbox = True if "wallbox" in circ_name else False
 
 		if elem_is_panel:
 			self.params.append(["Panel", 1])
 			self.params.append(["POC", 0])
-			# get reference
+			self.params.append(["Socket", 0])
+			self.params.append(["Wallbox", 0])
 
+			# get reference
 			refer_sheet = toolsrvt.inst_by_cat_strparamvalue(
 				self.doc,
 				BuiltInCategory.OST_Sheets,
 				BuiltInParameter.SHEET_NAME,
 				circuit.LoadName,
 				False)
+
 			if refer_sheet:
 				refer_sheet = refer_sheet[0]
 				refer_sheet_number = refer_sheet.SheetNumber
@@ -151,10 +159,27 @@ class Diagramm():
 				self.params.append(["Reference", "N/A"])
 				return None
 
-		# POC symbol - all other
-		self.params.append(["Panel", 0])
-		self.params.append(["POC", 1])
-		self.params.append(["Reference", ""])
+		elif elem_is_socket:
+			self.params.append(["Panel", 0])
+			self.params.append(["POC", 0])
+			self.params.append(["Socket", 1])
+			self.params.append(["Wallbox", 0])
+			self.params.append(["Reference", ""])
+		
+		elif elem_is_wallbox:
+			self.params.append(["Panel", 0])
+			self.params.append(["POC", 0])
+			self.params.append(["Socket", 0])
+			self.params.append(["Wallbox", 1])
+			self.params.append(["Reference", ""])
+		
+		else:
+			# POC symbol - all other
+			self.params.append(["Panel", 0])
+			self.params.append(["POC", 1])
+			self.params.append(["Socket", 0])
+			self.params.append(["Wallbox", 0])
+			self.params.append(["Reference", ""])
 
 	def get_header_info(self, panel_inst):
 		circuits_all = toolsrvt.elsys_by_brd(panel_inst)
