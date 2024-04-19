@@ -15,6 +15,9 @@ from RevitServices.Transactions import TransactionManager
 # ================ local imports
 import toolsrvt
 from toolsrvt import *
+import elsys_extend
+from elsys_extend import *
+
 
 class LightSymbol():
 	start_point: XYZ = None
@@ -29,21 +32,6 @@ class LightSymbol():
 		self.insert_point: XYZ = None
 		self.grid_row: int = None
 		self.grid_column: int = None
-
-	@staticmethod
-	def get_first_symbol(_rvt_circuit):
-		first_sym = LightSymbol(None)
-		first_sym.type_2D = first_sym.types_list[0]
-		first_sym.insert_point = first_sym.start_point
-		# get circuit parameters to be written in 2D
-		# get cable type
-		# get cable length
-		# get circuit name
-		return first_sym
-
-	@staticmethod
-	def get_all_symbols_by_circuit():
-		return None
 
 	@classmethod
 	def get_symbols_types(cls, doc):
@@ -80,3 +68,26 @@ class LightSymbol():
 			rvt_view)
 		self.inst_2D = instance_on_view
 		return instance_on_view
+
+	@staticmethod
+	def get_first_symbol(_rvt_circuit):
+		first_sym = LightSymbol(None)
+		first_sym.type_2D = first_sym.types_list[0]
+		first_sym.insert_point = first_sym.start_point
+		# get circuit parameters to be written in 2D
+		# get cable type
+		# get cable length
+		# get circuit name
+		return first_sym
+
+	@staticmethod
+	def get_all_symbols_by_circuit(_rvt_circuit, start_slot):
+		# get all elements of the circuit
+		rvt_elems = elsys_extend.get_sorted_circuit_elements(_rvt_circuit)
+		# sort elements by length along circuit path
+		# define slot numbers using level occupancy list
+		# convert slot-numbers to insert points
+		# update occupancy list
+		# update element parameters
+
+		return rvt_elems

@@ -28,7 +28,8 @@ from toolsrvt import *
 import light_symbol
 reload(light_symbol)
 from light_symbol import *
-
+import elsys_extend
+reload(elsys_extend)
 
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -60,19 +61,25 @@ circuits = [i for i in elsys_by_brd(rvt_panel)[1]
 LightSymbol.current_column = 0
 LightSymbol.current_row = 0
 rvt_circuit = [i for i in circuits if i.StartSlot == 48][0]
-first_elem = LightSymbol.get_first_symbol(rvt_circuit)
-symbols_to_install.append(first_elem)
+symbol_first = LightSymbol.get_first_symbol(rvt_circuit)
+
+# it is mandatory that first circuit contains only one main junction box.
+# Main junction box to contain only 1 main circuit
+main_junction_box = [i for i in rvt_circuit.Elements][0]
+main_circuit = elsys_by_brd(main_junction_box)[1][0]
+circuit_elements = LightSymbol.get_all_symbols_by_circuit(main_circuit, [0])
+# symbols_to_install.append(symbol_first)
 
 
-# =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
+# # =========Start transaction
+# TransactionManager.Instance.EnsureInTransaction(doc)
 
-for elem_2D in symbols_to_install:
-	elem_2D.create_2D(view_diagramm)
-	# elem_2D.set_parameters()
+# for elem_2D in symbols_to_install:
+# 	elem_2D.create_2D(view_diagramm)
+# 	# elem_2D.set_parameters()
 
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
+# # =========End transaction
+# TransactionManager.Instance.TransactionTaskDone()
 
 
 # for circuit get all elements
@@ -84,4 +91,6 @@ TransactionManager.Instance.TransactionTaskDone()
 # create 2D symbols
 # insert parameters to 2D
 
-OUT = [i.inst_2D for i in symbols_to_install]
+# OUT = [i.inst_2D for i in symbols_to_install]
+
+OUT = circuit_elements
