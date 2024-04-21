@@ -24,6 +24,7 @@ class LightSymbol():
 	current_row: int = 0
 	current_column: int = 0
 	types_list = []
+	circuit_symbols: list = []
 
 	def __init__(self, _rvt_inst):
 		self.rvt_inst = _rvt_inst
@@ -110,35 +111,71 @@ class LightSymbol():
 
 	def get_insert_point_by_index(self):
 		doc = self.type_2D.Document
-		current_row = self.slot[0]
-		current_column = self.slot[1]
+		current_column = self.slot[0]
+		current_row = self.slot[1]
 		start_point: XYZ = self.start_point
 		start_x = start_point.X
 		start_y = start_point.Y
 		current_x = start_x + toolsrvt.mm_to_ft(doc, 1000) * current_column
-		current_y = start_y + toolsrvt.mm_to_ft(doc, 2000) * current_row
+		current_y = start_y - toolsrvt.mm_to_ft(doc, 1500) * current_row
 		current_xyz = XYZ(current_x, current_y, 0)
 		self.insert_point = current_xyz
+
+	@classmethod
+	def check_next_slot(cls, current_slot, slots_needed):
+		elems_on_current_row = [i.slot for i in cls.circuit_symbols if i.slot[1] == current_slot[1]]
+
+		# current row is empty - all good
+		if not elems_on_current_row:
+			return current_slot
+
+		# current row is occupied - find occupied slot.
+		filtered_first_row = [i.slot for i in cls.circuit_symbols if i.slot[1] != 0]
+
+		# We do not care, if top rows are occupied. Only bottom rows are important
+		colums_occupied = [i[0] for i in filtered_first_row if i[1] >= current_slot[1]]
+		minimal_occupied_slot = min(colums_occupied)
+		
+		if current_slot[0] + slots_needed < minimal_occupied_slot:
+			return current_slot
+
+		else:
+			# check next row
+			return LightSymbol.check_next_slot([current_slot[0], current_slot[1] + 1], slots_needed)
 
 
 	@staticmethod
 	def get_all_symbols_by_circuit(_rvt_circuit, start_slot):
 		doc = _rvt_circuit.Document
-		start_row = start_slot[0]
-		start_column = start_slot[1]
+		start_column = start_slot[0]
+		start_row = start_slot[1]
 		rvt_elems = elsys_extend.get_sorted_circuit_elements(_rvt_circuit)
 		symbols = [LightSymbol(i) for i in rvt_elems]
+		LightSymbol.circuit_symbols.extend(symbols)
 
-		# define slot numbers using level occupancy list
 		for i, symbol in enumerate(symbols):
-			symbol.slot = [start_row, start_column + i]
+			symbol.slot = [start_column + i, start_row	]
 			symbol.get_symbol_by_rvt_elem()  # get 2D for a symbol
 			symbol.get_insert_point_by_index()
 			# get symbol parameters
-			# convert slot-numbers to insert points
-		
 
-		# update occupancy list
-		# update element parameters
 
-		return symbols
+		# analyze all the symbols if there is a junction box
+		# that means that revit instance category is Electrical Equipment
+		for symbol in reversed(symbols):
+			if symbol.rvt_inst.Category.Id.IntegerValue == -2001040:
+				# get next circuits to analyze
+				next_systems = toolsrvt.elsys_by_brd(symbol.rvt_inst)[1]
+				start_column = symbol.slot[0] + 1
+				system_row = start_row
+				for j, el_sys in enumerate(next_systems, start=1):
+					# find next slot
+					system_row = start_row + j
+					system_column = start_column
+					system_slots_needed = len([i for i in el_sys.Elements])
+					slot_to_check = [system_column, system_row]
+					checked_slot = LightSymbol.check_next_slot(slot_to_check, system_slots_needed)
+					# start recursion
+					LightSymbol.get_all_symbols_by_circuit(el_sys, checked_slot)
+
+

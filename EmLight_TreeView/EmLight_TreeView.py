@@ -60,16 +60,16 @@ circuits = [i for i in elsys_by_brd(rvt_panel)[1]
 # start point to be changed by -y*i
 LightSymbol.current_column = 0
 LightSymbol.current_row = 0
-rvt_circuit = [i for i in circuits if i.StartSlot == 48][0]
+rvt_circuit = [i for i in circuits if i.StartSlot == 17][0]
 symbol_first = LightSymbol.get_first_symbol(rvt_circuit)
 
 # it is mandatory that first circuit contains only one main junction box.
 # Main junction box to contain only 1 main circuit
 main_junction_box = [i for i in rvt_circuit.Elements][0]
 main_circuit = elsys_by_brd(main_junction_box)[1][0]
-circuit_elements = LightSymbol.get_all_symbols_by_circuit(main_circuit, [0,2])
+circuit_elements = LightSymbol.get_all_symbols_by_circuit(main_circuit, [2,0])
 symbols_to_install.append(symbol_first)
-symbols_to_install.extend(circuit_elements)
+symbols_to_install.extend(LightSymbol.circuit_symbols)
 
 
 # =========Start transaction
@@ -83,16 +83,7 @@ for elem_2D in symbols_to_install:
 TransactionManager.Instance.TransactionTaskDone()
 
 
-# for circuit get all elements
-# sort elements by distance along circuit path
-# find quasi panels
-# calculate insert points for elements
 # calculate length
 # read parameters
-# create 2D symbols
-# insert parameters to 2D
 
-# OUT = [i.slot for i in circuit_elements]
-OUT = [[i.type_2D, i.slot] for i in symbols_to_install]
-
-# OUT = symbols_to_install
+OUT = [[i.type_2D, i.insert_point] for i in symbols_to_install]
