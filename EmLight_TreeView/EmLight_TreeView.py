@@ -67,19 +67,20 @@ symbol_first = LightSymbol.get_first_symbol(rvt_circuit)
 # Main junction box to contain only 1 main circuit
 main_junction_box = [i for i in rvt_circuit.Elements][0]
 main_circuit = elsys_by_brd(main_junction_box)[1][0]
-circuit_elements = LightSymbol.get_all_symbols_by_circuit(main_circuit, [0])
-# symbols_to_install.append(symbol_first)
+circuit_elements = LightSymbol.get_all_symbols_by_circuit(main_circuit, [0,2])
+symbols_to_install.append(symbol_first)
+symbols_to_install.extend(circuit_elements)
 
 
-# # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
-# for elem_2D in symbols_to_install:
-# 	elem_2D.create_2D(view_diagramm)
-# 	# elem_2D.set_parameters()
+for elem_2D in symbols_to_install:
+	elem_2D.create_2D(view_diagramm)
+	# elem_2D.set_parameters()
 
-# # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
 
 # for circuit get all elements
@@ -91,6 +92,7 @@ circuit_elements = LightSymbol.get_all_symbols_by_circuit(main_circuit, [0])
 # create 2D symbols
 # insert parameters to 2D
 
-# OUT = [i.inst_2D for i in symbols_to_install]
+# OUT = [i.slot for i in circuit_elements]
+OUT = [[i.type_2D, i.slot] for i in symbols_to_install]
 
-OUT = circuit_elements
+# OUT = symbols_to_install
