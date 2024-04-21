@@ -52,3 +52,19 @@ def get_sorted_circuit_elements(_rvt_circuit: Electrical.ElectricalSystem):
 	sorted_pairs = sorted(zip(rvt_elems, point_index), key=lambda x: x[1])
 	sorted_elements = [pair[0] for pair in sorted_pairs]
 	return sorted_elements
+
+def get_cable_name(el_sys):
+	circuit_wire_size = el_sys.WireSizeString
+	circuit_wire_type = el_sys.WireType.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString()
+
+	if "#2.5" in circuit_wire_size and "NYM" in circuit_wire_type:
+		circuit_wire_str = "NYM 3x2.5"
+	elif "#2.5" in circuit_wire_size and "NHXH E30" in circuit_wire_type:
+		circuit_wire_str = "NHXH E30 3x2.5"
+	elif "4" in circuit_wire_size and "NYM" in circuit_wire_type:
+		circuit_wire_str = "NYM 3x4"
+	elif "4" in circuit_wire_size and "NHXH E30" in circuit_wire_type:
+		circuit_wire_str = "NHXH E30 3x4"
+	else:
+		circuit_wire_str = ""
+	return circuit_wire_str

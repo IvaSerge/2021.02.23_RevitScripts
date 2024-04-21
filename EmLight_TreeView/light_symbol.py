@@ -32,6 +32,7 @@ class LightSymbol():
 		self.inst_2D: FamilyInstance = None
 		self.insert_point: XYZ = None
 		self.slot: list[int] = None
+		self.params_to_set = list()
 
 	@classmethod
 	def get_symbols_types(cls, doc):
@@ -97,16 +98,36 @@ class LightSymbol():
 			rvt_view)
 		self.inst_2D = instance_on_view
 		return instance_on_view
+	
+	def set_parameters(self):
+		if not self.params_to_set:
+			return None
+
+		symbol_2D = self.inst_2D
+		for param_info in self.params_to_set:
+			param_name = param_info[0]
+			param_val = param_info[1]
+			toolsrvt.setup_param_value(symbol_2D, param_name,param_val)
 
 	@staticmethod
 	def get_first_symbol(_rvt_circuit):
+		doc = _rvt_circuit.Document
 		first_sym = LightSymbol(None)
 		first_sym.type_2D = first_sym.types_list[0]
 		first_sym.insert_point = first_sym.start_point
 		# get circuit parameters to be written in 2D
-		# get cable type
-		# get cable length
-		# get circuit name
+		circuit_name = _rvt_circuit.LoadName
+		circuit_cable = elsys_extend.get_cable_name(_rvt_circuit)
+		circuit_length = toolsrvt.ft_to_mm(
+			doc,
+			toolsrvt.get_parval(_rvt_circuit, "RBS_ELEC_CIRCUIT_LENGTH_PARAM"))
+		circuit_length = round(circuit_length/1000)
+		length_txt = f"L = {circuit_length}m"
+
+		#append info to symbol parameters to set list
+		first_sym.params_to_set.append(["Beschriftung 1", circuit_name])
+		first_sym.params_to_set.append(["Beschriftung 2", circuit_cable])
+		first_sym.params_to_set.append(["Beschriftung 3", length_txt])
 		return first_sym
 
 	def get_insert_point_by_index(self):

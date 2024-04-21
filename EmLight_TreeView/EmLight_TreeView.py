@@ -77,7 +77,7 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 
 for elem_2D in symbols_to_install:
 	elem_2D.create_2D(view_diagramm)
-	# elem_2D.set_parameters()
+	elem_2D.set_parameters()
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
