@@ -55,12 +55,14 @@ view_diagramm = inst_by_cat_strparamvalue(
 # get circuits of the panel
 circuits = [i for i in elsys_by_brd(rvt_panel)[1]
 	if i.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit]
-
 # test circuit is 48
 # start point to be changed by -y*i
 LightSymbol.current_column = 0
 LightSymbol.current_row = 0
-rvt_circuit = [i for i in circuits if i.StartSlot == 17][0]
+rvt_circuit = [i for i in circuits if i.StartSlot == 18][0]
+circuit_number = rvt_circuit.StartSlot
+number_usv = elsys_extend.circuit_number_to_usv_link(circuit_number)
+LightSymbol.circuit_usv_number = number_usv
 symbol_first = LightSymbol.get_first_symbol(rvt_circuit)
 
 # it is mandatory that first circuit contains only one main junction box.
@@ -82,8 +84,6 @@ for elem_2D in symbols_to_install:
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-
-# calculate length
 # read parameters
 
 OUT = [[i.type_2D, i.insert_point] for i in symbols_to_install]

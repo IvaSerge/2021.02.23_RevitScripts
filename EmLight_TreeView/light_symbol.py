@@ -23,6 +23,7 @@ class LightSymbol():
 	start_point: XYZ = None
 	current_row: int = 0
 	current_column: int = 0
+	circuit_usv_number: int = int()
 	types_list = []
 	circuit_symbols: list = []
 
@@ -71,7 +72,22 @@ class LightSymbol():
 		cls.types_list.append(type_exit)
 		cls.types_list.append(type_box)
 
-			
+	def get_light_parameters(self):
+		rvt_elem = self.rvt_inst
+		circuit_usv_num = self.circuit_usv_number
+
+		# get symbol parameters
+		elem_mark = get_parval(rvt_elem.Symbol, "WINDOW_TYPE_ID")  # Revit parameter "Type Mark"
+		elem_light_num = get_parval(rvt_elem, "E_Light_number")
+
+		self.params_to_set.append(["Type Mark", elem_mark])
+		self.params_to_set.append(["Panel", circuit_usv_num])
+		self.params_to_set.append(["E_Light_number", elem_light_num])
+
+	def get_box_parameters(self):
+		return None
+
+		
 	def get_symbol_by_rvt_elem(self):
 		elem = self.rvt_inst
 		elem_type_mark = get_parval(elem.Symbol, "WINDOW_TYPE_ID")  # Revit parameter "Type Mark"
@@ -79,14 +95,17 @@ class LightSymbol():
 		# junction box
 		if not elem_type_mark:
 			self.type_2D = self.types_list[3]
+			self.get_box_parameters()
 
 		# exit sign
 		elif any(["03" in elem_type_mark, "04" in elem_type_mark, "06" in elem_type_mark]):
 			self.type_2D = self.types_list[2]
+			self.get_light_parameters()
 
 		# emergency light
 		else:
 			self.type_2D = self.types_list[1]
+			self.get_light_parameters()
 
 	def create_2D(self, rvt_view):
 		insert_pnt = self.insert_point
@@ -167,7 +186,6 @@ class LightSymbol():
 
 	@staticmethod
 	def get_all_symbols_by_circuit(_rvt_circuit, start_slot):
-		doc = _rvt_circuit.Document
 		start_column = start_slot[0]
 		start_row = start_slot[1]
 		rvt_elems = elsys_extend.get_sorted_circuit_elements(_rvt_circuit)
@@ -178,8 +196,6 @@ class LightSymbol():
 			symbol.slot = [start_column + i, start_row	]
 			symbol.get_symbol_by_rvt_elem()  # get 2D for a symbol
 			symbol.get_insert_point_by_index()
-			# get symbol parameters
-
 
 		# analyze all the symbols if there is a junction box
 		# that means that revit instance category is Electrical Equipment

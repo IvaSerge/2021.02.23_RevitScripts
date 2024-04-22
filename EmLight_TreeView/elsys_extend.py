@@ -68,3 +68,31 @@ def get_cable_name(el_sys):
 	else:
 		circuit_wire_str = ""
 	return circuit_wire_str
+
+def circuit_number_to_usv_link(_main_circ_num):
+	# type: (str) -> str
+	"""Convert Revit circuit number to realistic link to the panel
+
+	args:
+		main_circ_num - revit circuit number
+	return:
+		value_str - converterd number
+	"""
+	main_circ_num = str(_main_circ_num)
+
+	# convert circuit number to int
+	regexp = re.compile(r"^\D*(\d+)")
+	check = regexp.match(main_circ_num)
+	main_circ_num = check.group(1)
+	main_circ_num = int(main_circ_num)
+
+	# convert circuit number to USV name
+	if main_circ_num % 20 == 0:
+		n_subsection = main_circ_num // 20
+	else:
+		n_subsection = main_circ_num // 20 + 1
+	n_element = main_circ_num - (n_subsection - 1) * 20
+
+	value_str = str(n_subsection) + "." + str(n_element)
+
+	return value_str
