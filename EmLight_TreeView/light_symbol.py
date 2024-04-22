@@ -205,6 +205,8 @@ class LightSymbol():
 				next_systems = toolsrvt.elsys_by_brd(symbol.rvt_inst)[1]
 				start_column = symbol.slot[0] + 1
 				system_row = start_row
+				if not next_systems:
+					continue
 				for j, el_sys in enumerate(next_systems, start=1):
 					# find next slot
 					system_row = start_row + j
@@ -215,4 +217,23 @@ class LightSymbol():
 					# start recursion
 					LightSymbol.get_all_symbols_by_circuit(el_sys, checked_slot)
 
+	@classmethod
+	def calc_symbol_row(cls):
+		# calculate level of the junction box
+		all_symbols: list[LightSymbol] = cls.circuit_symbols
+		for symbol in all_symbols:
+			rvt_inst = symbol.rvt_inst
+			if not rvt_inst:
+				continue
+			if symbol.rvt_inst.Category.Id.IntegerValue == -2001040:
+				current_column = symbol.slot[0]
+				current_row = symbol.slot[1]
+				elems_on_next_column = [i.slot for i in cls.circuit_symbols if i.slot[0] == current_column + 1]
+				rows_occupied = [i[1] for i in elems_on_next_column if i[1] > current_row]
+				min_row = min(rows_occupied)
+
+				# check how much circuits connected to junction box
+				additional_rows = len(toolsrvt.elsys_by_brd(rvt_inst)[1]) - 1
+				level_to_set = min_row - current_row + additional_rows
+				symbol.params_to_set.append(["Number_of_rows", int(level_to_set)])
 

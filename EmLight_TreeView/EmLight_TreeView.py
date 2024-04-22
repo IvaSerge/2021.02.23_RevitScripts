@@ -70,6 +70,7 @@ symbol_first = LightSymbol.get_first_symbol(rvt_circuit)
 main_junction_box = [i for i in rvt_circuit.Elements][0]
 main_circuit = elsys_by_brd(main_junction_box)[1][0]
 circuit_elements = LightSymbol.get_all_symbols_by_circuit(main_circuit, [2,0])
+LightSymbol.calc_symbol_row()
 symbols_to_install.append(symbol_first)
 symbols_to_install.extend(LightSymbol.circuit_symbols)
 
