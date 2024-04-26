@@ -103,9 +103,30 @@ class electrical_objects(RvtObjGroup):
 		return list(zip(elem_categories, elem_description, elem_reference, elem_change_num))
 
 	def get_boq(self, bic_string):
-		rvt_elems = self._get_rev_objects(bic_string)
+		rvt_elems: list = self._get_rev_objects(bic_string)
 		if not rvt_elems:
 			return None
+
+		# as we have 1 family to represent multy connections, we need to 
+		# add more direct connection elements in boq list
+		# new ammount of connections to add - number of circuits in rvt instance
+		additional_drops = []
+		for elem in rvt_elems:
+			elem_type_name: str = toolsrvt.get_parval(elem.Symbol, "ALL_MODEL_DESCRIPTION")
+			if "hard wired connection" in elem_type_name.lower():
+				try:
+					elem.MEPModel.GetElectricalSystems()
+				except:
+					continue
+				circuits = [i for i in elem.MEPModel.GetElectricalSystems()]
+				filtered_circuits = [i for i in circuits if toolsrvt.get_parval(i, "BOQ Phase") == self.boq_param_value]
+				circuits_count = len(filtered_circuits)
+				multiply_count = circuits_count - 1
+				if multiply_count > 0:
+					to_add = [elem] * multiply_count
+					additional_drops.extend(to_add)
+		rvt_elems.extend(additional_drops)
+
 		rvt_params_list = self._get_objects_parameters(rvt_elems)
 		category_name = rvt_elems[0].Category.Name 
 
