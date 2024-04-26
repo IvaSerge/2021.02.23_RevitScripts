@@ -48,18 +48,23 @@ def get_breakers_info(csv_breakers):
 
 	breaker_trips = {
 		"3WL13634NG611AA2": "ETU76B",  # 5000A in substation
+		"3WL12403NG611AA2": "ETU76B",  # 4000A in substation
 		"3WL12323NG611AA2": "ETU76B",  # 3200A in substation
 		"3WL11163NG611AA2": "ETU76B",  # 1600A in substation
 		"3WL11163CB611AA2": "ETU25B",  # 1600A in distribution panel
 		"3WA12204AF010AA0": "ETU600",  # 2000A
+		"3VA27126AC010AA0": "ETU350",  # 1250A in tap-off Unit
 		"3VA25106JP320AA0": "ETU550",  # 1000A
 		"3VA24636KP320AA0": "ETU850",  # 630A
+		"3VA24636HN320AA0": "ETU350",  # 630A in tap-off Unit
 		"3VA23406KP320AA0": "ETU850",  # 400A
+		"3VA23406HN320AA0": "ETU350",  # 400A in tap-off Unit
 		"3VA22256KP320AA0": "ETU850",  # 250A
+		"3VA22256HN320AA0": "ETU350",  # 250A in tap-off Unit
 		"3VA21166KP320AA0": "ETU850",  # 160A
-		"3VA21166KP320AA0": "ETU850",  # 160A
-		"Micrologic 6.0X": "Micrologic 6.0X",  # 1000A for Shnieder MCCBs
-
+		"3VA21166HN320AA0": "ETU350",  # 160A in tap-off Unit 
+		"3VA21105HN320AA0": "ETU350",  # 100As
+		"Micrologic 6.0X": "Micrologic 6.0X",  # 1000A for Shnieder MCCB
 	}
 
 	with open(csv_breakers, mode='r', encoding='utf-8-sig') as csv_file:
