@@ -257,26 +257,24 @@ class data_objects(electrical_objects):
 			self.boq.extend(additional_devices)
 
 	def get_additional_elems(self):
-		elems_list = self.boq
-		additional_elems = []
 		change_num = self.boq_param_value
+		additional_elems = []
 
-		for elem in elems_list:
-			if "socket" in elem[0].lower():
-				to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1", change_num]
-				couter = int(elem[1])
-				additional_elems.extend([to_add] * couter * 2)
-			elif "access point" in elem[0].lower():
-				to_add = ["Data devices", "Patch cable category 6A schielded", "Not product specific", change_num]
-				couter = int(elem[1])
-				additional_elems.extend([to_add] * couter)
+		# add jacks
+		all_circuits = self._get_rev_objects("OST_ElectricalCircuit")
+		data_circuits = [i for i in all_circuits if i.SystemType == Electrical.ElectricalSystemType.Data]
 
-			elif "hard wired" in elem[0].lower():
-				to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1", change_num]
-				couter = int(elem[1])
-				additional_elems.extend([to_add] * couter * 2)
-			else:
-				pass
+		if data_circuits:
+			to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1", change_num]
+			circuits_count = len(data_circuits)
+			additional_elems.extend([to_add] * 2 * circuits_count)
+
+		# add patch cords for WiFi
+		wifi_elems = [i for i in self.boq if "access point" in i[0]]
+		if wifi_elems:
+			wifi_count = len(wifi_elems)
+			to_add = ["Data devices", "Patch cable category 6A schielded", "Not product specific", change_num]
+			additional_elems.extend([to_add] * wifi_count)
 
 		groupped_list = self.get_groupped_list(additional_elems)
 		return groupped_list
