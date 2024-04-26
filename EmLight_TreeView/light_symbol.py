@@ -72,6 +72,18 @@ class LightSymbol():
 		cls.types_list.append(type_exit)
 		cls.types_list.append(type_box)
 
+	@classmethod
+	def next_start_point(cls):
+		doc = cls.circuit_symbols[0].rvt_inst.Document
+		current_start_point = cls.start_point
+		current_point_X = current_start_point.X
+		current_point_Y = current_start_point.Y
+		all_rows = [i.slot[1] for i in cls.circuit_symbols]
+		max_row = max(all_rows)
+		next_Y = current_point_Y + toolsrvt.mm_to_ft(doc, 1500 * max_row + 3000)
+		cls.start_point = XYZ(current_point_X, next_Y, 0)
+
+
 	def get_light_parameters(self):
 		rvt_elem = self.rvt_inst
 		circuit_usv_num = self.circuit_usv_number
@@ -206,6 +218,7 @@ class LightSymbol():
 				start_column = symbol.slot[0] + 1
 				system_row = start_row
 				if not next_systems:
+					symbol.params_to_set.append(["Number_of_rows", 0])
 					continue
 				for j, el_sys in enumerate(next_systems, start=1):
 					# find next slot
@@ -216,24 +229,20 @@ class LightSymbol():
 					checked_slot = LightSymbol.check_next_slot(slot_to_check, system_slots_needed)
 					# start recursion
 					LightSymbol.get_all_symbols_by_circuit(el_sys, checked_slot)
+				# symbol.calc_symbol_row(start_column, start_row)
+				symbol_row = checked_slot[1] - system_row + 1
+				symbol.params_to_set.append(["Number_of_rows", symbol_row])
 
-	@classmethod
-	def calc_symbol_row(cls):
-		# calculate level of the junction box
-		all_symbols: list[LightSymbol] = cls.circuit_symbols
-		for symbol in all_symbols:
-			rvt_inst = symbol.rvt_inst
-			if not rvt_inst:
-				continue
-			if symbol.rvt_inst.Category.Id.IntegerValue == -2001040:
-				current_column = symbol.slot[0]
-				current_row = symbol.slot[1]
-				elems_on_next_column = [i.slot for i in cls.circuit_symbols if i.slot[0] == current_column + 1]
-				rows_occupied = [i[1] for i in elems_on_next_column if i[1] > current_row]
-				min_row = min(rows_occupied)
+	# def calc_symbol_row(self, current_column, current_row):
+	# 	# calculate level of the junction box
+	# 	elems_on_next_column = [i.slot for i in self.circuit_symbols if i.slot[0] == current_column + 1]
+	# 	if not elems_on_next_column:
+	# 		self.params_to_set.append(["Number_of_rows", 1])
+	# 		return None
 
-				# check how much circuits connected to junction box
-				additional_rows = len(toolsrvt.elsys_by_brd(rvt_inst)[1]) - 1
-				level_to_set = min_row - current_row + additional_rows
-				symbol.params_to_set.append(["Number_of_rows", int(level_to_set)])
+	# 	rows_occupied = [i[1] for i in elems_on_next_column]
+	# 	max_row = max(rows_occupied)
+	# 	level_to_set = max_row - current_row
+	# 	self.params_to_set.append(["Number_of_rows", int(level_to_set)])
+	# 	# else: # 	self.params_to_set.append(["Number_of_rows", 0])
 
