@@ -63,7 +63,7 @@ def get_breakers_info(csv_breakers):
 	}
 
 	with open(csv_breakers, mode='r', encoding='utf-8-sig') as csv_file:
-		csv_reader = csv.reader(csv_file, delimiter=';', quoting=csv.QUOTE_MINIMAL)
+		csv_reader = csv.reader(csv_file, delimiter=',', quoting=csv.QUOTE_MINIMAL)
 		for row in csv_reader:
 			breaker_parameters = list()
 			# check if row is not empty
@@ -93,7 +93,7 @@ def get_breakers_info(csv_breakers):
 			breaker_parameters.append(row[15])
 			breaker_parameters += row[17:]
 			# Remove touthends separator
-			breaker_parameters = [i.replace(".", "") if i else None for i in breaker_parameters]
+			breaker_parameters = [i.replace(",", "") if i else None for i in breaker_parameters]
 			cbreakers_list.append(breaker_parameters)
 
 	return cbreakers_list
