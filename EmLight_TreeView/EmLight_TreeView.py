@@ -40,6 +40,7 @@ view = doc.ActiveView
 reload_var = IN[1]  # type: ignore
 view_name = IN[2]  # type: ignore
 rvt_panel = UnwrapElement(IN[3])  # type: ignore
+circuit_number = IN[4]  # type: ignore
 LightSymbol.start_point = XYZ(0, 0, 0)
 LightSymbol.get_symbols_types(doc)
 symbols_to_install: list[LightSymbol] = []
@@ -55,11 +56,12 @@ view_diagramm = inst_by_cat_strparamvalue(
 # get circuits of the panel
 circuits = [i for i in elsys_by_brd(rvt_panel)[1]
 	if i.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit]
-# test circuit is 48
+rvt_circuit = [i for i in circuits if i.StartSlot == circuit_number][0]
+
 # start point to be changed by -y*i
 LightSymbol.current_column = 0
 LightSymbol.current_row = 0
-rvt_circuit = [i for i in circuits if i.StartSlot == 18][0]
+LightSymbol.circuit_symbols = []
 circuit_number = rvt_circuit.StartSlot
 number_usv = elsys_extend.circuit_number_to_usv_link(circuit_number)
 LightSymbol.circuit_usv_number = number_usv
@@ -70,10 +72,8 @@ symbol_first = LightSymbol.get_first_symbol(rvt_circuit)
 main_junction_box = [i for i in rvt_circuit.Elements][0]
 main_circuit = elsys_by_brd(main_junction_box)[1][0]
 circuit_elements = LightSymbol.get_all_symbols_by_circuit(main_circuit, [2,0])
-LightSymbol.calc_symbol_row()
 symbols_to_install.append(symbol_first)
 symbols_to_install.extend(LightSymbol.circuit_symbols)
-
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
