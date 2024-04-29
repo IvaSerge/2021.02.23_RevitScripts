@@ -130,7 +130,7 @@ def csv_to_rvt_elements(csv_info, doc):
 	for row in csv_info:
 		panel_name = row[0]
 		if not panel_name:
-			elem_list.append(None)
+			# elem_list.append(None)
 			continue
 
 		circuit_number = int(row[1])
@@ -146,6 +146,7 @@ def csv_to_rvt_elements(csv_info, doc):
 			panel_rvt = [i for i in panel_rvt if i.Name == panel_name][0]
 		except:
 			error_text = "Panel not found :" + panel_name
+			print(error_text)
 			raise ValueError(error_text)
 
 		# "0" is main circuit breaker of the panel
@@ -156,12 +157,20 @@ def csv_to_rvt_elements(csv_info, doc):
 
 		# "%n" is branch circuit of the panel
 		else:
-			circutits_rvt = toolsrvt.elsys_by_brd(panel_rvt)[1]
+			try:
+				circutits_rvt = toolsrvt.elsys_by_brd(panel_rvt)[1]
+			except:
+				# circuit in Revit not fount. Panel is empty
+				error_text = "Panel do not have branch circuits: " + panel_name
+				print(error_text)
+				raise ValueError(error_text)
+				
 			try:
 				circutit_rvt = [i for i in circutits_rvt if i.StartSlot == circuit_number][0]
 			except:
 				# circuit in Simaris do not have analog in Revit model. Situation to be checked
 				error_text = "Circuit not found :" + panel_name + ": " + str(circuit_number)
+				print(error_text)
 				raise ValueError(error_text)
 			circutit_list = [circutit_rvt] * len(param_toset_circuits)
 			# change value for frame to represent Revit value
