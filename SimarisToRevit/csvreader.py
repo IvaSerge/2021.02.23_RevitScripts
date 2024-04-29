@@ -164,7 +164,7 @@ def csv_to_rvt_elements(csv_info, doc):
 				error_text = "Panel do not have branch circuits: " + panel_name
 				print(error_text)
 				raise ValueError(error_text)
-				
+
 			try:
 				circutit_rvt = [i for i in circutits_rvt if i.StartSlot == circuit_number][0]
 			except:
@@ -172,6 +172,14 @@ def csv_to_rvt_elements(csv_info, doc):
 				error_text = "Circuit not found :" + panel_name + ": " + str(circuit_number)
 				print(error_text)
 				raise ValueError(error_text)
+
+			# check if circuit is not spare
+			if circutit_rvt.CircuitType != Electrical.CircuitType.Circuit:
+				# circuit is Spare - not possible to write parameters
+				error_text = "Circuit is spare: " + panel_name + ": " + str(circuit_number)
+				print(error_text)
+				raise ValueError(error_text)
+
 			circutit_list = [circutit_rvt] * len(param_toset_circuits)
 			# change value for frame to represent Revit value
 			display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Current).GetUnitTypeId()
