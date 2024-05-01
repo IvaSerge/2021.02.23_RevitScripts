@@ -31,6 +31,7 @@ clr.ImportExtensions(Revit.Elements)
 clr.ImportExtensions(Revit.GeometryConversion)
 
 # ================ Python imports
+import System
 from importlib import reload
 from operator import itemgetter
 
@@ -58,17 +59,31 @@ app = uiapp.Application
 view = doc.ActiveView
 
 reload_IN = IN[1]  # type: ignore
-rvt_inst = UnwrapElement(IN[2])  # type: ignore
+
+if not isinstance(IN[2], str):  # type: ignore
+	rvt_instances = [UnwrapElement(IN[2])]  # type: ignore
+else:
+	# # there is category
+	bic = System.Enum.Parse(BuiltInCategory, IN[2])  # type: ignore
+	rvt_instances = FilteredElementCollector(doc).\
+		OfCategory(bic).\
+		WhereElementIsNotElementType().\
+		ToElements()
 
 grid.find_grid_intersection_points(doc)
-shortest_grid_name = grid.get_nearest_grid_by_instance(rvt_inst)
+
+params_to_set = []
+for rvt_inst in rvt_instances:
+	shortest_grid_name = grid.get_nearest_grid_by_instance(rvt_inst)
+	params_to_set.append([rvt_inst, "TO Grid", shortest_grid_name])
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-toolsrvt.setup_param_value(rvt_inst, "TO Grid", shortest_grid_name)
+for param_info in params_to_set:
+	toolsrvt.setup_param_value(param_info[0], param_info[1], param_info[2])
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = shortest_grid_name
+OUT = params_to_set
