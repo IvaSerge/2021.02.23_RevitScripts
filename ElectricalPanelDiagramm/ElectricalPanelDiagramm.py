@@ -121,8 +121,8 @@ diagramms_list.extend(shedules_list)
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 # clean items on sheet(s)
-# for item in items_on_sheet_to_remove:
-# 	doc.Delete(item)
+for item in items_on_sheet_to_remove:
+	doc.Delete(item)
 
 # create diagramm on sheet only for
 for diagramm in diagramms_list:
@@ -137,4 +137,5 @@ for body_diag in diagramms_list:
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = [[i.sheet.Id, i.symbol_type, i.insert_point] for i in shedules_list]
+# OUT = [[i.sheet.Id, i.symbol_type, i.insert_point] for i in shedules_list]
+OUT = [[i.instance, i.params] for i in diagramms_list]
