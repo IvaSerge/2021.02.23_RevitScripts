@@ -53,10 +53,12 @@ class Diagramm():
 	# hard coded parameters
 	circuits_param_to_set = ["RBS_ELEC_CIRCUIT_FRAME_PARAM"]
 	panel_params_to_set = [
+		"_Breaker_Type"
 		"_IR(LTPU)", "_tr(LTD)",
 		"_Isd(STPU)", "_tsd(STD)",
 		"_Ii(INST)",
-		"_Ig(GFPU)", "_tg(GFD)"]
+		"_Ig(GFPU)", "_tg(GFD)",
+		"RBS_ELEC_CIRCUIT_FRAME_PARAM"]
 
 	header_point = [-0.919769759118699, 1.86351706036745, 0]
 	body_point = [-0.916488919223686, 1.63683154412002, 0]
@@ -82,7 +84,7 @@ class Diagramm():
 		return dia_inst
 
 	def set_parameters(self):
-		if not self.params:
+		if not self.params or not self.instance:
 			return None
 		for param_info in self.params:
 			param_name = param_info[0]
@@ -268,6 +270,8 @@ class Diagramm():
 
 
 def get_pairs(doc):
+	# TODO make more universal method not only for 2C and 2A
+
 	# get all panels
 	c_panel_symbol_Id = toolsrvt.type_by_bic_fam_type(
 		doc,
@@ -281,6 +285,12 @@ def get_pairs(doc):
 		"Switchboard",
 		"TYPE 2A 1800x2200x600mm").Id
 
+	# a_panel_symbol_Id = toolsrvt.type_by_bic_fam_type(
+	# 	doc,
+	# 	BuiltInCategory.OST_ElectricalEquipment,
+	# 	"Switchboard",
+	# 	"Chamber 200x2200x600mm").Id
+
 	filter_panel_c = FamilyInstanceFilter(doc, c_panel_symbol_Id)
 	filter_panel_a = FamilyInstanceFilter(doc, a_panel_symbol_Id)
 
@@ -292,6 +302,7 @@ def get_pairs(doc):
 		OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
 		WherePasses(filter_or).\
 		ToElements()
+
 	# if panel name in sheet name: create pair and add to pair list
 	pairs = [[i, get_sheet_by_panel(i)[0]]
 		for i in panels_found
