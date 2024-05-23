@@ -303,6 +303,9 @@ def elsys_by_brd(_brd):
 	lowsys = [i for i in lowsys
 		if i.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
 
+	if not allsys:
+		return None, None
+
 	if lowsys:
 		lowsysId = [i.Id for i in lowsys]
 		mainboardsysLst = [i for i in allsys if i.Id not in lowsysId]
