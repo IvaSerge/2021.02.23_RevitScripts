@@ -49,6 +49,15 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 	regexp = re.compile(r"^(.{2})")  # or take firs two symbols
 	check = regexp.match(rvt_level_str)
 	rvt_level_str = check.group(1)
+
+	# for DU only - 1M and 2F are the same
+	if "2F" or "1M" in rvt_level_str:
+		rvt_level_str = "2"
+	elif "1F" in rvt_level_str:
+		rvt_level_str = "1"
+	else:
+		raise ValueError("Wrong level name")
+
 	return rvt_level_str
 
 
