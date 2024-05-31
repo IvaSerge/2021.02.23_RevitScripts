@@ -73,6 +73,15 @@
 
 	"Wallbox_WB09":{
 		"4x230V/16A + 1x400V/16A + 1x400V/32A + 1x400V/63A":["TSLA_EF_WB09", "WB09"]
-	}
+	},
 
+	"Multi_Socket_Outlet_Assembly_JEG_M": {
+		"2x230V+1x400V": ["TSLA_EF_WB01", "WB01"],
+		"2x230V+1x400V+2XTELECOM": ["TSLA_EF_WB01", "WB01"]
+	},
+
+	"Wallbox_DELTA-BOX 92915":{
+		"2x230V/16A + 1x400V/16A + 1x400V/32A":["TSLA_EF_HB02", "HB02"],
+		"DELTA-BOX 92915 2x230V/16A + 1x400V/16A": ["TSLA_EF_HB02", "HB02"]
+	}
 }
