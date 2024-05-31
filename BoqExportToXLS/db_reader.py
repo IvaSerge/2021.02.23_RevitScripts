@@ -112,9 +112,9 @@ def get_db_boq_name_and_rev(env_path, shop_code, discipline_code):
 
 		query = "SELECT document_id, document_number, filename, revision, discipline "
 		query += "FROM aconex.document_history "
-		query += f"WHERE filename like 'LI-{shop_code}%TSLA%' "
-		query += f"AND discipline like '{discipline_code} -%' "
+		query += f"WHERE filename like '%{shop_code}-00-LI-{discipline_code}-TSLA%' "
 		query += "AND filetype = 'xls'"
+		
 
 		df = pd.read_sql(query, mydb)
 		df_values = df.values.tolist()
@@ -134,7 +134,7 @@ def get_db_boq_name_and_rev(env_path, shop_code, discipline_code):
 
 		# update number for next document
 		next_num = current_max_num + 1
-		boq_name = f"{shop_code}-00-LI-{discipline_code}-TSLA-8000-{next_num:02d}"
+		boq_name = f"{shop_code}-00-LI-{discipline_code}-TSLA-8000-{next_num:05d}"
 		boq_revision_number = int(0)
 		return boq_name, boq_revision_number
 
