@@ -20,9 +20,9 @@ class grid:
 		# type: (Autodesk.Revit.DB.Document) -> list
 
 		view = doc.ActiveView
-		view_temp_prop = doc.GetElement(view.GetTemporaryViewPropertiesId())
-		if view_temp_prop:
-			is_temp_view = True
+		temp_modes = view.TemporaryViewModes
+		if temp_modes:
+			is_temp_view = temp_modes.IsModeActive(TemporaryViewMode.TemporaryHideIsolate)
 		else:
 			is_temp_view = False
 
