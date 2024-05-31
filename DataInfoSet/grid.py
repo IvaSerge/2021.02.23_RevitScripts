@@ -18,13 +18,34 @@ class grid:
 	@classmethod
 	def find_grid_intersection_points(cls, doc):
 		# type: (Autodesk.Revit.DB.Document) -> list
+
+		view = doc.ActiveView
+		view_temp_prop = doc.GetElement(view.GetTemporaryViewPropertiesId())
+		if view_temp_prop:
+			is_temp_view = True
+		else:
+			is_temp_view = False
+
 		all_grids = FilteredElementCollector(doc).\
 			OfCategory(BuiltInCategory.OST_Grids).\
 			WhereElementIsNotElementType().\
 			ToElements()
+		
+		# filter elements, that not visible on temporary view
+		filtered_grids = []
+		for rvt_grd in all_grids:
+			grid_is_hidden = rvt_grd.IsHidden(view)
+			if is_temp_view:
+				grid_temporary_hidden = not(view.IsElementVisibleInTemporaryViewMode(
+					TemporaryViewMode.TemporaryHideIsolate, rvt_grd.Id))
+			else:
+				grid_temporary_hidden = False
+			if grid_temporary_hidden or grid_is_hidden:
+				continue
+			filtered_grids.append(rvt_grd)
 
 		all_intersection_points = dict()
-		obj_grids = [grid(i) for i in all_grids]
+		obj_grids = [grid(i) for i in filtered_grids]
 		for grd in obj_grids:
 			grid_intersections = grd.get_intersection_points(obj_grids)
 			all_intersection_points.update(grid_intersections)
