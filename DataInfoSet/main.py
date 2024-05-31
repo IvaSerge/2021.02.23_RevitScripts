@@ -175,6 +175,11 @@ for rvt_elem in elem_list:
 	# convert multi_tag to string and set to element
 	multi_tag_str = "\n".join(multi_tag_list)
 	params_to_set.append([rvt_elem, "Multi_Tag_1", multi_tag_str])
+	# circuit parameters to element
+	params_to_set.append([rvt_elem, "TO Rack Grid", panel_grid])
+	params_to_set.append([rvt_elem, "TO Rack Floor", panel_level])
+	params_to_set.append([rvt_elem, "TO Panel", panel_patch_panel])
+	params_to_set.append([rvt_elem, "TO Rack", panel_rack])
 
 	# =========Start transaction
 	TransactionManager.Instance.EnsureInTransaction(doc)
