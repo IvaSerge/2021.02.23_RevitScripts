@@ -119,74 +119,75 @@ grid.find_grid_intersection_points(doc)
 
 OUT = grid.all_intersection_points
 
-# for rvt_elem in elem_list:
-# 	# find element parameters
-# 	params_to_set = list()
-# 	elem_grid = grid.get_nearest_grid_by_instance(rvt_elem)
-# 	# For TV clean grid name - Project specific change
-# 	if elem_grid.startswith("TV-"):
-# 		elem_grid = re.sub("-", "", elem_grid)
-# 	elem_level = get_level_name(rvt_elem)
-# 	elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
+for rvt_elem in elem_list:
+	# find element parameters
+	params_to_set = list()
+	elem_grid = grid.get_nearest_grid_by_instance(rvt_elem)
 
-# 	params_to_set.append([rvt_elem, "TO Grid", elem_grid])
-# 	params_to_set.append([rvt_elem, "TO Level", elem_level])
+	# For TV clean grid name - Project specific change
+	if elem_grid.startswith("TV-"):
+		elem_grid = re.sub("-", "", elem_grid)
+	elem_level = get_level_name(rvt_elem)
+	elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
 
-# 	# find ciruit
-# 	elem_circuits = rvt_elem.MEPModel.GetElectricalSystems()
-# 	elem_circuits = [i for i in elem_circuits
-# 		if i.SystemType == Electrical.ElectricalSystemType.Data]
-# 	elem_circuits.sort(key=lambda x: x.StartSlot)
+	params_to_set.append([rvt_elem, "TO Grid", elem_grid])
+	params_to_set.append([rvt_elem, "TO Level", elem_level])
 
-# 	# for each circuit fill in TO parameters
-# 	multi_tag_list = list()
-# 	for circuit in elem_circuits:
-# 		# circuit_nuber = "{:02d}".format(int(circuit.Name))  # if heading zeros needed
-# 		circuit_nuber = circuit.Name  # without heading zeros
-# 		# drop info to circuit
-# 		params_to_set.append([circuit, "TO Grid", elem_grid])
-# 		params_to_set.append([circuit, "TO Level", elem_level])
-# 		params_to_set.append([circuit, "ALL_MODEL_INSTANCE_COMMENTS", elem_comments])
+	# find ciruit
+	elem_circuits = rvt_elem.MEPModel.GetElectricalSystems()
+	elem_circuits = [i for i in elem_circuits
+		if i.SystemType == Electrical.ElectricalSystemType.Data]
+	elem_circuits.sort(key=lambda x: x.StartSlot)
 
-# 		# panel info to circuit
-# 		data_panel = circuit.BaseEquipment
-# 		panel_grid = toolsrvt.get_parval(data_panel, "TO Grid")
-# 		panel_level = toolsrvt.get_parval(data_panel, "TO Level")
-# 		panel_patch_panel = toolsrvt.get_parval(data_panel, "TO Panel")
-# 		panel_rack = toolsrvt.get_parval(data_panel, "TO Rack")
+	# for each circuit fill in TO parameters
+	multi_tag_list = list()
+	for circuit in elem_circuits:
+		# circuit_nuber = "{:02d}".format(int(circuit.Name))  # if heading zeros needed
+		circuit_nuber = circuit.Name  # without heading zeros
+		# drop info to circuit
+		params_to_set.append([circuit, "TO Grid", elem_grid])
+		params_to_set.append([circuit, "TO Level", elem_level])
+		params_to_set.append([circuit, "ALL_MODEL_INSTANCE_COMMENTS", elem_comments])
 
-# 		# parameters to set from panel to circuit
-# 		params_to_set.append([circuit, "TO Rack Grid", panel_grid])
-# 		params_to_set.append([circuit, "TO Rack Floor", panel_level])
-# 		params_to_set.append([circuit, "TO Panel", panel_patch_panel])
-# 		params_to_set.append([circuit, "TO Rack", panel_rack])
+		# panel info to circuit
+		data_panel = circuit.BaseEquipment
+		panel_grid = toolsrvt.get_parval(data_panel, "TO Grid")
+		panel_level = toolsrvt.get_parval(data_panel, "TO Level")
+		panel_patch_panel = toolsrvt.get_parval(data_panel, "TO Panel")
+		panel_rack = toolsrvt.get_parval(data_panel, "TO Rack")
 
-# 		# multi_tag parameter for elemet
-# 		try:
-# 			circuit_tag = panel_level + panel_grid + "." + panel_rack
-# 		except:
-# 			error_text = "Panel parameters empty. Checl Level, Grid, Rack"
-# 			raise ValueError(error_text)
-# 		circuit_tag += "-" + elem_level + elem_grid + "."
-# 		circuit_tag += panel_patch_panel + circuit_nuber
-# 		multi_tag_list.append(circuit_tag)
+		# parameters to set from panel to circuit
+		params_to_set.append([circuit, "TO Rack Grid", panel_grid])
+		params_to_set.append([circuit, "TO Rack Floor", panel_level])
+		params_to_set.append([circuit, "TO Panel", panel_patch_panel])
+		params_to_set.append([circuit, "TO Rack", panel_rack])
 
-# 	# convert multi_tag to string and set to element
-# 	multi_tag_str = "\n".join(multi_tag_list)
-# 	params_to_set.append([rvt_elem, "Multi_Tag_1", multi_tag_str])
+		# multi_tag parameter for elemet
+		try:
+			circuit_tag = panel_level + panel_grid + "." + panel_rack
+		except:
+			error_text = "Panel parameters empty. Checl Level, Grid, Rack"
+			raise ValueError(error_text)
+		circuit_tag += "-" + elem_level + elem_grid + "."
+		circuit_tag += panel_patch_panel + circuit_nuber
+		multi_tag_list.append(circuit_tag)
 
-# 	# =========Start transaction
-# 	TransactionManager.Instance.EnsureInTransaction(doc)
-# 	for param_info in params_to_set:
-# 		p_elem = param_info[0]
-# 		p_name = param_info[1]
-# 		p_value = param_info[2]
-# 		toolsrvt.setup_param_value(p_elem, p_name, p_value)
+	# convert multi_tag to string and set to element
+	multi_tag_str = "\n".join(multi_tag_list)
+	params_to_set.append([rvt_elem, "Multi_Tag_1", multi_tag_str])
 
-# 	# =========End transaction
-# 	TransactionManager.Instance.TransactionTaskDone()
+	# =========Start transaction
+	TransactionManager.Instance.EnsureInTransaction(doc)
+	for param_info in params_to_set:
+		p_elem = param_info[0]
+		p_name = param_info[1]
+		p_value = param_info[2]
+		toolsrvt.setup_param_value(p_elem, p_name, p_value)
 
-# if params_to_set:
-# 	OUT = params_to_set
-# else:
-# 	OUT = None
+	# =========End transaction
+	TransactionManager.Instance.TransactionTaskDone()
+
+if params_to_set:
+	OUT = params_to_set
+else:
+	OUT = None
