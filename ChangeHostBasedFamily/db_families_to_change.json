@@ -32,7 +32,11 @@
 
 	"Standard Emergency Light":{
 		"Pendant - Forward Two Sided_IP65":
-			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Forward OneSide (5.5 W, Display 2000/G7, IP41)"]
+			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Forward OneSide (5.5 W, Display 2000/G7, IP41)"],
+		"Pendant - Right Two sided_IP40":
+			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Left TwoSide (5.5 W, Display 2000/G7, IP41)"],
+		"Pendant - Left Two Sided IP40":
+			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Right TwoSide (5.5 W, Display 2000/G7, IP41)"]
 	},
 
 	"Door Emergency Light Wall Mounted":{
