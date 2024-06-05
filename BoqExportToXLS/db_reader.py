@@ -121,7 +121,7 @@ def get_db_boq_name_and_rev(env_path, shop_code, discipline_code):
 
 		# nothing in DB
 		if not df_values:
-			boq_name = f"{shop_code}-00-LI-{discipline_code}-TSLA-00000"
+			boq_name = f"{shop_code}-00-LI-{discipline_code}-TSLA-00001"
 			boq_revision_number = int(0)
 			return boq_name, boq_revision_number
 
