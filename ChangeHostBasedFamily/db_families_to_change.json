@@ -42,5 +42,12 @@
 	"Door Emergency Light Wall Mounted":{
 		"Pendant - Emergency Exit":
 			["TSLA_LF_E03a_EXITSIGN_Surface_Mounting", "Forward OneSide (5.5 W, Display 2000/G7, IP41)"]
+	},
+
+	"ARCU-ME-Connector_Electrical":{
+		"400V":
+			["TSLA_EF_DirectConnection", "400V"],
+		"230V":
+			["TSLA_EF_DirectConnection", "230V"]
 	}
 }
