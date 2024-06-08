@@ -70,22 +70,6 @@ def get_db_table(env_path, doc_name):
 			pass
 
 
-# def get_info_by_name(dir_path, boq_name, rev_doc_number, boq_descr):
-
-# 	# read database and get table by boq name
-# 	db_table = get_db_table(dir_path, boq_name)
-
-# 	if db_table:
-# 		# if info from the database was found
-# 		# check revision
-# 		db_rev = int(db_table[1])
-# 		if int(rev_doc_number) <= db_rev:
-# 			err_string = f"Revision number [{rev_doc_number:02d}] is too small\n"
-# 			err_string += f"Use revision bigger then [{db_rev:02d}]"
-# 			raise ValueError(err_string)
-# 		boq_descr = db_table[2]
-
-
 def get_db_boq_name_and_rev(env_path, shop_code, discipline_code):
 
 	env_name = "db_info.env"
