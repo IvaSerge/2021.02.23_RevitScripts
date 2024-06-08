@@ -126,7 +126,7 @@ def get_db_boq_name_and_rev(env_path, shop_code, discipline_code):
 			return boq_name, boq_revision_number
 
 		# find max number
-		regexp = re.compile(r"^.*-TSLA-(\d*)_")  # or take firs two symbols
+		regexp = re.compile(r"^.*-TSLA-(\d*)")  # or take firs two symbols
 		xls_names = [i[1] for i in df_values]
 		get_number = lambda x: int(regexp.match(x).group(1))
 		xls_numbers = [get_number(i) for i in xls_names]
