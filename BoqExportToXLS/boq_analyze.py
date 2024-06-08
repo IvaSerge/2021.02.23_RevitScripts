@@ -187,9 +187,15 @@ def get_boq_by_tray_fitting(fitting_list):
 
 	fitting_manufacurer = [
 		toolsrvt.get_parval(i.Symbol, "ALL_MODEL_MANUFACTURER")
-		for i in fitting_list]
+		for i in fittings_filtered]
 	
-	out_list = list(zip(fitting_category, fitting_description, fitting_manufacurer))
+	lbf_change_num = [
+		toolsrvt.get_parval(
+			i,
+			"BOQ Phase")
+		for i in fittings_filtered]
+
+	out_list = list(zip(fitting_category, fitting_description, fitting_manufacurer, lbf_change_num))
 	return out_list
 
 def get_lbf_description(line_based_family):
@@ -218,12 +224,20 @@ def get_lbf_description(line_based_family):
 def get_fitting_description(rvt_fitting):
 	fitting_symbol = rvt_fitting.Symbol
 	fitting_model = get_parval(fitting_symbol, "ALL_MODEL_MODEL")
+	check = None
 
 	# analyzing model string to get decription and H
 	regexp = re.compile(r"^(.*)\s(H\d*)")  # or take firs two symbols
-	check = regexp.match(fitting_model)
-	fitting_descr = check.group(1)
-	fitting_h = check.group(2)
+	if fitting_model:
+		check = regexp.match(fitting_model)
+	if check:
+		fitting_descr = check.group(1)
+		fitting_h = check.group(2)
+	else:
+		fitting_Id = rvt_fitting.Id.IntegerValue
+		error_string = f"Not standard fitting. Check ID: {fitting_Id}"
+		print(error_string)
+		raise ValueError(error_string)
 
 	# analyzing instance size to get width
 	fitting_size = get_parval(rvt_fitting, "RBS_CALCULATED_SIZE")
@@ -287,7 +301,7 @@ def get_boq_list_by_dcn(dcn_string: str):
 	boq_general = sorted(boq_general)
 
 	boq_trays = tsla_trays()
-	# boq_fittings = tsla_fittings()
+	boq_fittings = tsla_fittings()
 	boq_cables = electrical_circuits()
 	boq_grounding = conduit_as_grounding()
 
@@ -295,7 +309,7 @@ def get_boq_list_by_dcn(dcn_string: str):
 	boq_list.extend(boq_general)
 	boq_list.append(boq_cables)
 	boq_list.append(boq_trays)
-	# boq_list.append(boq_fittings)
+	boq_list.append(boq_fittings)
 	boq_list.append(boq_grounding)
 	boq_list = [i for i in boq_list if i.boq]
 
