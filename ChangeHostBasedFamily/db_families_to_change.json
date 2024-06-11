@@ -48,6 +48,13 @@
 		"400V":
 			["TSLA_EF_DirectConnection", "400V"],
 		"230V":
-			["TSLA_EF_DirectConnection", "230V"]
+			["TSLA_EF_DirectConnection", "230V"],
+		"230V Socket 1x":
+			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx1"],
+		"230V Socket 2x":
+			["TSLA_EF_Socket_1P_Surface_Vertical_Wall", "IP20_230Vx2"],
+		"230V Socket 4x":
+			["TSLA_EF_Socket_1P_Surface_Vertical_Wall", "IP20_230Vx4"]
+
 	}
 }
