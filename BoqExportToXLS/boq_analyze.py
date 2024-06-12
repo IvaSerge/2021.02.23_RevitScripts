@@ -302,7 +302,7 @@ def get_boq_list_by_dcn(dcn_string: str):
 
 	boq_trays = tsla_trays()
 	boq_fittings = tsla_fittings()
-	boq_cables = electrical_circuits()
+	boq_cables = electrical_circuits().get_boq()
 	boq_grounding = conduit_as_grounding()
 
 	boq_list = []
@@ -314,3 +314,38 @@ def get_boq_list_by_dcn(dcn_string: str):
 	boq_list = [i for i in boq_list if i.boq]
 
 	return boq_list
+
+def get_circuits_by_dcn(dcn_string: str):
+	electrical_circuits.boq_param_value = dcn_string
+	rvt_sys = electrical_circuits().get_circuits_list()
+	
+	sys_type = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE).AsValueString() for i in rvt_sys]
+	sys_panel = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM).AsValueString() for i in rvt_sys]
+	sys_circuit_number = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NUMBER).AsValueString() for i in rvt_sys]
+	sys_load_name = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NAME).AsValueString() for i in rvt_sys]
+	sys_wire_types = [get_wire_type(i) for i in rvt_sys]
+	sys_length = [get_wire_length(i) * 1.2 for i in rvt_sys]
+	sys_change_num = [toolsrvt.get_parval(i, "BOQ Phase") for i in rvt_sys]
+	# comments = [" "] * len(rvt_sys)
+
+	pd_type = pd.Series(sys_type)
+	pd_panel = pd.Series(sys_panel)
+	pd_circuit_number = pd.Series(sys_circuit_number)
+	pd_load_name = pd.Series(sys_load_name)
+	pd_wire_types = pd.Series(sys_wire_types)
+	pd_length = pd.Series(sys_length)
+	pd_change_num = pd.Series(sys_change_num)
+	pd_frame = pd.DataFrame({
+		"CircuitType": pd_type,
+		"PanelName": pd_panel,
+		"CircuitN": pd_circuit_number,
+		"LoadName": pd_load_name,
+		"WireType": pd_wire_types,
+		"Length": pd_length,
+		"Change_num": pd_change_num})
+
+	# sort circuits
+	pd_frame_sorted = pd_frame.sort_values(by=["CircuitType","PanelName","CircuitN"])
+	pd_grouped_list = pd_frame_sorted.groupby("PanelName")[["PanelName", "CircuitN", "LoadName", "WireType", "Length", "Change_num"]].apply(lambda x: x.values.tolist()).tolist()
+
+	return pd_grouped_list

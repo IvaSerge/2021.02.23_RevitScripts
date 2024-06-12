@@ -172,7 +172,6 @@ class electrical_circuits(electrical_objects):
 
 	def __init__(self):
 		self.sort_str = "Cables"
-		self.boq = self.get_boq()
 
 	def get_boq(self):
 		rvt_elems = self._get_rev_objects("OST_ElectricalCircuit")
@@ -187,6 +186,10 @@ class electrical_circuits(electrical_objects):
 		out_list.extend(boq_analyze.get_boq_by_circuits(rvt_elems))
 
 		return out_list
+	
+	def get_circuits_list(self):
+		rvt_elems = self._get_rev_objects("OST_ElectricalCircuit")
+		return rvt_elems
 
 class tsla_trays(electrical_objects):
 
