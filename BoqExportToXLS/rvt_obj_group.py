@@ -184,7 +184,7 @@ class electrical_circuits(electrical_objects):
 		out_list.append(row_1)
 		out_list.append(row_2)
 		out_list.extend(boq_analyze.get_boq_by_circuits(rvt_elems))
-
+		self.boq = out_list
 		return out_list
 	
 	def get_circuits_list(self):

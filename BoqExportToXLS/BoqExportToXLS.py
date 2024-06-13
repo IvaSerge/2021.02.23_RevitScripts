@@ -75,6 +75,7 @@ rev_seq_number = info_list[2]
 rev_description = ", ".join(info_list[3])
 filter_param_list = info_list[3]
 info_to_excel = []
+info_circuits_list = []
 
 # get main BOQ parameters
 if manual_naming:
@@ -105,8 +106,15 @@ RvtObjGroup.doc = doc
 RvtObjGroup.boq_parameter = filter_param_name
 
 for filter_param_value in filter_param_list:
+	# get boq list. BOQ is aggregated list of materials
 	boq_list = boq_analyze.get_boq_list_by_dcn(filter_param_value)
 	info_to_excel.append([filter_param_value, boq_list])
+
+	# get crictuits list. Circuits list is by element list not to be aggregated
+	circuits_list = boq_analyze.get_circuits_by_dcn(filter_param_value)
+	circuits_tab_name = "Circuits" + filter_param_value
+	if circuits_list:
+		info_circuits_list.append([circuits_tab_name, circuits_list])
 
 sheets_in_rev = boq_analyze.get_sheets_by_seq_number(doc, rev_seq_number)
 
@@ -119,10 +127,13 @@ write_first_page(
 	doc)
 write_sheets_info(path_xlsx, sheets_in_rev)
 write_totals(path_xlsx, info_to_excel)
+write_totals(path_xlsx, info_circuits_list)
 
 # PDF export
 excel = client.Dispatch("Excel.Application")
 excel.Visible = False
+if info_circuits_list:
+	circuits_tabs = [tab_name[0] for tab_name in info_circuits_list]
 
 try:
 	# Read Excel File
@@ -134,6 +145,7 @@ try:
 
 	sheet_names = ["Cover", "General Notes","BOQ Sheets"]
 	sheet_names.extend(filter_param_list)
+	sheet_names.extend(circuits_tabs)
 	wb.WorkSheets(sheet_names).Select()
 
 	# Convert into PDF File
@@ -148,8 +160,3 @@ finally:
 	excel = None
 
 OUT = path_xlsx, path_pdf
-
-# ROADMAP
-# TODO: add new naming convention for BOQ
-# TODO check what happened if existing BOQ found in Database
-# TODO check if it possible to add page breaks automaticaly

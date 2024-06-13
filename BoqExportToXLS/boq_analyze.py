@@ -302,7 +302,8 @@ def get_boq_list_by_dcn(dcn_string: str):
 
 	boq_trays = tsla_trays()
 	boq_fittings = tsla_fittings()
-	boq_cables = electrical_circuits().get_boq()
+	boq_cables = electrical_circuits()
+	boq_cables.get_boq()
 	boq_grounding = conduit_as_grounding()
 
 	boq_list = []
@@ -318,13 +319,15 @@ def get_boq_list_by_dcn(dcn_string: str):
 def get_circuits_by_dcn(dcn_string: str):
 	electrical_circuits.boq_param_value = dcn_string
 	rvt_sys = electrical_circuits().get_circuits_list()
+	if not rvt_sys:
+		return None
 	
 	sys_type = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE).AsValueString() for i in rvt_sys]
 	sys_panel = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM).AsValueString() for i in rvt_sys]
 	sys_circuit_number = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NUMBER).AsValueString() for i in rvt_sys]
 	sys_load_name = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NAME).AsValueString() for i in rvt_sys]
 	sys_wire_types = [get_wire_type(i) for i in rvt_sys]
-	sys_length = [get_wire_length(i) * 1.2 for i in rvt_sys]
+	sys_length = [str(math.ceil(get_wire_length(i) * 1.2)) for i in rvt_sys]
 	sys_change_num = [toolsrvt.get_parval(i, "BOQ Phase") for i in rvt_sys]
 	# comments = [" "] * len(rvt_sys)
 
@@ -346,6 +349,19 @@ def get_circuits_by_dcn(dcn_string: str):
 
 	# sort circuits
 	pd_frame_sorted = pd_frame.sort_values(by=["CircuitType","PanelName","CircuitN"])
-	pd_grouped_list = pd_frame_sorted.groupby("PanelName")[["PanelName", "CircuitN", "LoadName", "WireType", "Length", "Change_num"]].apply(lambda x: x.values.tolist()).tolist()
+	grouped_list = pd_frame_sorted.groupby("PanelName")[
+			["PanelName", "CircuitN", "LoadName", "WireType", "Length", "Change_num"]
+		].apply(lambda x: x.values.tolist()).tolist()
+	
+	list_with_headers = [circuits_add_header(i) for i in grouped_list]
 
-	return pd_grouped_list
+	return list_with_headers
+
+def circuits_add_header(circuits_list):
+	panel_name = circuits_list[0][0]
+	first_row_header = f"Panel {panel_name} circuits"
+	first_row = [first_row_header, "", "", "", "", "", ""]
+	second_row = ["Panel", "Circuit", "Load name", "Wire", "L,m", "DCN", "Comments"]
+	extend_list = [first_row, second_row]
+	extend_list.extend(circuits_list)
+	return extend_list

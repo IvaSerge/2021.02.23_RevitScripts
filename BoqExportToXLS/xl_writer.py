@@ -156,9 +156,54 @@ def write_totals(xl_path, info_to_set):
 		new_tab.page_margins = page_margins
 
 		# save info
-		write_tab_info(new_tab, info[1])
+		if "Circuits" in info[0]:
+			write_cable_list(new_tab, info[1])
+			continue
+		else:
+			write_tab_info(new_tab, info[1])
 
 	wb.save(xl_path)
+	del wb
+
+def write_cable_list(ws, circuits_list):
+	# set columns width
+	ws.column_dimensions["A"].width = 30
+	ws.column_dimensions["B"].width = 10
+	ws.column_dimensions["C"].width = 40
+	ws.column_dimensions["D"].width = 50
+	ws.column_dimensions["E"].width = 10
+	ws.column_dimensions["F"].width = 20
+	ws.column_dimensions["G"].width = 28
+
+	rw = 1
+	for circuits_in_panel in circuits_list:
+		rw += 1
+		for r_count, row in enumerate(circuits_in_panel, 1):
+			for clmn, val in enumerate(row, 1):
+				current_cell = ws.cell(row=rw, column=clmn)
+
+				# get and set cell style by row
+				if r_count == 1:
+					# first line
+					style_cell = "DiRootsFullNameTitleStyle"
+
+				elif r_count == 2:
+					# second line
+					style_cell = "DiRootsHeaderStyle"
+
+				else:
+					# other lines
+					style_cell = "Normal"
+
+				current_cell.style = style_cell
+				if val:
+					current_cell.value = val
+			rw += 1
+
+	# set print area
+	first_cell = "A1"
+	last_cell = ws.cell(row=rw, column=7).coordinate
+	ws.print_area = first_cell + ":" + last_cell
 
 def write_tab_info(ws, boq_list):
 
@@ -199,9 +244,6 @@ def write_tab_info(ws, boq_list):
 	first_cell = "A1"
 	last_cell = ws.cell(row=rw, column=5).coordinate
 	ws.print_area = first_cell + ":" + last_cell
-
-	# wb.save(xl_path)
-
 
 def write_sheets_info(xl_path, sheets_info):
 	# Second page - write info
