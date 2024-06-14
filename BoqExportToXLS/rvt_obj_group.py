@@ -172,6 +172,7 @@ class electrical_circuits(electrical_objects):
 
 	def __init__(self):
 		self.sort_str = "Cables"
+		self.boq = None
 
 	def get_boq(self):
 		rvt_elems = self._get_rev_objects("OST_ElectricalCircuit")
