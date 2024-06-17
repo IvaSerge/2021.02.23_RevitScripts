@@ -21,13 +21,15 @@ from System.Collections.Generic import *
 
 # ================ Python imports
 import json
+import toolsrvt
 
 def get_new_type(old_family_instance, json_file):
 	# type: (FamilyInstance, str) -> FamilyType
 
 	doc = old_family_instance.Document
 	new_type = None
-	old_type_name = old_family_instance.Name
+	old_type = doc.GetElement(old_family_instance.GetTypeId())
+	old_type_name = old_type.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM).AsString()
 	old_family_name = old_family_instance.Symbol.FamilyName
 	json_data = get_json_data(old_family_name, old_type_name, json_file)
 	new_fam_name = json_data[0]

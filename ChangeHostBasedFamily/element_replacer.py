@@ -65,7 +65,12 @@ class ElementReplacer:
 		ins_pnt = self.old_instance.Location.Point
 		# host
 		host_lvl_Id = toolsrvt.get_parval(self.old_instance, "INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM")
+		# if host_lvl_Id:
 		rvt_host_lvl = doc.GetElement(host_lvl_Id)
+		# else:
+		# 	# hard-coded for DU
+		# 	# TODO: find level with +0.000
+		# 	rvt_host_lvl = doc.GetElement(ElementId(80939))
 
 		if not new_type.IsActive:
 			new_type.Activate()
