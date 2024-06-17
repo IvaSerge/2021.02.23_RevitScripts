@@ -4,11 +4,13 @@
 		"type2": ["new_family", "new_type"]
 	},
 
-	"Trunking system Siteco_Licross":{
-		"Licross Tragschiene L=4500 mm weiß 51TR1JE  Durchverdrahtung 14 x 2,5 mm²":
-			["TSLA_LF_Trunking_System_Rail", "T3_Trunking system L=4500 mm"],
-		"Licross Tragschiene L=3000 mm weiß 51TR1FE  Durchverdrahtung 14 x 2,5 mm²":
-			["TSLA_LF_Trunking_System_Rail", "T2_Trunking system L=3000 mm"]
+	"Trunking system Siteco_Licross":{ "Licross Tragschiene L=4500 mm weiß 51TR1JE  Durchverdrahtung 14 x 2,5 mm²": ["TSLA_LF_Trunking_System_Rail", "T3_Trunking system L=4500 mm"], "Licross Tragschiene L=3000 mm weiß 51TR1FE  Durchverdrahtung 14 x 2,5 mm²": ["TSLA_LF_Trunking_System_Rail", "T2_Trunking system L=3000 mm"], "Licross Tragschiene L=1500 mm weiß 51TR1CE  Durchverdrahtung 14 x 2,5 mm²":
+			["TSLA_LF_Trunking_System_Rail", "T1_Trunking system L=1500 mm"]
+	},
+
+	"L01a 51TS12DN4DXL":{
+		"230V": ["TSLA_LF_L01a_c_e_Surface_Mounting_Trunking", "L01a (13360 lm, 86 W, 4000K, L=1500mm)"],
+		"400V": ["TSLA_LF_L01a_c_e_Surface_Mounting_Trunking", "L01a 400V"]
 	},
 
 	"L01h_Siteco Licros IP50":{
@@ -36,7 +38,11 @@
 		"Pendant - Right Two sided_IP40":
 			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Left TwoSide (5.5 W, Display 2000/G7, IP41)"],
 		"Pendant - Left Two Sided IP40":
-			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Right TwoSide (5.5 W, Display 2000/G7, IP41)"]
+			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Right TwoSide (5.5 W, Display 2000/G7, IP41)"],
+		"EW5_Pendant - Right Two sided_Reccessed_IP40":
+			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Right TwoSide (5.5 W, Display 2000/G7, IP41)"],
+		"Left two Side":
+			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Left TwoSide (5.5 W, Display 2000/G7, IP41)"]
 	},
 
 	"Door Emergency Light Wall Mounted":{
@@ -55,6 +61,10 @@
 			["TSLA_EF_Socket_1P_Surface_Vertical_Wall", "IP20_230Vx2"],
 		"230V Socket 4x":
 			["TSLA_EF_Socket_1P_Surface_Vertical_Wall", "IP20_230Vx4"]
+	},
 
+	"ARCU-EE-Unterverteiler":{
+		"2ET":
+			["TSLA_EE_Branchpanel", "TYPE 2ET-63A 550x0950x210mm"]
 	}
 }
