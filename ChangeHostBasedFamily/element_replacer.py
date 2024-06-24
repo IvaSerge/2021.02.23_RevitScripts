@@ -70,9 +70,9 @@ class ElementReplacer:
 		else:
 			# hard-coded for DU
 			# TODO: find level with +0.000
-			# rvt_host_lvl = doc.GetElement(ElementId(80939))
+			rvt_host_lvl = doc.GetElement(ElementId(80939))
 			# DU 1M
-			rvt_host_lvl = doc.GetElement(ElementId(80948))
+			# rvt_host_lvl = doc.GetElement(ElementId(80948))
 
 		if not new_type.IsActive:
 			new_type.Activate()
@@ -195,13 +195,19 @@ class ElementReplacer:
 
 	def assign_el_sys(self):
 		new_inst = self.new_inst
+		doc = new_inst.Document
 		el_systems = self.el_sys
 		if not el_systems:
 			return None
 
-		for el_system in el_systems:
-			connectors = new_inst.MEPModel.ConnectorManager.UnusedConnectors
-			con = next(iter(connectors))
+		connectors = new_inst.MEPModel.ConnectorManager.UnusedConnectors
+		con_list = list(iter(connectors))
+		sorted_con_list = sorted(con_list, key=lambda x: x.Description)
+		zipped_systems = zip(el_systems, sorted_con_list)
+	
+		for zip_system in zipped_systems:
+			el_system = zip_system[0]
+			con = zip_system[1]
 			con_set: ConnectorSet = ConnectorSet()
 			con_set.Insert(con)
 			el_system.Add(con_set)
