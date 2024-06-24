@@ -65,12 +65,14 @@ class ElementReplacer:
 		ins_pnt = self.old_instance.Location.Point
 		# host
 		host_lvl_Id = toolsrvt.get_parval(self.old_instance, "INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM")
-		# if host_lvl_Id:
-		rvt_host_lvl = doc.GetElement(host_lvl_Id)
-		# else:
-		# 	# hard-coded for DU
-		# 	# TODO: find level with +0.000
-		# 	rvt_host_lvl = doc.GetElement(ElementId(80939))
+		if host_lvl_Id:
+			rvt_host_lvl = doc.GetElement(host_lvl_Id)
+		else:
+			# hard-coded for DU
+			# TODO: find level with +0.000
+			# rvt_host_lvl = doc.GetElement(ElementId(80939))
+			# DU 1M
+			rvt_host_lvl = doc.GetElement(ElementId(80948))
 
 		if not new_type.IsActive:
 			new_type.Activate()
@@ -144,10 +146,11 @@ class ElementReplacer:
 			# additional parameter filters
 			# Elevation from level
 			if param.Id == ElementId(-1001360):
+				# p_value_ft = toolsrvt.get_parval(old_inst, "INSTANCE_FREE_HOST_OFFSET_PARAM")
 				p_value_ft = toolsrvt.get_parval(old_inst, "INSTANCE_ELEVATION_PARAM")
 				p_value_round = round(toolsrvt.ft_to_mm(self.doc, p_value_ft), -2)
 				p_value_to_set = toolsrvt.mm_to_ft(self.doc, p_value_round)
-				param_list.append(["INSTANCE_ELEVATION_PARAM", p_value_to_set])
+				param_list.append(["INSTANCE_FREE_HOST_OFFSET_PARAM", p_value_to_set])
 				continue
 			# offset fromhost
 			elif param.Id == ElementId(-1001364):
@@ -184,24 +187,24 @@ class ElementReplacer:
 		old_inst = self.old_instance
 		old_elsystems = old_inst.MEPModel.GetElectricalSystems()
 		if old_elsystems:
-			first_sys = [i for i in old_elsystems][0]
+			all_sys = [i for i in old_elsystems]
 		else:
 			return None
-		self.el_sys = first_sys
+		self.el_sys = all_sys
 
 
 	def assign_el_sys(self):
 		new_inst = self.new_inst
-		el_sys = self.el_sys
-		if not el_sys:
+		el_systems = self.el_sys
+		if not el_systems:
 			return None
 
-		connectors = new_inst.MEPModel.ConnectorManager.UnusedConnectors
-		con = next(iter(connectors))
-		con_set = List[Connector]([con])
-		el_sys.Add(connectors)
-
-		return con_set
+		for el_system in el_systems:
+			connectors = new_inst.MEPModel.ConnectorManager.UnusedConnectors
+			con = next(iter(connectors))
+			con_set: ConnectorSet = ConnectorSet()
+			con_set.Insert(con)
+			el_system.Add(con_set)
 
 	@staticmethod
 	def euler_angles_from_rotation_matrix(rotation_matrix):
