@@ -43,6 +43,10 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 	doc = rvt_elem.Document
 	rvt_lvl = doc.GetElement(rvt_elem.LevelId)
 	if not rvt_lvl:
+		sh_lvl = toolsrvt.get_parval(rvt_elem, "INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM")
+		rvt_lvl = doc.GetElement(sh_lvl)
+
+	if not rvt_lvl:
 		raise ValueError("No Host Level found")
 	rvt_level_str = rvt_lvl.Name
 	
