@@ -93,6 +93,9 @@
 	},
 
 	"ARCU-ME-Connector_Network": {
-		"Socket 2x": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x2"]
+		"Socket 1x": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x1"],
+		"Socket 2x": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x2"],
+		"Socket 4x": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x4"],
+		"ARCU-ME-Connector_Network": ["TSLA_DD_DirectConnection", "DATA"]
 	}
 }
