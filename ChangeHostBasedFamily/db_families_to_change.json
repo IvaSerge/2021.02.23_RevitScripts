@@ -17,6 +17,11 @@
 		"--- (1 x LED, 9080 lm, 56.2000007629395 W, 4000K)": ["TSLA_LF_L01h1", "L01h1 3p"]
 	},
 
+	"L09 51FB10DP460A":{
+		"--- (1 x LED, 6020 lm, 45.2999992370605 W, 4000K)":
+			["TSLA_LF_L09_Suspended_Mounting", "L09 (6060 lm, 45 W, 4000K, L=1590mm)"]
+	},
+
 	"Trunking system Siteco_Licross out-feed module weiß":{
 		"Licross® Ausspeisemodul L=450 mm leuchtenweiß  Buchse 14polig   59TP1FTE":
 			["TSLA_LF_Trunking_System_Module", "Feed-out_Module L=450 mm"]
@@ -66,5 +71,28 @@
 	"ARCU-EE-Unterverteiler":{
 		"2ET":
 			["TSLA_EE_Branchpanel", "TYPE 2ET-63A 550x0950x210mm"]
+	},
+
+	"RCPT_4plex Receptacle 230V_16A_IP20":{
+		"Regular-4plex":
+			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx4"]
+	},
+
+	"RCPT_Double Receptacle 230V_16A_IP20": {
+		"Regular-Single": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx1"],
+		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx2"]
+	},
+
+	"CEE_Socket":{
+		"16A 3P+N+E":
+			["TSLA_EF_Socket_CEE_Wall", "IP44_16A_400V"],
+		"32A 3P+N+E":
+			["TSLA_EF_Socket_CEE_Wall", "IP44_32A_400V"],
+		"63A 3P+N+E":
+			["TSLA_EF_Socket_CEE_Wall", "IP44_63A_400V"]
+	},
+
+	"ARCU-ME-Connector_Network": {
+		"Socket 2x": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x2"]
 	}
 }
