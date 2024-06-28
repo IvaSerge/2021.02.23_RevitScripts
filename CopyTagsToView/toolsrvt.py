@@ -1,10 +1,6 @@
 
 import clr
-
 import sys
-# sys.path.append(r"C:\Program Files\Dynamo 0.8")
-pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
-sys.path.append(pyt_path)
 
 import System
 from System import Array
@@ -58,7 +54,7 @@ def unwrap(_item):
 	if isinstance(_item, list):
 		return process_list(unwrap, _item)
 	else:
-		return [UnwrapElement(_item)]  # type: ignore
+		return UnwrapElement(_item)  # type: ignore
 
 
 def flatten_list(data):
