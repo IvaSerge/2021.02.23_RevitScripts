@@ -12,11 +12,8 @@
         <li><a href="#script-parameters">Script Parameters</a></li>
       </ul>
     </li>
-    <li><a href="#script">Script</a></li>
-    <li><a href="#additional-notes">Additional Notes</a></li>
-    <li><a href="#license">License</a></li>
   </ol>
-</details>!-- TABLE OF CONTENTS -->
+</details>
 
 # About the script
 The script performs the following tasks:
