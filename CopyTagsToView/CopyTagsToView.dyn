@@ -72,15 +72,6 @@
           "Level": 2,
           "UseLevels": false,
           "KeepListStructure": false
-        },
-        {
-          "Id": "92fdbd0ada5f4eb2a01f5c5085e900d6",
-          "Name": "IN[3]",
-          "Description": "Input #3",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
         }
       ],
       "Outputs": [
@@ -207,26 +198,6 @@
       "Description": "Allows for DesignScript code to be authored directly"
     },
     {
-      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
-      "NodeType": "CodeBlockNode",
-      "Code": "\"Overall 1F _Copy_SI\";",
-      "Id": "f44eab452c474c2a97e94c241a286b96",
-      "Inputs": [],
-      "Outputs": [
-        {
-          "Id": "f2c5f6e1273040cc8c035b6f50478b76",
-          "Name": "",
-          "Description": "Value of expression at line 1",
-          "UsingDefaultValue": false,
-          "Level": 2,
-          "UseLevels": false,
-          "KeepListStructure": false
-        }
-      ],
-      "Replication": "Disabled",
-      "Description": "Allows for DesignScript code to be authored directly"
-    },
-    {
       "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
       "NodeType": "ExtensionNode",
       "InstanceId": [],
@@ -281,12 +252,6 @@
       "Start": "bd105f4188574a50875ad47efc0c103f",
       "End": "166aa7d726124a9fa4cb95664a069252",
       "Id": "579ad503321b4e6296e53d8f9decb8da",
-      "IsHidden": "False"
-    },
-    {
-      "Start": "f2c5f6e1273040cc8c035b6f50478b76",
-      "End": "92fdbd0ada5f4eb2a01f5c5085e900d6",
-      "Id": "f0fa80539ca048de98651784a52330c7",
       "IsHidden": "False"
     },
     {
@@ -406,16 +371,6 @@
         "Y": 860.37503288144762
       },
       {
-        "Name": "Code Block",
-        "ShowGeometry": true,
-        "Id": "f44eab452c474c2a97e94c241a286b96",
-        "IsSetAsInput": false,
-        "IsSetAsOutput": false,
-        "Excluded": false,
-        "X": 144.05854188095972,
-        "Y": 1712.5191943562488
-      },
-      {
         "Name": "Select Model Element",
         "ShowGeometry": true,
         "Id": "520a077d688849238e4a68fa9a089d30",
@@ -449,8 +404,8 @@
         "Background": "#FFB9F9E1"
       }
     ],
-    "X": -32.34396896240662,
-    "Y": -889.72973392980975,
+    "X": -1.3439689624066204,
+    "Y": -985.72973392980975,
     "Zoom": 0.79100584520686168
   }
 }
