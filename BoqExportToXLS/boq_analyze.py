@@ -325,6 +325,7 @@ def get_circuits_by_dcn(dcn_string: str):
 	sys_type = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE).AsValueString() for i in rvt_sys]
 	sys_panel = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM).AsValueString() for i in rvt_sys]
 	sys_circuit_number = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NUMBER).AsValueString() for i in rvt_sys]
+	sys_circuit_slot = [i.StartSlot for i in rvt_sys]
 	sys_load_name = [i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_NAME).AsValueString() for i in rvt_sys]
 	sys_wire_types = [get_wire_type(i) for i in rvt_sys]
 	sys_length = [str(math.ceil(get_wire_length(i) * 1.2)) for i in rvt_sys]
@@ -334,6 +335,7 @@ def get_circuits_by_dcn(dcn_string: str):
 	pd_type = pd.Series(sys_type)
 	pd_panel = pd.Series(sys_panel)
 	pd_circuit_number = pd.Series(sys_circuit_number)
+	pd_circuit_slot = pd.Series(sys_circuit_slot)
 	pd_load_name = pd.Series(sys_load_name)
 	pd_wire_types = pd.Series(sys_wire_types)
 	pd_length = pd.Series(sys_length)
@@ -342,13 +344,14 @@ def get_circuits_by_dcn(dcn_string: str):
 		"CircuitType": pd_type,
 		"PanelName": pd_panel,
 		"CircuitN": pd_circuit_number,
+		"CircuitS": pd_circuit_slot,
 		"LoadName": pd_load_name,
 		"WireType": pd_wire_types,
 		"Length": pd_length,
 		"Change_num": pd_change_num})
 
 	# sort circuits
-	pd_frame_sorted = pd_frame.sort_values(by=["CircuitType","PanelName","CircuitN"])
+	pd_frame_sorted = pd_frame.sort_values(by=["CircuitType","PanelName","CircuitS"])
 	grouped_list = pd_frame_sorted.groupby("PanelName")[
 			["PanelName", "CircuitN", "LoadName", "WireType", "Length", "Change_num"]
 		].apply(lambda x: x.values.tolist()).tolist()
