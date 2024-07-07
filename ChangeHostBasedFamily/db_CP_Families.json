@@ -83,5 +83,9 @@
 	"Wallbox_DELTA-BOX 92915":{
 		"2x230V/16A + 1x400V/16A + 1x400V/32A":["TSLA_EF_HB02", "HB02"],
 		"DELTA-BOX 92915 2x230V/16A + 1x400V/16A": ["TSLA_EF_HB02", "HB02"]
+	},
+
+	"RCPT_5xReceptacle 230V_16A_IP20_surface mounted": {
+		"5x - Gowning room": ["TSLA_EF_Socket_1P_Surface_Vertical_Wall", "IP44_230Vx5"]
 	}
 }

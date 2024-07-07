@@ -88,6 +88,8 @@
 			["TSLA_EF_Socket_CEE_Wall", "IP44_16A_400V"],
 		"32A 3P+N+E":
 			["TSLA_EF_Socket_CEE_Wall", "IP44_32A_400V"],
+		"32A P+N+E":
+			["TSLA_EF_Socket_CEE_Wall", "IP44_32A_230V"],
 		"63A 3P+N+E":
 			["TSLA_EF_Socket_CEE_Wall", "IP44_63A_400V"]
 	},
@@ -97,5 +99,13 @@
 		"Socket 2x": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x2"],
 		"Socket 4x": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x4"],
 		"ARCU-ME-Connector_Network": ["TSLA_DD_DirectConnection", "DATA"]
+	},
+
+	"TELE_Outlet_CU_1-2_Camera_Outside_JEG_M": {
+		"Outlet CU 2 Ports (1 occupied)- CCTV OUTSIDE": ["TSLA_DD_Socket_Surface_Wall_C", "IP20_RJ45x1"]
+	},
+
+	"TELE_Outlet_CU_1-2_Data_JEG_M": {
+		"AP": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x1"]
 	}
 }
