@@ -80,7 +80,8 @@
 
 	"RCPT_Double Receptacle 230V_16A_IP20": {
 		"Regular-Single": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx1"],
-		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx2"]
+		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx2"],
+		"Regular-4 plex": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx4"]
 	},
 
 	"CEE_Socket":{
