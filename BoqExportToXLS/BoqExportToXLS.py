@@ -132,6 +132,7 @@ write_totals(path_xlsx, info_circuits_list)
 # PDF export
 excel = client.Dispatch("Excel.Application")
 excel.Visible = False
+circuits_tabs = None
 if info_circuits_list:
 	circuits_tabs = [tab_name[0] for tab_name in info_circuits_list]
 
@@ -145,15 +146,16 @@ try:
 
 	sheet_names = ["Cover", "General Notes","BOQ Sheets"]
 	sheet_names.extend(filter_param_list)
-	sheet_names.extend(circuits_tabs)
+	if circuits_tabs:
+		sheet_names.extend(circuits_tabs)
 	wb.WorkSheets(sheet_names).Select()
 
 	# Convert into PDF File
 	wb.ActiveSheet.ExportAsFixedFormat(0, path_pdf)
 	wb.Close(False)
 
-except Exception as e:
-	raise ValueError(e)
+# except Exception as e:
+# 	raise ValueError(e)
 
 finally:
 	excel.Quit()
