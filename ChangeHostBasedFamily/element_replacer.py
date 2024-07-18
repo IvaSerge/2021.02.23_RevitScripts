@@ -151,6 +151,7 @@ class ElementReplacer:
 				p_value_round = round(toolsrvt.ft_to_mm(self.doc, p_value_ft), -2)
 				p_value_to_set = toolsrvt.mm_to_ft(self.doc, p_value_round)
 				param_list.append(["INSTANCE_FREE_HOST_OFFSET_PARAM", p_value_to_set])
+				param_list.append(["INSTANCE_ELEVATION_PARAM", p_value_to_set])
 				continue
 			# offset fromhost
 			elif param.Id == ElementId(-1001364):

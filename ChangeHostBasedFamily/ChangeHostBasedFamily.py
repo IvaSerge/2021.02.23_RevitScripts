@@ -68,7 +68,7 @@ for elem_to_change in elem_list:
 	elem_new_rvt_type = elem_getter.get_new_type(elem_to_change, json_file)
 	replacer = ElementReplacer(elem_to_change)
 	replacer.new_type = elem_new_rvt_type
-	# replacer.get_element_tags()
+	replacer.get_element_tags()
 	replacer.get_parameters()
 	replacer.get_el_sys()
 	replacers_list.append(replacer)
@@ -79,7 +79,7 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 
 for replacer in replacers_list:
 	replacer.create_new_instance()
-	# replacer.switch_tags()
+	replacer.switch_tags()
 	replacer.set_parameters()
 	test = replacer.assign_el_sys()
 
