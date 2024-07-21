@@ -65,14 +65,7 @@ class ElementReplacer:
 		ins_pnt = self.old_instance.Location.Point
 		# host
 		host_lvl_Id = toolsrvt.get_parval(self.old_instance, "INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM")
-		if host_lvl_Id:
-			rvt_host_lvl = doc.GetElement(host_lvl_Id)
-		else:
-			# hard-coded for DU
-			# TODO: find level with +0.000
-			rvt_host_lvl = doc.GetElement(ElementId(80939))
-			# DU 1M
-			# rvt_host_lvl = doc.GetElement(ElementId(80948))
+		rvt_host_lvl = doc.GetElement(host_lvl_Id)
 
 		if not new_type.IsActive:
 			new_type.Activate()
@@ -137,6 +130,7 @@ class ElementReplacer:
 		for param in old_inst.GetOrderedParameters():
 			p_has_value = param.HasValue
 			p_read_only = param.IsReadOnly
+			p_Id = param.Id
 			# p_modifiable = param.UserModifiable
 			is_valid = all([p_has_value, not(p_read_only)])
 			
@@ -145,19 +139,17 @@ class ElementReplacer:
 			
 			# additional parameter filters
 			# Elevation from level
-			if param.Id == ElementId(-1001360):
-				# p_value_ft = toolsrvt.get_parval(old_inst, "INSTANCE_FREE_HOST_OFFSET_PARAM")
-				p_value_ft = toolsrvt.get_parval(old_inst, "INSTANCE_ELEVATION_PARAM")
-				p_value_round = round(toolsrvt.ft_to_mm(self.doc, p_value_ft), -2)
-				p_value_to_set = toolsrvt.mm_to_ft(self.doc, p_value_round)
-				param_list.append(["INSTANCE_FREE_HOST_OFFSET_PARAM", p_value_to_set])
-				param_list.append(["INSTANCE_ELEVATION_PARAM", p_value_to_set])
+			param_ids_to_ignore = [
+					-1001352,  # Level
+					-1002062,  # Level
+					-1001360,  # Elevation from Level
+					-1001363,  # Host
+					-1002108,  # Host Id
+					-1001364,  # Offset from Host
+				]
+			# ignore level and offset parameters
+			if p_Id in param_ids_to_ignore:
 				continue
-			# offset fromhost
-			elif param.Id == ElementId(-1001364):
-				continue
-			else:
-				pass
 
 			p_name = param.Definition.Name
 			p_value = toolsrvt.get_parval(old_inst, p_name)
@@ -165,6 +157,23 @@ class ElementReplacer:
 				param_list.append([p_name, p_value])
 
 		self.param_list = param_list
+	
+	def get_level_and_elevation(self):
+		old_inst = self.old_instance
+		level_params = []
+		# get param level and drop error if not found
+		shedule_lvl_id = toolsrvt.get_parval(old_inst, "INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM")
+		if not shedule_lvl_id:
+			error_text = f"Level not found. Check instance: {str(old_inst.Id.IntegerValue)}"
+			print(error_text)
+			raise ValueError(error_text)
+
+		elevation = toolsrvt.get_parval(old_inst, "INSTANCE_ELEVATION_PARAM")
+		level_params.append(["INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM", shedule_lvl_id])
+		level_params.append(["INSTANCE_ELEVATION_PARAM", elevation])
+
+		# self.old_instance
+		self.param_list.extend(level_params)
 
 	def set_parameters(self):
 		new_inst = self.new_inst

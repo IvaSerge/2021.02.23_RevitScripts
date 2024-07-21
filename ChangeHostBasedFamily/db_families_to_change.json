@@ -108,7 +108,7 @@
 
 	"TELE_Outlet_CU_1-2_Data_JEG_M": {
 		"AP": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x1"],
-		"Outlet CU 2 Ports (1 occupied), CCTV INSIDE (WALL)": ["TSLA_DD_DirectConnection", "DATA_E"]
+		"Outlet CU 2 Ports (1 occupied)- (wall)": ["TSLA_DD_DirectConnection", "DATA_E"]
 	},
 
 	"TELE_Outlet_CU_1-2_Camera_Wall_JEG_M": {
@@ -117,5 +117,25 @@
 
 	"4 Port Network": {
 		"Outlet CU 2 Ports (1 occupied), POWER MONITORING": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x4"]
+	},
+	
+	"TELE_Outlet_CU_Ceiling_1-2_JEG_M": {
+		"Outlet CU Ceiling 2 Ports (1 occupied)": ["TSLA_DD_Socket_Surface_Wall_W", "IP20_RJ45x1"]
+	},
+
+	"TELE_Access_Point_Type1_JEG_M": {
+		"Access Point AP-535": ["TSLA_DD_WiFi_Wall", "WiFi Access point wall"]
+	},
+
+	"Data Device box": {
+		"Data Device box": ["TSLA_DD_DirectConnection", "DATA"]
+	},
+
+	"Data Network 2 Port": {
+		"Data Network x2": ["TSLA_DD_DirectConnection", "DATA"]
+	},
+
+	"TELE_Outlet_CU_1-2_JEG_M": {
+		"Outlet CU 2 Ports (1 occupied)- WLAN (wall)": ["TSLA_DD_DirectConnection", "DATA"]
 	}
 }

@@ -70,6 +70,7 @@ for elem_to_change in elem_list:
 	replacer.new_type = elem_new_rvt_type
 	replacer.get_element_tags()
 	replacer.get_parameters()
+	replacer.get_level_and_elevation()
 	replacer.get_el_sys()
 	replacers_list.append(replacer)
 	replacer.rotate_inst()
