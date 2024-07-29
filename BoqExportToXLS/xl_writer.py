@@ -146,7 +146,7 @@ def write_totals(xl_path, info_to_set):
 
 		# page setup
 		new_tab.page_setup.orientation = new_tab.ORIENTATION_LANDSCAPE
-		new_tab.page_setup.paperSize = new_tab.PAPERSIZE_A5
+		new_tab.page_setup.paperSize = new_tab.PAPERSIZE_A4
 
 		# page margins
 		page_margins = openpyxl.worksheet.page.PageMargins(
