@@ -136,6 +136,15 @@
 	},
 
 	"TELE_Outlet_CU_1-2_JEG_M": {
-		"Outlet CU 2 Ports (1 occupied)- WLAN (wall)": ["TSLA_DD_DirectConnection", "DATA"]
+		"Outlet CU 2 Ports (1 occupied)- WLAN (wall)": ["TSLA_DD_Socket_Surface_Wall_W", "IP20_RJ45x1"]
+	},
+
+	"TELE_Access_Point_wall1_JEG_M-rfa v1": {
+		"Access Point AP365": ["TSLA_DD_WiFi_Wall", "WiFi Access point wall"]
+	},
+
+	"TELE_Outlet_CU_1-2_Electrical_JEG_M": {
+		"Outlet CU 2 Ports (1 occupied), POWER MONITORING": ["TSLA_DD_DirectConnection", "DATA_E"]
 	}
+
 }
