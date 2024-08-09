@@ -290,7 +290,7 @@ class data_objects(electrical_objects):
 		data_circuits = [i for i in all_circuits if i.SystemType == Electrical.ElectricalSystemType.Data]
 
 		if data_circuits:
-			to_add = ["Data devices", "Jack Category 6A scielded", "Tesla product standard B.4.1", change_num]
+			to_add = ["Data devices", "Jack Category 6A shielded", "Tesla product standard B.4.1", change_num]
 			circuits_count = len(data_circuits)
 			additional_elems.extend([to_add] * 2 * circuits_count)
 
