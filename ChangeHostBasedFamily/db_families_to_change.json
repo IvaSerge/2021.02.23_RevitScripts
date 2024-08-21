@@ -32,6 +32,11 @@
 			["TSLA_LF_Trunking_System_Module", "Feed-in_Module L=450 mm"]
 	},
 
+	"Emergency Light_E01a":{
+		"E01a_PG5_S1_lens":
+			["TSLA_LF_E01a_Surface_Mounting", "E01a (304 lm, 3.5 W, PG5D+S1 lens, IP67)"]
+	},
+
 	"Emergency Light_E02b":{
 		"E02b_Gessler_Siteco_Licross_S1":
 			["TSLA_LF_E02b_Trunking_System", "E02b (304 lm, 3.5 W, M023+S1 lens, IP20)"]
