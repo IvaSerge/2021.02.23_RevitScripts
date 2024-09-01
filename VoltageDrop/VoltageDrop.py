@@ -53,13 +53,22 @@ def get_sys_by_selection():
 			circuits_to_calculate = [circuit for circuit in brd_systems[1]
 				if circuit.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit]
 			el_sys_list.extend(circuits_to_calculate)
-
 		el_sys_list = [
 			x for x in el_sys_list
 			if x.SystemType == Electrical.ElectricalSystemType.PowerCircuit]
 	else:
 		el_sys_list = [x for x in sel_obj.MEPModel.GetElectricalSystems()]
-	return el_sys_list
+
+	# Filter out not electrical circuti
+	filtered_circuits = []
+	for circuit in el_sys_list:
+		c_type = circuit.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit
+		c_sys_type = circuit.SystemType == Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit
+		c_check = all([c_type, c_sys_type])
+		if c_check:
+			filtered_circuits.append(circuit)
+
+	return filtered_circuits
 
 
 def elsys_by_brd(_brd):
@@ -181,57 +190,57 @@ outlist = list()
 if not calc_all:
 	circuits_to_calculate = get_sys_by_selection()
 
-# get all electrical systems that are modifiable
-if calc_all:
-	# get all circuits in the model
-	# Get all electrical circuits
-	# Circuit type need to be electrilca only
-	# electrical circuit type ID == 6
-	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
-	pvp = ParameterValueProvider(ElementId(int(testParam)))
-	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
-	filter = ElementParameterFilter(sysRule)
+# # get all electrical systems that are modifiable
+# if calc_all:
+# 	# get all circuits in the model
+# 	# Get all electrical circuits
+# 	# Circuit type need to be electrilca only
+# 	# electrical circuit type ID == 6
+# 	testParam = BuiltInParameter.RBS_ELEC_CIRCUIT_TYPE
+# 	pvp = ParameterValueProvider(ElementId(int(testParam)))
+# 	sysRule = FilterIntegerRule(pvp, FilterNumericEquals(), 6)
+# 	filter = ElementParameterFilter(sysRule)
 
-	circuits_to_calculate = FilteredElementCollector(doc).\
-		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
-		WhereElementIsNotElementType().WherePasses(filter).\
-		ToElements()
+# 	circuits_to_calculate = FilteredElementCollector(doc).\
+# 		OfCategory(BuiltInCategory.OST_ElectricalCircuit).\
+# 		WhereElementIsNotElementType().WherePasses(filter).\
+# 		ToElements()
 
-	voltage_230 = UnitUtils.ConvertToInternalUnits(230, UnitTypeId.Volts)  # type: ignore
-	voltage_400 = UnitUtils.ConvertToInternalUnits(400, UnitTypeId.Volts)  # type: ignore
+# 	voltage_230 = UnitUtils.ConvertToInternalUnits(230, UnitTypeId.Volts)  # type: ignore
+# 	voltage_400 = UnitUtils.ConvertToInternalUnits(400, UnitTypeId.Volts)  # type: ignore
 
-	circuits_to_calculate = [
-		i for i in circuits_to_calculate
-		if i.Voltage == voltage_230 or i.Voltage == voltage_400
-	]
+# 	circuits_to_calculate = [
+# 		i for i in circuits_to_calculate
+# 		if i.Voltage == voltage_230 or i.Voltage == voltage_400
+# 	]
 
-	# filter out not owned circuits
-	circuits_to_calculate = [
-		i for i in circuits_to_calculate
-		if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != CheckoutStatus.OwnedByOtherUser
-	]
+# 	# filter out not owned circuits
+# 	circuits_to_calculate = [
+# 		i for i in circuits_to_calculate
+# 		if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != CheckoutStatus.OwnedByOtherUser
+# 	]
 
-	# Filtering out not connected circuits
-	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
+# 	# Filtering out not connected circuits
+# 	circuits_to_calculate = [i for i in circuits_to_calculate if i.BaseEquipment]
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-vd_list = [get_vd(circuit) for circuit in circuits_to_calculate]
+# vd_list = [get_vd(circuit) for circuit in circuits_to_calculate]
 
-for i in vd_list:
-	el_sys = i[0]
-	# skiped not owned system
-	if WorksharingUtils.GetCheckoutStatus(doc, el_sys.Id) == CheckoutStatus.OwnedByOtherUser:
-		continue
+# for i in vd_list:
+# 	el_sys = i[0]
+# 	# skiped not owned system
+# 	if WorksharingUtils.GetCheckoutStatus(doc, el_sys.Id) == CheckoutStatus.OwnedByOtherUser:
+# 		continue
 
-	el_vd = str(round(i[1][0] * 100) / 100)
-	el_vd_overall = str(round(sum(i[1]) * 100) / 100)
-	el_sys.LookupParameter("CP_Voltage Drop").Set(el_vd)
-	el_sys.LookupParameter("CP_Voltage Drop Overall").Set(el_vd_overall)
+# 	el_vd = str(round(i[1][0] * 100) / 100)
+# 	el_vd_overall = str(round(sum(i[1]) * 100) / 100)
+# 	el_sys.LookupParameter("CP_Voltage Drop").Set(el_vd)
+# 	el_sys.LookupParameter("CP_Voltage Drop Overall").Set(el_vd_overall)
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = vd_list
-# OUT = circuits_to_calculate
+# OUT = vd_list
+OUT = circuits_to_calculate
