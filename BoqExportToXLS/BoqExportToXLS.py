@@ -112,7 +112,7 @@ for filter_param_value in filter_param_list:
 
 	# get crictuits list. Circuits list is by element list not to be aggregated
 	circuits_list = boq_analyze.get_circuits_by_dcn(filter_param_value)
-	circuits_tab_name = "Circuits" + filter_param_value
+	circuits_tab_name = "Circuits"
 	if circuits_list:
 		info_circuits_list.append([circuits_tab_name, circuits_list])
 
