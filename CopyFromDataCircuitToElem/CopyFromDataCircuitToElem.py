@@ -11,7 +11,7 @@ import System
 from System import Array
 from System.Collections.Generic import *
 
-# ================ Revit imports
+# ================ Revit imports	
 clr.AddReference('RevitAPIUI')
 from Autodesk.Revit.UI import *
 
@@ -24,8 +24,6 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
-# ================ Python imports
-from itertools import product
 
 def get_parval(elem, name):
 	"""Get parametr value
