@@ -24,6 +24,8 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+# ================ Python imports
+from itertools import product
 
 def get_parval(elem, name):
 	"""Get parametr value
@@ -122,12 +124,12 @@ def get_circuit_info(_el_circuit, _param_list):
 	outlist = list()
 	search_list = zip([_el_circuit] * len(_param_list), _param_list)
 	found_list = [get_parval(i[0], i[1]) for i in search_list]
-	set_list = zip(_param_list, found_list)
 	elem_list = [i for i in _el_circuit.Elements]
 	for elem in elem_list:
-		for info in set_list:
-			outlist.append([elem, info[0], info[1]])
-	return outlist
+		elem_total = [elem] * len(_param_list)
+		set_list = zip(elem_total, _param_list, found_list)
+		outlist.extend(set_list)
+	return outlist 
 
 
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -172,4 +174,4 @@ for circuit in circuit_list:
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
 
-OUT = circuit_list
+OUT = elem_list
