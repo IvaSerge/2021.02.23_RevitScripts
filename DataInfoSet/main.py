@@ -41,6 +41,7 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 	Return string that represents level name according to Naming Standard
 	"""
 	doc = rvt_elem.Document
+	doc_titel = doc.Title
 	rvt_lvl = doc.GetElement(rvt_elem.LevelId)
 	if not rvt_lvl:
 		sh_lvl = toolsrvt.get_parval(rvt_elem, "INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM")
@@ -50,18 +51,23 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 		raise ValueError("No Host Level found")
 	rvt_level_str = rvt_lvl.Name
 	
-	# # for CP only
-	# regexp = re.compile(r"^(.*?)F")
-	# check = regexp.match(rvt_level_str)
-	# rvt_level_out = check.group(1)
+	# level naming is model specific
+	if "BER-GF-SE-CP" in doc_titel:
+		# for CP only
+		regexp = re.compile(r"^(.*?)F")
+		check = regexp.match(rvt_level_str)
+		rvt_level_out = check.group(1)
 
-	# for DU only - 1M and 2F are the same
-	if "2F" in rvt_level_str or "1M" in rvt_level_str:
-		rvt_level_out = "2"
-	elif "1F" in rvt_level_str:
-		rvt_level_out = "1"
+	elif "BER-GF-SE-DU" in doc_titel:
+		# for DU only - 1M and 2F are the same
+		if "2F" in rvt_level_str or "1M" in rvt_level_str:
+			rvt_level_out = "2"
+		elif "1F" in rvt_level_str:
+			rvt_level_out = "1"
+		else:
+			raise ValueError("Wrong level name")
 	else:
-		raise ValueError("Wrong level name")
+		raise ValueError("Model not found. Add level settings for the model")
 
 	return rvt_level_out
 
