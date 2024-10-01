@@ -128,7 +128,18 @@ def update_subboard_name(board_inst):
 		if board_is_quasi:
 			# get upper board
 			next_system = elsys_by_brd(current_board)[0]
-			next_board = next_system.BaseEquipment
+
+			# check if next_system exists
+			if not next_system:
+				return None
+			
+			# check if next system is connected to a panel
+			# if not connected - no furhter action requiered
+			try:
+				next_board = next_system.BaseEquipment
+			except:
+				return None
+
 			current_board = next_board
 		else:
 			main_board = current_board.Name
