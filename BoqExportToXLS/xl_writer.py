@@ -140,8 +140,8 @@ def write_totals(xl_path, info_to_set):
 
 	for info in info_to_set:
 		# create new tab
-		new_tab = wb.create_sheet(title=info[0])
-		wb.active = wb[info[0]]
+		new_tab = wb.create_sheet("Materials")
+		wb.active = wb["Materials"]
 		new_tab.title = info[0]
 
 		# page setup
