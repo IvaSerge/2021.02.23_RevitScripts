@@ -155,6 +155,7 @@ for rvt_elem in elem_list:
 		params_to_set.append([circuit, "TO Grid", elem_grid])
 		params_to_set.append([circuit, "TO Level", elem_level])
 		params_to_set.append([circuit, "ALL_MODEL_INSTANCE_COMMENTS", elem_comments])
+		params_to_set.append([circuit, "RBS_ELEC_CIRCUIT_NAME", elem_comments])
 
 		# panel info to circuit
 		data_panel = circuit.BaseEquipment
