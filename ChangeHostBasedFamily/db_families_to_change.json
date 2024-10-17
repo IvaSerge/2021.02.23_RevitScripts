@@ -13,6 +13,10 @@
 		"400V": ["TSLA_LF_L01a_c_e_Surface_Mounting_Trunking", "L01a 400V"]
 	},
 
+	"L07_LEDVALUX L 1120lm840":{
+		"LEDVALUX® L (1 x LED 4000K / CRI = 80, 1120 lm, 11 W, 4000K)": ["TSLA_LF_L07_Ceiling_Mounting_Downlight", "L07 (1040 lm, 11 W, 4000K, d=172mm, Flush)"]
+	},
+
 	"L01h_Siteco Licros IP50":{
 		"--- (1 x LED, 9080 lm, 56.2000007629395 W, 4000K)": ["TSLA_LF_L01h1", "L01h1 3p"]
 	},
@@ -20,6 +24,21 @@
 	"L09 51FB10DP460A":{
 		"--- (1 x LED, 6020 lm, 45.2999992370605 W, 4000K)":
 			["TSLA_LF_L09_Suspended_Mounting", "L09 (6060 lm, 45 W, 4000K, L=1590mm)"]
+	},
+
+	"L12_Ex-proof":{
+		"eLLK_92_LED_800A 57000k":
+			["TSLA_LF_L12_EX-proof_Suspended_Mounting", "L12 (5350 lm, 57 W, 4000K, L=1360mm)"]
+	},
+
+	"L15 Lateralo":{
+		"LateraloP H2 BLGS 7500-840 ETDD 03":
+			["TSLA_LF_L12_EX-proof_Suspended_Mounting", "L15 (8000 lm, 63 W, 4000K, 1455x388mm)"]
+	},
+
+	"L35":{
+		"This Family uses a Type Catalog":
+			["TSLA_LF_L35_Ceiling_Mounting", "L35 - IP54"]
 	},
 
 	"Trunking system Siteco_Licross out-feed module weiß":{
@@ -62,7 +81,11 @@
 
 	"Door Emergency Light Wall Mounted":{
 		"Pendant - Emergency Exit":
-			["TSLA_LF_E03a_EXITSIGN_Surface_Mounting", "Forward OneSide (5.5 W, Display 2000/G7, IP41)"]
+			["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Forward (5.5 W, Display 2000/G7, IP41)"],
+		"Wall Mounted - Left_IP40":
+			["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Left (5.5 W, Display 2000/G7, IP41)"],
+		"Wall Mounted-Right_IP40":
+			["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Right (5.5 W, Display 2000/G7, IP41)"]
 	},
 
 	"ARCU-ME-Connector_Electrical":{
