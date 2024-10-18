@@ -1,4 +1,9 @@
 
+"""
+The script calculates number of lights and switches for every
+electrical circuit that found in electrical panel.
+Optional can calculate and propose DALI ports.
+"""
 # ================ system imports
 import clr
 
