@@ -13,6 +13,10 @@
 		"400V": ["TSLA_LF_L01a_c_e_Surface_Mounting_Trunking", "L01a 400V"]
 	},
 
+	"L04 Trilux Valineo":{
+		"L04 Trilux Valineo 7207240": ["TSLA_LF_L04_Ceiling_Mounting", "L04 (4180 lm, 38 W, 4000K, 600x600mm, Flush)"]
+	},
+
 	"L07_LEDVALUX L 1120lm840":{
 		"LEDVALUX® L (1 x LED 4000K / CRI = 80, 1120 lm, 11 W, 4000K)": ["TSLA_LF_L07_Ceiling_Mounting_Downlight", "L07 (1040 lm, 11 W, 4000K, d=172mm, Flush)"]
 	},
