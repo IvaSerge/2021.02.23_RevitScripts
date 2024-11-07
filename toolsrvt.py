@@ -271,16 +271,12 @@ def inst_by_multicategory_param_val(_doc, _bic_list, _param_name, _param_value):
 	return elems
 
 
-def mm_to_ft(doc, mm):
-	display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Length).GetUnitTypeId()
-	ft = Autodesk.Revit.DB.UnitUtils.ConvertToInternalUnits(mm, display_units)
-	return ft
+def mm_to_ft(mm):
+	return mm * 0.00328084
 
 
-def ft_to_mm(doc, ft):
-	display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Length).GetUnitTypeId()
-	mm = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(ft, display_units)
-	return mm
+def ft_to_mm(ft):
+	return ft * 304.8
 
 
 def elsys_by_brd(_brd):
