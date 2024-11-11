@@ -158,10 +158,18 @@ class ElementReplacer:
 
 		self.param_list = param_list
 	
-	def get_level_and_elevation(self):
+	def get_level_and_elevation(self, hight_compensation):
+		# type: (ElementReplacer, float) -> list
+		"""Get all systems of electrical board.
+			args:
+			hight_compensation - in "mm" distance, the light need to be moved
+		"""
 		old_inst = self.old_instance
-		level_params = []
+		doc = old_inst.Document
+		hight_comnepsation_ft = toolsrvt.mm_to_ft(hight_compensation)
+
 		# get param level and drop error if not found
+		level_params = []
 		shedule_lvl_id = toolsrvt.get_parval(old_inst, "INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM")
 		if not shedule_lvl_id:
 			error_text = f"Level not found. Check instance: {str(old_inst.Id.IntegerValue)}"
@@ -169,8 +177,9 @@ class ElementReplacer:
 			raise ValueError(error_text)
 
 		elevation = toolsrvt.get_parval(old_inst, "INSTANCE_ELEVATION_PARAM")
+		elevation_corrected = elevation + hight_comnepsation_ft
 		level_params.append(["INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM", shedule_lvl_id])
-		level_params.append(["INSTANCE_ELEVATION_PARAM", elevation])
+		level_params.append(["INSTANCE_ELEVATION_PARAM", elevation_corrected])
 
 		# self.old_instance
 		self.param_list.extend(level_params)

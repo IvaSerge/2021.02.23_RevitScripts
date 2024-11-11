@@ -54,6 +54,7 @@ view = doc.ActiveView
 reload_var = IN[1]  # type: ignore
 elem_change_all = IN[3]  # type: ignore
 replacers_list: Iterable[ElementReplacer] = []
+hight_compensation = IN[5]  # type: ignore
 
 if isinstance(IN[2], list):  # type: ignore
 	elem_list = unwrap(IN[2])  # type: ignore
@@ -70,7 +71,7 @@ for elem_to_change in elem_list:
 	replacer.new_type = elem_new_rvt_type
 	replacer.get_element_tags()
 	replacer.get_parameters()
-	replacer.get_level_and_elevation()
+	replacer.get_level_and_elevation(hight_compensation)
 	replacer.get_el_sys()
 	replacers_list.append(replacer)
 	replacer.rotate_inst()
