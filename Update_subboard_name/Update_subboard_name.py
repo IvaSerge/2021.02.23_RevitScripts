@@ -158,7 +158,7 @@ app = uiapp.Application
 
 fnrvStr = FilterStringContains()
 pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
-frule = FilterStringRule(pvp, fnrvStr, "quasi_connector")
+frule = FilterStringRule(pvp, fnrvStr, "Quasi_Connector")
 filter = ElementParameterFilter(frule)
 
 electroBoards = FilteredElementCollector(doc).\
