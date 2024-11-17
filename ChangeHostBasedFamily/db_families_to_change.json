@@ -88,6 +88,16 @@
 			["TSLA_LF_E01a_Surface_Mounting", "E01a (304 lm, 3.5 W, PG5D+S1 lens, IP67)"]
 	},
 
+	"Emergency Light_E01b":{
+		"E01b_LG6_S1_lens":
+			["TSLA_LF_E01b_Ceiling_Mounting", "E01b (304 lm, 3.5 W, LG6E+S1 lens, IP20)"]
+	},
+
+	"E01d":{
+		"Sicherheitsleuchte Aufputz":
+			["TSLA_LF_E01d_Surface_Mounting", "E01d (113 lm, 3.5 W, PG5D+F1 lens, IP67)"]
+	},
+
 	"Emergency Light_E02b":{
 		"E02b_Gessler_Siteco_Licross_S1":
 			["TSLA_LF_E02b_Trunking_System", "E02b (304 lm, 3.5 W, M023+S1 lens, IP20)"]
@@ -119,10 +129,14 @@
 	"Door Emergency Light Wall Mounted":{
 		"Pendant - Emergency Exit":
 			["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Forward (5.5 W, Display 2000/G7, IP41)"],
+		"Pendant - Left Two Sided IP40":
+			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Left TwoSide (5.5 W, Display 2000/G7, IP41)"],
 		"Wall Mounted - Left_IP40":
 			["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Left (5.5 W, Display 2000/G7, IP41)"],
 		"Wall Mounted-Right_IP40":
-			["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Right (5.5 W, Display 2000/G7, IP41)"]
+			["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Right (5.5 W, Display 2000/G7, IP41)"],
+		"Wall Mounted Forward":
+			["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Forward (5.5 W, Display 2000/G7, IP41)"]
 	},
 
 	"ARCU-ME-Connector_Electrical":{
