@@ -93,9 +93,19 @@
 			["TSLA_LF_E01b_Ceiling_Mounting", "E01b (304 lm, 3.5 W, LG6E+S1 lens, IP20)"]
 	},
 
+	"Emergency Light_E01c":{
+		"Sicherheitsleuchte Aufputz":
+			["TSLA_LF_E01c_Surface_Mounting", "E01c (289 lm, 3.5 W, PG5D+S2 lens, IP67)"]
+		},
+
 	"E01d":{
 		"Sicherheitsleuchte Aufputz":
 			["TSLA_LF_E01d_Surface_Mounting", "E01d (113 lm, 3.5 W, PG5D+F1 lens, IP67)"]
+	},
+
+	"Emergency Light_E01e":{
+		"E01e_LG6_A1_lens":
+			["TSLA_LF_E01e_Ceiling_Mounting", "E01e (270 lm, 3.5 W, LG6E+A1 lens, IP20)"]
 	},
 
 	"Emergency Light_E02b":{
@@ -106,6 +116,11 @@
 	"Emergency E04":{
 		"E04":
 			["TSLA_LF_E04a_EXITSIGN_CUBE_Suspended_Mounting", "E04a (6.0 W, W35, IP40)"]
+	},
+
+	"E07_Gessler":{
+		"C-Lux SL":
+			["TSLA_LF_E07a_EX-proof_Surface_Mounting", "E07a (600 lm, 5.5 W, EX-proof, IP67)"]
 	},
 
 	"E08_External Emergency Lighting":{
@@ -124,6 +139,11 @@
 			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Right TwoSide (5.5 W, Display 2000/G7, IP41)"],
 		"Left two Side":
 			["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Left TwoSide (5.5 W, Display 2000/G7, IP41)"]
+	},
+
+	"Standard Emergency Light Wall Mounted":{
+		"Wall Mounted - Forward_IP65":
+			["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Forward (5.5 W, Display 2000/G7, IP41)"]
 	},
 
 	"Door Emergency Light Wall Mounted":{
