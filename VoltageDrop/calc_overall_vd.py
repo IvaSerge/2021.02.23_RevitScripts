@@ -109,13 +109,7 @@ def get_parval(elem, name):
 
 
 def get_bip(paramName):
-	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
-	param = None
-	for i, i_name in enumerate(builtInParams):
-		if i_name == paramName:
-			param = System.Enum.GetValues(BuiltInParameter)[i]
-			break
-	return param
+	return System.Enum.Parse(BuiltInParameter, paramName)
 
 
 def category_by_bic_name(_bicString):
