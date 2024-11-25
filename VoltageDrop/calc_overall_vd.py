@@ -113,13 +113,13 @@ def get_bip(paramName):
 
 
 def category_by_bic_name(_bicString):
-	builtInCats = [i for i in System.Enum.GetNames(BuiltInCategory)]
-	bic = None
-	for i, i_name in enumerate(builtInCats):
-		if i_name == _bicString:
-			bic = System.Enum.GetValues(BuiltInCategory)[i]
-			break
-	return bic
+	# builtInCats = [i for i in System.Enum.GetNames(BuiltInCategory)]
+	# bic = None
+	# for i, i_name in enumerate(builtInCats):
+	# 	if i_name == _bicString:
+	# 		bic = System.Enum.GetValues(BuiltInCategory)[i]
+	# 		break
+	return System.Enum.Parse(BuiltInCategory, _bicString)
 
 
 def get_low_elem(_up_elem):
