@@ -192,6 +192,8 @@ for rvt_elem in elem_list:
 	# =========Start transaction
 	TransactionManager.Instance.EnsureInTransaction(doc)
 	for param_info in params_to_set:
+		if param_info[2] is None:
+			continue
 		p_elem = param_info[0]
 		p_name = param_info[1]
 		p_value = param_info[2]
