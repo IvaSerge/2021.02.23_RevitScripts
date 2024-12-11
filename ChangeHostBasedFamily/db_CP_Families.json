@@ -11,9 +11,17 @@
 			["TSLA_EF_Socket_CEE_Wall", "IP44_32A_400V"]
 	},
 
+	"CELL_POCS":{
+		"ELECTRICAL_RCPT_CEE-3PH+N+PE - 16A":
+			["TSLA_EF_Socket_CEE_Wall", "IP44_16A_400V"]
+	},
+
 	"RCPT_Double Receptacle 230V_16A_IP20": {
 		"Regular-single": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx1"],
-		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx2"]
+		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx2"],
+		"FR - Fridge": ["TSLA_EF_Socket_1P_Flush_Horizontal_Wall", "IP20_230Vx1"],
+		"DW - Dishwasher": ["TSLA_EF_Socket_1P_Flush_Horizontal_Wall", "IP20_230Vx1"],
+		"MV - Microwave": ["TSLA_EF_Socket_1P_Flush_Horizontal_Wall", "IP20_230Vx1"]
 	},
 
 	"RCPT_Double Receptacle 230V_16A_IP44": {

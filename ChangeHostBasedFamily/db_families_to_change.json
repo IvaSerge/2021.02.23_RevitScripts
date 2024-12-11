@@ -185,7 +185,8 @@
 	"RCPT_Double Receptacle 230V_16A_IP20": {
 		"Regular-Single": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx1"],
 		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx2"],
-		"Regular-4 plex": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx4"]
+		"Regular-4 plex": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx4"],
+		"FR - Fridge": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx1"]		
 	},
 
 	"CEE_Socket":{
@@ -225,6 +226,10 @@
 	
 	"TELE_Outlet_CU_Ceiling_1-2_JEG_M": {
 		"Outlet CU Ceiling 2 Ports (1 occupied)": ["TSLA_DD_Socket_Surface_Wall_W", "IP20_RJ45x1"]
+	},
+
+	"TELE_Outlet_CU_1-2_Security_JEG_M": {
+		"Outlet CU 2 Ports (1 occupied), SECURITY": ["TSLA_DD_DirectConnection", "DATA_S"]
 	},
 
 	"TELE_Access_Point_Type1_JEG_M": {
