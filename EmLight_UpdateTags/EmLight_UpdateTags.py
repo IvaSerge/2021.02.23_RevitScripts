@@ -223,22 +223,23 @@ quasi_boards = [
 	if WorksharingUtils.GetCheckoutStatus(doc, i.Id) != elem_status and
 	any([
 		"CP1-KE3W2C05" in i.Name,  # Emergency lighting panel hard coded
-		"CP1-KE3L2B05" in i.Name  # Emergency lighting panel hard coded
+		"CP1-KE3L2B05" in i.Name,  # Emergency lighting panel hard coded
+		"PTP-KE3W1D06" in i.Name  # Emergency lighting panel hard coded
 	])]
 
-# # =================== part 2 of the script
-# # renumerate lighting fixtures in panel
-# if calc_by_panel:
-# 	# get all circuits of the panel
-# 	em_board = UnwrapElement(IN[3])  # type: ignore
-# 	circuits = elsys_by_brd(em_board)[1]
-# else:
-# 	# get only current circuit of the element
-# 	# means, that only 1 circuit (connector) in faliy possible
-# 	el_fixture = UnwrapElement(IN[3])  # type: ignore
-# 	circuits = el_fixture.MEPModel.GetElectricalSystems()
-# 	if circuits:
-# 		circuits = [i for i in el_fixture.MEPModel.GetElectricalSystems()]
+# =================== part 2 of the script
+# renumerate lighting fixtures in panel
+if calc_by_panel:
+	# get all circuits of the panel
+	em_board = UnwrapElement(IN[3])  # type: ignore
+	circuits = elsys_by_brd(em_board)[1]
+else:
+	# get only current circuit of the element
+	# means, that only 1 circuit (connector) in faliy possible
+	el_fixture = UnwrapElement(IN[3])  # type: ignore
+	circuits = el_fixture.MEPModel.GetElectricalSystems()
+	if circuits:
+		circuits = [i for i in el_fixture.MEPModel.GetElectricalSystems()]
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
@@ -249,17 +250,17 @@ TransactionManager.Instance.EnsureInTransaction(doc)
 # All quasi panels, that are avaliable, will be updated.
 brd_updated = map(update_subboard_name, quasi_boards)
 
-# # =================== part 4 of the script
-# # Set parameters to lighting fixtures
-# outlist = list()
-# for circuit in circuits:
-# 	# TODO check if circuit is electrical
-# 	elems_in_circuit = searchInDeep(circuit, [])
-# 	outlist.append(elems_in_circuit)
-# 	if elems_in_circuit:
-# 		for i, elem in enumerate(elems_in_circuit):
-# 			outlist.append([elem, "E_Light_number", str(i + 1)])
-# 			setup_param_value(elem, "E_Light_number", str(i + 1))
+# =================== part 4 of the script
+# Set parameters to lighting fixtures
+outlist = list()
+for circuit in circuits:
+	# TODO check if circuit is electrical
+	elems_in_circuit = searchInDeep(circuit, [])
+	outlist.append(elems_in_circuit)
+	if elems_in_circuit:
+		for i, elem in enumerate(elems_in_circuit):
+			outlist.append([elem, "E_Light_number", str(i + 1)])
+			setup_param_value(elem, "E_Light_number", str(i + 1))
 
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction

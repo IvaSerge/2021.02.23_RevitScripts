@@ -8,9 +8,6 @@ import sys
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
 
-clr.AddReferenceByName('Microsoft.Office.Interop.Excel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c')
-from Microsoft.Office.Interop import Excel  # type: ignore
-
 import System
 from System import Array
 from System.Collections.Generic import *
@@ -49,7 +46,7 @@ def getByCatAndStrParam(_bic, _bip, _val, _isType):
 			WherePasses(filter).\
 			ToElements()
 	else:
-		fnrvStr = FilterStringEquals()
+		fnrvStr = FilterStringContains()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
 		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
@@ -132,12 +129,7 @@ def get_parval(elem, name):
 
 
 def get_bip(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
-	param = []
-	for i in builtInParams:
-		if i.ToString() == paramName:
-			param.append(i)
-			return i
+	return System.Enum.Parse(BuiltInParameter, paramName)
 
 
 def setup_param_value(elem, name, pValue):
@@ -182,16 +174,19 @@ def circuit_number_to_usv_link(_main_circ_num):
 	main_circ_num = check.group(1)
 	main_circ_num = int(main_circ_num)
 
-	# convert circuit number to USV name
-	if main_circ_num % 20 == 0:
-		n_subsection = main_circ_num // 20
-	else:
-		n_subsection = main_circ_num // 20 + 1
-	n_element = main_circ_num - (n_subsection - 1) * 20
+	# # convert circuit number to USV name
+	# if main_circ_num % 20 == 0:
+	# 	n_subsection = main_circ_num // 20
+	# else:
+	# 	n_subsection = main_circ_num // 20 + 1
+	# n_element = main_circ_num - (n_subsection - 1) * 20
 
-	value_str = str(n_subsection) + "." + str(n_element)
+	# value_str = str(n_subsection) + "." + str(n_element)
+	# return value_str
 
-	return value_str
+	# only circuit number
+	return str(main_circ_num)
+
 
 
 global doc
@@ -240,6 +235,13 @@ circuits = [i for i in elsys_by_brd(board_inst)[1]
 circuits.sort(key=lambda x: x.StartSlot)
 
 circuits_info_list = list()
+
+elems_in_panel = getByCatAndStrParam(
+	BuiltInCategory.OST_LightingFixtures,
+	BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM,
+	str(board_inst.Name),
+	False)
+
 for circuit_inst in circuits:
 
 	circuit_num = circuit_inst.CircuitNumber
@@ -260,13 +262,11 @@ for circuit_inst in circuits:
 		circuit_wire_str = "NHXH E30 3x4"
 	else:
 		circuit_wire_str = ""
-
-	# find all elements by "Panel" and "Circuit Number"
-	elems_in_circuit = getByCatAndStrParam(
-		BuiltInCategory.OST_LightingFixtures,
-		BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM,
-		circuit_str,
-		False)
+	
+	elems_in_circuit = [i for i in elems_in_panel if
+		i.get_Parameter(
+			BuiltInParameter.RBS_ELEC_CIRCUIT_NUMBER).AsString() == str(circuit_num)]
+	
 
 	if not elems_in_circuit:
 		continue
