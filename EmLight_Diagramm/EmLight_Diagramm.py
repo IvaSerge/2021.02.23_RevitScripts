@@ -5,8 +5,6 @@
 	"E_Ligth_number" - need to be filled in manualy or by script ???
 """
 
-from re import X
-from this import d
 import clr
 
 import sys
@@ -14,12 +12,9 @@ import sys
 pyt_path = r'C:\Program Files (x86)\IronPython 2.7\Lib'
 sys.path.append(pyt_path)
 
-import System
-from System import Array
-from System.Collections.Generic import *
+dir_path = IN[0].DirectoryName  # type: ignore
+sys.path.append(dir_path)
 
-System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo("en-US")
-from System.Runtime.InteropServices import Marshal
 
 # ================ Revit imports
 clr.AddReference('RevitAPI')
@@ -34,42 +29,21 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
-# ================ python imports
+# ================ Python imports
+import System
+from System import Array
+from System.Collections.Generic import *
+
 import importlib
 from importlib import reload
-from operator import itemgetter
-import re
 
 # ================ local imports
 import toolsrvt
 reload(toolsrvt)
+from toolsrvt import *
 import diag
 reload(diag)
-from diag import Diagramm
-
-def getByCatAndStrParam(_bic, _bip, _val, _isType):
-	global doc
-	if _isType:
-		fnrvStr = FilterStringEquals()
-		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val)
-		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
-			OfCategory(_bic).\
-			WhereElementIsElementType().\
-			WherePasses(filter).\
-			ToElements()
-	else:
-		fnrvStr = FilterStringContains()
-		pvp = ParameterValueProvider(ElementId(int(_bip)))
-		frule = FilterStringRule(pvp, fnrvStr, _val)
-		filter = ElementParameterFilter(frule)
-		elem = FilteredElementCollector(doc).\
-			OfCategory(_bic).\
-			WhereElementIsNotElementType().\
-			WherePasses(filter).\
-			ToElements()
-	return elem
+from diag import *
 
 
 global doc
@@ -85,52 +59,67 @@ board_inst = UnwrapElement(IN[3])  # type: ignore
 
 # select view for diagramm
 view_name = IN[2]  # type: ignore
-Diagramm.view_diagramm = getByCatAndStrParam(
+Diagramm.view_diagramm = toolsrvt.inst_by_cat_strparamvalue(
+	doc,
 	BuiltInCategory.OST_Views,
 	BuiltInParameter.VIEW_NAME,
 	view_name,
 	False)[0]
 
 # type to install
-Diagramm.type_first = getByCatAndStrParam(
+Diagramm.type_first = toolsrvt.inst_by_cat_strparamvalue(
+	doc,
 	BuiltInCategory.OST_DetailComponents,
 	BuiltInParameter.SYMBOL_NAME_PARAM,
 	"2D_diagramm_NOT_1P",
 	True)[0]
 
-Diagramm.type_emergency = getByCatAndStrParam(
+Diagramm.type_emergency = toolsrvt.inst_by_cat_strparamvalue(
+	doc,
 	BuiltInCategory.OST_DetailComponents,
 	BuiltInParameter.SYMBOL_NAME_PARAM,
 	"2D_diagramm_E01",
 	True)[0]
 
-Diagramm.type_exit = getByCatAndStrParam(
+Diagramm.type_exit = toolsrvt.inst_by_cat_strparamvalue(
+	doc,
 	BuiltInCategory.OST_DetailComponents,
 	BuiltInParameter.SYMBOL_NAME_PARAM,
 	"2D_diagramm_Exit",
 	True)[0]
 
 
-# for circuit in boards:
+# find circuits in boards:
 circuits = [i for i in toolsrvt.elsys_by_brd(board_inst)[1]
 	if i.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit]
 
-
 circuits.sort(key=lambda x: x.StartSlot)
+circuits_info_list = list()
 
-# circuits_info_list = list()
-
-elems_in_panel = getByCatAndStrParam(
+elems_in_panel = toolsrvt.inst_by_cat_strparamvalue(
+	doc,
 	BuiltInCategory.OST_LightingFixtures,
 	BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM,
 	str(board_inst.Name),
 	False)
 
-# for circuit_inst in circuits:
-	# get diagramm
+diagramm_symbols: list[Diagramm] = list()
+for row, circuit_inst in enumerate(circuits):
+	first_elem = DiagFirst(row)
+	diagramm_symbols.append(first_elem)
 
-	# circuit_num = circuit_inst.CircuitNumber
-	# circuit_usv_link = circuit_number_to_usv_link(circuit_num)
+	circuit_num = circuit_inst.CircuitNumber
+	elems_in_circuit = [i for i in elems_in_panel if
+		i.get_Parameter(
+			BuiltInParameter.RBS_ELEC_CIRCUIT_NUMBER).AsString() == str(circuit_num)]
+	
+	if not elems_in_circuit:
+		continue
+
+	for column, rvt_elem in enumerate(elems_in_circuit,start=1):
+		next_elem = Diagramm(rvt_elem, column, row)
+		diagramm_symbols.append(next_elem)
+
 
 # 	circuit_str = board_inst.Name + ":" + circuit_usv_link
 # 	circuit_name = circuit_inst.LoadName
@@ -197,16 +186,6 @@ elems_in_panel = getByCatAndStrParam(
 # 	for pnt_x, info in enumerate(params_to_set):
 # 		insert_pnt = XYZ((pnt_x + 2) * mm_to_ft(1000), -(pnt_y + 1) * mm_to_ft(2000), 0)
 
-# 		if any(["03" in info[0], "04" in info[0], "06" in info[0]]):
-# 			symbol_type = type_exit
-# 		else:
-# 			symbol_type = type_emergency
-
-# 		instance_on_view = doc.Create.NewFamilyInstance(
-# 			insert_pnt,
-# 			symbol_type,
-# 			view_diagramm)
-
 # 		# set parameters to new instance
 # 		setup_param_value(instance_on_view, "Type Mark", info[0])
 # 		setup_param_value(instance_on_view, "Panel", info[1])
@@ -218,5 +197,5 @@ elems_in_panel = getByCatAndStrParam(
 # TransactionManager.Instance.TransactionTaskDone()
 
 # OUT = circuits_info_list
-OUT = Diagramm.type
+OUT = [i.symbol_type for i in diagramm_symbols]
 
