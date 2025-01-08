@@ -51,12 +51,13 @@ reload(toolsrvt)
 
 class Diagramm():
 
-	step_y = 0.0623365636168
 	doc = None
 	view_diagramm = None
 	type_first = None
 	type_emergency = None
 	type_exit = None
+	start_point_x = 0
+	start_point_y = 0
 
 	def __init__(self, rvt_elem, column, row):
 		self.insert_point = None
@@ -68,25 +69,32 @@ class Diagramm():
 		self.column = column
 		self.get_elem_symbol()
 
+	def calc_insert_point(self):
+		pnt_x = self.start_point_x + self.column * toolsrvt.mm_to_ft(1000)
+		pnt_y = self.start_point_y - self.row * toolsrvt.mm_to_ft(2000)
+		pnt_z = 0
+		insert_xyz = XYZ(pnt_x, pnt_y, pnt_z)
+		self.insert_point = insert_xyz
 
-	# def create_elem_on_view(self):
-	# 	dia_inst = self.doc.Create.NewFamilyInstance(
-	# 		self.insert_point,
-	# 		self.symbol_type,
-	# 		self.view_diagramm)
-	# 	return dia_inst
+	def create_elem_on_view(self):
+		self.calc_insert_point()
+		dia_inst = self.doc.Create.NewFamilyInstance(
+			self.insert_point,
+			self.symbol_type,
+			self.view_diagramm)
+		return dia_inst
 
-	# def set_parameters(self):
-	# 	if not self.params or not self.instance:
-	# 		return None
-	# 	for param_info in self.params:
-	# 		param_name = param_info[0]
-	# 		param_val = param_info[1]
-	# 		toolsrvt.setup_param_value(
-	# 			self.instance,
-	# 			param_name,
-	# 			param_val)
-	# 	return param_name, param_val
+	def set_parameters(self):
+		if not self.params or not self.instance:
+			return None
+		for param_info in self.params:
+			param_name = param_info[0]
+			param_val = param_info[1]
+			toolsrvt.setup_param_value(
+				self.instance,
+				param_name,
+				param_val)
+		return param_name, param_val
 
 	def get_elem_symbol(self):
 		elem_family_str = self.rvt_elem.Symbol.FamilyName

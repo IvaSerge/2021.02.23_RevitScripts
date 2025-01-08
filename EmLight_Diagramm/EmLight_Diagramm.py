@@ -102,23 +102,41 @@ elems_in_panel = toolsrvt.inst_by_cat_strparamvalue(
 	BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM,
 	str(board_inst.Name),
 	False)
+elems_in_panel_circuit_num = [
+	i.get_Parameter(BuiltInParameter.RBS_ELEC_CIRCUIT_PANEL_PARAM).AsString()
+	for i in elems_in_panel]
+elems_with_circuits = list(zip(elems_in_panel, elems_in_panel_circuit_num))
 
 diagramm_symbols: list[Diagramm] = list()
-for row, circuit_inst in enumerate(circuits):
-	first_elem = DiagFirst(row)
-	diagramm_symbols.append(first_elem)
+outlist = list()
+row = 0
 
-	circuit_num = circuit_inst.CircuitNumber
-	elems_in_circuit = [i for i in elems_in_panel if
-		i.get_Parameter(
-			BuiltInParameter.RBS_ELEC_CIRCUIT_NUMBER).AsString() == str(circuit_num)]
+for circuit_inst in circuits:
+
+	circuit_panel_name = circuit_inst.BaseEquipment.Name
+	circuit_num = str(circuit_inst.CircuitNumber)
+	circuit_name_str = circuit_panel_name + ": " + circuit_num
+	elems_in_circuit = [i[0] for i in elems_with_circuits if i[1] == circuit_name_str]
 	
 	if not elems_in_circuit:
 		continue
 
-	for column, rvt_elem in enumerate(elems_in_circuit,start=1):
+	first_elem = DiagFirst(row)
+	diagramm_symbols.append(first_elem)
+
+	for rvt_elem in elems_in_circuit:
+		try:
+			column = int(toolsrvt.get_parval(rvt_elem, "E_Light_number"))
+		except:
+			elem_id = rvt_elem.Id.IntegerValue
+			error_string = "Light do not have tag number: " + str(elem_id)
+			print(error_string)
+			raise ValueError(error_string)
+		
 		next_elem = Diagramm(rvt_elem, column, row)
 		diagramm_symbols.append(next_elem)
+
+	row += 1
 
 
 # 	circuit_str = board_inst.Name + ":" + circuit_usv_link
@@ -162,40 +180,14 @@ for row, circuit_inst in enumerate(circuits):
 # 	circuits_info_list.append(params_to_set)
 
 
-# # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
-# instances_on_view = list()
-# for pnt_y, params_to_set in enumerate(circuits_info_list):
+symbols_on_view = [i.create_elem_on_view() for i in diagramm_symbols]
 
-# 	# insert 2D on drawing, add parameters
-# 	# insert first element
-# 	# Start point
-# 	instance_on_view = None
-
-# 	if params_to_set:
-# 		insert_pnt = XYZ(0, -(pnt_y + 1) * mm_to_ft(2000), 0)
-# 		instance_on_view = doc.Create.NewFamilyInstance(
-# 			insert_pnt,
-# 			type_first,
-# 			view_diagramm)
-# 		instance_on_view.LookupParameter("Beschriftung 1").Set(params_to_set[0][3])
-# 		instance_on_view.LookupParameter("Beschriftung 2").Set(params_to_set[0][4])
-# 		instances_on_view.append(instance_on_view)
-
-# 	for pnt_x, info in enumerate(params_to_set):
-# 		insert_pnt = XYZ((pnt_x + 2) * mm_to_ft(1000), -(pnt_y + 1) * mm_to_ft(2000), 0)
-
-# 		# set parameters to new instance
-# 		setup_param_value(instance_on_view, "Type Mark", info[0])
-# 		setup_param_value(instance_on_view, "Panel", info[1])
-# 		setup_param_value(instance_on_view, "E_Light_number", str(info[2]))
-
-# 		instances_on_view.append(instance_on_view)
-
-# # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
 # OUT = circuits_info_list
-OUT = [i.symbol_type for i in diagramm_symbols]
-
+# OUT = [i.symbol_type for i in diagramm_symbols]
+OUT = symbols_on_view
