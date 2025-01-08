@@ -24,6 +24,8 @@ import RevitServices
 from RevitServices.Persistence import DocumentManager
 from RevitServices.Transactions import TransactionManager
 
+import toolsrvt
+import re
 
 def elsys_by_brd(_brd):
 	"""Get all systems of electrical board.
@@ -102,6 +104,39 @@ def get_bip(paramName):
 	return System.Enum.Parse(BuiltInParameter, paramName)
 
 
+def update_circuit_number(panel_name, circuit_number_str):
+	"""
+	Change circuit number for Emergency Lighting panel
+	CP1 panels have different numbering convention.
+	Panel have subsections with 20 fuses each.
+	Numbering is subsection_number.current_number_in_subsection
+	"""
+	
+	panel_names_to_check = ["CP1-KE"]
+
+	checking = [name_to_check in panel_name 
+		for name_to_check in panel_names_to_check]
+	
+	if any(checking):
+		# convert circuit number to int
+		regexp = re.compile(r"^\D*(\d+)")
+		check = regexp.match(circuit_number_str)
+		circuit_number = check.group(1)
+		circuit_number = int(circuit_number)
+
+		if circuit_number % 20 == 0:
+			n_subsection = circuit_number // 20
+		else:
+			n_subsection = circuit_number // 20 + 1
+		n_element = circuit_number - (n_subsection - 1) * 20
+		checked_number = str(n_subsection) + "." + str(n_element)
+
+	else:
+		checked_number = circuit_number_str
+
+	return checked_number
+
+
 def update_subboard_name(board_inst):
 	"""
 	Board type "QUASI_Connector" symbol is subboard.
@@ -139,10 +174,10 @@ def update_subboard_name(board_inst):
 			main_board = current_board.Name
 			main_circ_num = next_system.CircuitNumber
 			break
+	updated_num = update_circuit_number(main_board, main_circ_num)
 
-	name = main_board + ": " + main_circ_num
-	board_inst.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_NAME).Set(name)
-	return name
+	name = main_board + ": " + updated_num
+	return [board_inst, "RBS_ELEC_PANEL_NAME", name]
 
 
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -150,38 +185,37 @@ uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
 uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 
-fnrvStr = FilterStringContains()
-pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
-frule = FilterStringRule(pvp, fnrvStr, "Quasi_Connector")
-filter = ElementParameterFilter(frule)
 
-electroBoards = FilteredElementCollector(doc).\
-	OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
-	WhereElementIsNotElementType().\
-	WherePasses(filter).\
-	ToElements()
 
 reload = IN[1]  # type: ignore
 calc_all = IN[2]  # type: ignore
 
 if calc_all:
-	elemList = list()
-	# filter out emergency lighting Quasys
-	# use EmLight_UpdateTags to tag them correctly
-	elemList = [i for i in electroBoards if
-		any([
-			"not" not in i.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString().lower(),
-			"emergency_lighting" not in i.Symbol.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString().lower(),
-		])
-	]
+	fnrvStr = FilterStringContains()
+	pvp = ParameterValueProvider(ElementId(int(BuiltInParameter.ELEM_FAMILY_PARAM)))
+	frule = FilterStringRule(pvp, fnrvStr, "Quasi_Connector")
+	filter = ElementParameterFilter(frule)
+	elemList = FilteredElementCollector(doc).\
+		OfCategory(BuiltInCategory.OST_ElectricalEquipment).\
+		WhereElementIsNotElementType().\
+		WherePasses(filter).\
+		ToElements()
 
 if not calc_all:
 	elemList = [UnwrapElement(IN[3])]  # type: ignore
 
+brd_updated = [update_subboard_name(sub) for sub in elemList]
+
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
-
-brd_updated = map(update_subboard_name, elemList)
+for board in brd_updated:
+	if not board:
+		continue
+	toolsrvt.setup_param_value(
+		board[0],
+		board[1],
+		board[2],
+	)
 
 TransactionManager.Instance.TransactionTaskDone()
 # =========End transaction
