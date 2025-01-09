@@ -120,10 +120,13 @@ for circuit_inst in circuits:
 	
 	if not elems_in_circuit:
 		continue
-
-	first_elem = DiagFirst(row)
+	
+	# ============= First element
+	first_elem = DiagFirst(circuit_inst, 0, row)
+	first_elem.rvt_elem = circuit_inst
 	diagramm_symbols.append(first_elem)
 
+	# ============= Next elements
 	for rvt_elem in elems_in_circuit:
 		try:
 			column = int(toolsrvt.get_parval(rvt_elem, "E_Light_number"))
@@ -134,60 +137,21 @@ for circuit_inst in circuits:
 			raise ValueError(error_string)
 		
 		next_elem = Diagramm(rvt_elem, column, row)
+		next_elem.params.append(["Panel", circuit_num])
 		diagramm_symbols.append(next_elem)
-
 	row += 1
-
-
-# 	circuit_str = board_inst.Name + ":" + circuit_usv_link
-# 	circuit_name = circuit_inst.LoadName
-# 	circuit_wire_size = circuit_inst.WireSizeString
-# 	circuit_wire_type = circuit_inst.WireType.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME).AsString()
-
-# 	if "#2.5" in circuit_wire_size and "NYM" in circuit_wire_type:
-# 		circuit_wire_str = "NYM 3x2.5"
-# 	elif "#2.5" in circuit_wire_size and "NHXH E30" in circuit_wire_type:
-# 		circuit_wire_str = "NHXH E30 3x2.5"
-# 	elif "4" in circuit_wire_size and "NYM" in circuit_wire_type:
-# 		circuit_wire_str = "NYM 3x4"
-# 	elif "4" in circuit_wire_size and "NHXH E30" in circuit_wire_type:
-# 		circuit_wire_str = "NHXH E30 3x4"
-# 	else:
-# 		circuit_wire_str = ""
-	
-# 	elems_in_circuit = [i for i in elems_in_panel if
-# 		i.get_Parameter(
-# 			BuiltInParameter.RBS_ELEC_CIRCUIT_NUMBER).AsString() == str(circuit_num)]
-	
-
-# 	if not elems_in_circuit:
-# 		continue
-
-# 	# read element parameters
-# 	params_to_set = list()
-# 	for elem in elems_in_circuit:
-# 		elem_mark = get_parval(elem.Symbol, "WINDOW_TYPE_ID")  # Revit parameter "Type Mark"
-# 		elem_light_num = get_parval(elem, "E_Light_number")
-# 		param_list = list()
-# 		param_list.append(elem_mark)
-# 		param_list.append(circuit_usv_link)
-# 		param_list.append(int(elem_light_num))
-# 		param_list.append(circuit_name)
-# 		param_list.append(circuit_wire_str)
-# 		params_to_set.append(param_list)
-
-# 	params_to_set.sort(key=itemgetter(2))
-# 	circuits_info_list.append(params_to_set)
 
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
 
-symbols_on_view = [i.create_elem_on_view() for i in diagramm_symbols]
+for diag_symbol in diagramm_symbols:
+	diag_symbol.create_elem_on_view()
+	diag_symbol.get_params_to_set()
+	diag_symbol.set_parameters()
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-# OUT = circuits_info_list
-# OUT = [i.symbol_type for i in diagramm_symbols]
-OUT = symbols_on_view
+OUT = [i.params for i in diagramm_symbols]
+# OUT = symbols_on_view
