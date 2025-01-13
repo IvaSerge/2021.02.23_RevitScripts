@@ -109,10 +109,8 @@ class Diagramm():
 		elem_mark = toolsrvt.get_parval(
 			self.rvt_elem.Symbol, "WINDOW_TYPE_ID")  # Revit parameter "Type Mark"
 		elem_light_num = toolsrvt.get_parval(self.rvt_elem, "E_Light_number")
-		self.params.append(["Type Mark", elem_mark])
+		self.params.append(["Type Mark", elem_mark + " "])
 		self.params.append(["E_Light_number", str(elem_light_num) + " "])
-		# self.params.append(["E_Light_number", "F8"])
-
 
 class DiagFirst(Diagramm):
 	def __init__(self, rvt_elem, column, row):

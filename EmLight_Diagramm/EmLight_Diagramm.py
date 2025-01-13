@@ -114,9 +114,18 @@ row = 0
 for circuit_inst in circuits:
 
 	circuit_panel_name = circuit_inst.BaseEquipment.Name
-	circuit_num = str(circuit_inst.CircuitNumber)
+	
+	# For CP1 circuit number is different
+	if "CP1" in circuit_panel_name:
+		circuit_num = toolsrvt.get_parval(circuit_inst, "Tool Device ID")
+		if not circuit_num:
+			circuit_num = "None"
+	else:
+		circuit_num = str(circuit_inst.CircuitNumber)
+
 	circuit_name_str = circuit_panel_name + ": " + circuit_num
 	elems_in_circuit = [i[0] for i in elems_with_circuits if i[1] == circuit_name_str]
+	outlist.append(circuit_name_str)
 	
 	if not elems_in_circuit:
 		continue
@@ -154,4 +163,3 @@ for diag_symbol in diagramm_symbols:
 TransactionManager.Instance.TransactionTaskDone()
 
 OUT = [i.params for i in diagramm_symbols]
-# OUT = symbols_on_view
