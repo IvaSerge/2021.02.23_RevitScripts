@@ -23,8 +23,11 @@ from importlib import reload
 
 # ================ local imports
 import toolsrvt
-reload(toolsrvt)
 from toolsrvt import *
+
+import rvt_panel
+reload(rvt_panel)
+from rvt_panel import *
 
 
 # ================ GLOBAL VARIABLES
@@ -45,6 +48,14 @@ else:
 		Autodesk.Revit.UI.Selection.ObjectType.Element,
 		"Element selection")
 
-# 
 
-OUT = sel_elem
+main_panel:RvtPanel = RvtPanel(sel_elem)
+
+# Create main panel list
+## Get circuits
+### Get ciruit number and circuit name
+### Check if it is a circuit for a panel
+###	If yes - Create subpanel list
+
+
+OUT = main_panel.get_circuts_info()
