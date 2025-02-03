@@ -29,6 +29,9 @@ import rvt_panel
 reload(rvt_panel)
 from rvt_panel import *
 
+import tree_list_utils
+reload(tree_list_utils)
+from tree_list_utils import *
 
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -50,12 +53,13 @@ else:
 
 
 main_panel:RvtPanel = RvtPanel(sel_elem)
+main_panel_name = sel_elem.Name
+main_panel_tree = main_panel.get_circuts_info() 
 
-# Create main panel list
-## Get circuits
-### Get ciruit number and circuit name
-### Check if it is a circuit for a panel
-###	If yes - Create subpanel list
+circuits_tree = [[main_panel_name]] + main_panel_tree
+flattened_result = tree_list_utils.flatten_with_none(circuits_tree)
+
+excel_name = tree_list_utils.create_file_name(main_panel_name, dir_path)
 
 
-OUT = main_panel.get_circuts_info()
+OUT = excel_name
