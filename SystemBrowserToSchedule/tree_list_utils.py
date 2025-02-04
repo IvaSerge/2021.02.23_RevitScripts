@@ -6,6 +6,9 @@ create excel, write the list to excel and format the excel
 
 Functions:
 	flatten_with_none
+	create_new_xlsx
+	
+
 
 """
 
@@ -40,7 +43,7 @@ def flatten_with_none(in_list, level=0, result=None):
 			check_item = item[0]
 			if isinstance(check_item, list):
 				# recurcive search deeper
-				inner(item, level + 1)
+				inner(item, level + 2)
 			else:
 				row = [None] * level
 				row.extend(item)
@@ -50,9 +53,8 @@ def flatten_with_none(in_list, level=0, result=None):
 	return result
 
 
-def move_template_xls_file(dyn_path, xl_save_to):
-	template_path = dyn_path + "\\boq_template.xlsx"
-	shutil.copy(template_path, xl_save_to)
+def create_new_xlsx(temp_path, xl_save_to):
+	shutil.copy(temp_path, xl_save_to)
 
 
 def create_file_name(panel_name, path_to_save):
@@ -61,3 +63,28 @@ def create_file_name(panel_name, path_to_save):
 	name_xlsx += ".xlsx"
 	name_xlsx = path_to_save + "\\" + name_xlsx
 	return name_xlsx
+
+
+def write_totals(xl_path, info_to_set):
+	wb = openpyxl.load_workbook(xl_path)
+	ws = wb["Panel_tree"]
+	wb.active = wb["Panel_tree"]
+
+	for rw, row in enumerate(info_to_set,1):
+		# save info
+		for clmn, val in enumerate(row, 1):
+			current_cell = ws.cell(row=rw, column=clmn)
+			if val:
+				current_cell.value = val
+	
+	# format columns
+	# odd column - circit breaker N. - narrow
+	# even column - circuit name - wide
+	for col in range(1, ws.max_column + 1):
+		column_letter = ws.cell(row=1, column=col).column_letter  # Get column letter
+		if col % 2 == 0:  # Even column
+			ws.column_dimensions[column_letter].width = 20
+		else:  # Odd column
+			ws.column_dimensions[column_letter].width = 5
+
+	wb.save(xl_path)

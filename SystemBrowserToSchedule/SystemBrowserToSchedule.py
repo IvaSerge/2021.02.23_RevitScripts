@@ -31,7 +31,6 @@ from rvt_panel import *
 
 import tree_list_utils
 reload(tree_list_utils)
-from tree_list_utils import *
 
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
@@ -51,15 +50,18 @@ else:
 		Autodesk.Revit.UI.Selection.ObjectType.Element,
 		"Element selection")
 
-
 main_panel:RvtPanel = RvtPanel(sel_elem)
 main_panel_name = sel_elem.Name
 main_panel_tree = main_panel.get_circuts_info() 
 
-circuits_tree = [[main_panel_name]] + main_panel_tree
+circuits_tree = [[None, main_panel_name]] + main_panel_tree
 flattened_result = tree_list_utils.flatten_with_none(circuits_tree)
+print(flattened_result)
 
-excel_name = tree_list_utils.create_file_name(main_panel_name, dir_path)
+excel_name_panel = tree_list_utils.create_file_name(main_panel_name, dir_path)
+excel_name_template = tree_list_utils.create_file_name("temp", dir_path)
+tree_list_utils.create_new_xlsx(excel_name_template, excel_name_panel)
+tree_list_utils.write_totals(excel_name_panel, flattened_result)
 
 
-OUT = excel_name
+OUT = flattened_result
