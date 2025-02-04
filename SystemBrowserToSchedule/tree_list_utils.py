@@ -7,10 +7,16 @@ create excel, write the list to excel and format the excel
 Functions:
 	flatten_with_none
 	create_new_xlsx
-	
-
-
+	create_file_name
+	write_totals
 """
+
+__all__ = [
+	"flatten_with_none",
+	"create_new_xlsx",
+	"create_file_name",
+	"write_totals"
+]
 
 import clr
 import os
@@ -86,5 +92,4 @@ def write_totals(xl_path, info_to_set):
 			ws.column_dimensions[column_letter].width = 20
 		else:  # Odd column
 			ws.column_dimensions[column_letter].width = 5
-
 	wb.save(xl_path)
