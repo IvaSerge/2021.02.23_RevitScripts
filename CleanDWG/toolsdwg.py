@@ -5,6 +5,7 @@ sys.path.append(r"C:\Users\sivasiuk\AppData\Local\python-3.9.12-embed-amd64\Lib\
 sys.path.append(r"C:\Users\sivasiuk\AppData\Local\python-3.9.12-embed-amd64\Lib\site-packages\win32\lib")
 
 import win32com.client
+import time
 
 def get_acad_instance():
 	prog_ids = [
@@ -151,3 +152,39 @@ def get_visible_hatches(doc):
 	# 		visible_hatches.append(entity)
 	
 	return mod_space
+
+def purge_total(doc):
+	db = doc.Database
+
+	db = doc.Database
+
+	while True:
+		# Get counts before purge
+		initial_counts = {
+			"Blocks": db.Blocks.Count,
+			"Views": db.Views.Count,
+			"DimStyles": db.DimStyles.Count,
+			"Layers": db.Layers.Count,
+			"Linetypes": db.Linetypes.Count,
+			"Material": db.Materials.Count
+		}
+
+		doc.PurgeAll()
+
+		new_counts = {
+			"Blocks": db.Blocks.Count,
+			"Views": db.Views.Count,
+			"DimStyles": db.DimStyles.Count,
+			"Layers": db.Layers.Count,
+			"Linetypes": db.Linetypes.Count,
+			"Material": db.Materials.Count
+			}
+
+		# Check if anything changed
+		if initial_counts == new_counts:
+			break  # Stop if nothing was removed
+
+	for i in range(3):
+		doc.SendCommand("-PURGE\nALL\n*\nN\n")  # Purge everything, confirm "No" to each prompt
+		time.sleep(2)  # Wait briefly to let the command complete
+
