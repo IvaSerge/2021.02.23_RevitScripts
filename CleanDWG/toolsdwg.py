@@ -34,6 +34,12 @@ def get_active_document(acad_app):
 		print(error_string)
 		raise ValueError(error_string)
 
+def iter_com_obj(com_obj):
+	"""Yield all objects in com_obj as an iterable."""
+	count = com_obj.Count
+	for i in range(count):
+		yield com_obj.Item(i)  # Yield each entity
+
 def get_all_layers(doc):
 	layers = doc.Layers  # Get the Layers collection
 	layer_names = [layers.Item(i).Name for i in range(layers.Count)]
@@ -59,7 +65,9 @@ def on_layers(doc):
 			layer.LayerOn = True  # Turn layer on
 
 def burst_block(doc, block_name):
-	for entity in doc.ModelSpace:
+	all_items = iter_com_obj(doc.ModelSpace)
+
+	for entity in all_items:
 		if entity.ObjectName == "AcDbBlockReference" and entity.Name == block_name:
 			attributes = {}
 
@@ -69,26 +77,38 @@ def burst_block(doc, block_name):
 					"text": attr.TextString,
 					"position": attr.InsertionPoint,
 					"height": attr.Height,  # Copy text size
-					"style": attr.StyleName  # Copy text style
+					"style": attr.StyleName,  # Copy text style
 				}
 
 			# Explode the block
 			exploded_objects = entity.Explode()
-				
+	
+			outlist = []
 			# Replace attributes with MText at the correct position
 			for obj in exploded_objects:
-				if obj.ObjectName == "AcDbText" and obj.TextString in attributes:
-					attr_data = attributes[obj.TextString]  # Get attribute data
+				if obj.ObjectName == "AcDbAttributeDefinition" and obj.TagString in attributes:
+					attr_data = attributes[obj.TagString]  # Get attribute data
 						
 					# Create a new MText object at the attribute's position
-					mtext = doc.ModelSpace.AddMText(attr_data["position"], 10, attr_data["text"])  # Width 10 (adjustable)
+					# mtext = doc.ModelSpace.AddMText(attr_data["position"], 10, attr_data["text"])  # Width 10 (adjustable)
+					# mtext = doc.ModelSpace.AddText(attr_data["text"], attr_data["position"], attr_data["height"])  # Width 10 (adjustable)
+					try:
+						mtext = doc.ModelSpace.AddText("Test", (0, 0, 0), 10.0)
+					except Exception as e:
+						print(f"Error creating text: {e}")
+						raise ValueError
+						
+					outlist.append([attr_data["text"], attr_data["position"], attr_data["height"]]) 
 
 					# Apply the original attribute's size and style
-					mtext.Height = attr_data["height"]
-					mtext.StyleName = attr_data["style"]
+					# mtext.Height = attr_data["height"]
+					# mtext.StyleName = attr_data["style"]
 
-					# Remove the original exploded text
+			# 		# Remove the original exploded text
 					obj.Delete()
+			# entity.Delete()
+
+		return outlist
 
 def get_selection(doc):
 	"""Prompts the user to select objects and prints their types."""
@@ -141,23 +161,20 @@ def block_all_to_layer_null(doc, block_name_str):
 	doc.Regen(1)  # Refresh the active viewport to update changes
 	return block_info
 
-def get_visible_hatches(doc):
-	visible_hatches = []
+# def get_visible_hatches(doc):
+# 	visible_hatches = []
 
-	mod_space = doc.ModelSpace.Count
+# 	mod_space = doc.ModelSpace.Count
 	
-	# # Iterate through all objects in ModelSpace
-	# for entity in doc.ModelSpace:
-	# 	if entity.ObjectName == "AcDbHatch" and entity.Visible:
-	# 		visible_hatches.append(entity)
+# 	# # Iterate through all objects in ModelSpace
+# 	# for entity in doc.ModelSpace:
+# 	# 	if entity.ObjectName == "AcDbHatch" and entity.Visible:
+# 	# 		visible_hatches.append(entity)
 	
-	return mod_space
+# 	return mod_space
 
 def purge_total(doc):
 	db = doc.Database
-
-	db = doc.Database
-
 	while True:
 		# Get counts before purge
 		initial_counts = {
