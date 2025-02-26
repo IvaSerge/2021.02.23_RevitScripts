@@ -52,9 +52,15 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 	rvt_level_str = rvt_lvl.Name
 	
 	# level naming is model specific
-	if "BER-GF-SE-CP" in doc_titel:
+	# F level (1F, 2F..)
+	is_f_level = any([
+		"BER-GF-SE-CP" in doc_titel, 
+		"BER-GF-SITE-PTP" in doc_titel, 
+		])
+
+	if is_f_level:
 		# for CP only
-		regexp = re.compile(r"^(.*?)F")
+		regexp = re.compile(r"^(.*?)[FM]")
 		check = regexp.match(rvt_level_str)
 		rvt_level_out = check.group(1)
 
@@ -134,6 +140,12 @@ for rvt_elem in elem_list:
 	# For TV clean grid name - Project specific change
 	if elem_grid.startswith("TV-"):
 		elem_grid = re.sub("-", "", elem_grid)
+	elem_level = get_level_name(rvt_elem)
+	elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
+
+	# For PTP clean grid name - Project specific change
+	if elem_grid.startswith("PTP-"):
+		elem_grid = re.sub("PTP-", "", elem_grid)
 	elem_level = get_level_name(rvt_elem)
 	elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
 
