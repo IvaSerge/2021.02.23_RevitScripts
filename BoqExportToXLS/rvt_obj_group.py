@@ -113,6 +113,12 @@ class electrical_objects(RvtObjGroup):
 		additional_drops = []
 		for elem in rvt_elems:
 			elem_type_name: str = toolsrvt.get_parval(elem.Symbol, "ALL_MODEL_DESCRIPTION")
+			
+			if not elem_type_name:
+				error_text = f"No type description in {elem.Id}"
+				print(error_text)
+				raise ValueError(error_text)
+
 			if "hard wired connection" in elem_type_name.lower():
 				try:
 					elem.MEPModel.GetElectricalSystems()
