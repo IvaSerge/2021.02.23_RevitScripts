@@ -52,7 +52,8 @@
 		"TSLA_A1_594x841": "BatchPrint_A1_841x594",
 		"TSLA_A1_841x594": "BatchPrint_A1_594x841",
 		"TSLA_A1_1000x594": "BatchPrint_XX_594x1000",
-		"TSLA_A2_594x420": "BatchPrint_A2_594x420"
+		"TSLA_A2_594x420": "BatchPrint_A2_594x420",
+		"TSLA_A0+_841x2000": "BatchPrint_XX_2000x841"
 	},
 
 	"Tesla sheetframe": {
