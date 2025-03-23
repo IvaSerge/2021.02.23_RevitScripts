@@ -95,5 +95,9 @@
 
 	"RCPT_5xReceptacle 230V_16A_IP20_surface mounted": {
 		"5x - Gowning room": ["TSLA_EF_Socket_1P_Surface_Vertical_Wall", "IP44_230Vx5"]
+	},
+
+	"Motion and Occupancy Sensor_SI":{
+		"Pres. + motion detec. 360° Kompakt Sentinel": ["TSLA_LD_Occupancy_Sensor_DALI", "Sensor_DALI_surface mounted"]
 	}
 }
