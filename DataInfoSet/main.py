@@ -64,6 +64,16 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 		check = regexp.match(rvt_level_str)
 		rvt_level_out = check.group(1)
 
+	elif "BER-GF-SITE-NPI" in doc_titel:
+		if "RF" in rvt_level_str:
+			rvt_level_out = "3"	# for NPI only - 1M and 2F are the same
+		if "1M" in rvt_level_str:
+			rvt_level_out = "2"
+		elif "1F" in rvt_level_str:
+			rvt_level_out = "1"
+		else:
+			raise ValueError("Wrong level name")
+
 	elif "BER-GF-SE-DU" in doc_titel:
 		# for DU only - 1M and 2F are the same
 		if "2F" in rvt_level_str or "1M" in rvt_level_str:
@@ -146,6 +156,12 @@ for rvt_elem in elem_list:
 	# For PTP clean grid name - Project specific change
 	if elem_grid.startswith("PTP-"):
 		elem_grid = re.sub("PTP-", "", elem_grid)
+	elem_level = get_level_name(rvt_elem)
+	elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
+
+	# For NPI clean grid name - Project specific change
+	if elem_grid.startswith("NPI-"):
+		elem_grid = re.sub("NPI-", "", elem_grid)
 	elem_level = get_level_name(rvt_elem)
 	elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
 
