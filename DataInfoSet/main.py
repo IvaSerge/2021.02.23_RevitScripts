@@ -67,7 +67,7 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 	elif "BER-GF-SITE-NPI" in doc_titel:
 		if "RF" in rvt_level_str:
 			rvt_level_out = "3"	# for NPI only - 1M and 2F are the same
-		if "1M" in rvt_level_str:
+		elif "1M" in rvt_level_str:
 			rvt_level_out = "2"
 		elif "1F" in rvt_level_str:
 			rvt_level_out = "1"
