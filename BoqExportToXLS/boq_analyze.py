@@ -282,7 +282,6 @@ def get_boq_list_by_dcn(dcn_string: str):
 	RvtObjGroup.boq_param_value = dcn_string
 
 	elec_bic_list = (
-		"OST_ConduitFitting",
 		"OST_ElectricalEquipment",
 		"OST_ElectricalFixtures",
 		"OST_FireAlarmDevices",
