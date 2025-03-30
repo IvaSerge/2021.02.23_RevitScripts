@@ -66,9 +66,6 @@ def get_wire_type(el_circuit):
 	elif elec_non_standard_cable:
 		return toolsrvt.get_parval(el_circuit, "Cable Description")
 
-	# elif is_data:
-	# 	return "LAN 250 (S/FTP) CAT.6A"
-
 	else:
 		return None
 
