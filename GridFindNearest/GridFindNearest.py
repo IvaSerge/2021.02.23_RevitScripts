@@ -43,6 +43,9 @@ import grid
 reload(grid)
 from grid import *
 
+import inst_info_getter
+reload(inst_info_getter)
+from inst_info_getter import *
 
 def toPoint(doc, xyz):
 	x = toolsrvt.ft_to_mm(doc, xyz.X)
@@ -75,7 +78,11 @@ grid.find_grid_intersection_points(doc)
 params_to_set = []
 for rvt_inst in rvt_instances:
 	shortest_grid_name = grid.get_nearest_grid_by_instance(rvt_inst)
+	inst_level = inst_info_getter.get_level_name(rvt_inst)
 	params_to_set.append([rvt_inst, "TO Grid", shortest_grid_name])
+	circuit_parameters = inst_info_getter.get_circuit_params(rvt_inst, inst_level, shortest_grid_name)
+	if circuit_parameters:
+		params_to_set.extend(circuit_parameters)
 
 # =========Start transaction
 TransactionManager.Instance.EnsureInTransaction(doc)
@@ -86,4 +93,4 @@ for param_info in params_to_set:
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
 
-OUT = params_to_set
+OUT = params_to_set, inst_level

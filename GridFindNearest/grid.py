@@ -9,6 +9,7 @@ from Autodesk.Revit.DB import *
 # ================ Python imports
 import math
 from operator import itemgetter
+import re
 
 
 class grid:
@@ -67,9 +68,13 @@ class grid:
 			# define naming priority
 			# name with smalest angle is first as example ("A" = 0, "1" = 90) -> A1
 			if self.angle < grid_next.angle:
-				point_name = self.rvt_grid.Name + grid_next.rvt_grid.Name
+				point_name = f"{self.rvt_grid.Name}\{grid_next.rvt_grid.Name}"
 			else:
-				point_name = grid_next.rvt_grid.Name + self.rvt_grid.Name
+				point_name = f"{grid_next.rvt_grid.Name}\{self.rvt_grid.Name}"
+			
+			# # For NPI clean grid name - Project specific change
+			# if point_name.startswith("NPI-"):
+			# 	point_name = re.sub("NPI-", "", point_name)
 
 			# find intersection point
 			results = Autodesk.Revit.DB.IntersectionResultArray()
