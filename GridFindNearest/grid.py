@@ -16,45 +16,11 @@ class grid:
 	# class variables
 	all_intersection_points = list()
 
-	@classmethod
-	def find_grid_intersection_points(cls, doc):
-		# type: (Autodesk.Revit.DB.Document) -> list
-		all_grids = FilteredElementCollector(doc).\
-			OfCategory(BuiltInCategory.OST_Grids).\
-			WhereElementIsNotElementType().\
-			ToElements()
-
-		all_intersection_points = dict()
-		obj_grids = [grid(i) for i in all_grids]
-		for grd in obj_grids:
-			grid_intersections = grd.get_intersection_points(obj_grids)
-			all_intersection_points.update(grid_intersections)
-
-		cls.all_intersection_points = all_intersection_points
-		return cls.all_intersection_points
-
 	def __init__(self, _rvt_grid):
 		# type: (Autodesk.Revit.DB.Grid) -> None
 		self.rvt_grid = _rvt_grid  # type: Autodesk.Revit.DB.Grid
 		self.angle = grid.get_angle(_rvt_grid)
 		self.intersections = dict()
-
-	@staticmethod
-	def get_angle(_rvt_grid):
-		# type: (Autodesk.Revit.DB.Grid) -> float
-		"""
-		Get angle rotation fo the grid
-		"""
-		vector = _rvt_grid.Curve.Direction
-		direction = round(math.degrees(math.acos(_rvt_grid.Curve.Direction.X)))
-		# rotating vector in upper direction
-		if direction == 180 or direction == 0:
-			direction = 0
-		elif vector.Y < 0:
-			direction = 180 - direction
-		else:
-			pass
-		return direction
 
 	def get_intersection_points(self, _grids):
 		# type: (grid, list[grid]) -> None
@@ -101,3 +67,37 @@ class grid:
 		distance_list.sort(key=itemgetter(1))
 		shortest_grid_name = distance_list[0][0]
 		return shortest_grid_name
+
+	@classmethod
+	def find_grid_intersection_points(cls, doc):
+		# type: (Autodesk.Revit.DB.Document) -> list
+		all_grids = FilteredElementCollector(doc).\
+			OfCategory(BuiltInCategory.OST_Grids).\
+			WhereElementIsNotElementType().\
+			ToElements()
+
+		all_intersection_points = dict()
+		obj_grids = [grid(i) for i in all_grids]
+		for grd in obj_grids:
+			grid_intersections = grd.get_intersection_points(obj_grids)
+			all_intersection_points.update(grid_intersections)
+
+		cls.all_intersection_points = all_intersection_points
+		return cls.all_intersection_points
+
+	@staticmethod
+	def get_angle(_rvt_grid):
+		# type: (Autodesk.Revit.DB.Grid) -> float
+		"""
+		Get angle rotation fo the grid
+		"""
+		vector = _rvt_grid.Curve.Direction
+		direction = round(math.degrees(math.acos(_rvt_grid.Curve.Direction.X)))
+		# rotating vector in upper direction
+		if direction == 180 or direction == 0:
+			direction = 0
+		elif vector.Y < 0:
+			direction = 180 - direction
+		else:
+			pass
+		return direction
