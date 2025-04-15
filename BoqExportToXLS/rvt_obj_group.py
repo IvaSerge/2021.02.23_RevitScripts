@@ -301,7 +301,7 @@ class data_objects(electrical_objects):
 			additional_elems.extend([to_add] * 2 * circuits_count)
 
 		# add patch cords for WiFi
-		wifi_elems = [i for i in self.boq if "access point" in string.lower(i[0])]
+		wifi_elems = [i for i in self.boq if "access point" in str.lower([0])]
 		if wifi_elems:
 			wifi_count = len(wifi_elems)
 			to_add = ["Data devices", "Patch cable category 6A schielded", "Not product specific", change_num]

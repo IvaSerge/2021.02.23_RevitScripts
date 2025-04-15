@@ -56,10 +56,10 @@ During installation, the following Python path must be utilized:
 ## Installation of python modules
   - pip install pandas
   - pip install Pillow
-  - pip inatall -U pypiwin32
-  - pip inatall -U python-dotenv
-  - pip inatall mysql-connector-python
-  - pip inatall openpyxl
+  - pip install -U pypiwin32
+  - pip install -U python-dotenv
+  - pip install mysql-connector-python
+  - pip install openpyxl
 
 # Settings in Revit
 For filtering elements parameter "BOQ Phase" is used.
