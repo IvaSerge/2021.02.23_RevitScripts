@@ -63,6 +63,10 @@
 		"BEGA_24374_graphite_K3": ["TSLA_LF_L30_Wall_Mounting", "L30 (1075 lm, 15 W, 3000K, IP65)"]
 	},
 
+	"L32 ProLed L=880mm":{
+		"Type catalog Modified": ["TSLA_LF_L33_LED_Stripe", "L32 (950 lm/lfm, 12W/lfm, 3000K)"]
+	},
+
 	"L35":{
 		"This Family uses a Type Catalog":
 			["TSLA_LF_L35_Ceiling_Mounting", "L35 - IP54"]

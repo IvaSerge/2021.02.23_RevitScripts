@@ -37,6 +37,11 @@
 		"--- (1 x LED, 9080 lm, 56.2000007629395 W, 4000K)":
 			["TSLA_LF_L01b_d_f_Surface_Mounting_Single", "L01b (13360 lm, 86 W, 4000K, L=1500mm)"]
 	},
+	
+	"L09 51FB10DP460A_SI":{
+		"--- (1 x LED, 6020 lm, 45.2999992370605 W, 4000K)":
+			["TSLA_LF_L09_Suspended_Mounting", "L09 (6060 lm, 45 W, 4000K, L=1590mm)"]
+	},
 
 	"Motion and Occupancy Sensor_SI":{
 		"Pres. + motion detec. 360° Kompakt Sentinel": ["TSLA_LD_Occupancy_Sensor_DALI", "Sensor_DALI_surface mounted"]
