@@ -13,6 +13,7 @@
 		"A1": "BatchPrint_A1_841x594",
 		"A2": "BatchPrint_A2_594x420",
 		"1100 x 3276": "BatchPrint_XX_3276x1100",
+		"841 x 1500": "BatchPrint_XX_1500x841",
 		"841 x 2000": "BatchPrint_XX_2000x841",
 		"841 x 2100": "BatchPrint_XX_2100x841",
 		"841 x 2500": "BatchPrint_XX_2500x841",
@@ -25,6 +26,7 @@
 		"A1": "BatchPrint_A1_841x594",
 		"A2": "BatchPrint_A2_594x420",
 		"1100 x 3276": "BatchPrint_XX_3276x1100",
+		"841 x 1500": "BatchPrint_XX_1500x841",
 		"841 x 2000": "BatchPrint_XX_2000x841",
 		"841 x 2100": "BatchPrint_XX_2100x841",
 		"A1x3_1782x841": "BatchPrint_A1x3_1782x841"
