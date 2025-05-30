@@ -12,6 +12,10 @@
 		"--- (1 x LED, 4520 lm, 27.5 W, 4000K)": ["TSLA_LF_L01g_l_Surface_Mounting_Trunking", "L01g (4520 lm, 28 W, 4000K, L=1500mm)"]
 	},
 
+	"GND_Isolated Bar_FB_CH_I":{
+		"GND_BAR_STANDARD": ["TSLA_LP_InsolatedBar", "X2_GND_Busbar_Standart"]
+	},
+
 	"Trunking system Siteco_Licross":{ "Licross Tragschiene L=4500 mm weiß 51TR1JE  Durchverdrahtung 14 x 2,5 mm²": ["TSLA_LF_Trunking_System_Rail", "T3_Trunking system L=4500 mm"], "Licross Tragschiene L=3000 mm weiß 51TR1FE  Durchverdrahtung 14 x 2,5 mm²": ["TSLA_LF_Trunking_System_Rail", "T2_Trunking system L=3000 mm"], "Licross Tragschiene L=1500 mm weiß 51TR1CE  Durchverdrahtung 14 x 2,5 mm²":
 			["TSLA_LF_Trunking_System_Rail", "T1_Trunking system L=1500 mm"]
 	},
