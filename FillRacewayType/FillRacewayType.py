@@ -11,6 +11,8 @@ import System
 from System import Array
 from System.Collections.Generic import *
 
+import toolsrvt
+
 # ================ Revit imports
 clr.AddReference('RevitAPI')
 import Autodesk
@@ -24,69 +26,15 @@ from RevitServices.Transactions import TransactionManager
 import itertools
 from itertools import chain
 
+# ================ Python imports
+from System import Array
+from System.Collections.Generic import *
+from importlib import reload
 
-def get_parval(elem, name):
-	# type: (FamilyInstance, str) -> any
-	"""Get parametr value
-
-	args:
-		elem - family instance or type
-		name - parameter name
-	return:
-		value - parameter value
-	"""
-
-	value = None
-	# custom parameter
-	param = elem.LookupParameter(name)
-	# check is it a BuiltIn parameter if not found
-	if not param:
-		param = elem.get_Parameter(get_bip(name))
-
-	if param:
-		# get paremeter Value if found
-		storeType = param.StorageType
-		# value = storeType
-		if storeType == StorageType.String:
-			value = param.AsString()
-		elif storeType == StorageType.Integer:
-			value = param.AsDouble()
-		elif storeType == StorageType.Double:
-			value = param.AsDouble()
-		elif storeType == StorageType.ElementId:
-			value: ElementId = param.AsElementId()
-
-	return value
-
-
-def get_bip(paramName):
-	builtInParams = [i for i in System.Enum.GetNames(BuiltInParameter)]
-	param = None
-	for i, i_name in enumerate(builtInParams):
-		if i_name == paramName:
-			param = System.Enum.GetValues(BuiltInParameter)[i]
-			break
-	return param
-
-
-def setup_param_value(elem, name, pValue):
-
-	# check element staus
-	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
-
-	if elem_status == CheckoutStatus.OwnedByOtherUser:
-		return None
-
-	# custom parameter
-	param = elem.LookupParameter(name)
-	# check is it a BuiltIn parameter if not found
-	if not param:
-		param = elem.get_Parameter(get_bip(name))
-	if param:
-		param.Set(pValue)
-
-	return elem
-
+# ================ local imports
+import toolsrvt
+reload(toolsrvt)
+from toolsrvt import *
 
 def get_first_elem_of_system(_el_sys):
 	"""Get first family instances of electrical system
