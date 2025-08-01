@@ -17,8 +17,18 @@
 	},
 
 	"CELL_POCS":{
+		"ELECTRICAL_RCPT_IP44 - 1":
+			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx1"],
+		"ELECTRICAL_RCPT_IP44 - 4":
+			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx4"],
 		"ELECTRICAL_RCPT_CEE-3PH+N+PE - 16A":
-			["TSLA_EF_Socket_CEE_Wall", "IP44_16A_400V"]
+			["TSLA_EF_Socket_CEE_Wall", "IP44_16A_400V"],
+		"ELECTRICAL_RCPT_CEE-3PH+N+PE - 32A":
+			["TSLA_EF_Socket_CEE_Wall", "IP44_32A_400V"]
+	},
+
+	"Emergency Light_E02b":{
+		"E02b": ["TSLA_LF_E02a_Trunking_System", "E02a (289 lm, 3.5 W, M023+S2 lens, IP20)"]
 	},
 
 	"Hangingbox_HB01":{
@@ -33,14 +43,39 @@
 		"3x230V/16A":["TSLA_EF_HB03", "HB03"]
 	},
 
+	"L01l_Siteco Licros IP50 trunking_SI": {
+		"--- (1 x LED, 14250 lm, 86.0999984741211 W, 4000K)":
+			["TSLA_LF_L01g_l_Surface_Mounting_Trunking", "L01l (4520 lm, 28 W, 4000K, L=1500mm)"]
+	},
+
 	"L01h_Siteco Licros IP50":{
 		"--- (1 x LED, 9080 lm, 56.2000007629395 W, 4000K)":
 			["TSLA_LF_L01b_d_f_Surface_Mounting_Single", "L01b (13360 lm, 86 W, 4000K, L=1500mm)"]
+	},
+
+	"L01i_Siteco Licros IP50 single_SI": {
+		"--- (1 x LED, 9140 lm, 56.2000007629395 W, 4000K)":
+		["TSLA_LF_L01i_Surface_Mounting_Trunking", "L01i (9140 lm, 56 W, 4000K, L=1500mm)"]
+	},
+
+	"L02 Highbay 11 LED33150-840-SI":{
+		"--- (1 x LED, 33150 lm, 189.600006103516 W, 4000K)":
+		["TSLA_LF_L02_a_Highbay", "L02 (33150 lm, 190 W, 4000K, Highbay11 2x 2x LED)"]
+	},
+
+	"L02a Highbay 11 LED32370-840":{
+		"--- (1 x LED, 33150 lm, 189.600006103516 W, 4000K)":
+		["TSLA_LF_L02_a_Highbay", "L02a (32370 lm, 190 W, 4000K, Highbay11 2x 2x LED)"]
 	},
 	
 	"L09 51FB10DP460A_SI":{
 		"--- (1 x LED, 6020 lm, 45.2999992370605 W, 4000K)":
 			["TSLA_LF_L09_Suspended_Mounting", "L09 (6060 lm, 45 W, 4000K, L=1590mm)"]
+	},
+
+	"L14_Siteco_Licross IP50":{
+		"--- (1 x LED, 6250 lm, 52.5 W, 4000K)":
+		["TSLA_LF_L14_Recessed_Mounting_Trunking", "L14 (6520 lm, 48 W, 4000K, L=1500mm)"]
 	},
 
 	"Motion and Occupancy Sensor_SI":{
@@ -74,6 +109,7 @@
 		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx2"]
 	},
 
+
 	"RCPT_5xReceptacle 230V_16A_IP20_surface mounted": {
 		"5x - Gowning room": ["TSLA_EF_Socket_1P_Surface_Vertical_Wall", "IP44_230Vx5"]
 	},
@@ -86,6 +122,26 @@
 		"2x230V/16A + 1x400V/16A": ["TSLA_EF_WB01", "WB01"]
 	},
 
+	"Trunking system Siteco_Licross":{
+		"T3_Licross Tragschiene L=4500 mm schwarz 51TR3J7  Durchverdrahtung 7 x 2,5 mm²":
+			["TSLA_LF_Trunking_System_Rail", "T3_Trunking system L=4500 mm"],
+
+		"T2_Licross Tragschiene L=3000 mm schwarz 51TR3F7  Durchverdrahtung 7 x 2,5 mm²":
+			["TSLA_LF_Trunking_System_Rail", "T2_Trunking system L=3000 mm"],
+
+		"T1_Licross Tragschiene L=1500 mm schwarz 51TR3C7  Durchverdrahtung 7 x 2,5 mm²":
+			["TSLA_LF_Trunking_System_Rail", "T1_Trunking system L=1500 mm"]
+	},
+
+	"Trunking system Siteco_Licross out-feed module weiß":{
+		"Licross® Ausspeisemodul L=450 mm leuchtenweiß  Buchse 14polig   59TP1FTE":
+			["TSLA_LF_Trunking_System_Module", "Feed-out_Module L=450 mm"]
+	},
+
+	"Trunking system Siteco_Licross in-feed module weiß":{
+		"Licross® Einspeismodul L=450 mm leuchtenweiß  Buchse 14polig   59TP1FNE":
+			["TSLA_LF_Trunking_System_Module", "Feed-in_Module L=450 mm"]
+	},
 	"Wallbox_WB02":{
 		"2x230V/16A + 1x400V/16A + 1x400V/32A": ["TSLA_EF_WB02", "WB02"]
 	},
