@@ -106,7 +106,8 @@
 	},
 
 	"RCPT_Double Receptacle 230V_16A_IP44_surface mounted":{
-		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx2"]
+		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx2"],
+		"Regular-Single": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx1"]
 	},
 
 
@@ -116,6 +117,14 @@
 
 	"TELE_Access_Point_Wall Mounted_JEG_M":{
 		"Access Point Wall Mounted": ["TSLA_DD_WiFi_Wall", "WiFi Access point wall"]
+	},
+
+	"TELE_Outlet_CU_1-2_Security_JEG_M":{
+		"Outlet CU 2 Ports (1 occupied), SECURITY":["TSLA_DD_DirectConnection", "DATA_S"]
+	},
+
+	"TELE_Outlet_CU_1-2_JEG_M":{
+		"Outlet CU 2 Ports (1 occupied)- WLAN (wall)":["TSLA_DD_Socket_Surface_Wall_W", "IP20_RJ45x1"]
 	},
 
 	"Wallbox_WB01":{
