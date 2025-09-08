@@ -82,6 +82,16 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 			rvt_level_out = "1"
 		else:
 			raise ValueError("Wrong level name")
+
+	elif "BER-GF-SITE-BR" in doc_titel:
+		# for DU only - 1M and 2F are the same
+		if "1F FFL" in rvt_level_str:
+			rvt_level_out = "1"
+		elif "RF" in rvt_level_str:
+			rvt_level_out = "2"
+		else:
+			raise ValueError("Wrong level name")
+
 	else:
 		raise ValueError("Model not found. Add level settings for the model")
 
