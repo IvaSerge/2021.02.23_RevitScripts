@@ -131,6 +131,12 @@
 		"2x230V/16A + 1x400V/16A": ["TSLA_EF_WB01", "WB01"]
 	},
 
+	"TSLA_ElecFIX_default":{
+		"230V": ["TSLA_EF_DirectConnection", "230V"],
+		"400V": ["TSLA_EF_DirectConnection", "400V"]
+		
+	},
+
 	"Trunking system Siteco_Licross":{
 		"T3_Licross Tragschiene L=4500 mm schwarz 51TR3J7  Durchverdrahtung 7 x 2,5 mm²":
 			["TSLA_LF_Trunking_System_Rail", "T3_Trunking system L=4500 mm"],
