@@ -67,15 +67,25 @@
 		"--- (1 x LED, 33150 lm, 189.600006103516 W, 4000K)":
 		["TSLA_LF_L02_a_Highbay", "L02a (32370 lm, 190 W, 4000K, Highbay11 2x 2x LED)"]
 	},
-	
+
 	"L09 51FB10DP460A_SI":{
 		"--- (1 x LED, 6020 lm, 45.2999992370605 W, 4000K)":
 			["TSLA_LF_L09_Suspended_Mounting", "L09 (6060 lm, 45 W, 4000K, L=1590mm)"]
 	},
 
+	"L12_Ex-proof_SI":{
+		"eLLK_92_LED_800A 57000k":
+			["TSLA_LF_L12_EX-proof_Suspended_Mounting", "L12 (5350 lm, 57 W, 4000K, L=1360mm)"]
+	},
+
 	"L14_Siteco_Licross IP50":{
 		"--- (1 x LED, 6250 lm, 52.5 W, 4000K)":
 		["TSLA_LF_L14_Recessed_Mounting_Trunking", "L14 (6520 lm, 48 W, 4000K, L=1500mm)"]
+	},
+
+	"L42_Highbay31-S":{
+		"Highbay 31-S (1 x LED, 20000 lm, 134 W, 4000K)":
+		["TSLA_LF_L42_Highbay31s", "L42 (20000 lm, 134 W, 4000K, Highbay31s 1x LED)"]
 	},
 
 	"Motion and Occupancy Sensor_SI":{
