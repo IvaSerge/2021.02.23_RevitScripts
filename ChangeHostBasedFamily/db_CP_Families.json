@@ -133,7 +133,6 @@
 		"5x - Gowning room": ["TSLA_EF_Socket_1P_Surface_Vertical_Wall", "IP44_230Vx5"]
 	},
 
-
 	"TELE_Access_Point_Wall Mounted_JEG_M":{
 		"Access Point Wall Mounted": ["TSLA_DD_WiFi_Wall", "WiFi Access point wall"]
 	},
