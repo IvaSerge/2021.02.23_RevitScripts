@@ -63,6 +63,11 @@
 		["TSLA_LF_L02_a_Highbay", "L02 (33150 lm, 190 W, 4000K, Highbay11 2x 2x LED)"]
 	},
 
+	"L03_pALADIO 54 pRISM-SI":{
+		"pRISM pALADIO":
+		["TSLA_LF_L03.1_Suspended_Mounting", "L03.1 (2140 lm, 20 W, 4000K, 1200x54mm)"]
+	},
+
 	"L02a Highbay 11 LED32370-840":{
 		"--- (1 x LED, 33150 lm, 189.600006103516 W, 4000K)":
 		["TSLA_LF_L02_a_Highbay", "L02a (32370 lm, 190 W, 4000K, Highbay11 2x 2x LED)"]
@@ -120,10 +125,14 @@
 		"Regular-Single": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx1"]
 	},
 
+	"Standard Emergency Light_rev1": {
+		"Pendant - Forward Two Sided_Reccessed_IP40": ["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Forward TwoSide (5.5 W, Display 2000/G7, IP41)"]
+	},
 
 	"RCPT_5xReceptacle 230V_16A_IP20_surface mounted": {
 		"5x - Gowning room": ["TSLA_EF_Socket_1P_Surface_Vertical_Wall", "IP44_230Vx5"]
 	},
+
 
 	"TELE_Access_Point_Wall Mounted_JEG_M":{
 		"Access Point Wall Mounted": ["TSLA_DD_WiFi_Wall", "WiFi Access point wall"]
