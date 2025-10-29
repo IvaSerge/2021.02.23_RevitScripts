@@ -53,12 +53,14 @@ class Diagramm():
 	# hard coded parameters
 	circuits_param_to_set = ["RBS_ELEC_CIRCUIT_FRAME_PARAM"]
 	panel_params_to_set = [
-		"_Breaker_Type"
-		"_IR(LTPU)", "_tr(LTD)",
-		"_Isd(STPU)", "_tsd(STD)",
+		"_Breaker_Type",
+		"_IR(LTPU)", 
+		"_tr(LTD)",
+		"_Isd(STPU)",
+		"_tsd(STD)",
 		"_Ii(INST)",
-		"_Ig(GFPU)", "_tg(GFD)",
-		"RBS_ELEC_CIRCUIT_FRAME_PARAM"]
+		"_Ig(GFPU)",
+		"_tg(GFD)"]
 
 	header_point = [-0.919769759118699, 1.86351706036745, 0]
 	body_point = [-0.916488919223686, 1.63683154412002, 0]
@@ -217,6 +219,7 @@ class Diagramm():
 		# circuit number
 		circuits_main_number = circuits_main.CircuitNumber
 		self.params.append(["RBS_ELEC_CIRCUIT_NUMBER", circuits_main_number])
+		self.test = self.params
 
 	@classmethod
 	def get_body_info(cls, sheet_obj, panel_inst):

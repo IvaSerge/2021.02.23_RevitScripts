@@ -59,15 +59,15 @@ Diagramm.set_diag_types(doc)
 
 # ================ IN DATA
 reload_obj = IN[1]  # type: ignore
-# update_all
 update_all = IN[2]  # type: ignore
 
 if not update_all:
 	# get sheet
 	obj_on_sheet = UnwrapElement(IN[3])  # type: ignore
 	sheet_rvt = doc.GetElement(obj_on_sheet.OwnerViewId)
+
 	# get panel
-	panel_inst = toolsrvt.unwrap(IN[4])  # type: ignore
+	panel_inst = toolsrvt.unwrap(IN[4])[0]  # type: ignore
 	pairs_list.append([panel_inst, sheet_rvt])
 
 else:
