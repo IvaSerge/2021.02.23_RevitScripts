@@ -14,9 +14,6 @@ clr.AddReference('RevitAPI')
 import Autodesk
 from Autodesk.Revit.DB import *
 
-clr.AddReference('RevitAPIUI')
-from Autodesk.Revit.UI import *
-
 clr.AddReference("RevitServices")
 import RevitServices
 from RevitServices.Persistence import DocumentManager
@@ -41,37 +38,49 @@ from toolsrvt import *
 import csvreader
 reload(csvreader)
 
+import circuit_breaker
+reload(circuit_breaker)
+from circuit_breaker import CircuitBreaker
+
 
 # ================ GLOBAL VARIABLES
 doc = DocumentManager.Instance.CurrentDBDocument
-uidoc = DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument
-uiapp = DocumentManager.Instance.CurrentUIApplication
-app = uiapp.Application
-view = doc.ActiveView
 
 reload_IN = IN[1]  # type: ignore
-csv_breakers = dir_path + "\\" + IN[2]  # type: ignore
+csv_path = dir_path + "\\" + IN[2]  # type: ignore
 outlist = list()
+CircuitBreaker.doc = doc
 
 # ================ get info for circuit breaker settings
-cbreakers_list = csvreader.get_breakers_info(csv_breakers)
-cb_paramts_to_set = csvreader.csv_to_rvt_elements(cbreakers_list, doc)
+settings_from_csv = csvreader.get_info_from_csv(csv_path)
+
+breakers_list = list()
+error_list = []
+for breaker_settings in settings_from_csv:
+	try:
+		circui_breaker = CircuitBreaker(breaker_settings)
+		breakers_list.append(circui_breaker)
+	except Exception as e:
+		error_sting = str(e)
+		error_list.append(error_sting)
+
+# cb_paramts_to_set = csvreader.csv_to_rvt_elements(cbreakers_list, doc)
 
 
-# =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
+# # =========Start transaction
+# TransactionManager.Instance.EnsureInTransaction(doc)
 
-# ================ set parameters
-for i in cb_paramts_to_set:
-	if not i:
-		continue
-	elems = list(i)
-	elem_rvt = elems[0]
-	p_name = elems[1]
-	p_value = elems[2]
-	toolsrvt.setup_param_value(elem_rvt, p_name, p_value)
+# # ================ set parameters
+# for i in cb_paramts_to_set:
+# 	if not i:
+# 		continue
+# 	elems = list(i)
+# 	elem_rvt = elems[0]
+# 	p_name = elems[1]
+# 	p_value = elems[2]
+# 	toolsrvt.setup_param_value(elem_rvt, p_name, p_value)
 
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
+# # =========End transaction
+# TransactionManager.Instance.TransactionTaskDone()
 
-OUT = cbreakers_list
+OUT = [i.revit_element for i in breakers_list], error_list

@@ -51,14 +51,14 @@ def process_list(_func, _list):
 	# type: (FunctionType, list) -> any
 	return map(
 		lambda x: process_list(_func, x)
-		if type(x) == list else _func(x), _list)
+		if x is list else _func(x), _list)
 
 
 def unwrap(_item):
 	if isinstance(_item, list):
 		return process_list(unwrap, _item)
 	else:
-		return UnwrapElement(_item)  # type: ignore
+		return [UnwrapElement(_item)]  # type: ignore
 
 
 def flatten_list(data):
@@ -98,20 +98,25 @@ def get_parval(elem, name):
 	if not param:
 		param = elem.get_Parameter(get_bip(name))
 
-	# get paremeter Value if found
-	try:
+	if param:
+		# check if parameter has value
+		if not param.HasValue:
+			return None
+		# get paremeter Value if found
 		storeType = param.StorageType
 		# value = storeType
 		if storeType == StorageType.String:
 			value = param.AsString()
 		elif storeType == StorageType.Integer:
-			value = param.AsDouble()
+			value = param.AsInteger()
 		elif storeType == StorageType.Double:
 			value = param.AsDouble()
 		elif storeType == StorageType.ElementId:
-			value = param.AsValueString()
-	except:
-		pass
+			value: ElementId = param.AsElementId()
+	else:
+		error_string = "No parameter found: " + name
+		raise Exception(error_string)
+
 	return value
 
 
@@ -122,8 +127,8 @@ def get_bip(paramName):
 def setup_param_value(elem, name, pValue):
 
 	# check element staus
-	doc = elem.Document
-	elem_status = WorksharingUtils.GetCheckoutStatus(doc, elem.Id)
+	elem_status = WorksharingUtils.GetCheckoutStatus(elem.Document, elem.Id)
+
 	if elem_status == CheckoutStatus.OwnedByOtherUser:
 		return None
 
@@ -132,55 +137,18 @@ def setup_param_value(elem, name, pValue):
 	# check is it a BuiltIn parameter if not found
 	if not param:
 		param = elem.get_Parameter(get_bip(name))
-	param.Set(pValue)
-	return param
+
+	if param:
+		param.Set(pValue)
+	else:
+		error_string = "No parameter found: " + name
+		raise Exception(error_string)
+	return elem
 
 
 def category_by_bic_name(doc, _bicString):
 	bic_value = System.Enum.Parse(BuiltInCategory, _bicString)
 	return Autodesk.Revit.DB.Category.GetCategory(doc, bic_value)
-
-
-# def param_by_cat(_bic, _name):
-# 	# type: (Autodesk.Revit.DB.BuiltiInCategory, str) -> Autodesk.Revit.DB.Parameter
-# 	"""Get parametr in
-
-# 	args:
-# 		_bic (BuiltiInCategory.OST_xxx): category
-# 		_name (str): parameter name
-# 	return:
-# 		param (Autodesk.Revit.DB.Parameter) - parameter
-# 	"""
-# 	# check Type parameter
-# 	elem = FilteredElementCollector(doc).\
-# 		OfCategory(_bic).\
-# 		WhereElementIsElementType().\
-# 		FirstElement()
-# 	param = elem.LookupParameter(_name)
-# 	if param:
-# 		return param
-
-# 	# check instance parameter
-# 	# ATTENTION! instance is first in!
-# 	# Be sure that all instances has the parameter.
-# 	elem = FilteredElementCollector(doc).\
-# 		OfCategory(_bic).\
-# 		WhereElementIsNotElementType().\
-# 		FirstElement()
-# 	param = elem.LookupParameter(_name)
-# 	if param:
-# 		return param
-
-# 	# Not found
-# 	return None
-
-
-# 	if param:
-# 		try:
-# 			param.Set(pValue)
-# 		except:
-# 			pass
-# 	return elem
 
 
 def inst_by_cat_strparamvalue(_doc, _bic, _bip, _val, _isType):
@@ -197,7 +165,7 @@ def inst_by_cat_strparamvalue(_doc, _bic, _bip, _val, _isType):
 		list()[Autodesk.Revit.DB.FamilySymbol]
 	"""
 	if _isType:
-		fnrvStr = FilterStringContains()
+		fnrvStr = FilterStringEquals()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
 		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
@@ -207,7 +175,7 @@ def inst_by_cat_strparamvalue(_doc, _bic, _bip, _val, _isType):
 			WherePasses(filter).\
 			ToElements()
 	else:
-		fnrvStr = FilterStringContains()
+		fnrvStr = FilterStringEquals()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
 		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
@@ -253,14 +221,56 @@ def type_by_bic_fam_type(_doc, _bic, _fnam, _tnam):
 	return elem
 
 
+def inst_by_multicategory_param_val(_doc, _bic_list, _param_name, _param_value):
+	"""Get Family Instances by category filters, and string parameter values
+
+	args:
+		_doc: active document
+		_bic_list[str]: list of Build In Categories names
+		_param_name(str): parameter name to filter
+		_param_value: parameter
+
+	return:
+		Autodesk.Revit.DB.FamilySymbol
+	"""
+
+	# =============  parameter filter
+	parameter_id = [
+		i for i in
+		FilteredElementCollector(_doc).OfClass(ParameterElement)
+		if i.Name == _param_name]
+	if parameter_id:
+		parameter_id = parameter_id[0].Id
+	else:
+		error_str = "Parameter not found"
+		raise ValueError(error_str)
+
+	parameter_value_provider = ParameterValueProvider(parameter_id)
+	parameter_str_rule = FilterStringRule(
+		parameter_value_provider,
+		FilterStringEquals(),
+		_param_value)
+
+	parameter_filter = ElementParameterFilter(parameter_str_rule)
+
+	# =============  category filter
+	bic_ids = List[ElementId]([
+		category_by_bic_name(_doc, i).Id
+		for i in _bic_list])
+
+	bic_filter = ElementMulticategoryFilter(bic_ids)
+
+	main_filter = LogicalAndFilter(bic_filter, parameter_filter)
+	elems = FilteredElementCollector(_doc).WherePasses(main_filter).ToElements()
+	return elems
+
+
 def mm_to_ft(mm):
-	return 3.2808 * mm / 1000
+	return mm * 0.00328084
 
 
-# def ft_to_mm(ft):
-# 	mm = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(
-# 		ft, Autodesk.Revit.DB.DisplayUnitType.DUT_MILLIMETERS)
-# 	return mm
+def ft_to_mm(ft):
+	return ft * 304.8
 
 
 def elsys_by_brd(_brd):
