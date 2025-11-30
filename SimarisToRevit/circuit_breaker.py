@@ -98,6 +98,50 @@ class CircuitBreaker:
 		raise ValueError(f"Circuit '{circuit_number}' not found in panel '{panel_name}'")
 
 
+	@staticmethod
+	def _get_trip_by_catalogue(trip_value):
+		breaker_trips = {
+			"3WL13634NG611AA2": "ETU76B",  # 5000A in substation
+			"3WL12403NG611AA2": "ETU76B",  # 4000A in substation
+			"3WL12323NG611AA2": "ETU76B",  # 3200A in substation
+			"3WL11163NG611AA2": "ETU76B",  # 1600A in substation
+			"3WL11163CB611AA2": "ETU25B",  # 1600A in distribution panel
+			"3WA12204AF010AA0": "ETU600",  # 2000A
+			"3VA27126AC010AA0": "ETU350",  # 1250A in tap-off Unit
+			"3VA25106JP320AA0": "ETU550",  # 1000A
+			"3VA24636KP320AA0": "ETU850",  # 630A
+			"3VA24636HN320AA0": "ETU350",  # 630A in tap-off Unit
+			"3VA23406KP320AA0": "ETU850",  # 400A
+			"3VA23406HN320AA0": "ETU350",  # 400A in tap-off Unit
+			"3VA22256KP320AA0": "ETU850",  # 250A
+			"3VA22256HN320AA0": "ETU350",  # 250A in tap-off Unit
+			"3VA21166KP320AA0": "ETU850",  # 160A
+			"3VA21166HN320AA0": "ETU350",  # 160A in tap-off Unit 
+			"3VA21105HN320AA0": "ETU350",  # 100As
+			"Micrologic 6.0X": "Micrologic 6.0X",  # 1000A for Shnieder MCCB
+		}
+
+		breaker_trip = breaker_trips.get(trip_value)
+		if not breaker_trip:
+			breaker_trip = "-"
+
+		return breaker_trip
+	
+	@staticmethod
+	def get_frame_parameter(description, current_value):
+		return None
+
+	@staticmethod
+	def _get_parameters_to_set_(settings):
+		params_to_set = list()
+
+		# convert Catalog reference to trip type
+		breaker_cataluge = settings.get("Catalog reference")
+		breaker_trip =CircuitBreaker._get_trip_by_catalogue(breaker_cataluge)
+		params_to_set.append(["_Breaker_Type", breaker_trip])
+
+		# Convert falue of In to inernal Revit units for Frame
+		return params_to_set
 
 	def __init__(self, breaker_settings):
 		"""
@@ -114,4 +158,5 @@ class CircuitBreaker:
 			raise ValueError("Missing 'Designation' in breaker settings")
 
 		self.revit_element = CircuitBreaker._get_revit_element_by_description_(designation)
+		self.params_list = CircuitBreaker._get_parameters_to_set_(settings)
 
