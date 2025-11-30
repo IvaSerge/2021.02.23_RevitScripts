@@ -64,23 +64,14 @@ for breaker_settings in settings_from_csv:
 		error_sting = str(e)
 		error_list.append(error_sting)
 
-# cb_paramts_to_set = csvreader.csv_to_rvt_elements(cbreakers_list, doc)
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
+# ================ set parameters
+for breaker in breakers_list:
+	breaker.set_rvt_parameters()
 
-# # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
-# # ================ set parameters
-# for i in cb_paramts_to_set:
-# 	if not i:
-# 		continue
-# 	elems = list(i)
-# 	elem_rvt = elems[0]
-# 	p_name = elems[1]
-# 	p_value = elems[2]
-# 	toolsrvt.setup_param_value(elem_rvt, p_name, p_value)
-
-# # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
-
-OUT = [i.revit_element for i in breakers_list], error_list
+OUT = [i.params_list for i in breakers_list], error_list

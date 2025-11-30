@@ -127,9 +127,21 @@ class CircuitBreaker:
 
 		return breaker_trip
 	
-	@staticmethod
-	def get_frame_parameter(description, current_value):
-		return None
+	@classmethod
+	def _get_frame_parameter(cls, settings):
+		doc = cls.doc
+		description: str = settings.get("Designation")
+		nominal_current = settings.get("In [A]")
+		display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Current).GetUnitTypeId()
+		rvt_value = Autodesk.Revit.DB.UnitUtils.ConvertToInternalUnits(float(nominal_current), display_units)
+
+		if "[0]" in description:
+			# Frame parameter for electical panel
+			param_name = "RBS_ELEC_PANEL_MCB_RATING_PARAM"
+		else:
+			param_name = "RBS_ELEC_CIRCUIT_FRAME_PARAM"
+
+		return [param_name, rvt_value]
 
 	@staticmethod
 	def _get_parameters_to_set_(settings):
@@ -137,11 +149,46 @@ class CircuitBreaker:
 
 		# convert Catalog reference to trip type
 		breaker_cataluge = settings.get("Catalog reference")
-		breaker_trip =CircuitBreaker._get_trip_by_catalogue(breaker_cataluge)
+		breaker_trip = CircuitBreaker._get_trip_by_catalogue(breaker_cataluge)
 		params_to_set.append(["_Breaker_Type", breaker_trip])
 
 		# Convert falue of In to inernal Revit units for Frame
+		frame_param_list = CircuitBreaker._get_frame_parameter(settings)
+		params_to_set.append(frame_param_list)
+
+		# Get other parameters string values
+		str_values_list = CircuitBreaker._get_str_parameters_list(settings)
+		params_to_set.extend(str_values_list)
+
 		return params_to_set
+	
+	@staticmethod
+	def _get_str_parameters_list(settings):
+		parameters_list = []
+
+		Ir_value = settings.get("IR [A]")
+		parameters_list.append(["_IR(LTPU)", Ir_value])
+
+		tr_value = settings.get("tR [s]")
+		parameters_list.append(["_tr(LTD)", tr_value])
+
+		Isd_value = settings.get("Isd [A] undirected")
+		parameters_list.append(["_Isd(STPU)", Isd_value])
+
+		tsd_value = settings.get("tsd [s] undirected")
+		parameters_list.append(["_tsd(STD)", tsd_value])
+
+		Ii_value = settings.get("Ii [A]")
+		parameters_list.append(["_Ii(INST)", Ii_value])
+
+		Ig_value = settings.get("Ig [A]")
+		parameters_list.append(["_Ig(GFPU)", Ig_value])
+
+		tg_value = settings.get("tg [s]")
+		parameters_list.append(["_tg(GFD)", tg_value])
+
+		return parameters_list
+
 
 	def __init__(self, breaker_settings):
 		"""
@@ -160,3 +207,11 @@ class CircuitBreaker:
 		self.revit_element = CircuitBreaker._get_revit_element_by_description_(designation)
 		self.params_list = CircuitBreaker._get_parameters_to_set_(settings)
 
+	def set_rvt_parameters(this):
+		rvt_element = this.revit_element
+		params_list = this.params_list
+
+		for parameter in params_list:
+			param_name = parameter[0]
+			param_value = parameter[1]
+			toolsrvt.setup_param_value(rvt_element, param_name, param_value)
