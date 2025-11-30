@@ -165,7 +165,7 @@ def inst_by_cat_strparamvalue(_doc, _bic, _bip, _val, _isType):
 		list()[Autodesk.Revit.DB.FamilySymbol]
 	"""
 	if _isType:
-		fnrvStr = FilterStringContains()
+		fnrvStr = FilterStringEquals()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
 		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
@@ -175,7 +175,7 @@ def inst_by_cat_strparamvalue(_doc, _bic, _bip, _val, _isType):
 			WherePasses(filter).\
 			ToElements()
 	else:
-		fnrvStr = FilterStringContains()
+		fnrvStr = FilterStringEquals()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
 		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
