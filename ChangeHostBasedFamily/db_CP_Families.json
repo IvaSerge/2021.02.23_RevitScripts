@@ -31,6 +31,10 @@
 		"E02b": ["TSLA_LF_E02a_Trunking_System", "E02a (289 lm, 3.5 W, M023+S2 lens, IP20)"]
 	},
 
+	"GND_Isolated Bar_FB_CH_I":{
+		"GND_BAR_STANDARD": ["TSLA_LP_InsolatedBar", "X2_GND_Busbar_Standart"]
+	},
+
 	"Hangingbox_HB01":{
 		"3x230V/16A + 1x400V/16A + 1x400V/32A": ["TSLA_EF_HB01", "HB01"]
 	},
@@ -126,7 +130,8 @@
 	},
 
 	"Standard Emergency Light_rev1": {
-		"Pendant - Forward Two Sided_Reccessed_IP40": ["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Forward TwoSide (5.5 W, Display 2000/G7, IP41)"]
+		"Pendant - Forward Two Sided_Reccessed_IP40": ["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Forward TwoSide (5.5 W, Display 2000/G7, IP41)"],
+		"Wall Mounted - Forward_IP40": ["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Forward (5.5 W, Display 2000/G7, IP41)"]
 	},
 
 	"RCPT_5xReceptacle 230V_16A_IP20_surface mounted": {

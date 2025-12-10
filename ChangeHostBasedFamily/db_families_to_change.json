@@ -81,6 +81,12 @@
 			["TSLA_LF_L36_Ceiling_Mounting", "L36 - IP54"]
 	},
 
+
+	"TSLA_EF_Socket_1P_Surface_Horizontal_Wall":{
+		"IP20_230Vx1":
+			["TSLA_EF_Socket_1P_Flush_Horizontal_Wall", "Trunk_IP20_230Vx1"]
+	},
+
 	"Trunking system Siteco_Licross out-feed module weiß":{
 		"Licross® Ausspeisemodul L=450 mm leuchtenweiß  Buchse 14polig   59TP1FTE":
 			["TSLA_LF_Trunking_System_Module", "Feed-out_Module L=450 mm"]
