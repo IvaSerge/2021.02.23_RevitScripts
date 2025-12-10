@@ -87,7 +87,8 @@ board_ref = uidoc.Selection.PickObject(
 board_to_convert = doc.GetElement(board_ref.ElementId)
 
 # read JSON
-json_file = dir_path + "\\" + "db_panels.json"
+# json_file = dir_path + "\\" + "db_panels.json"
+json_file = dir_path + "\\" + "db_panels_TEC.json"
 with open(json_file, "r") as f_db:
 		data = json.load(f_db)
 
