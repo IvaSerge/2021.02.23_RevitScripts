@@ -450,7 +450,7 @@
 				["RBS_ELEC_SHORT_CIRCUIT_RATING", "50kA"],
 				["RBS_ELEC_CIRCUIT_PREFIX", ""],
 				["RBS_ELEC_CIRCUIT_NAMING", -7000011],
-				["RBS_ELEC_MAX_POLE_BREAKERS", 234]
+				["RBS_ELEC_MAX_POLE_BREAKERS", 324]
 			]
 		},
 
@@ -483,7 +483,7 @@
 			]
 		},
 
-			"250_1": {
+			"250_3": {
 			"spare_parameter_values": [
 				["C63 / F123", 3, 63],
 				["C63 / F456", 3, 63],
@@ -595,6 +595,5 @@
 				["RBS_ELEC_MAX_POLE_BREAKERS", 180]
 			]
 		}
-
 	}
 }
