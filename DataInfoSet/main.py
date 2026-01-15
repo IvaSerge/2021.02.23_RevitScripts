@@ -106,9 +106,19 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 		else:
 			raise ValueError("Wrong level name")
 
+	elif "EMEA-TEC" in doc_titel:
+		# Objects
+		if "EG" in rvt_level_str:
+			rvt_level_out = "1F"
+		elif "OG_+4.00m" in rvt_level_str:
+			rvt_level_out = "2F"
+		else:
+			raise ValueError("Wrong level name")
 
 	else:
-		raise ValueError("Model not found. Add level settings for the model")
+		error_text = f"Model not found. Add level settings for the model. Current doc is {doc_titel}"
+		print(error_text)
+		raise ValueError(error_text)
 
 	return rvt_level_out
 
@@ -145,7 +155,7 @@ app = uiapp.Application
 view = doc.ActiveView
 reload_var = IN[1]  # type: ignore
 rvt_elem = IN[2]  # type: ignore
-
+doc_titel = doc.Title
 
 # Element selection
 if rvt_elem:
@@ -175,20 +185,27 @@ for rvt_elem in elem_list:
 	# For TV clean grid name - Project specific change
 	if elem_grid.startswith("TV-"):
 		elem_grid = re.sub("-", "", elem_grid)
-	elem_level = get_level_name(rvt_elem)
-	elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
+		elem_level = get_level_name(rvt_elem)
+		elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
 
 	# For PTP clean grid name - Project specific change
-	if elem_grid.startswith("PTP-"):
+	elif elem_grid.startswith("PTP-"):
 		elem_grid = re.sub("PTP-", "", elem_grid)
-	elem_level = get_level_name(rvt_elem)
-	elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
+		elem_level = get_level_name(rvt_elem)
+		elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
 
 	# For NPI clean grid name - Project specific change
-	if elem_grid.startswith("NPI-"):
+	elif elem_grid.startswith("NPI-"):
 		elem_grid = re.sub("NPI-", "", elem_grid)
-	elem_level = get_level_name(rvt_elem)
-	elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
+		elem_level = get_level_name(rvt_elem)
+		elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
+	
+	elif "EMEA-TEC" in doc_titel:
+		# Change grid name 9'E to E9 and clean from ' if it is there
+		elem_grid = re.sub(r"(\d*)'?(\w*)", r"\2\1", elem_grid)
+		elem_grid = elem_grid
+		elem_level = get_level_name(rvt_elem)
+		elem_comments = toolsrvt.get_parval(rvt_elem, "ALL_MODEL_INSTANCE_COMMENTS")
 
 	params_to_set.append([rvt_elem, "TO Grid", elem_grid])
 	params_to_set.append([rvt_elem, "TO Level", elem_level])
