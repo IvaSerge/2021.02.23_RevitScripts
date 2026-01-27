@@ -96,6 +96,10 @@
 		["TSLA_LF_L14_Recessed_Mounting_Trunking", "L14 (6520 lm, 48 W, 4000K, L=1500mm)"]
 	},
 
+	"L30_Outside":{
+		"L30_Outside": ["TSLA_LF_L30_Wall_Mounting", "L30 (1075 lm, 15 W, 3000K, IP65)"]
+	},
+
 	"L42_Highbay31-S":{
 		"Highbay 31-S (1 x LED, 20000 lm, 134 W, 4000K)":
 		["TSLA_LF_L42_Highbay31s", "L42 (20000 lm, 134 W, 4000K, Highbay31s 1x LED)"]
