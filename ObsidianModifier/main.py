@@ -164,6 +164,7 @@ def clean_all_properties(file_path):
 	"""
 	Remove the entire YAML frontmatter block if the file starts with '---'.
 	Removes all lines from the first '---' up to and including the second '---'.
+	Additionally, removes any leading empty lines immediately after the frontmatter removal.
 	Preserves the rest of the file content.
 	"""
 	try:
@@ -180,6 +181,8 @@ def clean_all_properties(file_path):
 		frontmatter_end = -1
 		in_frontmatter = True  # Assume starts in frontmatter
 		for i, line in enumerate(lines):
+			if i == 0:
+				continue
 			if line.strip() == '---':
 				if in_frontmatter:
 					# First '---' already passed; this is the second
@@ -196,13 +199,21 @@ def clean_all_properties(file_path):
 			return  # No complete frontmatter to remove
 		
 		# Slice the content after the frontmatter
-		new_content = ''.join(lines[frontmatter_end:])
+		remaining_lines = lines[frontmatter_end:]
+		
+		# Remove leading empty lines from the remaining content
+		non_empty_start = 0
+		for i, line in enumerate(remaining_lines):
+			if line.strip():  # First non-empty line
+				non_empty_start = i
+				break
+		cleaned_remaining = ''.join(remaining_lines[non_empty_start:])
 		
 		# Only write if there was a change (i.e., frontmatter was present and removed)
-		if new_content != content:
+		if cleaned_remaining != content:
 			with open(file_path, 'w', encoding='utf-8') as f:
-				f.write(new_content)
-			print(f"Removed frontmatter from: {file_path}")
+				f.write(cleaned_remaining)
+			print(f"Removed frontmatter and leading empty lines from: {file_path}")
 		else:
 			print(f"No changes needed in: {file_path}")
 			
