@@ -26,6 +26,7 @@ def files_finder(obsidian_files_path):
 				md_files.append(os.path.join(root, file))
 	return md_files
 
+
 def tag_renamer(file_path, tag_name, new_tag):
 	"""
 	Using regex to replace occurrences of tag_name with new_tag in the file content.
@@ -58,6 +59,7 @@ def tag_renamer(file_path, tag_name, new_tag):
 			
 	except Exception as e:
 		print(f"Error processing {file_path}: {str(e)}")
+
 
 def tags_to_properties(file_path):
 	standard_properties_list = list()
@@ -146,6 +148,7 @@ def tags_to_properties(file_path):
 	except Exception as e:
 		print(f"Error processing {file_path}: {str(e)}")
 
+
 def sub_tags_in_file(file_path):
 	tags_list = []
 	try:
@@ -159,6 +162,7 @@ def sub_tags_in_file(file_path):
 	except Exception as e:
 		print(f"Error reading {file_path}: {str(e)}")
 	return tags_list
+
 
 def clean_all_properties(file_path):
 	"""
@@ -220,14 +224,172 @@ def clean_all_properties(file_path):
 	except Exception as e:
 		print(f"Error processing {file_path}: {str(e)}")
 
+def set_string_value_to_property(file_path, re_value, property_str):
+	try:
+		with open(file_path, 'r', encoding='utf-8') as f:
+			content = f.read()
+		
+		lines = content.splitlines(keepends=True)  # Preserve line endings
+		
+		# Step 1: Find the matching line in the body and extract value
+		pattern = re.compile(re_value)
+		matching_index = -1
+		captured_value = ""
+		for i, line in enumerate(lines):
+			match = pattern.match(line)
+			matching_index = i
+			if match:
+				captured_value = match.group(1).strip()
+				break
+		
+		if matching_index == -1 or not captured_value:
+			return 111 # No change needed
+		
+		# Step 2: Identify frontmatter boundaries
+		if lines[0].strip() != "---":
+			return 222
+
+		frontmatter_start = 0
+		frontmatter_end = len(lines)
+		in_frontmatter = False
+		for i, line in enumerate(lines):
+			if i == 0:
+				continue
+			if line.strip() == '---':
+				in_frontmatter = True
+				frontmatter_end = i + 1  # End after closing '---'
+				break
+
+		# Step 3: Find and update the property line in frontmatter
+		property_updated = False
+		for i in range(frontmatter_start + 1, frontmatter_end - 1):  # Skip '---' lines
+			if lines[i].strip() == property_str:
+				# Append value if not already present (simple check; assumes no existing value)
+				lines[i] = lines[i].rstrip() + f" {captured_value}" + '\n'
+				property_updated = True
+
+		if not property_updated:
+			print(f"Property line '{property}' not found in frontmatter of: {file_path}")
+			return
+		
+		# # Step 4: Remove the original matching line (ensure it's outside frontmatter)
+		# if frontmatter_end <= matching_index < len(lines):
+		# 	lines[matching_index] = ''  # Remove by emptying the line
+
+		# Step 5: Rejoin and clean up any resulting empty lines from removal (optional, but good practice)
+		new_lines = []
+		for line in lines:
+			if line.strip():  # Skip now-empty lines from removal
+				new_lines.append(line)
+			else:
+				# If empty, but preserve single empty lines if they were intentional; here we skip only the removed one
+				pass  # For simplicity, just skip the removed line; adjust if multiple empties need trimming
+		
+		new_content = ''.join(new_lines)
+		
+		# Only write if there was a chang
+		if new_content != content:
+			with open(file_path, 'w', encoding='utf-8') as f:
+				f.write(new_content)
+			print(f"Updated property '{property}' with value '{captured_value}' and removed source line in: {file_path}")
+		else:
+			print(f"No changes needed in: {file_path}")
+
+	except Exception as e:
+		print(f"Error processing {file_path}: {str(e)}")
+
+def daily_ask_properties(file_path):
+	# Get file name from the path
+	string_file_name = os.path.basename(file_path)
+	
+	# Using re to get date (\d{4}-\d{2}-\d{2}).
+	# File name example: DailyAsks_2025-01-13.md => 2025-01-13
+	match = re.search(r'\d{4}-\d{2}-\d{2}', string_file_name)
+	if not match:
+		raise ValueError(f"No date found in filename: {string_file_name}")
+	string_file_date = match.group(0)
+	
+	# Create list that needs to be inserted at file beginning
+	new_lines = []
+	new_lines.append("---")
+	new_lines.append(f"StartDate: {string_file_date}")
+	new_lines.append("tags: daily")
+	new_lines.append("---")
+
+	previous_next_links = get_links(file_path)
+	
+	if previous_next_links:
+		new_lines.append("")
+		new_lines.append(previous_next_links)
+	
+	# Read existing file content
+	with open(file_path, 'r', encoding='utf-8') as f:
+		existing_content = f.read()
+	
+	# Prepend new front matter and write back to file
+	front_matter = '\n'.join(new_lines) + '\n\n'
+	new_content = front_matter + existing_content
+	
+	with open(file_path, 'w', encoding='utf-8') as f:
+		f.write(new_content)
+	
+	print(f"Updated {file_path} with front matter for date {string_file_date}")
+
+def get_links(file_path):
+	# Get the directory of the file
+	folder_path = os.path.dirname(file_path)
+	
+	# Get all files in the folder as list (assuming .md files; adjust extension if needed)
+	all_files_in_current_folder = [f for f in os.listdir(folder_path) if f.endswith('.md')]
+	
+	# Check if there are files in the folder (more than one)
+	if len(all_files_in_current_folder) <= 1:
+		return None
+	
+	# Sort files by name in normal order a-z
+	all_files_in_current_folder.sort()
+	
+	# Get the index of the current file's basename
+	current_filename = os.path.basename(file_path)
+	if current_filename not in all_files_in_current_folder:
+		raise ValueError(f"File {current_filename} not found in folder {folder_path}")
+	current_index = all_files_in_current_folder.index(current_filename)
+	
+	# Determine previous and next files
+	previous_file = ""
+	next_file = ""
+	
+	if current_index == 0:
+		# First file in the folder
+		next_file = all_files_in_current_folder[current_index + 1]
+	elif current_index == len(all_files_in_current_folder) - 1:
+		# Last file in the folder
+		previous_file = all_files_in_current_folder[current_index - 1]
+	else:
+		# Any other file
+		previous_file = all_files_in_current_folder[current_index - 1]
+		next_file = all_files_in_current_folder[current_index + 1]
+	
+	# Generate links if files exist
+	previous_file_link = f"[[{previous_file} | <== {previous_file}]]" if previous_file else ""
+	next_file_link = f"  |  [[{next_file} | {next_file} ==>]]" if next_file else ""
+	
+	full_link = previous_file_link + next_file_link
+	return full_link
+
 # ================ Main Logic
 tag_name = "#VolodymirS"
 new_tag = "#DesignedBy/VolodymirS"
+re_value = r"^- Start date: (\d*-\d*-\d*)$"
+property = "StartDate:"
 all_files_in_folder = files_finder(obsidian_files_path)
 
 for md_file in all_files_in_folder:
 	# tag_renamer(md_file, tag_name, new_tag)
 	# tags_to_properties(md_file)
-	clean_all_properties(md_file)
+	# clean_all_properties(md_file)
+	# test_string = set_string_value_to_property(md_file, re_value, property)
+	daily_ask_properties(md_file)
 
-OUT = obsidian_files_path
+# OUT = obsidian_files_path
+# OUT = test_string
