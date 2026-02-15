@@ -123,7 +123,8 @@
 	},
 
 	"RCPT_Double Receptacle 230V_16A_IP20_surface mounted":{
-		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx2"]
+		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx2"],
+		"Regular-Single": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP20_230Vx1"]
 	},
 
 	"RCPT_Double Receptacle 230V_16A_IP44": {
@@ -135,6 +136,14 @@
 	"RCPT_Double Receptacle 230V_16A_IP44_surface mounted":{
 		"Regular-Double": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx2"],
 		"Regular-Single": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx1"]
+	},
+
+	"RCPT_3xReceptacle 230V_16A_IP20_surface mounted":{
+		"3x - Gowning room": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx4"]
+	},
+
+	"RCPT_4xReceptacle 230V_16A_IP20_surface mounted":{
+		"4x - Gowning room": ["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx4"]
 	},
 
 	"Standard Emergency Light_rev1": {
