@@ -60,6 +60,34 @@ def tag_renamer(file_path, tag_name, new_tag):
 	except Exception as e:
 		print(f"Error processing {file_path}: {str(e)}")
 
+def status_renamer(file_path, tag_name, new_tag):
+	"""
+	Using regex to replace occurrences of status.
+	Assumes status is like 'FooStatus:' and new_tag is like 'BarStatus:'.
+	"""
+	# Define the regex pattern: match #CP optionally followed by /subpath (no spaces or other #)
+	# Escape the prefix after # for safety, but in this case it's simple.
+	pattern = re.escape(tag_name) + r':\s*'
+
+	# Replacement: 
+	replacement = new_tag + ': '
+	
+	try:
+		with open(file_path, 'r', encoding='utf-8') as f:
+			content = f.read()
+		
+		new_content = re.sub(pattern, replacement, content)
+		
+		# Only write if there was a change
+		if new_content != content:
+			with open(file_path, 'w', encoding='utf-8') as f:
+				f.write(new_content)
+			print(f"Updated tags in: {file_path}")
+		else:
+			print(f"No changes needed in: {file_path}")
+			
+	except Exception as e:
+		print(f"Error processing {file_path}: {str(e)}")
 
 def tags_to_properties(file_path):
 	standard_properties_list = list()
@@ -84,7 +112,7 @@ def tags_to_properties(file_path):
 	standard_properties_list.append("  - Done")
 	standard_properties_list.append("  - Pending")
 	standard_properties_list.append("  - WorkInProgress")
-	standard_properties_list.append("StartDate:")
+	standard_properties_list.append("DateCreated:")
 	standard_properties_list.append("Responsible:")
 	standard_properties_list.append("tags:")
 	standard_properties_list.append("---")
@@ -94,7 +122,7 @@ def tags_to_properties(file_path):
 	keep_always_list.append("Area:")
 	keep_always_list.append("DesignedBy:")
 	keep_always_list.append("Status:")
-	keep_always_list.append("StartDate:")
+	keep_always_list.append("DateCreated:")
 	keep_always_list.append("Responsible:")
 	keep_always_list.append("tags:")
 
@@ -312,7 +340,7 @@ def daily_ask_properties(file_path):
 	# Create list that needs to be inserted at file beginning
 	new_lines = []
 	new_lines.append("---")
-	new_lines.append(f"StartDate: {string_file_date}")
+	new_lines.append(f"DateCreated: {string_file_date}")
 	new_lines.append("tags: daily")
 	new_lines.append("---")
 
@@ -381,15 +409,16 @@ def get_links(file_path):
 tag_name = "#VolodymirS"
 new_tag = "#DesignedBy/VolodymirS"
 re_value = r"^- Start date: (\d*-\d*-\d*)$"
-property = "StartDate:"
+property = "DateCreated:"
 all_files_in_folder = files_finder(obsidian_files_path)
 
 for md_file in all_files_in_folder:
 	# tag_renamer(md_file, tag_name, new_tag)
+	status_renamer(md_file, "StartDate", "DateCreated")
 	# tags_to_properties(md_file)
 	# clean_all_properties(md_file)
 	# test_string = set_string_value_to_property(md_file, re_value, property)
-	daily_ask_properties(md_file)
+	# daily_ask_properties(md_file)
 
 # OUT = obsidian_files_path
 # OUT = test_string
