@@ -268,6 +268,9 @@
 
 	"TELE_Outlet_CU_1-2_Electrical_JEG_M": {
 		"Outlet CU 2 Ports (1 occupied), POWER MONITORING": ["TSLA_DD_DirectConnection", "DATA_E"]
-	}
+	},
 
+	"Floor Box": {
+		"IP20_230Vx2": ["TSLA_EF_ServicePost", "Double side"]
+	}
 }
