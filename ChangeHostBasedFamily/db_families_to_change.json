@@ -4,12 +4,21 @@
 		"type2": ["new_family", "new_type"]
 	},
 
+	"3P Socket":{
+		"16A" : ["TSLA_EF_Socket_CEE_Wall", "IP44_16A_400V"]
+	}, 
+
+
 	"51HLA2D24MCB":{
 		"--- (1 x LED, 27600 lm, 171.100006103516 W, 4000K)": ["TSLA_LF_L02_a_Highbay", "L02 (33150 lm, 190 W, 4000K, Highbay11 2x 2x LED) 3p"]
 	},
 
 	"51TS16DN445F":{
 		"--- (1 x LED, 4520 lm, 27.5 W, 4000K)": ["TSLA_LF_L01g_l_Surface_Mounting_Trunking", "L01g (4520 lm, 28 W, 4000K, L=1500mm)"]
+	},
+
+	"Blinds_Shutter":{
+		"Shutter": ["TSLA_EF_DirectConnection", "Motor_230V"]
 	},
 
 	"GND_Isolated Bar_FB_CH_I":{
@@ -81,6 +90,15 @@
 			["TSLA_LF_L36_Ceiling_Mounting", "L36 - IP54"]
 	},
 
+	"Motion and Occupancy Sensor": {
+		"Pres. + motion detec. 360° Kompakt Sentinel":
+			["TSLA_LD_Occupancy_Sensor_DALI", "Sensor_DALI_surface mounted"]
+	},
+
+	"Motion and Occupancy Sensor trunking": {
+		"Pres. + motion detec. 360° Kompakt Sentinel":
+			["", ""]
+	},
 
 	"TSLA_EF_Socket_1P_Surface_Horizontal_Wall":{
 		"IP20_230Vx1":
