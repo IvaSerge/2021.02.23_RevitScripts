@@ -249,7 +249,7 @@ for rvt_elem in elem_list:
 		multi_tag_list.append(circuit_tag)
 
 	# convert multi_tag to string and set to element
-	multi_tag_str = "\n".join(multi_tag_list)
+	multi_tag_str = "\r\n".join(multi_tag_list)
 	params_to_set.append([rvt_elem, "Multi_Tag_1", multi_tag_str])
 	# circuit parameters to element
 	params_to_set.append([rvt_elem, "TO Rack Grid", panel_grid])
