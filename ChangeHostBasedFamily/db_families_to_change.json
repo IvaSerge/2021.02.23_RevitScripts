@@ -232,11 +232,27 @@
 			["TSLA_EF_Socket_CEE_Wall", "IP44_63A_400V"]
 	},
 
+	"TELE_Outlet_CU_1-2_IC_PLC_PSP_JEG_M":{
+		"Outlet CU 2 Ports (1 occupied)- PLC, PSP": ["TSLA_DD_DirectConnection", "DATA_I"]
+	}, 
+
 	"ARCU-ME-Connector_Network": {
 		"Socket 1x": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x1"],
 		"Socket 2x": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x2"],
 		"Socket 4x": ["TSLA_DD_Socket_Surface_Wall", "IP20_RJ45x4"],
 		"ARCU-ME-Connector_Network": ["TSLA_DD_DirectConnection", "DATA"]
+	},
+
+	"JCP_Lockable_Switch_Disconnector": {
+		"1P_20A": ["TSLA_EF_Disconnector_Lockable_Switch", "1P_20A"],
+		"3P_32A": ["TSLA_EF_Disconnector_Lockable_Switch", "3P_32A"],
+		"3P_63A": ["TSLA_EF_Disconnector_Lockable_Switch", "3P_63A"],
+		"3P_100A": ["TSLA_EF_Disconnector_Lockable_Switch", "3P_100A"],
+		"3P_160A": ["TSLA_EF_Disconnector_Lockable_Switchnew", "3P_160A"]
+	},
+
+	"Symbol 4X230+1XTelecom family": {
+		"4X230V+1TELECOM": ["TSLA_EF_WBXX_230V", "Mennekes 3x230V"]
 	},
 
 	"TELE_Outlet_CU_1-2_Camera_Outside_JEG_M": {

@@ -23,8 +23,14 @@
 	"CELL_POCS":{
 		"ELECTRICAL_RCPT_IP44 - 1":
 			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx1"],
+		"ELECTRICAL_RCPT - 1":
+			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx1"],
+		"ELECTRICAL_RCPT - 2":
+			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx2"],
 		"ELECTRICAL_RCPT_IP44 - 4":
 			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx4"],
+		"ELECTRICAL_RCPT_CEE-1PH - 32A":
+			["TSLA_EF_Socket_CEE_Wall", "IP44_32A_230V"],
 		"ELECTRICAL_RCPT_CEE-3PH+N+PE - 16A":
 			["TSLA_EF_Socket_CEE_Wall", "IP44_16A_400V"],
 		"ELECTRICAL_RCPT_CEE-3PH+N+PE - 32A":
