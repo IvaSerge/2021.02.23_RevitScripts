@@ -154,7 +154,7 @@ uiapp = DocumentManager.Instance.CurrentUIApplication
 app = uiapp.Application
 view = doc.ActiveView
 reload_var = IN[1]  # type: ignore
-rvt_elem = IN[2]  # type: ignore
+rvt_elem = None # IN[2]  # type: ignore
 doc_titel = doc.Title
 
 # Element selection
