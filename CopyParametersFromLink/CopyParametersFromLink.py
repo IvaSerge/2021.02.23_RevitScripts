@@ -80,7 +80,12 @@ def setup_param_value(elem, name, pValue):
 
 
 def get_bip(paramName):
-	builtInParams = System.Enum.GetValues(BuiltInParameter)
+	try:
+		builtInParams = System.Enum.GetValues(BuiltInParameter)
+	except:
+		# parameter not found
+		return None
+
 	param = []
 	for i in builtInParams:
 		if i.ToString() == paramName:
