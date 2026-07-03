@@ -27,7 +27,11 @@
 			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx1"],
 		"ELECTRICAL_RCPT - 2":
 			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx2"],
+		"ELECTRICAL_RCPT_IP44 - 2":
+			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx2"],
 		"ELECTRICAL_RCPT_IP44 - 4":
+			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx4"],
+		"ELECTRICAL_RCPT_IP44 - 4 Horizontal":
 			["TSLA_EF_Socket_1P_Surface_Horizontal_Wall", "IP44_230Vx4"],
 		"ELECTRICAL_RCPT_CEE-1PH - 32A":
 			["TSLA_EF_Socket_CEE_Wall", "IP44_32A_230V"],
@@ -39,6 +43,10 @@
 
 	"DAT__POC":{
 		"DATA_POC": ["TSLA_DD_DirectConnection", "DATA"]
+	},
+
+	"Emergency Light_E01g": {
+		"E01g_LG6_A1_lens": ["TSLA_LF_E01g_Surface_Mounting", "E01g (270 lm, 3.5 W, LG6D+A1 lens, IP40)"]
 	},
 
 	"Emergency Light_E02b":{
@@ -114,6 +122,11 @@
 		"L30_Outside": ["TSLA_LF_L30_Wall_Mounting", "L30 (1075 lm, 15 W, 3000K, IP65)"]
 	},
 
+	"L41_Siteco_Silica_SI":{
+		"--- (1 x LED, 9910 lm, 60.0999984741211 W, 4000K)":
+		["TSLA_LF_L20_40_40.1_41_Suspended_Mounting_Single", "L41 (9910 lm, 60 W, 4000K, L=2844mm)"]
+	},
+
 	"L42_Highbay31-S":{
 		"Highbay 31-S (1 x LED, 20000 lm, 134 W, 4000K)":
 		["TSLA_LF_L42_Highbay31s", "L42 (20000 lm, 134 W, 4000K, Highbay31s 1x LED)"]
@@ -162,7 +175,10 @@
 
 	"Standard Emergency Light_rev1": {
 		"Pendant - Forward Two Sided_Reccessed_IP40": ["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Forward TwoSide (5.5 W, Display 2000/G7, IP41)"],
-		"Wall Mounted - Forward_IP40": ["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Forward (5.5 W, Display 2000/G7, IP41)"]
+		"Wall Mounted - Forward_IP40": ["TSLA_LF_E03a_EXITSIGN_Wall_Mounting", "Forward (5.5 W, Display 2000/G7, IP41)"],
+		"Pendant - Left Two Sided IP40": ["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Left TwoSide (5.5 W, Display 2000/G7, IP41)"],
+		"Pendant - Right Two sided_IP40": ["TSLA_LF_E03b_EXITSIGN_Suspended_Mounting", "Right TwoSide (5.5 W, Display 2000/G7, IP41)"]
+
 	},
 
 	"RCPT_5xReceptacle 230V_16A_IP20_surface mounted": {
