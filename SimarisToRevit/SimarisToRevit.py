@@ -29,6 +29,7 @@ from importlib import reload
 
 import csv
 import re
+from typing import List
 
 # ================ local imports
 import toolsrvt
@@ -54,24 +55,29 @@ CircuitBreaker.doc = doc
 # ================ get info for circuit breaker settings
 settings_from_csv = csvreader.get_info_from_csv(csv_path)
 
-breakers_list = list()
+breakers_list = [] 
 error_list = []
 for breaker_settings in settings_from_csv:
 	try:
 		circui_breaker = CircuitBreaker(breaker_settings)
 		breakers_list.append(circui_breaker)
+		print(circui_breaker.params_list)
 	except Exception as e:
 		error_sting = str(e)
 		error_list.append(error_sting)
 
-# =========Start transaction
-TransactionManager.Instance.EnsureInTransaction(doc)
+try:
+	# =========Start transaction
+	TransactionManager.Instance.EnsureInTransaction(doc)
 
-# ================ set parameters
-for breaker in breakers_list:
-	breaker.set_rvt_parameters()
+	# ================ set parameters
+	for br in breakers_list:
+		breaker = br # type: CircuitBreaker
+		breaker.set_rvt_parameters()
 
-# =========End transaction
-TransactionManager.Instance.TransactionTaskDone()
+	# =========End transaction
+finally:
+	TransactionManager.Instance.TransactionTaskDone()
 
-OUT = [i.params_list for i in breakers_list], error_list
+OUT = [[i.revit_element, i.params_list] for i in breakers_list], error_list
+

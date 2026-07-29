@@ -214,4 +214,4 @@ class CircuitBreaker:
 		for parameter in params_list:
 			param_name = parameter[0]
 			param_value = parameter[1]
-			toolsrvt.setup_param_value(rvt_element, param_name, param_value)
+			toolsrvt.setup_param_value(rvt_element, param_name, str(param_value))
