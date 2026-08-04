@@ -9,6 +9,8 @@
 			["TSLA_EF_Socket_CEE_Wall", "IP44_16A_400V"],
 		"32A 3P+N+E":
 			["TSLA_EF_Socket_CEE_Wall", "IP44_32A_400V"],
+		"32A 3P+N+E + RCD":
+			["TSLA_EF_Socket_CEE_Wall", "IP44_32A_400V"],
 		"32A P+N+E":
 			["TSLA_EF_Socket_CEE_Wall", "IP44_32A_230V"]
 	},
