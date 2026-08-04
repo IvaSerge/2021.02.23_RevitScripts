@@ -25,6 +25,7 @@ from RevitServices.Transactions import TransactionManager
 # ================ Python imports
 import re
 import toolsrvt
+from typing import *
 
 class CircuitBreaker:
 	"""
@@ -78,7 +79,7 @@ class CircuitBreaker:
 		# It is a circuit breaker inside the panel. In Revit it is electrical circuit element
 		try:
 			# Assuming toolsrvt.elsys_by_brd returns [systems, circuits] or similar; [1] is circuits list
-			circuits_rvt = toolsrvt.elsys_by_brd(panel_rvt)[1]
+			circuits_rvt: list[Autodesk.Revit.DB.Electrical.ElectricalSystem] = toolsrvt.elsys_by_brd(panel_rvt)[1]
 		except Exception as e:
 			# Circuit in Revit not found. Panel is empty or error
 			error_text = f"Panel does not have branch circuits: {panel_name} (Error: {str(e)})"
@@ -91,12 +92,15 @@ class CircuitBreaker:
 		for circuit in circuits_rvt:
 			circuit_start_slot = circuit.StartSlot
 			if int(circuit_start_slot) == int(circuit_number):
+				# cricuit found, but need to be checked if it is not a Spare or Space
+				if circuit.CircuitType != Autodesk.Revit.DB.Electrical.CircuitType.Circuit:
+					print(f"Circuit is spare. Check {panel_name}[{circuit_number}], ID: {circuit.Id}]")
+					raise ValueError(f"Circuit is spare. Check {panel_name}[{circuit_number}], Id: {circuit.Id} ")
 				return circuit
 
 		# If no matching circuit found
 		print(f"Circuit not found in panel {panel_name}[{circuit_number}]")
 		raise ValueError(f"Circuit '{circuit_number}' not found in panel '{panel_name}'")
-
 
 	@staticmethod
 	def _get_trip_by_catalogue(trip_value):

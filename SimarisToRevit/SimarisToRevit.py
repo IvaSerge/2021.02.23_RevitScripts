@@ -59,9 +59,10 @@ breakers_list = []
 error_list = []
 for breaker_settings in settings_from_csv:
 	try:
-		circui_breaker = CircuitBreaker(breaker_settings)
-		breakers_list.append(circui_breaker)
-		print(circui_breaker.params_list)
+		circuit_breaker = CircuitBreaker(breaker_settings)
+		breakers_list.append(circuit_breaker)
+		print(circuit_breaker.revit_element.Id)
+		print(circuit_breaker.params_list)
 	except Exception as e:
 		error_sting = str(e)
 		error_list.append(error_sting)
