@@ -5,3 +5,5 @@
 *.env
 *.dyn
 __pycache__/
+.opencode/
+opencode.jsonc

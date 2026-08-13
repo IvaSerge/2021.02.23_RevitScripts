@@ -72,4 +72,7 @@ if isinstance(rvt_elem, Autodesk.Revit.DB.FamilyInstance):
 			# add all systems found to circuits_list
 			circuits_list.extend(elem_systems)
 
+# for every circuit in circuits_list
+# 
+
 OUT = circuits_list
