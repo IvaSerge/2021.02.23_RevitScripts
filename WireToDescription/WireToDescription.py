@@ -27,6 +27,42 @@ from importlib import reload
 import toolsrvt
 reload(toolsrvt)
 from toolsrvt import *
+import elec_sys
+reload(elec_sys)
+from elec_sys import ElecSys
+
+
+def get_system_by_instance(
+	rvt_inst: FamilyInstance
+) -> Optional[List[Electrical.ElectricalSystem]]:
+	"""Get electrical systems from a family instance.
+
+	args:
+		rvt_inst: Revit FamilyInstance
+	return:
+		list of ElectricalSystem or None if no systems found
+	"""
+	# Check if the element is an electrical panel
+	# OST_ElectricalEquipment.Id == -2001040
+	if rvt_inst.Category.Id == ElementId(-2001040):
+		# it is electrical panel - get main circuit
+		main_circuit: Optional[Electrical.ElectricalSystem] = toolsrvt.elsys_by_brd(rvt_inst)[0]
+		if main_circuit:
+			return [main_circuit]
+		return None
+
+	# it is another familyInstance
+	# check if electrical instance has electrical systems
+	mep_model: Optional[MEPModel] = rvt_inst.MEPModel
+	if not mep_model:
+		return None
+
+	elem_systems: List[Electrical.ElectricalSystem] = [
+		sys for sys in mep_model.GetElectricalSystems()
+	]
+	if elem_systems:
+		return elem_systems
+	return None
 
 
 # ================ GLOBAL VARIABLES
@@ -48,31 +84,21 @@ else:
 		"Element selection")
 	rvt_elem = doc.GetElement(sel_elem.ElementId)
 
-# create empty list for electrical systems
-circuits_list: List[Electrical.ElectricalSystem] = list()
-
 # Check if selected element is FamilyInstance
-if isinstance(rvt_elem, Autodesk.Revit.DB.FamilyInstance):
-	# Check if the element is an electrical panel
-	# OST_ElectricalEquipment.Id == -2001040
-	if rvt_elem.Category.Id == ElementId(-2001040):
-		# it is electrical panel - get main circuit using toolsrvt.elsys_by_brd(_brd)[0]
-		main_circuit: Optional[Electrical.ElectricalSystem] = toolsrvt.elsys_by_brd(rvt_elem)[0]
-		# add the main circuit to circuits_list
-		if main_circuit:
-			circuits_list.append(main_circuit)
-	else:
-		# it is another familyInstance
-		# check if electrical instance has electrical systems
-		mep_model: Optional[MEPModel] = rvt_elem.MEPModel
-		if mep_model:
-			elem_systems: List[Electrical.ElectricalSystem] = [
-				sys for sys in mep_model.GetElectricalSystems()
-			]
-			# add all systems found to circuits_list
-			circuits_list.extend(elem_systems)
+if not isinstance(rvt_elem, FamilyInstance):
+	except_string: str = "Element is not family instance: {}".format(rvt_elem.Id)
+	print(except_string)
+	raise ValueError(except_string)
+
+circuits_list: Optional[List[Electrical.ElectricalSystem]] = get_system_by_instance(rvt_elem)
+
+# Check if instance has electrical systems
+if not circuits_list:
+	except_string: str = "Instance do not have electrical systems"
+	print(except_string)
+	raise ValueError(except_string)
 
 # for every circuit in circuits_list
-# 
+
 
 OUT = circuits_list
