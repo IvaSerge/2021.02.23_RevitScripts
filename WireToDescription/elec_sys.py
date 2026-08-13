@@ -2,6 +2,7 @@ import clr
 
 # ================ Revit imports
 clr.AddReference('RevitAPI')
+import Autodesk
 from Autodesk.Revit.DB import *
 
 
@@ -20,7 +21,10 @@ class ElecSys:
 
 	def _get_wire_string(self) -> None:
 		# only real circuits have a wire size
-		if self.rvt_sys.CircuitType != Electrical.CircuitType.Circuit:
+		# only real circuits have a wire size
+		isCircuit = self.rvt_sys.CircuitType != Autodesk.Revit.DB.Electrical.CircuitType.Circuit
+		isPower = self.rvt_sys.SystemType != Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit
+		if any([isCircuit, isPower]):
 			return
 
 		# WireSizeString can fail if wire is not assigned

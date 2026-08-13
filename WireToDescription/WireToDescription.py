@@ -33,7 +33,7 @@ from elec_sys import ElecSys
 
 
 def get_system_by_instance(
-	rvt_inst: FamilyInstance
+	rvt_inst: Autodesk.Revit.DB.FamilyInstance
 ) -> Optional[List[Electrical.ElectricalSystem]]:
 	"""Get electrical systems from a family instance.
 
@@ -85,7 +85,7 @@ else:
 	rvt_elem = doc.GetElement(sel_elem.ElementId)
 
 # Check if selected element is FamilyInstance
-if not isinstance(rvt_elem, FamilyInstance):
+if not isinstance(rvt_elem, Autodesk.Revit.DB.FamilyInstance):
 	except_string: str = "Element is not family instance: {}".format(rvt_elem.Id)
 	print(except_string)
 	raise ValueError(except_string)
@@ -99,6 +99,10 @@ if not circuits_list:
 	raise ValueError(except_string)
 
 # for every circuit in circuits_list
-
+elec_sys_objects = list()
+for circuit in circuits_list:
+	elec_sys_object: ElecSys = ElecSys(circuit)
+	elec_sys_objects.append(elec_sys_object)
+	print(elec_sys_object.wire_string)
 
 OUT = circuits_list
