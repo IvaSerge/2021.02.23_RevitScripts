@@ -33,23 +33,33 @@ from elec_sys import ElecSys
 
 
 def get_system_by_instance(
-	rvt_inst: Autodesk.Revit.DB.FamilyInstance
+	rvt_inst: Autodesk.Revit.DB.FamilyInstance,
+	add_branch_circuits: bool
 ) -> Optional[List[Electrical.ElectricalSystem]]:
 	"""Get electrical systems from a family instance.
 
 	args:
 		rvt_inst: Revit FamilyInstance
+		add_branch_circuits: bool
 	return:
 		list of ElectricalSystem or None if no systems found
 	"""
 	# Check if the element is an electrical panel
 	# OST_ElectricalEquipment.Id == -2001040
 	if rvt_inst.Category.Id == ElementId(-2001040):
+		panel_circuits = list()
 		# it is electrical panel - get main circuit
-		main_circuit: Optional[Electrical.ElectricalSystem] = toolsrvt.elsys_by_brd(rvt_inst)[0]
-		if main_circuit:
-			return [main_circuit]
-		return None
+		all_circuits: Optional[Electrical.ElectricalSystem] = toolsrvt.elsys_by_brd(rvt_inst)
+		# include main circuit
+		if all_circuits[0]:
+			panel_circuits.append(all_circuits[0])
+		# include branch circuits
+		if all_circuits[1] and add_branch_circuits:
+			panel_circuits.extend(all_circuits[1])
+		if panel_circuits:
+			return panel_circuits
+		else:
+			return None
 
 	# it is another familyInstance
 	# check if electrical instance has electrical systems
@@ -73,6 +83,8 @@ app = uiapp.Application
 view = doc.ActiveView
 reload_var = IN[1]  # type: ignore
 rvt_elem = IN[2]  # type: ignore
+add_branch_circuits = IN[3]  # type: ignore
+overwright_description = IN[4]  # type: ignore
 
 
 # Element selection
@@ -90,7 +102,7 @@ if not isinstance(rvt_elem, Autodesk.Revit.DB.FamilyInstance):
 	print(except_string)
 	raise ValueError(except_string)
 
-circuits_list: Optional[List[Electrical.ElectricalSystem]] = get_system_by_instance(rvt_elem)
+circuits_list: Optional[List[Electrical.ElectricalSystem]] = get_system_by_instance(rvt_elem, add_branch_circuits)
 
 # Check if instance has electrical systems
 if not circuits_list:
