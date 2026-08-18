@@ -85,6 +85,7 @@ reload_var = IN[1]  # type: ignore
 rvt_elem = IN[2]  # type: ignore
 add_branch_circuits = IN[3]  # type: ignore
 overwright_description = IN[4]  # type: ignore
+ElecSys.overwright = overwright_description
 
 
 # Element selection
@@ -111,10 +112,11 @@ if not circuits_list:
 	raise ValueError(except_string)
 
 # for every circuit in circuits_list
+
 elec_sys_objects = list()
 for circuit in circuits_list:
 	elec_sys_object: ElecSys = ElecSys(circuit)
 	elec_sys_objects.append(elec_sys_object)
 	print(elec_sys_object.wire_string)
 
-OUT = circuits_list
+OUT = [obj.wire_string for obj in elec_sys_objects], circuits_list
