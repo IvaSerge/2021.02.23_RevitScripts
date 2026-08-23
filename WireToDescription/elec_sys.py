@@ -35,7 +35,7 @@ class ElecSys:
 		isNotCircuit = self.rvt_sys.CircuitType != Autodesk.Revit.DB.Electrical.CircuitType.Circuit
 		isNotPower = self.rvt_sys.SystemType != Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit
 		if any([isNotCircuit, isNotPower]):
-			self.wire_string = "Not Electrical"
+			self.wire_string = None
 			return
 
 		# WireSizeString can fail if wire is not assigned

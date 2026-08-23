@@ -103,7 +103,10 @@ if not isinstance(rvt_elem, Autodesk.Revit.DB.FamilyInstance):
 	print(except_string)
 	raise ValueError(except_string)
 
-circuits_list: Optional[List[Electrical.ElectricalSystem]] = get_system_by_instance(rvt_elem, add_branch_circuits)
+circuits_list: Optional[List[Electrical.ElectricalSystem]] = get_system_by_instance(
+	rvt_elem,
+	add_branch_circuits
+)
 
 # Check if instance has electrical systems
 if not circuits_list:
@@ -111,12 +114,47 @@ if not circuits_list:
 	print(except_string)
 	raise ValueError(except_string)
 
-# for every circuit in circuits_list
+# filter out circuits that have discription
+if not overwright_description:
+	filtered_circuits = list()
+	for circuit in circuits_list:
+		isCircuit = circuit.CircuitType == Autodesk.Revit.DB.Electrical.CircuitType.Circuit
+		isPower = circuit.SystemType == Autodesk.Revit.DB.Electrical.ElectricalSystemType.PowerCircuit
+		if all([isCircuit, isPower]):
+			cab_description = toolsrvt.get_parval(circuit, "Cable Description")
+			isEmpty = any([cab_description is None, cab_description == ""])
+		else:
+			continue
+		if isEmpty:
+			filtered_circuits.append(circuit)
+else:
+	filtered_circuits = circuits_list
 
+# for every circuit in circuits_list
 elec_sys_objects = list()
-for circuit in circuits_list:
+for circuit in filtered_circuits:
 	elec_sys_object: ElecSys = ElecSys(circuit)
 	elec_sys_objects.append(elec_sys_object)
-	print(elec_sys_object.wire_string)
 
-OUT = [obj.wire_string for obj in elec_sys_objects], circuits_list
+
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
+for obj in elec_sys_objects:
+	rvt_sys = obj.rvt_sys
+	cable_size_string = obj.wire_string
+	isEmpty = any([cable_size_string is None, cable_size_string == ""])
+	if isEmpty:
+		continue
+	toolsrvt.setup_param_value(
+		rvt_sys,
+		"Cable Description",
+		cable_size_string
+	)
+	print(obj.wire_string)
+	print(isEmpty)
+
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
+
+OUT = [obj.wire_string for obj in elec_sys_objects], filtered_circuits
+# OUT = elec_sys_objects
