@@ -154,7 +154,7 @@ class CircuitBreaker:
 		# convert Catalog reference to trip type
 		breaker_cataluge = settings.get("Catalog reference")
 		breaker_trip = CircuitBreaker._get_trip_by_catalogue(breaker_cataluge)
-		params_to_set.append(["_Breaker_Type", breaker_trip])
+		params_to_set.append(["_Breaker_Type", str(breaker_trip)])
 
 		# Convert falue of In to inernal Revit units for Frame
 		frame_param_list = CircuitBreaker._get_frame_parameter(settings)
