@@ -23,7 +23,8 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 	doc = rvt_elem.Document
 	doc_titel = doc.Title
 	rvt_lvl = doc.GetElement(rvt_elem.LevelId)
-	if not rvt_lvl:
+	print(rvt_lvl.Id)
+	if not rvt_lvl or rvt_lvl.Id == -1:
 		sh_lvl = toolsrvt.get_parval(rvt_elem, "INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM")
 		rvt_lvl = doc.GetElement(sh_lvl)
 
@@ -53,7 +54,8 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 		elif "1F" in rvt_level_str:
 			rvt_level_out = "1F"
 		else:
-			raise ValueError("Wrong level name")
+			print (rvt_level_str)
+			raise ValueError(f"Wrong level name: {rvt_level_str}")
 
 	elif "BER-GF-SE-DU" in doc_titel:
 		# for DU only - 1M and 2F are the same
@@ -62,7 +64,8 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 		elif "1F" in rvt_level_str:
 			rvt_level_out = "1"
 		else:
-			raise ValueError("Wrong level name")
+			print (rvt_level_str)
+			raise ValueError(f"Wrong level name: {rvt_level_str}")
 	elif rvt_level_str:
 		return rvt_level_str
 	else:
