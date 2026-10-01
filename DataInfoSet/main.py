@@ -60,9 +60,13 @@ def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 
 	if is_f_level:
 		# for CP only
-		regexp = re.compile(r"^(.*?)[FM]")
-		check = regexp.match(rvt_level_str)
-		rvt_level_out = check.group(1)
+		# Check if it is roof
+		if rvt_level_str == "OK-Attika":
+			rvt_level_out = "RF"
+		else:
+			regexp = re.compile(r"^(.*?)[FM]")
+			check = regexp.match(rvt_level_str)
+			rvt_level_out = check.group(1)
 
 	elif "BER-GF-SITE-NPI" in doc_titel:
 		if "RF" in rvt_level_str:
