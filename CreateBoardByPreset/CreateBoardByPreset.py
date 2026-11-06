@@ -102,19 +102,19 @@ except:
 user_preset = data["panel_types"][IN[2]]["spare_parameter_values"]  # type: ignore
 board_parameters = data["panel_types"][IN[2]]["panel_parameter_values"]  # type: ignore
 
-with Autodesk.Revit.DB.Transaction(doc, "CreateBoardByPreset") as t:
-	# =========Start transaction
-	t.Start()
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
+create_spares(board_to_convert, user_preset)
 
-	create_spares(board_to_convert, user_preset)
+# set panel parameters
+for param_info in board_parameters:
+	elem = board_to_convert
+	p_name = param_info[0]
+	p_value = param_info[1]
+	toolsrvt.setup_param_value(elem, p_name, p_value)
 
-	# set panel parameters
-	for param_info in board_parameters:
-		elem = board_to_convert
-		p_name = param_info[0]
-		p_value = param_info[1]
-		toolsrvt.setup_param_value(elem, p_name, p_value)
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
-	t.Commit()
 
 OUT = board_to_convert
