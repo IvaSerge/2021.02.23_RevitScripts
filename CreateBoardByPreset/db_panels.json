@@ -421,6 +421,95 @@
 			]
 		},
 
+		"2E Formation_sub":{
+			"spare_parameter_values": [
+				["B32 / F123", 3, 32],
+				["B32 / F456", 3, 32],
+				["B32 / F789", 3, 32],
+				["B32 / F101112", 3, 32],
+				["B32 / F131415", 3, 32],
+				["B32 / F161718", 3, 63],
+				["B32 / F192021", 3, 63],
+
+				["B16 / 0,03 A / F22 Section F1", 1, 16],
+				["B16 / 0,03 A / F23 Section F1", 1, 16],
+				["B16 / 0,03 A / F24 Section F1", 1, 16],
+				["B16 / 0,03 A / F25 Section F1", 1, 16],
+				["B16 / 0,03 A / F26 Section F1", 1, 16],
+				["B16 / 0,03 A / F27 Section F1", 1, 16],
+				["B16 / 0,03 A / F28 Section F1", 1, 16],
+				["B16 / 0,03 A / F29 Section F1", 1, 16],
+				["B16 / 0,03 A / F30 Section F1", 1, 16],
+
+				["B16 / 0,03 A / F31 Section F2", 1, 16],
+				["B16 / 0,03 A / F32 Section F2", 1, 16],
+				["B16 / 0,03 A / F33 Section F2", 1, 16],
+				["B16 / 0,03 A / F34 Section F2", 1, 16],
+				["B16 / 0,03 A / F35 Section F2", 1, 16],
+				["B16 / 0,03 A / F36 Section F2", 1, 16],
+				["B16 / 0,03 A / F37 Section F2", 1, 16],
+				["B16 / 0,03 A / F38 Section F2", 1, 16],
+				["B16 / 0,03 A / F39 Section F2", 1, 16],
+
+				["B16 / 0,03 A / F40 Section F3", 1, 16],
+				["B16 / 0,03 A / F41 Section F3", 1, 16],
+				["B16 / 0,03 A / F42 Section F3", 1, 16],
+				["B16 / 0,03 A / F43 Section F3", 1, 16],
+				["B16 / 0,03 A / F44 Section F3", 1, 16],
+				["B16 / 0,03 A / F45 Section F3", 1, 16],
+				["B16 / 0,03 A / F46 Section F3", 1, 16],
+				["B16 / 0,03 A / F47 Section F3", 1, 16],
+				["B16 / 0,03 A / F48 Section F3", 1, 16],
+
+				["B16 / F495051 Section F4", 3, 16],
+				["B16 / F525354 Section F4", 3, 16],
+				["B16 / F555657 Section F4", 3, 16],
+				["B16 / F585960 Section F4", 3, 16],
+				["B16 / F616263 Section F4", 3, 16],
+
+				["B16 / 0,03 A / F646566 Section F5", 3, 16],
+				["B16 / 0,03 A / F676869 Section F5", 3, 16],
+				["B16 / 0,03 A / F707172 Section F5", 3, 16],
+
+				["C10 / F73 Section F6", 1, 10],
+				["C10 / F74 Section F6", 1, 10],
+				["C10 / F75 Section F6", 1, 10],
+				["C10 / F76 Section F6", 1, 10],
+
+				["B16 / 0,03 A / F77 Section F3", 1, 16],
+				["B16 / 0,03 A / F78 Section F3", 1, 16],
+				["B16 / 0,03 A / F79 Section F3", 1, 16],
+				["B16 / 0,03 A / F80 Section F3", 1, 16],
+				["B16 / 0,03 A / F81 Section F3", 1, 16],
+				["B16 / 0,03 A / F82 Section F3", 1, 16],
+				["B16 / 0,03 A / F83 Section F3", 1, 16],
+				["B16 / 0,03 A / F84 Section F3", 1, 16],
+				["B16 / 0,03 A / F85 Section F3", 1, 16],
+
+				["B16 / 0,03 A / F86 Section F3", 1, 16],
+				["B16 / 0,03 A / F87 Section F3", 1, 16],
+				["B16 / 0,03 A / F88 Section F3", 1, 16],
+				["B16 / 0,03 A / F89 Section F3", 1, 16],
+				["B16 / 0,03 A / F90 Section F3", 1, 16],
+				["B16 / 0,03 A / F91 Section F3", 1, 16],
+				["B16 / 0,03 A / F92 Section F3", 1, 16],
+				["B16 / 0,03 A / F93 Section F3", 1, 16],
+				["B16 / 0,03 A / F94 Section F3", 1, 16]
+			],
+			"panel_parameter_values": [
+				["RBS_ELEC_MAINS", 250],
+				["RBS_ELEC_MOUNTING", "FLOOR"],
+				["RBS_ELEC_PANEL_FEED_PARAM", "TOP"],
+				["RBS_ELEC_ENCLOSURE", "IP55"],
+				["Protection Class", "IP55"],
+				["RBS_ELEC_PANEL_MCB_RATING_PARAM", 250],
+				["RBS_ELEC_SHORT_CIRCUIT_RATING", "50kA"],
+				["RBS_ELEC_CIRCUIT_PREFIX", "0F"],
+				["RBS_ELEC_CIRCUIT_NAMING", -7000010],
+				["RBS_ELEC_NUMBER_OF_CIRCUITS", 10]
+			]
+		},
+
 		"2ET": {
 			"spare_parameter_values": [
 				["B16 / 0,03 A / F1", 1, 16],
