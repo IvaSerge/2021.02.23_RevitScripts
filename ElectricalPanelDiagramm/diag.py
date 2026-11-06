@@ -91,6 +91,8 @@ class Diagramm():
 		for param_info in self.params:
 			param_name = param_info[0]
 			param_val = param_info[1]
+			if param_val is None:
+				param_val = ""
 			toolsrvt.setup_param_value(
 				self.instance,
 				param_name,
