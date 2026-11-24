@@ -71,30 +71,28 @@ else:
 	toolsrvt.UnwrapElement = UnwrapElement  # type: ignore
 	rvt_instances = toolsrvt.flatten_list(toolsrvt.unwrap(IN[2]))  # type: ignore
 
-OUT = rvt_instances
+grid.find_grid_intersection_points(doc)
 
-# grid.find_grid_intersection_points(doc)
+params_to_set = []
+for rvt_inst in rvt_instances:
+	shortest_grid_name = grid.get_nearest_grid_by_instance(rvt_inst)
+	try:
+		inst_level = inst_info_getter.get_level_name(rvt_inst)
+	except:
+		inst_level = "NA"
+	params_to_set.append([rvt_inst, "TO Grid", shortest_grid_name])
+	params_to_set.append([rvt_inst, "TO Level", inst_level])
+	# circuit_parameters = inst_info_getter.get_circuit_params(rvt_inst, inst_level, shortest_grid_name)
+	# if circuit_parameters:
+	# 	params_to_set.extend(circuit_parameters)
 
-# params_to_set = []
-# for rvt_inst in rvt_instances:
-# 	shortest_grid_name = grid.get_nearest_grid_by_instance(rvt_inst)
-# 	try:
-# 		inst_level = inst_info_getter.get_level_name(rvt_inst)
-# 	except:
-# 		inst_level = "NA"
-# 	params_to_set.append([rvt_inst, "TO Grid", shortest_grid_name])
-# 	params_to_set.append([rvt_inst, "TO Level", inst_level])
-# 	# circuit_parameters = inst_info_getter.get_circuit_params(rvt_inst, inst_level, shortest_grid_name)
-# 	# if circuit_parameters:
-# 	# 	params_to_set.extend(circuit_parameters)
+# =========Start transaction
+TransactionManager.Instance.EnsureInTransaction(doc)
 
-# # =========Start transaction
-# TransactionManager.Instance.EnsureInTransaction(doc)
+for param_info in params_to_set:
+	toolsrvt.setup_param_value(param_info[0], param_info[1], param_info[2])
 
-# for param_info in params_to_set:
-# 	toolsrvt.setup_param_value(param_info[0], param_info[1], param_info[2])
+# =========End transaction
+TransactionManager.Instance.TransactionTaskDone()
 
-# # =========End transaction
-# TransactionManager.Instance.TransactionTaskDone()
-
-# OUT = params_to_set
+OUT = params_to_set
