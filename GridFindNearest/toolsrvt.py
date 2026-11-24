@@ -51,18 +51,19 @@ def process_list(_func, _list):
 	# type: (FunctionType, list) -> any
 	return map(
 		lambda x: process_list(_func, x)
-		if type(x) == list else _func(x), _list)
+		if x is list else _func(x), _list)
 
 
 def unwrap(_item):
 	if isinstance(_item, list):
 		return process_list(unwrap, _item)
 	else:
-		return UnwrapElement(_item)  # type: ignore
+		return [UnwrapElement(_item)]  # type: ignore
 
 
 def flatten_list(data):
 	# iterating over the data
+	# do not use map() here: in Python 3 it is lazy, so append never runs
 	list_in_progress = data
 	list_found = True
 
@@ -72,10 +73,10 @@ def flatten_list(data):
 		for i in list_in_progress:
 			if isinstance(i, list):
 				list_found = True
-				map(lambda x: flat_list.append(x), i)
+				flat_list.extend(i)
 			else:
 				flat_list.append(i)
-		list_in_progress = [x for x in flat_list]
+		list_in_progress = flat_list
 
 	return list_in_progress
 
@@ -99,19 +100,23 @@ def get_parval(elem, name):
 		param = elem.get_Parameter(get_bip(name))
 
 	if param:
+		# check if parameter has value
+		if not param.HasValue:
+			return None
 		# get paremeter Value if found
 		storeType = param.StorageType
 		# value = storeType
 		if storeType == StorageType.String:
 			value = param.AsString()
 		elif storeType == StorageType.Integer:
-			value = param.AsDouble()
+			value = param.AsInteger()
 		elif storeType == StorageType.Double:
 			value = param.AsDouble()
 		elif storeType == StorageType.ElementId:
 			value: ElementId = param.AsElementId()
 	else:
-		raise Exception("No parameter found")
+		error_string = "No parameter found: " + name
+		raise Exception(error_string)
 
 	return value
 
@@ -137,7 +142,8 @@ def setup_param_value(elem, name, pValue):
 	if param:
 		param.Set(pValue)
 	else:
-		raise Exception("No parameter found")
+		error_string = "No parameter found: " + name
+		raise Exception(error_string)
 	return elem
 
 
@@ -160,7 +166,7 @@ def inst_by_cat_strparamvalue(_doc, _bic, _bip, _val, _isType):
 		list()[Autodesk.Revit.DB.FamilySymbol]
 	"""
 	if _isType:
-		fnrvStr = FilterStringContains()
+		fnrvStr = FilterStringEquals()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
 		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
@@ -170,7 +176,7 @@ def inst_by_cat_strparamvalue(_doc, _bic, _bip, _val, _isType):
 			WherePasses(filter).\
 			ToElements()
 	else:
-		fnrvStr = FilterStringContains()
+		fnrvStr = FilterStringEquals()
 		pvp = ParameterValueProvider(ElementId(int(_bip)))
 		frule = FilterStringRule(pvp, fnrvStr, _val)
 		filter = ElementParameterFilter(frule)
@@ -216,16 +222,56 @@ def type_by_bic_fam_type(_doc, _bic, _fnam, _tnam):
 	return elem
 
 
-def mm_to_ft(doc, mm):
-	display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Length).GetUnitTypeId()
-	ft = Autodesk.Revit.DB.UnitUtils.ConvertToInternalUnits(mm, display_units)
-	return ft
+def inst_by_multicategory_param_val(_doc, _bic_list, _param_name, _param_value):
+	"""Get Family Instances by category filters, and string parameter values
+
+	args:
+		_doc: active document
+		_bic_list[str]: list of Build In Categories names
+		_param_name(str): parameter name to filter
+		_param_value: parameter
+
+	return:
+		Autodesk.Revit.DB.FamilySymbol
+	"""
+
+	# =============  parameter filter
+	parameter_id = [
+		i for i in
+		FilteredElementCollector(_doc).OfClass(ParameterElement)
+		if i.Name == _param_name]
+	if parameter_id:
+		parameter_id = parameter_id[0].Id
+	else:
+		error_str = "Parameter not found"
+		raise ValueError(error_str)
+
+	parameter_value_provider = ParameterValueProvider(parameter_id)
+	parameter_str_rule = FilterStringRule(
+		parameter_value_provider,
+		FilterStringEquals(),
+		_param_value)
+
+	parameter_filter = ElementParameterFilter(parameter_str_rule)
+
+	# =============  category filter
+	bic_ids = List[ElementId]([
+		category_by_bic_name(_doc, i).Id
+		for i in _bic_list])
+
+	bic_filter = ElementMulticategoryFilter(bic_ids)
+
+	main_filter = LogicalAndFilter(bic_filter, parameter_filter)
+	elems = FilteredElementCollector(_doc).WherePasses(main_filter).ToElements()
+	return elems
 
 
-def ft_to_mm(doc, ft):
-	display_units = doc.GetUnits().GetFormatOptions(Autodesk.Revit.DB.SpecTypeId.Length).GetUnitTypeId()
-	mm = Autodesk.Revit.DB.UnitUtils.ConvertFromInternalUnits(ft, display_units)
-	return mm
+def mm_to_ft(mm):
+	return mm * 0.00328084
+
+
+def ft_to_mm(ft):
+	return ft * 304.8
 
 
 def elsys_by_brd(_brd):

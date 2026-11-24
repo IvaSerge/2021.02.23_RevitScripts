@@ -34,9 +34,9 @@ class grid:
 			# define naming priority
 			# name with smalest angle is first as example ("A" = 0, "1" = 90) -> A1
 			if self.angle < grid_next.angle:
-				point_name = f"{self.rvt_grid.Name}\{grid_next.rvt_grid.Name}"
+				point_name = f"{self.rvt_grid.Name}{grid_next.rvt_grid.Name}"
 			else:
-				point_name = f"{grid_next.rvt_grid.Name}\{self.rvt_grid.Name}"
+				point_name = f"{grid_next.rvt_grid.Name}{self.rvt_grid.Name}"
 			
 			# # For NPI clean grid name - Project specific change
 			# if point_name.startswith("NPI-"):
@@ -58,7 +58,7 @@ class grid:
 			Get nearest grid string for family
 		"""
 		rvt_inst_point = rvt_inst.Location.Point
-		# # get all distances list
+		# get all distances list
 		distance_list = list()
 		all_intersect_points = cls.all_intersection_points.items()
 		for key, value in all_intersect_points:
@@ -71,13 +71,33 @@ class grid:
 	@classmethod
 	def find_grid_intersection_points(cls, doc):
 		# type: (Autodesk.Revit.DB.Document) -> list
+		view = doc.ActiveView
+		temp_modes = view.TemporaryViewModes
+		if temp_modes:
+			is_temp_view = temp_modes.IsModeActive(TemporaryViewMode.TemporaryHideIsolate)
+		else:
+			is_temp_view = False
+
 		all_grids = FilteredElementCollector(doc).\
 			OfCategory(BuiltInCategory.OST_Grids).\
 			WhereElementIsNotElementType().\
 			ToElements()
 
+		# filter elements, that not visible on temporary view
+		filtered_grids = []
+		for rvt_grd in all_grids:
+			grid_is_hidden = rvt_grd.IsHidden(view)
+			if is_temp_view:
+				grid_temporary_hidden = not(view.IsElementVisibleInTemporaryViewMode(
+					TemporaryViewMode.TemporaryHideIsolate, rvt_grd.Id))
+			else:
+				grid_temporary_hidden = False
+			if grid_temporary_hidden or grid_is_hidden:
+				continue
+			filtered_grids.append(rvt_grd)
+
 		all_intersection_points = dict()
-		obj_grids = [grid(i) for i in all_grids]
+		obj_grids = [grid(i) for i in filtered_grids]
 		for grd in obj_grids:
 			grid_intersections = grd.get_intersection_points(obj_grids)
 			all_intersection_points.update(grid_intersections)
