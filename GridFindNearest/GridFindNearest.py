@@ -80,6 +80,10 @@ for rvt_inst in rvt_instances:
 		inst_level = inst_info_getter.get_level_name(rvt_inst)
 	except:
 		inst_level = "NA"
+	if inst_level is None:
+		inst_level = "NA"
+	if shortest_grid_name is None:
+		shortest_grid_name = "NA"
 	params_to_set.append([rvt_inst, "TO Grid", shortest_grid_name])
 	params_to_set.append([rvt_inst, "TO Level", inst_level])
 	# circuit_parameters = inst_info_getter.get_circuit_params(rvt_inst, inst_level, shortest_grid_name)
@@ -90,7 +94,13 @@ for rvt_inst in rvt_instances:
 TransactionManager.Instance.EnsureInTransaction(doc)
 
 for param_info in params_to_set:
-	toolsrvt.setup_param_value(param_info[0], param_info[1], param_info[2])
+	try:
+		toolsrvt.setup_param_value(param_info[0], param_info[1], param_info[2])
+	except Exception as e:
+		elem_id = param_info[0].Id.IntegerValue
+		error_text = f"check the element - {elem_id}, {param_info[1]}, {param_info[2]}"
+		print(error_text)
+		raise ValueError(error_text) from e
 
 # =========End transaction
 TransactionManager.Instance.TransactionTaskDone()
