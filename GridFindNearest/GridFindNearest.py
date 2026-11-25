@@ -75,6 +75,12 @@ grid.find_grid_intersection_points(doc)
 
 params_to_set = []
 for rvt_inst in rvt_instances:
+	family_name = rvt_inst.Symbol.FamilyName
+
+	# Skip IDF
+	if "CU_Patchpanel" in family_name:
+		continue
+
 	shortest_grid_name = grid.get_nearest_grid_by_instance(rvt_inst)
 	try:
 		inst_level = inst_info_getter.get_level_name(rvt_inst)
