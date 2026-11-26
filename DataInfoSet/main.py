@@ -24,6 +24,8 @@ from RevitServices.Transactions import TransactionManager
 from System import Array
 from System.Collections.Generic import *
 from importlib import reload
+import json
+import os
 import re
 
 # ================ local imports
@@ -34,97 +36,48 @@ import grid
 reload(grid)
 from grid import *
 
+def _load_level_names():
+	json_path = os.path.join(dir_path, "db_level_names.json")
+	with open(json_path, "r", encoding="utf-8") as f_db:
+		return json.load(f_db)
+
 
 def get_level_name(rvt_elem: Autodesk.Revit.DB.FamilyInstance) -> str:
 	"""
 	Get Level from the element.\\
-	Return string that represents level name according to Naming Standard
+	Return string that represents level name according to Naming Standard.
+	Model and level names are taken from db_level_names.json.
 	"""
 	doc = rvt_elem.Document
-	doc_titel = doc.Title
+	doc_title = doc.Title
+	level_db = _load_level_names()
+
+	# JSON top-level key must be contained in the document title
+	matched_key = None
+	for model_key in level_db:
+		if model_key in doc_title:
+			if matched_key is None or len(model_key) > len(matched_key):
+				matched_key = model_key
+
+	if not matched_key:
+		print(doc_title)
+		raise ValueError("No information about model levels in JSON")
+
 	rvt_lvl = doc.GetElement(rvt_elem.LevelId)
-	if not rvt_lvl:
+	if not rvt_lvl or rvt_lvl.Id == -1:
 		sh_lvl = toolsrvt.get_parval(rvt_elem, "INSTANCE_SCHEDULE_ONLY_LEVEL_PARAM")
 		rvt_lvl = doc.GetElement(sh_lvl)
 
 	if not rvt_lvl:
 		raise ValueError("No Host Level found")
+
 	rvt_level_str = rvt_lvl.Name
-	
-	# level naming is model specific
-	# F level (1F, 2F..)
-	is_f_level = any([
-		"BER-GF-SE-CP" in doc_titel, 
-		"BER-GF-SITE-PTP" in doc_titel, 
-		])
+	level_map = {pair[0]: pair[1] for pair in level_db[matched_key]}
+	if rvt_level_str not in level_map:
+		print(rvt_level_str)
+		raise ValueError("No information about level name found in JSON")
 
-	if is_f_level:
-		# for CP only
-		# Check if it is roof
-		if rvt_level_str == "OK-Attika":
-			rvt_level_out = "RF"
-		else:
-			regexp = re.compile(r"^(.*?)[FM]")
-			check = regexp.match(rvt_level_str)
-			rvt_level_out = check.group(1)
-
-	elif "BER-GF-SITE-NPI" in doc_titel:
-		if "RF" in rvt_level_str:
-			rvt_level_out = "3"	# for NPI only - 1M and 2F are the same
-		elif "1M" in rvt_level_str:
-			rvt_level_out = "2"
-		elif "1F" in rvt_level_str:
-			rvt_level_out = "1"
-		else:
-			raise ValueError("Wrong level name")
-
-	elif "BER-GF-SE-DU" in doc_titel:
-		# for DU only - 1M and 2F are the same
-		if "2F" in rvt_level_str or "1M" in rvt_level_str:
-			rvt_level_out = "2"
-		elif "1F" in rvt_level_str:
-			rvt_level_out = "1"
-		else:
-			raise ValueError("Wrong level name")
-
-	elif "EMEA-DRK-MBN" in doc_titel:
-		# DRAKO MBN
-		if "EG" in rvt_level_str:
-			rvt_level_out = "1"
-		else:
-			raise ValueError("Wrong level name")
-
-	elif "BER-GF-SITE-BR" in doc_titel:
-		# for DU only - 1M and 2F are the same
-		if "1F FFL" in rvt_level_str:
-			rvt_level_out = "1"
-		elif "RF" in rvt_level_str:
-			rvt_level_out = "2"
-		else:
-			raise ValueError("Wrong level name")
-
-	elif "BER_GF_CT_00_ELEC" in doc_titel:
-		# Objects
-		if "1F" in rvt_level_str:
-			rvt_level_out = "1"
-		else:
-			raise ValueError("Wrong level name")
-
-	elif "EMEA-TEC" in doc_titel:
-		# Objects
-		if "EG" in rvt_level_str:
-			rvt_level_out = "1F"
-		elif "OG_+4.00m" in rvt_level_str:
-			rvt_level_out = "2F"
-		else:
-			raise ValueError("Wrong level name")
-
-	else:
-		error_text = f"Model not found. Add level settings for the model. Current doc is {doc_titel}"
-		print(error_text)
-		raise ValueError(error_text)
-
-	return rvt_level_out
+	return level_map[rvt_level_str]
 
 def get_elements_by_panel(rvt_panel):
 	panel_circuits = rvt_panel.MEPModel.GetAssignedElectricalSystems()
